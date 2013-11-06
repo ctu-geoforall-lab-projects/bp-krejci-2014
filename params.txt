@@ -1,0 +1,9 @@
+A1  	precip enhancement
+A2 		shear fracture constant
+sigm 	metamorphic stress
+B1 		compactive viscosity constant
+B2 		compactive viscosity constant - controls exponentional decay of depth
+SIcrit	critical value of the stability index
+9 line must by numbers of parameters !!!SNOSS READ 9 LINE!!!
+
+1.6 19500 75 2.6953e-8 30.27 1
