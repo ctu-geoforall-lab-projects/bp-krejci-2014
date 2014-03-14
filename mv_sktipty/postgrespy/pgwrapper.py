@@ -35,7 +35,7 @@ class pgwrapper:
                 self.cursor.execute(sql)
                 # Get the results.
                 #results = self.cursor.fetchall()
-                results = self.cursor.fetchone()
+                results = self.cursor.fetchall()
                 # Return the results.
                 return results
         
@@ -47,11 +47,5 @@ class pgwrapper:
                 n=self.cursor.fetchall()[0][0]
                 return n
         
-        def progresBarStart():
-                label="aaa"
-                widgets = [label+":", Percentage(), ' ', Bar(marker=RotatingMarker()),' ', ETA(), ' ', FileTransferSpeed()]
-                pbar = ProgressBar(widgets=widgets, maxval=n+1).start()
-                
-        def progresBarStop():
-                pbar.finish()
+
                 
