@@ -5,12 +5,6 @@ import sys, os, numpy, argparse
 import psycopg2 as ppg
 
 
-from rpy2 import robjects as ro
-from rpy2.robjects.packages import importr as rin
-from progressbar import * 
-
-r_base = rin('base')
-
 
 class pgwrapper:
         def __init__(self, dbname, srid, host='localhost', user='', passwd=''):
