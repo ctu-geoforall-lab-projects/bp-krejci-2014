@@ -1,0 +1,101 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import argparse
+import string
+
+# nahrani GRASS Python knihoven
+gisbase = os.environ['GISBASE'] = "/home/matt/Documents/grass_trunk/dist.x86_64-unknown-linux-gnu"
+
+# nastaveni adresare s daty, lokace a mapsetu
+gisdbase = os.path.join(os.environ['HOME'], "grassdata")
+location = "cr-wgs84"
+mapset = "PERMANENT"
+
+# nahrani GRASS Python knihoven"
+sys.path.append(os.path.join(os.environ["GISBASE"], "etc", "python"))
+try:
+    from grass.script import core as g
+except ImportError:
+    import grass.script.setup as gsetup
+
+
+def main():
+    #parser = argparse.ArgumentParser ()
+    #group1 = parser.add_argument_group('group1', 'group database')
+    #group1.add_argument("phost", help = 'database host')
+    #group1.add_argument("pdb_name", help = 'database name')
+    #group1.add_argument("pdb_schema", help = 'database schema')
+    #group1.add_argument("pport", help = 'port')
+    #group1.add_argument("puser", help = 'database user')
+    #group1.add_argument("ppassword", help = 'database password')
+    
+    #group2 = parser.add_argument_group('group2', 'precip config')
+    #group2.add_argument("ptimestep", help = 'time step')
+    #args = parser.parse_args()
+    #db_schema=(args.accumulate(args.pdb_schema))
+    
+#jen docesne misto parser
+    db_schame="public"
+    db_name="mvdb"
+    db_host="localhost"
+    db_port="5432"
+    db_user='grass'
+    db_password= None
+    
+##set up and connect to postgres database in grass##
+#make string for connect database- example(database="host=myserver.itc.it,dbname=mydb")
+    dbconn="dbname=" + db_name
+    if db_host: dbconn += ",host = " + db_host
+    if db_port: dbconn += ",port = " + db_port
+#if required password and user    
+    if db_password:  
+        run_command('db.login',user = db_user, driver = 'pg', database = dbconn, password = db_password) 
+#if required only user
+    elif db_user and not db_password: 
+        run_command('db.login',user = db_user, driver = 'pg', database = dbconn)
+    
+    g.run_command('db.connect',
+                driver = 'pg',
+                database = dbconn)
+    
+    g.run_command('v.in.ogr',
+                dsn ="./",
+                layer = link,
+                output = link1,
+                quiet = True,
+                overwrite = True,)
+    
+    g.run_command('v.category',
+                input=link1,
+                output=link_nat,
+                op="transfer",
+                layer="1,2")
+
+    g.run_command('v.db.connect',
+                link_nat,
+                layer=1,
+                table=link,
+                key=linkid)
+    
+    g.run_command('v.db.connect',
+                link_nat,
+                layer=2,
+                table=record_test,
+                key=linkid)
+#////////////////////////////////////////////////////
+#compute nuber of links(need for db.record procesing)
+    num_links=g.parse_command('db.select',
+                                driver='pg',
+                                database=db_name,
+                                sql='select count(linkid) from link',
+                                flags='c')
+    
+    
+    
+    
+
+main()
+
+
