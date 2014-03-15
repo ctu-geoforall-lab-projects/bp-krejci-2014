@@ -60,11 +60,11 @@ def computeAlphaK(freq,polarization):
         ck_kv=0.63297
         
         #Coefficients for αV   4
-        aj_av=[-0.07771, 0.56727, -0.20238,-48.2991,48.5833]
+        aj_av=[-0.07771, 0.56727, -0.20238,-48.2991, 48.5833]
         bj_av=[2.33840, 0.95545, 1.14520,0.791669,0.791459]
         cj_av=[-0.76284, 0.54039, 0.26809,0.116226,0.116479]
         ma_av=-0.053739
-        ca_av=-0.83433
+        ca_av=0.83433
         kv=0
         av=0
     #kv.. coefficient k of vertical polarization       
@@ -79,7 +79,7 @@ def computeAlphaK(freq,polarization):
             frac_av=-math.pow(((math.log10(freq) - bj_av[j]) / cj_av[j]),2)
             av+=aj_av[j]* math.exp(frac_av)             
     
-        av=av + ma_av * math.log10(freq) + ca_av
+        av=(av + ma_av * math.log10(freq) + ca_av)
         
         return (av,kv)
 
@@ -94,15 +94,15 @@ def computePrecip(db,baseline_decibel,Aw):
     record_num=db.count("record")
     print record_num 
     
-    #create view of record sorting by time asc!                     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!limit 10, pak tu zadnej limit nebude
+    #create view of record sorting by time asc!                     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!limit 5, pak tu zadnej limit nebude
     db_view=randomWord(5)
     print "name of view %s"%db_view 
-    sql="CREATE VIEW %s AS SELECT * from record ORDER BY time::date asc ,time::time asc LIMIT 10; "%db_view
+    sql="CREATE VIEW %s AS SELECT * from record ORDER BY time::date asc ,time::time asc LIMIT 5; "%db_view
     db.executeSql(sql,False)
     
     
 #cyclus compute precip for each rows in table record    
-    for record in range(1,10):
+    for record in range(1,5):
     #get mw intensity "rxpower-txpower" from first row from view
         sql="select (rxpower-txpower) from %s  limit 1 ;"%db_view
         a=db.executeSql(sql)[0][0]
@@ -138,36 +138,47 @@ def computePrecip(db,baseline_decibel,Aw):
     #coef_a_k[alpha, k]
         coef_a_k= computeAlphaK(freq,polarization)
     #final precipiatation is R    
-        Ar=a-baseline_decibel-Aw
+        Ar=(-1)*a-baseline_decibel-Aw
         yr=Ar/length
+        print "a k"
         print coef_a_k 
         print 'Ar %s'%Ar
         print 'yr %s'%yr
         
-        R=math.pow((1/coef_a_k[1]),(1/coef_a_k[0])) * math.pow(yr,(1/coef_a_k[0]))
+        alfa=1/coef_a_k[1]
+        beta=1/coef_a_k[0]
+        
+        R=(alfa**beta)*yr**beta
         
     #get time of first row in view     
         sql="select time from %s limit 1;"%db_view
         time=db.executeSql(sql)[0][0] 
         print time
         
-        sql="UPDATE record SET precipitation =%s where time=%s;"%R%time
+        sql="UPDATE record SET precipitation =%s where time='%s';" %(R,time)
         db.executeSql(sql,False) 
           
     #delete first rows in view        
-        #sql="DELETE FROM %s LIMIT 1" %db_view  
-        #print db.executeSql(sql)
+        sql="DELETE FROM %s LIMIT 1" %db_view  
+        db.executeSql(sql,False)
   
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
-    print "heloo "
+    #parser = argparse.ArgumentParser ()
+    #group1 = parser.add_argument_group('group1', 'group database')
+    #group1.add_argument("phost", help = 'database host')
+    #group1.add_argument("pdb_name", help = 'database name')
+    #group1.add_argument("pdb_schema", help = 'database schema')
+    #group1.add_argument("pport", help = 'port')
+    #group1.add_argument("puser", help = 'database user')
+    #group1.add_argument("ppassword", help = 'database password')
+    print "hello "
     db_schema="public"
     db_name="letnany"
     db_host="localhost"
     db_port="5432"
     db_user='matt'
     db_password= None
-    srid= 4326
     
     timestep=60
     baseline_decibel=1
@@ -177,15 +188,15 @@ def main():
     
     #if required password and user    
     if db_password:        
-        db = pg(dbname=db_name,srid=srid, host=db_host,
+        db = pg(dbname=db_name, host=db_host,
                 user=db_user, passwd = db_password)   
     #if required only user
     elif db_user and not db_password:         
-        db = pg(dbname=db_name,srid=srid, host=db_host,
+        db = pg(dbname=db_name, host=db_host,
                 user=db_user)
     #if not required user adn passwd   
     else:
-        db = pg(dbname=db_name,srid=srid, host=db_host,
+        db = pg(dbname=db_name, host=db_host,
                 user=db_user)    
    #compute precipitation    
     computePrecip(db,baseline_decibel,Aw)

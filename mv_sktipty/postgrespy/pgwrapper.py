@@ -7,9 +7,8 @@ import psycopg2 as ppg
 
 
 class pgwrapper:
-        def __init__(self, dbname, srid, host='localhost', user='', passwd=''):
+        def __init__(self, dbname, host='localhost', user='', passwd=''):
                 self.dbname = dbname                    # Database name which connect to.
-                self.srid = str(srid)                   # Identifier of spatial reference system.
                 self.host = host                        # Host name (default is "localhost")
                 self.user = user                        # User name for login to the database.
                 self.password = passwd                  # Password for login to the database. 

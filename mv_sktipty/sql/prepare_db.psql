@@ -58,6 +58,9 @@ on l.linkid=t.linkid
 limit 1
 
 
+CREATE OR REPLACE RULE remove_first_rov AS ON DELETE TO test2 DO INSTEAD (
+     DELETE * FROM test2 limit1
+    );
 
 
 
