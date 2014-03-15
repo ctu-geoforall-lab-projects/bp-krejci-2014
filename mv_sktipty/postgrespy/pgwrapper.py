@@ -17,21 +17,29 @@ class pgwrapper:
                 self.cursor = self.setCursor()          # Generate cursor.
                 
         def setConnect(self):
-            conn = ppg.connect("dbname='"+self.dbname+"' user='"+self.user+"' host='"+self.host+"' password='"+self.password+"'")
-            return conn
+                conn = ppg.connect("dbname='"+self.dbname+"' user='"+self.user+"' host='"+self.host+"' password='"+self.password+"'")
+                return conn
         
         def setCursor(self):
-            return self.connection.cursor()
+                return self.connection.cursor()
         
+
         
-        def executeSql(self,sql):
+        def executeSql(self,sql,results=True):
                 # Excute the SQL statement.
-                self.cursor.execute(sql)
-                # Get the results.
-                #results = self.cursor.fetchall()
-                results = self.cursor.fetchall()
-                # Return the results.
-                return results
+                try:
+                        self.cursor.execute(sql)
+                except Exception, e:
+                        self.connection.rollback()
+                        print e.pgerror
+                        pass
+             
+                
+                if results :
+                        # Get the results.
+                        results = self.cursor.fetchall()
+                        # Return the results.1
+                        return results
         
         def count(self, table):
                 """!Count the number of rows.
