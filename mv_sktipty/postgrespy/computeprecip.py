@@ -5,7 +5,6 @@ import sys
 import argparse
 import string, random
 import math
-sys.path.append('/home/matt/Dropbox/BC/python/komodo/postgrespy/pgwrapper.py') 
 # Import our wrapper.
 from pgwrapper import pgwrapper as pg
 #------------------------------------------------------------------functions-------------------------------------------    
