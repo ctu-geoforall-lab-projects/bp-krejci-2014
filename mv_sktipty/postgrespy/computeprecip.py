@@ -83,6 +83,11 @@ def computeAlphaK(freq,polarization):
         return (av,kv)
 
 def computePrecip(db,baseline_decibel,Aw):
+    #create temporaly table of record
+    db_temp="temp_%s"%randomWord(2)
+    sql='CREATE TABLE %s AS SELECT * FROM record'%db_temp
+    db.executeSql(sql,False)
+    
     #nuber of link in table link
     print "num of link"
     link_num=db.count("link")
@@ -96,12 +101,12 @@ def computePrecip(db,baseline_decibel,Aw):
     #create view of record sorting by time asc!                     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!limit 5, pak tu zadnej limit nebude
     db_view=randomWord(5)
     print "name of view %s"%db_view 
-    sql="CREATE VIEW %s AS SELECT * from record ORDER BY time::date asc ,time::time asc LIMIT 5; "%db_view
+    sql="CREATE VIEW %s AS SELECT * from record ORDER BY time::date asc ,time::time asc LIMIT 3; "%db_view
     db.executeSql(sql,False)
     
     
-#cyclus compute precip for each rows in table record    
-    for record in range(1,5):
+#loop compute precip for each rows in table record    
+    for record in range(1,3):
     #get mw intensity "rxpower-txpower" from first row from view
         sql="select (rxpower-txpower) from %s  limit 1 ;"%db_view
         a=db.executeSql(sql)[0][0]
@@ -118,19 +123,23 @@ def computePrecip(db,baseline_decibel,Aw):
         WHERE link.linkid = record.linkid AND link.linkid=%s\
         LIMIT 1;"%linkid
         length=db.executeSql(sql)[0][0]
-        length=length/1000
+        length=length/1000.0
         print 'length %s'%length
         
-    #get frequency of link !!!!!!potreba optimalizace  (potreba vypsat frequency u prvniho radku ve view(frequency je v tabulce link)    
-        sql="select distinct on(l.linkid) l.frequency from link as l\
-            join %s as t on l.linkid=t.linkid limit 1;"%db_view
+    #get frequency of link !!!!!!potreba optimalizace?  ( vypsat frequency u prvniho radku ve view(frequency je v tabulce link)    
+        sql="SELECT distinct on(l.linkid) l.frequency\
+            FROM link as l join \
+            (SELECT linkid from %s limit 1) as t\
+            on l.linkid=t.linkid ;"%db_view
         freq=db.executeSql(sql)[0][0]
-        freq=freq/1000000
+        freq=freq/1000000.0
         print "freq %s"%freq
         
-    #get polarization of link !!!!!!potreba optimalizace(potreba vypsat polarizaci u prvniho radku ve view(polarizace je v tabulce link)       
-        sql="select distinct on(l.linkid) l.polarization from link as l\
-            join %s as t on l.linkid=t.linkid limit 1;"%db_view
+    #get polarization of link !!!!!!potreba optimalizace?( vypsat polarizaci u prvniho radku ve view(polarizace je v tabulce link)       
+        sql="SELECT distinct on(l.linkid) l.polarization\
+            FROM link as l join \
+            (SELECT linkid from %s limit 1) as t\
+            on l.linkid=t.linkid ;"%db_view
         polarization=db.executeSql(sql)[0][0]
         print "polarization %s" %polarization
     
@@ -148,7 +157,7 @@ def computePrecip(db,baseline_decibel,Aw):
         beta=1/coef_a_k[0]
         
         R=(alfa**beta)*yr**beta
-        
+        print "precip %s"%R
     #get time of first row in view     
         sql="select time from %s limit 1;"%db_view
         time=db.executeSql(sql)[0][0] 
@@ -158,8 +167,15 @@ def computePrecip(db,baseline_decibel,Aw):
         db.executeSql(sql,False) 
           
     #delete first rows in view        
-        sql="DELETE FROM %s LIMIT 1" %db_view  
+        sql="DELETE FROM %s where time='%s'" %(db_temp,time)  
         db.executeSql(sql,False)
+        
+        sql='DROP VIEW %s;\
+        CREATE  VIEW %s AS SELECT * from %s ORDER BY time::date asc ,time::time asc;\
+        DROP VIEW %s;\
+        CREATE  VIEW %s AS SELECT * from %s ORDER BY time::date asc ,time::time asc;'%(db_view,db_view,db_temp,db_view,db_view,db_temp)
+        db.executeSql(sql,False)
+
   
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
