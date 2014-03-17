@@ -8,6 +8,7 @@ import math
 import timeit 
 import time
 mesuretime=0
+restime=0
 # Import our wrapper.
 from pgwrapper import pgwrapper as pg
 #------------------------------------------------------------------functions-------------------------------------------    
@@ -88,9 +89,11 @@ def computeAlphaK(freq,polarization):
 def st(mes=True):
     if mes:
         global mesuretime
+        global restime
         mesuretime= time.time()
     else:
-        print "time is: ", time.time() - mesuretime
+        restime=time.time() - mesuretime
+        print "time is: ", restime
 
 def computePrecip(db,baseline_decibel,Aw):
     '''
@@ -110,55 +113,53 @@ def computePrecip(db,baseline_decibel,Aw):
     record_num=db.count("record")
     print "num of record"
     print record_num
-    print 'AMD Phenom X3 ocek cas hodin %s'%((record_num*0.2823)/3600)
+    
     
     #create view of record sorting by time asc!
     db_view=randomWord(5)
     #print "name of view %s"%db_view 
     sql="CREATE MATERIALIZED VIEW %s AS SELECT * from record ORDER BY time::date asc ,time::time asc; "%db_view
     db.executeSql(sql,False)
-  
+    
+    db_view="ygyjb"
     st()
-#loop compute precip for each rows in table record    
-    for record in range(0,9):
+#loop compute precip for each rows in table record(view)
+    xx=10
+    for record in range(0,xx):
         
         sql="select time,(rxpower-txpower)as a,lenght,polarization,frequency from %s OFFSET %s limit 1 ; "%(db_view,record)
         resu=db.executeSql(sql)
-        print resu
-        time1=resu[0]
-        a=resu[1]
-        length=resu[2]
-        polarization=[3]
-        freq=resu[4]
-        
-        
+        '''
+        a=resu[0][1]
+        length=resu[0][2]
+        polarization=resu[0][3]
+        freq=resu[0][4]
+        '''
+        time1=resu[0][0]
+        print time1
     #coef_a_k[alpha, k]
-        coef_a_k= computeAlphaK(freq,polarization)
+        coef_a_k= computeAlphaK(resu[0][4],resu[0][3])
     #final precipiatation is R1    
-        Ar=(-1)*a-baseline_decibel-Aw
-        yr=Ar/length
+        Ar=(-1)*resu[0][1]-baseline_decibel-Aw
+        yr=Ar/resu[0][2]
         
         alfa=1/coef_a_k[1]
         beta=1/coef_a_k[0]
-        
-
-        
         R1=(yr/beta)**(1/alfa)
         #print "R1 %s"%R1
         
-
-        
-        sql="UPDATE record SET precipitation =%s where time='%s';"%(R1,time1)
+        sql="UPDATE record SET precipitation ='%s' where time='%s';"%(R1,resu[0][0])
         #print "sql %s"%sql
         db.executeSql(sql,False) 
-        
 
-        
     st(False)
-    #def sumPrecip(sumprecip):
-    sql="DROP MATERIALIZED VIEW %s"%db_view;
-    db.executeSql(sql,False)
-
+    print 'AMD Phenom X3 ocek cas hodin %s'%((record_num*restime/xx)/3600)
+    #sql="DROP MATERIALIZED VIEW %s"%db_view;
+    #db.executeSql(sql,False)
+    
+ 
+#def sumPrecip(sumprecip):
+    
   
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
