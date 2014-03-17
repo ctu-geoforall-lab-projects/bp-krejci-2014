@@ -96,13 +96,6 @@ def st(mes=True):
         print "time is: ", restime
 
 def computePrecip(db,baseline_decibel,Aw):
-    '''
-    #create temporaly table of record
-    db_temp="temp"
-    sql="CREATE TABLE temp AS SELECT * FROM record"
-    data=(db_temp,)
-    db.executeSql(sql,False)
-    '''
     #nuber of link in table link
     #print "num of link"
     link_num=db.count("link")
@@ -114,31 +107,27 @@ def computePrecip(db,baseline_decibel,Aw):
     print "num of record"
     print record_num
     
-    '''
+    
     #create view of record sorting by time asc!
     db_view=randomWord(5)
     #print "name of view %s"%db_view 
     sql="CREATE MATERIALIZED VIEW %s AS SELECT * from record ORDER BY time::date asc ,time::time asc; "%db_view
     db.executeSql(sql,False)
-    '''
-    db_view="ygyjb"
+   
     st()
 #loop compute precip for each rows in table record
-    xx=10
+    xx=100
     for record in range(0,xx):
         
         sql="select time,a as x,lenght,polarization,frequency from %s OFFSET %s limit 1 ; "%(db_view,record)
         resu=db.executeSql(sql)
         '''
         a=resu[0][1]
+        time1=resu[0][0]
         length=resu[0][2]
         polarization=resu[0][3]
         freq=resu[0][4]
         '''
-        a=resu[0][1]
-        print a
-        time1=resu[0][0]
-        print time1
     #coef_a_k[alpha, k]
         coef_a_k= computeAlphaK(resu[0][4],resu[0][3])
     #final precipiatation is R1    
@@ -156,17 +145,66 @@ def computePrecip(db,baseline_decibel,Aw):
 
     st(False)
     print 'AMD Phenom X3 ocek cas hodin %s'%((record_num*restime/xx)/3600)
-    #sql="DROP MATERIALIZED VIEW %s"%db_view;
-    #db.executeSql(sql,False)
-    
+    sql="DROP MATERIALIZED VIEW %s"%db_view;
+    db.executeSql(sql,False,True)
  
-def sumPrecip(sumprecip):
-    sql="select sum(a),count(a), date_trunc('%s',time) as timestamp\
-        FROM record\
-        WHERE linkid=66\
-        GROUP BY date_trunc('%s',time) \
-        ORDER BY timestamp"%(sumprecip,sumprecip)
-  
+def sumPrecip(db,sumprecip,from_time,to_time):
+    #@function sumPrecip make db views for all timestamps
+    view_db="matviewfortimestamp"
+    
+    #summing values per (->user)timestep interval
+    
+    sql="CREATE MATERIALIZED VIEW %s as select\
+        linkid,sum(a)as x,count(a) as xx,date_trunc('%s',time)\
+        as timestamp FROM record GROUP BY linkid,date_trunc('%s',time)\
+        ORDER BY timestamp"%(view_db,sumprecip,sumprecip)
+    data=db.executeSql(sql,False,True)
+   
+    #num of rows of materialized view
+    record_num=db.count(view_db)
+    
+    #the user's choice or all record 
+    if from_time and to_time:
+        first_timestamp=from_time
+        last_timestamp=to_time
+    else:    
+        #get first timestamp
+        sql="select timestamp from %s limit 1"%view_db
+        first_timestamp=db.executeSql(sql)[0][0]
+        
+        #get last timestep
+        sql="select timestamp from %s offset %s"%(view_db,record_num-1)
+        last_timestamp=db.executeSql(sql)[0][0]
+    
+    #make view per(->user) interval for all timestamp, for all links
+    time_const=0
+    if sumprecip=="minute":
+        tc=60
+    elif sumprecip=='second':
+        tc=0
+    elif sumPrecip=="hour" :
+        tc=3600
+    else:
+        tc=216000
+        
+    cur_timestamp=first_timestamp
+    
+    while cur_timestamp!=last_timestamp:
+        
+        a=cur_timestamp.strftime("%Y_%m_%d_%H_%M")
+        view_name="view%s"%a
+        sql="CREATE VIEW %s as select * from %s where timestamp=(timestamp'%s'+ %s * interval '1 second')"%(view_name,view_db,first_timestamp,time_const)
+        data=db.executeSql(sql,False,True)
+        
+        #go to next time interval
+        time_const+=tc
+        
+        #compute cur_timestamp (need for loop while)
+        sql="select (timestamp'%s')+ %s* interval '1 second'"%(cur_timestamp,tc)
+        cur_timestamp=db.executeSql(sql)[0][0]   
+    
+    
+    
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
     #parser = argparse.ArgumentParser ()
@@ -191,7 +229,7 @@ def main():
     db_user='matt'
     db_password= None
     
-    sumprecip=('second','minute', 'hour', 'day', 'week', 'month', 'quarter')
+    sumprecip=('second','minute', 'hour', 'day')
     sprc=sumprecip[1]
     baseline_decibel=1
     Aw=1.5
@@ -220,7 +258,7 @@ def main():
    #compute precipitation    
     computePrecip(db,baseline_decibel,Aw)
     
-    sumPrecip(sprc)
+    sumPrecip(db,sprc,"2013-09-08 23:59:00","2013-09-09 00:03:00")
  
     
     

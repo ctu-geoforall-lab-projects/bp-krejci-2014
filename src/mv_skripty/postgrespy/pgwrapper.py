@@ -24,7 +24,7 @@ class pgwrapper:
                 
 
         
-        def executeSql(self,sql,results=True):
+        def executeSql(self,sql,results=True,commit=False):
                 # Excute the SQL statement.
                 try:
                         self.cursor.execute(sql)
@@ -32,7 +32,8 @@ class pgwrapper:
                         self.connection.rollback()
                         print e.pgerror
                         pass
-                self.connection.commit()
+                if commit:
+                        self.connection.commit()
                 
                 if results :
                         # Get the results.
