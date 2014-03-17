@@ -7,6 +7,7 @@ import string, random
 import math
 import timeit 
 import time
+import psycopg2
 mesuretime=0
 # Import our wrapper.
 from pgwrapper import pgwrapper as pg
@@ -268,8 +269,8 @@ def main():
             db = pg(dbname=db_name, host=db_host,
                     user=db_user)
             print "not required user and passwd"
-    except:
-        sys.exit("I am unable to connect to the database (db=%s, user=%s)." % (db_name, db_user))
+    except psycopg2.OperationalError, e:
+        sys.exit("I am unable to connect to the database (db=%s, user=%s). %s" % (db_name, db_user, e))
         
         
    #compute precipitation    
