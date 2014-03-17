@@ -121,9 +121,9 @@ def computePrecip(db,baseline_decibel,Aw):
     sql="CREATE MATERIALIZED VIEW %s AS SELECT * from record ORDER BY time::date asc ,time::time asc; "%db_view
     db.executeSql(sql,False)
     
-    db_view="ygyjb"
+    #db_view="ygyjb"
     st()
-#loop compute precip for each rows in table record(view)
+#loop compute precip for each rows in table record()
     xx=10
     for record in range(0,xx):
         
