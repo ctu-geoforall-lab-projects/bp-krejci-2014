@@ -232,11 +232,20 @@ def main():
     
     print "hello "
     db_schema="public"
-    db_name="letnany"
+    if len(sys.argv) > 1:
+        db_name = sys.argv[1]
+    else:
+        db_name="letnany"
     db_host="localhost"
     db_port="5432"
-    db_user='matt'
-    db_password= None
+    if len(sys.argv) > 2:
+        db_user = sys.argv[2]
+    else:
+        db_user='matt'
+    if len(sys.argv) > 3:
+        db_password = sys.argv[3]
+    else:
+        db_password= None
     
     sumprecip=60
     baseline_decibel=1
@@ -260,7 +269,7 @@ def main():
                     user=db_user)
             print "not required user and passwd"
     except:
-        print "I am unable to connect to the database."
+        sys.exit("I am unable to connect to the database (db=%s, user=%s)." % (db_name, db_user))
         
         
    #compute precipitation    
@@ -268,6 +277,5 @@ def main():
     
    # sumPrecip(sumprecip)
  
-    
-    
-main()
+if __name__ == "__main__":
+    main()
