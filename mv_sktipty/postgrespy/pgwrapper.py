@@ -21,7 +21,7 @@ class pgwrapper:
         
         def setCursor(self):
                 return self.connection.cursor()
-        
+                
 
         
         def executeSql(self,sql,results=True):
@@ -32,13 +32,14 @@ class pgwrapper:
                         self.connection.rollback()
                         print e.pgerror
                         pass
-             
+                self.connection.commit()
+                
                 if results :
                         # Get the results.
                         results = self.cursor.fetchall()
                         # Return the results.1
                         return results
-        
+        '''
         def executeSqlP(self,sql,data):
                 # Excute the SQL statement.
                 try:
@@ -47,8 +48,8 @@ class pgwrapper:
                         self.connection.rollback()
                         print e.pgerror
                         pass
-        
-        
+                self.connection.commit()
+        '''
         
         def count(self, table):
                 """!Count the number of rows.

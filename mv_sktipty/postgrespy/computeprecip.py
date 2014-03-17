@@ -5,6 +5,9 @@ import sys
 import argparse
 import string, random
 import math
+import timeit 
+import time
+mesuretime=0
 # Import our wrapper.
 from pgwrapper import pgwrapper as pg
 #------------------------------------------------------------------functions-------------------------------------------    
@@ -81,78 +84,92 @@ def computeAlphaK(freq,polarization):
         av=(av + ma_av * math.log10(freq) + ca_av)
         
         return (av,kv)
+    
+def st(mes=True):
+    if mes:
+        global mesuretime
+        mesuretime= time.time()
+    else:
+        print "time is: ", time.time() - mesuretime
 
 def computePrecip(db,baseline_decibel,Aw):
+    '''
     #create temporaly table of record
     db_temp="temp"
     sql="CREATE TABLE temp AS SELECT * FROM record"
     data=(db_temp,)
     db.executeSql(sql,False)
-    
+    '''
     #nuber of link in table link
-    print "num of link"
+    #print "num of link"
     link_num=db.count("link")
-    print link_num
+    #print link_num
     
     #nuber of records in table record
-    print "num of record"
+    
     record_num=db.count("record")
-    print record_num 
+    #print "num of record"
+    print record_num
+    print 'ocek cas hodin %s'%((record_num/10*3.13292598724)/360)
     
-    #create view of record sorting by time asc!                     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!limit 5, pak tu zadnej limit nebude
+    #create view of record sorting by time asc!
     db_view=randomWord(5)
-    print "name of view %s"%db_view 
-    sql="CREATE VIEW %s AS SELECT * from record ORDER BY time::date asc ,time::time asc LIMIT 3; "%db_view
+    #print "name of view %s"%db_view 
+    sql="CREATE MATERIALIZED VIEW %s AS SELECT * from record ORDER BY time::date asc ,time::time asc; "%db_view
     db.executeSql(sql,False)
-    
-    
+  
+    st()
 #loop compute precip for each rows in table record    
-    for record in range(1,2):
+    for record in range(0,10):
+        
     #get mw intensity "rxpower-txpower" from first row from view
-        sql="select (rxpower-txpower) from %s  limit 1 ;"%db_view
+        sql="select (rxpower-txpower) from %s OFFSET %s limit 1 ;"%(db_view,record)
         a=db.executeSql(sql)[0][0]
-        print "a %s "%a
+        #print "a %s "%a
         
     #get linkid from first row from view
-        sql="SELECT linkid FROM %s LIMIT 1 ;"%db_view
+        sql="SELECT linkid FROM %s OFFSET %s LIMIT 1 ;"%(db_view,record)
         linkid=db.executeSql(sql)[0][0]
-        print 'linkid %s'%linkid 
+        #print 'linkid %s'%linkid 
+        
         
     #get length [meters] of link
         sql="SELECT ST_Length(link.geom,false)\
-        FROM link join record on link.linkid=record.linkid \
-        WHERE link.linkid = record.linkid AND link.linkid=%s\
-        LIMIT 1;"%linkid
+            FROM link join record on link.linkid=record.linkid \
+            WHERE link.linkid = record.linkid AND link.linkid=%s\
+            OFFSET %s LIMIT 1;"%(linkid,record)
         length=db.executeSql(sql)[0][0]
         length=length/1000.0
-        print 'length %s'%length
+        #print 'length %s'%length
         
+            
     #get frequency of link !!!!!!potreba optimalizace?  ( vypsat frequency u prvniho radku ve view(frequency je v tabulce link)    
         sql="SELECT distinct on(l.linkid) l.frequency\
             FROM link as l join \
-            (SELECT linkid from %s limit 1) as t\
-            on l.linkid=t.linkid ;"%db_view
+            (SELECT linkid from %s OFFSET %s limit 1) as t\
+            on l.linkid=t.linkid ;"%(db_view,record)
         freq=db.executeSql(sql)[0][0]
         freq=freq/1000000.0
-        print "freq %s"%freq
+        #print "freq %s"%freq
+       
         
     #get polarization of link !!!!!!potreba optimalizace?( vypsat polarizaci u prvniho radku ve view(polarizace je v tabulce link)       
         sql="SELECT distinct on(l.linkid) l.polarization\
             FROM link as l join \
-            (SELECT linkid from %s limit 1) as t\
-            on l.linkid=t.linkid ;"%db_view
+            (SELECT linkid from %s OFFSET %s limit 1) as t\
+            on l.linkid=t.linkid ;"%(db_view,record)
         polarization=db.executeSql(sql)[0][0]
-        print "polarization %s" %polarization
-    
+        #print "polarization %s" %polarization
+        
     #coef_a_k[alpha, k]
         coef_a_k= computeAlphaK(freq,polarization)
     #final precipiatation is R1    
         Ar=(-1)*a-baseline_decibel-Aw
         yr=Ar/length
-        print "a k"
-        print coef_a_k 
-        print 'Ar %s'%Ar
-        print 'yr %s'%yr
+        #print "a k"
+        #print coef_a_k 
+        #print 'Ar %s'%Ar
+        #print 'yr %s'%yr
         
         alfa=1/coef_a_k[1]
         beta=1/coef_a_k[0]
@@ -161,38 +178,45 @@ def computePrecip(db,baseline_decibel,Aw):
 #        print "precip %s"%R
         
         R1=(yr/beta)**(1/alfa)
-        print "R1 %s"%R1
+        #print "R1 %s"%R1
         
     #get time of first row in view     
-        sql="select time from %s limit 1;"%db_view
-        time=db.executeSql(sql)[0][0] 
-        print time
+        sql="select time from %s OFFSET %s limit 1;"%(db_view,record)
+        time1=db.executeSql(sql)[0][0] 
+        #print time1
         
-        sql="UPDATE record SET precipitation =%s where time='%s';"
-        data=[R1,time]
-        print "sql %s"%sql
-        db.executeSqlP(sql,data) 
+        sql="UPDATE record SET precipitation =%s where time='%s';"%(R1,time1)
+        #print "sql %s"%sql
+        db.executeSql(sql,False) 
         
         #aa= "time='%s'" %time
         #dicta={'precipitation':R1}
         #db.updatecol( "record", dicta, where=aa)
-        
-        
-    #delete first rows in view        
-        sql="DELETE FROM %s where time= '%s';"
+        '''
+        #delete first rows in view        
+        sql="DELETE FROM %s where time= '%s';"%(db_temp,time1)
         print "sql %s"%sql
-        data=(db_temp,time)
-        db.executeSqlP(sql,data)
-        
-        sql="DROP VIEW %s;\
-        CREATE  VIEW %s AS SELECT * from %s ORDER BY time::date asc ,time::time asc;\
-        DROP VIEW %s;\
-        CREATE  VIEW %s AS SELECT * from %s ORDER BY time::date asc ,time::time asc;"%(db_view,db_view,db_temp,db_view,db_view,db_temp)
+        data=(db_temp,time1)
+        db.executeSql(sql,False)
+       
+        sql="DROP MATERIALIZED VIEW %s;\
+        CREATE MATERIALIZED VIEW %s AS SELECT * from %s ORDER BY time::date asc ,time::time asc;\
+        DROP MATERIALIZED VIEW %s;\
+        CREATE MATERIALIZED VIEW %s AS SELECT * from %s ORDER BY time::date asc ,time::time asc;"%(db_view,db_view,db_temp,db_view,db_view,db_temp)
         db.executeSql(sql,False)
         
+       
+        st(0)
+        st()
+        sql='REFRESH MATERIALIZED VIEW %s WITH NO DATA'%db_view
+        db.executeSql(sql,False)
+        )
+        '''
         
-#def sumPrecip(sumprecip):
-    
+    st(False)
+    #def sumPrecip(sumprecip):
+    sql="DROP MATERIALIZED VIEW %s"%db_view;
+    db.executeSql(sql,False)
   
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
@@ -221,7 +245,8 @@ def main():
     sumprecip=60
     baseline_decibel=1
     Aw=1.5
-     
+    
+    
     try:
         #if required password and user    
         if db_password:        
