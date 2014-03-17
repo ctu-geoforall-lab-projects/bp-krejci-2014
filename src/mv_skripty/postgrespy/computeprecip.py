@@ -7,10 +7,15 @@ import string, random
 import math
 import timeit 
 import time
+import psycopg2
 mesuretime=0
 # Import our wrapper.
 from pgwrapper import pgwrapper as pg
 #------------------------------------------------------------------functions-------------------------------------------    
+
+### TODO: check PG version
+view_statement = "MATERIALIZED VIEW"
+#view_statement = "TABLE"
 
 def randomWord(length):
     return ''.join(random.choice(string.lowercase) for i in range(length))
@@ -115,7 +120,7 @@ def computePrecip(db,baseline_decibel,Aw):
     #create view of record sorting by time asc!
     db_view=randomWord(5)
     #print "name of view %s"%db_view 
-    sql="CREATE MATERIALIZED VIEW %s AS SELECT * from record ORDER BY time::date asc ,time::time asc; "%db_view
+    sql="CREATE %s %s AS SELECT * from record ORDER BY time::date asc ,time::time asc; "% (view_statement, db_view)
     db.executeSql(sql,False)
   
     st()
@@ -232,11 +237,23 @@ def main():
     
     print "hello "
     db_schema="public"
-    db_name="letnany"
-    db_host="localhost"
+    if len(sys.argv) > 1:
+        db_name = sys.argv[1]
+    else:
+        db_name="letnany"
+    if len(sys.argv) == 3: # hack for geo102 (TODO: fix it)
+        db_host = '' 
+    else:
+        db_host="localhost"
     db_port="5432"
-    db_user='matt'
-    db_password= None
+    if len(sys.argv) > 2:
+        db_user = sys.argv[2]
+    else:
+        db_user='matt'
+    if len(sys.argv) > 3:
+        db_password = sys.argv[3]
+    else:
+        db_password= None
     
     sumprecip=60
     baseline_decibel=1
@@ -259,8 +276,8 @@ def main():
             db = pg(dbname=db_name, host=db_host,
                     user=db_user)
             print "not required user and passwd"
-    except:
-        print "I am unable to connect to the database."
+    except psycopg2.OperationalError, e:
+        sys.exit("I am unable to connect to the database (db=%s, user=%s). %s" % (db_name, db_user, e))
         
         
    #compute precipitation    
@@ -268,6 +285,5 @@ def main():
     
    # sumPrecip(sumprecip)
  
-    
-    
-main()
+if __name__ == "__main__":
+    main()
