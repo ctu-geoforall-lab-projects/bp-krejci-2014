@@ -154,7 +154,7 @@ def sumPrecip(db,sumprecip,from_time,to_time):
     #summing values per (->user)timestep interval
     
     sql="CREATE MATERIALIZED VIEW %s as select\
-        linkid,sum(a)as x,count(a) as xx,date_trunc('%s',time)\
+        linkid,sum(precipitation)as x,count(precipitation) as xx,date_trunc('%s',time)\
         as timestamp FROM record GROUP BY linkid,date_trunc('%s',time)\
         ORDER BY timestamp"%(view_db,sumprecip,sumprecip)
     data=db.executeSql(sql,False,True)
