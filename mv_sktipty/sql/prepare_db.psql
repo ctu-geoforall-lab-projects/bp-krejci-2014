@@ -21,6 +21,14 @@ UPDATE link SET geom = st_makeline(n1.geom,n2.geom)
  WHERE
  link.linkid = l.linkid;
 
+
+
+update record 
+set polarization=link.polarization
+from link
+where record.linkid=link.linkid
+
+'''
 --add column frequency
 alter table link add column frequency integer;
 
@@ -46,7 +54,7 @@ alter table record add column precipitation double precision;
 
 
 
-
+'''
 
 
 
