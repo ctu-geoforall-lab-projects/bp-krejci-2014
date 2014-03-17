@@ -1,0 +1,54 @@
+CREATE EXTENSION postgis;
+-- Enable Topology
+CREATE EXTENSION postgis_topology;
+
+--add geometry for nods
+SELECT AddGeometryColumn 
+('public','node','geom',4326,'POINT',2);
+
+SELECT AddGeometryColumn 
+('public','link','geom',4326,'LINESTRING',2);
+
+UPDATE node
+SET geom = ST_SetSRID(ST_MakePoint("long", lat), 4326);
+
+--add geometry for link
+UPDATE link SET geom = st_makeline(n1.geom,n2.geom)
+ FROM
+ node AS n1 JOIN link AS l ON n1.nodeid = fromnodeid
+ JOIN
+ node AS n2 ON n2.nodeid = tonodeid
+ WHERE
+ link.linkid = l.linkid;
+
+--add column frequency
+alter table link add column frequency integer;
+
+--move frequency from record to link
+UPDATE link as t2
+SET frequency = t1.frequency
+from record t1
+WHERE t2.linkid=t1.linkid;
+
+alter table record drop column frequency;
+--add coll prcip
+alter table record add column precipitation double precision;
+
+
+--add primary key to table record
+--ALTER TABLE "public"."record" ADD COLUMN "id" INTEGER;
+--CREATE SEQUENCE "public"."foo_id_seq";
+--UPDATE record2 SET id = nextval('"public"."foo_id_seq"');
+--ALTER TABLE "public"."record" ALTER COLUMN "id" SET DEFAULT nextval('"public"."foo_id_seq"');
+--ALTER TABLE "public"."record" ALTER COLUMN "id" SET NOT NULL;
+--ALTER TABLE "public"."record" ADD UNIQUE ("id");
+--ALTER TABLE "public"."record" ADD PRIMARY KEY ("id");
+
+
+
+
+
+
+
+
+
