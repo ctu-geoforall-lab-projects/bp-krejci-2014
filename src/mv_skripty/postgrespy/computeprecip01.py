@@ -12,7 +12,6 @@ restime=0
 # Import our wrapper.
 from pgwrapper import pgwrapper as pg
 #------------------------------------------------------------------functions-------------------------------------------    
-
 def randomWord(length):
     return ''.join(random.choice(string.lowercase) for i in range(length))
 
@@ -202,8 +201,6 @@ def sumPrecip(db,sumprecip,from_time,to_time):
         #compute cur_timestamp (need for loop while)
         sql="select (timestamp'%s')+ %s* interval '1 second'"%(cur_timestamp,tc)
         cur_timestamp=db.executeSql(sql)[0][0]   
-    
-    
     
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
