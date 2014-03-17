@@ -13,6 +13,10 @@ mesuretime=0
 from pgwrapper import pgwrapper as pg
 #------------------------------------------------------------------functions-------------------------------------------    
 
+### TODO: check PG version
+view_statement = "MATERIALIZED VIEW"
+#view_statement = "TABLE"
+
 def randomWord(length):
     return ''.join(random.choice(string.lowercase) for i in range(length))
 
@@ -116,7 +120,7 @@ def computePrecip(db,baseline_decibel,Aw):
     #create view of record sorting by time asc!
     db_view=randomWord(5)
     #print "name of view %s"%db_view 
-    sql="CREATE MATERIALIZED VIEW %s AS SELECT * from record ORDER BY time::date asc ,time::time asc; "%db_view
+    sql="CREATE %s %s AS SELECT * from record ORDER BY time::date asc ,time::time asc; "% (view_statement, db_view)
     db.executeSql(sql,False)
   
     st()
