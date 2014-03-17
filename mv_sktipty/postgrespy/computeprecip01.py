@@ -114,20 +114,20 @@ def computePrecip(db,baseline_decibel,Aw):
     print "num of record"
     print record_num
     
-    
+    '''
     #create view of record sorting by time asc!
     db_view=randomWord(5)
     #print "name of view %s"%db_view 
     sql="CREATE MATERIALIZED VIEW %s AS SELECT * from record ORDER BY time::date asc ,time::time asc; "%db_view
     db.executeSql(sql,False)
-    
-    #db_view="ygyjb"
+    '''
+    db_view="ygyjb"
     st()
-#loop compute precip for each rows in table record()
+#loop compute precip for each rows in table record
     xx=10
     for record in range(0,xx):
         
-        sql="select time,(rxpower-txpower)as a,lenght,polarization,frequency from %s OFFSET %s limit 1 ; "%(db_view,record)
+        sql="select time,a as x,lenght,polarization,frequency from %s OFFSET %s limit 1 ; "%(db_view,record)
         resu=db.executeSql(sql)
         '''
         a=resu[0][1]
@@ -135,6 +135,8 @@ def computePrecip(db,baseline_decibel,Aw):
         polarization=resu[0][3]
         freq=resu[0][4]
         '''
+        a=resu[0][1]
+        print a
         time1=resu[0][0]
         print time1
     #coef_a_k[alpha, k]
@@ -158,8 +160,12 @@ def computePrecip(db,baseline_decibel,Aw):
     #db.executeSql(sql,False)
     
  
-#def sumPrecip(sumprecip):
-    
+def sumPrecip(sumprecip):
+    sql="select sum(a),count(a), date_trunc('%s',time) as timestamp\
+        FROM record\
+        WHERE linkid=66\
+        GROUP BY date_trunc('%s',time) \
+        ORDER BY timestamp"%(sumprecip,sumprecip)
   
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
@@ -173,7 +179,7 @@ def main():
     #group1.add_argument("password", help = 'database password')
     
     #group2 = parser.add_argument_group('group2', 'group precipitation')
-    #group2.add_argument("sumprecip", help = 'summing interval of precipitation in [sec]')3
+    #group2.add_argument("sumprecip", help = 'summing interval of precipitation in ['second','minute', 'hour', 'day', 'week', 'month', 'quarter'] write string!!)
     #group2.add_argument("baseline_decibel", help = 'baseline of frequency for compute precip')
     #group2.add_argument("freq_const", help = 'minus constant in [decibel] ')
     
@@ -185,7 +191,8 @@ def main():
     db_user='matt'
     db_password= None
     
-    sumprecip=60
+    sumprecip=('second','minute', 'hour', 'day', 'week', 'month', 'quarter')
+    sprc=sumprecip[1]
     baseline_decibel=1
     Aw=1.5
     
@@ -213,7 +220,7 @@ def main():
    #compute precipitation    
     computePrecip(db,baseline_decibel,Aw)
     
-   # sumPrecip(sumprecip)
+    sumPrecip(sprc)
  
     
     

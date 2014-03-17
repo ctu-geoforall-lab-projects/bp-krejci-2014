@@ -22,25 +22,37 @@ UPDATE link SET geom = st_makeline(n1.geom,n2.geom)
  link.linkid = l.linkid;
 
 
+alter table record add column polarization char(1);
+alter table record add column lenght real;
+alter table record add column precipitation real;
 
 update record 
 set polarization=link.polarization
 from link
-where record.linkid=link.linkid
+where record.linkid=link.linkid;
+
+update record 
+set lenght=ST_Length(link.geom,false)
+from link
+where record.linkid=link.linkid;
+
+
+
+
 
 '''
 --add column frequency
-alter table link add column frequency integer;
+--alter table link add column frequency integer;
 
 --move frequency from record to link
-UPDATE link as t2
-SET frequency = t1.frequency
-from record t1
-WHERE t2.linkid=t1.linkid;
+--UPDATE link as t2
+--SET frequency = t1.frequency
+--from record t1
+--WHERE t2.linkid=t1.linkid;
 
-alter table record drop column frequency;
+-alter table record drop column frequency;
 --add coll prcip
-alter table record add column precipitation double precision;
+--alter table record add column precipitation real;
 
 
 --add primary key to table record
