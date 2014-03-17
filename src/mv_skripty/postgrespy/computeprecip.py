@@ -237,7 +237,10 @@ def main():
         db_name = sys.argv[1]
     else:
         db_name="letnany"
-    db_host="localhost"
+    if len(sys.argv) == 3: # hack for geo102 (TODO: fix it)
+        db_host = '' 
+    else:
+        db_host="localhost"
     db_port="5432"
     if len(sys.argv) > 2:
         db_user = sys.argv[2]

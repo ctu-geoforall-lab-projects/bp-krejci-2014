@@ -7,7 +7,7 @@ import psycopg2 as ppg
 
 
 class pgwrapper:
-        def __init__(self, dbname, host='localhost', user='', passwd=''):
+        def __init__(self, dbname, host='', user='', passwd=''):
                 self.dbname = dbname                    # Database name which connect to.
                 self.host = host                        # Host name (default is "localhost")
                 self.user = user                        # User name for login to the database.
@@ -16,7 +16,13 @@ class pgwrapper:
                 self.cursor = self.setCursor()          # Generate cursor.
                 
         def setConnect(self):
-                conn = ppg.connect("dbname='"+self.dbname+"' user='"+self.user+"' host='"+self.host+"' password='"+self.password+"'")
+                conn_string = "dbname='%s' user='%s'" % (self.dbname, self.user)
+                if self.host:
+                        conn_string += " host='%s'" % self.host
+                if self.password:
+                        conn_string += " passwd='%s'" % self.password
+                
+                conn = ppg.connect(conn_string)
                 return conn
         
         def setCursor(self):
