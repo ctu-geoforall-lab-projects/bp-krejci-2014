@@ -84,8 +84,9 @@ def computeAlphaK(freq,polarization):
 
 def computePrecip(db,baseline_decibel,Aw):
     #create temporaly table of record
-    db_temp="temp_%s"%randomWord(2)
-    sql='CREATE TABLE %s AS SELECT * FROM record'%db_temp
+    db_temp="temp"
+    sql="CREATE TABLE temp AS SELECT * FROM record"
+    data=(db_temp,)
     db.executeSql(sql,False)
     
     #nuber of link in table link
@@ -106,7 +107,7 @@ def computePrecip(db,baseline_decibel,Aw):
     
     
 #loop compute precip for each rows in table record    
-    for record in range(1,3):
+    for record in range(1,2):
     #get mw intensity "rxpower-txpower" from first row from view
         sql="select (rxpower-txpower) from %s  limit 1 ;"%db_view
         a=db.executeSql(sql)[0][0]
@@ -145,7 +146,7 @@ def computePrecip(db,baseline_decibel,Aw):
     
     #coef_a_k[alpha, k]
         coef_a_k= computeAlphaK(freq,polarization)
-    #final precipiatation is R    
+    #final precipiatation is R1    
         Ar=(-1)*a-baseline_decibel-Aw
         yr=Ar/length
         print "a k"
@@ -156,37 +157,59 @@ def computePrecip(db,baseline_decibel,Aw):
         alfa=1/coef_a_k[1]
         beta=1/coef_a_k[0]
         
-        R=(alfa**beta)*yr**beta
-        print "precip %s"%R
+#        R=(alfa**beta)*yr**beta
+#        print "precip %s"%R
+        
+        R1=(yr/beta)**(1/alfa)
+        print "R1 %s"%R1
+        
     #get time of first row in view     
         sql="select time from %s limit 1;"%db_view
         time=db.executeSql(sql)[0][0] 
         print time
         
-        sql="UPDATE record SET precipitation =%s where time='%s';" %(R,time)
-        db.executeSql(sql,False) 
-          
-    #delete first rows in view        
-        sql="DELETE FROM %s where time='%s'" %(db_temp,time)  
-        db.executeSql(sql,False)
+        sql="UPDATE record SET precipitation =%s where time='%s';"
+        data=[R1,time]
+        print "sql %s"%sql
+        db.executeSqlP(sql,data) 
         
-        sql='DROP VIEW %s;\
+        #aa= "time='%s'" %time
+        #dicta={'precipitation':R1}
+        #db.updatecol( "record", dicta, where=aa)
+        
+        
+    #delete first rows in view        
+        sql="DELETE FROM %s where time= '%s';"
+        print "sql %s"%sql
+        data=(db_temp,time)
+        db.executeSqlP(sql,data)
+        
+        sql="DROP VIEW %s;\
         CREATE  VIEW %s AS SELECT * from %s ORDER BY time::date asc ,time::time asc;\
         DROP VIEW %s;\
-        CREATE  VIEW %s AS SELECT * from %s ORDER BY time::date asc ,time::time asc;'%(db_view,db_view,db_temp,db_view,db_view,db_temp)
+        CREATE  VIEW %s AS SELECT * from %s ORDER BY time::date asc ,time::time asc;"%(db_view,db_view,db_temp,db_view,db_view,db_temp)
         db.executeSql(sql,False)
-
+        
+        
+#def sumPrecip(sumprecip):
+    
   
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
     #parser = argparse.ArgumentParser ()
     #group1 = parser.add_argument_group('group1', 'group database')
-    #group1.add_argument("phost", help = 'database host')
-    #group1.add_argument("pdb_name", help = 'database name')
-    #group1.add_argument("pdb_schema", help = 'database schema')
-    #group1.add_argument("pport", help = 'port')
-    #group1.add_argument("puser", help = 'database user')
-    #group1.add_argument("ppassword", help = 'database password')
+    #group1.add_argument("host", help = 'database host')
+    #group1.add_argument("db_name", help = 'database name')
+    #group1.add_argument("db_schema", help = 'database schema')
+    #group1.add_argument("port", help = 'port')
+    #group1.add_argument("user", help = 'database user')
+    #group1.add_argument("password", help = 'database password')
+    
+    #group2 = parser.add_argument_group('group2', 'group precipitation')
+    #group2.add_argument("sumprecip", help = 'summing interval of precipitation in [sec]')3
+    #group2.add_argument("baseline_decibel", help = 'baseline of frequency for compute precip')
+    #group2.add_argument("freq_const", help = 'minus constant in [decibel] ')
+    
     print "hello "
     db_schema="public"
     db_name="letnany"
@@ -195,26 +218,34 @@ def main():
     db_user='matt'
     db_password= None
     
-    timestep=60
+    sumprecip=60
     baseline_decibel=1
     Aw=1.5
-    
-
-    
-    #if required password and user    
-    if db_password:        
-        db = pg(dbname=db_name, host=db_host,
-                user=db_user, passwd = db_password)   
-    #if required only user
-    elif db_user and not db_password:         
-        db = pg(dbname=db_name, host=db_host,
-                user=db_user)
-    #if not required user adn passwd   
-    else:
-        db = pg(dbname=db_name, host=db_host,
-                user=db_user)    
+     
+    try:
+        #if required password and user    
+        if db_password:        
+            db = pg(dbname=db_name, host=db_host,
+                    user=db_user, passwd = db_password)
+            print " #required password and user "
+        #if required only user
+        elif db_user and not db_password:         
+            db = pg(dbname=db_name, host=db_host,
+                    user=db_user)
+            print "required only user"
+        #if not required user and passwd   
+        else:
+            db = pg(dbname=db_name, host=db_host,
+                    user=db_user)
+            print "not required user and passwd"
+    except:
+        print "I am unable to connect to the database."
+        
+        
    #compute precipitation    
     computePrecip(db,baseline_decibel,Aw)
+    
+   # sumPrecip(sumprecip)
  
     
     

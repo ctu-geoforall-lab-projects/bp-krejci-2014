@@ -33,12 +33,22 @@ class pgwrapper:
                         print e.pgerror
                         pass
              
-                
                 if results :
                         # Get the results.
                         results = self.cursor.fetchall()
                         # Return the results.1
                         return results
+        
+        def executeSqlP(self,sql,data):
+                # Excute the SQL statement.
+                try:
+                        self.cursor.mogrify(sql,data)
+                except Exception, e:
+                        self.connection.rollback()
+                        print e.pgerror
+                        pass
+        
+        
         
         def count(self, table):
                 """!Count the number of rows.
@@ -48,5 +58,23 @@ class pgwrapper:
                 n=self.cursor.fetchall()[0][0]
                 return n
         
+        def updatecol(self, table, columns, where=''):
+                """!Update the values of columns.
+                @param table            : Name of the table to parse.
+                @param columns          : Keys values pair of column names and values to update.
+                @param where            : Advanced search option for 'where' statement.
+                """
+                # Make a SQL statement.
+                parse = '' 
+                for i in range(len(columns)):
+                        parse = parse + '"' + str(dict.keys(columns)[i]) + '"=' + str(dict.values(columns)[i]) + ','
+                parse = parse.rstrip(',')
 
+                if where=='':
+                        sql_update_col = 'UPDATE "' + table + '" SET ' + parse
+                else:
+                        sql_update_col = 'UPDATE "' + table + '" SET ' + parse + ' WHERE ' + where
+                print "upcol %s"%sql_update_col      
+                # Excute the SQL statement.
+                self.cursor.execute(sql_update_col)
                 
