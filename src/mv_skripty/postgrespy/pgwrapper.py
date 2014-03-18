@@ -32,6 +32,7 @@ class pgwrapper:
         
         def executeSql(self,sql,results=True,commit=False):
                 # Excute the SQL statement.
+                #print sql
                 try:
                         self.cursor.execute(sql)
                 except Exception, e:
@@ -40,7 +41,8 @@ class pgwrapper:
                         pass
                 if commit:
                         self.connection.commit()
-                
+                        print 'commited'
+
                 if results :
                         # Get the results.
                         results = self.cursor.fetchall()

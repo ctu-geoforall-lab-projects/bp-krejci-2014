@@ -119,13 +119,15 @@ def computePrecip(db,baseline_decibel,Aw):
     sql="CREATE %s %s AS SELECT * from record ORDER BY time::date asc ,time::time asc; "% (view_statement, db_view)
     db.executeSql(sql,False)
    
-    st()
+
 #loop compute precip for each rows in table record
     xx=100
-    for record in range(0,xx):
-        
-        sql="select time,a as x,lenght,polarization,frequency from %s OFFSET %s limit 1 ; "%(db_view,record)
-        resu=db.executeSql(sql)
+    sql="select time,a as x,lenght,polarization,frequency from %s order by recordid limit %d ; "%(db_view, xx)
+    resu=db.executeSql(sql)
+
+    recordid = 1
+    st()
+    for record in resu:
         '''
         a=resu[0][1]
         time1=resu[0][0]
@@ -134,22 +136,23 @@ def computePrecip(db,baseline_decibel,Aw):
         freq=resu[0][4]
         '''
     #coef_a_k[alpha, k]
-        coef_a_k= computeAlphaK(resu[0][4],resu[0][3])
+        coef_a_k= computeAlphaK(record[4],record[3])
     #final precipiatation is R1    
-        Ar=(-1)*resu[0][1]-baseline_decibel-Aw
-        yr=Ar/resu[0][2]
+        Ar=(-1)*record[1]-baseline_decibel-Aw
+        yr=Ar/record[2]
         
         alfa=1/coef_a_k[1]
         beta=1/coef_a_k[0]
         R1=(yr/beta)**(1/alfa)
         #print "R1 %s"%R1
         
-        sql="UPDATE record SET precipitation ='%s' where time='%s';"%(R1,resu[0][0])
+        sql="UPDATE record SET precipitation ='%s' where recordid = %d;"%(R1,recordid)
         #print "sql %s"%sql
         db.executeSql(sql,False) 
+        recordid += 1
 
     st(False)
-    print 'AMD Phenom X3 ocek cas hodin %s'%((record_num*restime/xx)/3600)
+    print 'AMD Phenom X3 ocek cas hodin %s'%((record_num * (restime / xx)) / 60)
     sql="DROP %s %s"% (view_statement, db_view);
     db.executeSql(sql,False,True)
  
@@ -193,12 +196,14 @@ def sumPrecip(db,sumprecip,from_time,to_time):
         tc=216000
         
     cur_timestamp=first_timestamp
-    
+
+    schema_name = "time_windows"
+    data=db.executeSql("CREATE SCHEMA %s" % schema_name,False,True)
     while cur_timestamp!=last_timestamp:
-        
-        a=cur_timestamp.strftime("%Y_%m_%d_%H_%M")
+        a=time.strftime("%Y_%m_%d_%H_%M", time.strptime(str(cur_timestamp), "%Y-%m-%d %H:%M:%S"))
         view_name="view%s"%a
-        sql="CREATE VIEW %s as select * from %s where timestamp=(timestamp'%s'+ %s * interval '1 second')"%(view_name,view_db,first_timestamp,time_const)
+        print "(timestamp'%s'+ %s * interval '1 second')" % (first_timestamp,time_const)
+        sql="CREATE VIEW %s.%s as select * from %s where timestamp=(timestamp'%s'+ %s * interval '1 second')"%(schema_name,view_name,view_db,first_timestamp,time_const)
         data=db.executeSql(sql,False,True)
         
         #go to next time interval
@@ -273,7 +278,7 @@ def main():
    #compute precipitation    
     computePrecip(db,baseline_decibel,Aw)
     
-    sumPrecip(db,sprc,"2013-09-08 23:59:00","2013-09-09 00:03:00")
+    #sumPrecip(db,sprc,"2013-09-08 23:59:00","2013-09-09 00:03:00")
  
     
     
