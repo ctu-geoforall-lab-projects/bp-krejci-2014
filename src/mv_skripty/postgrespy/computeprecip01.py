@@ -8,7 +8,6 @@ import math
 import timeit 
 import time
 import psycopg2
-
 mesuretime=0
 restime=0
 # Import our wrapper.
@@ -112,29 +111,22 @@ def computePrecip(db,baseline_decibel,Aw):
     print "num of record"
     print record_num
     
-    
     #create view of record sorting by time asc!
     db_view=randomWord(5)
     #print "name of view %s"%db_view 
-    sql="CREATE %s %s AS SELECT * from record ORDER BY time::date asc ,time::time asc; "% (view_statement, db_view)
-    db.executeSql(sql,False)
+    sql="CREATE %s %s AS SELECT * from record2 ORDER BY time::date asc ,time::time asc; "% (view_statement, db_view)
+    db.executeSql(sql,False,True)
    
-
-#loop compute precip for each rows in table record
     xx=100
-    sql="select time,a as x,lenght,polarization,frequency from %s order by recordid limit %d ; "%(db_view, xx)
-    resu=db.executeSql(sql)
-
+    sql=" select time,a as x,lenght,polarization,frequency from %s order by recordid limit %d ; "%(db_view, xx)
+    resu=db.executeSql(sql,True,True)
+  
     recordid = 1
+    
+    db.setIsoLvl(0)
     st()
     for record in resu:
-        '''
-        a=resu[0][1]
-        time1=resu[0][0]
-        length=resu[0][2]
-        polarization=resu[0][3]
-        freq=resu[0][4]
-        '''
+        
     #coef_a_k[alpha, k]
         coef_a_k= computeAlphaK(record[4],record[3])
     #final precipiatation is R1    
@@ -146,15 +138,17 @@ def computePrecip(db,baseline_decibel,Aw):
         R1=(yr/beta)**(1/alfa)
         #print "R1 %s"%R1
         
-        sql="UPDATE record SET precipitation ='%s' where recordid = %d;"%(R1,recordid)
+        sql="UPDATE record2 SET precipitation ='%s' where recordid = %d;"%(R1,recordid)
         #print "sql %s"%sql
         db.executeSql(sql,False) 
         recordid += 1
-
+        
+         
     st(False)
-    print 'AMD Phenom X3 ocek cas hodin %s'%((record_num * (restime / xx)) / 60)
+    print 'AMD Phenom X3 ocek cas minut %s'%((record_num * (restime / xx)) / 60)
     sql="DROP %s %s"% (view_statement, db_view);
     db.executeSql(sql,False,True)
+    
  
 def sumPrecip(db,sumprecip,from_time,to_time):
     #@function sumPrecip make db views for all timestamps

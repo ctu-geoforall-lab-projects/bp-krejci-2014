@@ -3,7 +3,7 @@
 
 import sys, os, numpy, argparse
 import psycopg2 as ppg
-
+import psycopg2.extensions
 
 
 class pgwrapper:
@@ -27,9 +27,17 @@ class pgwrapper:
         
         def setCursor(self):
                 return self.connection.cursor()
-                
-
-        
+         #http://www.postgresql.org/docs/current/static/transaction-iso.html#XACT-REPEATABLE-READ
+         #http://initd.org/psycopg/docs/extensions.html#isolation-level-constants
+         #http://initd.org/psycopg/docs/connection.html#connection.set_session
+         #http://initd.org/psycopg/articles/2011/06/12/psycopg-242-released/
+         
+        def setIsoLvl(self,lvl='0'):
+                if lvl==0:
+                        self.connection.set_session('read committed')
+                elif lvl==1:
+                        self.connection.set_session(readonly=True, autocommit=False)
+                         
         def executeSql(self,sql,results=True,commit=False):
                 # Excute the SQL statement.
                 #print sql
@@ -39,7 +47,8 @@ class pgwrapper:
                         self.connection.rollback()
                         print e.pgerror
                         pass
-                if commit:
+                
+                if commit:        
                         self.connection.commit()
                         print 'commited'
 
