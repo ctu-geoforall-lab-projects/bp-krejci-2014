@@ -39,8 +39,6 @@ where record.linkid=link.linkid;
 
 
 
-
-'''
 --add column frequency
 --alter table link add column frequency integer;
 
@@ -64,9 +62,6 @@ where record.linkid=link.linkid;
 --ALTER TABLE "public"."record" ADD UNIQUE ("id");
 --ALTER TABLE "public"."record" ADD PRIMARY KEY ("id");
 
-
-
-'''
 
 
 
