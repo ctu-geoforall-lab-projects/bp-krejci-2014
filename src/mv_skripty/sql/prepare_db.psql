@@ -25,6 +25,10 @@ UPDATE link SET geom = st_makeline(n1.geom,n2.geom)
 alter table record add column polarization char(1);
 alter table record add column lenght real;
 alter table record add column precipitation real;
+alter table recprd add column a;
+
+update record
+set a= rxrpower-txpower;
 
 update record 
 set polarization=link.polarization
@@ -37,6 +41,14 @@ from link
 where record.linkid=link.linkid;
 
 
+
+create table record2 as select * from record order by time; 
+
+
+CREATE SEQUENCE serial START 1;
+alter table record2 add column id integer PRIMARY KEY DEFAULT nextval('serial')
+
+alter table record2 add column id integer PRIMARY KEY DEFAULT nextval('oid')
 
 
 --add column frequency

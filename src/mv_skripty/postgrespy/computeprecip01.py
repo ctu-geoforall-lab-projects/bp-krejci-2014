@@ -8,6 +8,16 @@ import math
 import timeit 
 import time
 import psycopg2
+
+'''
+first start hint 
+psql createdb name
+psql psql letnany < /path/to/sql/dump 
+'''
+first_fun=True #first run, make geometry, prepare columns
+
+
+
 mesuretime=0
 restime=0
 # Import our wrapper.
@@ -15,11 +25,22 @@ from pgwrapper import pgwrapper as pg
 
 #view_statement = "MATERIALIZED VIEW"
 view_statement = "TABLE"
+schema_name = "temp"  #new scheme, no source
+fromtime= "2013-09-08 23:59:00"
+totime="2013-09-09 00:03:00"
+record_tb_name= "record"
+recalculate_precitp=False
 
-#------------------------------------------------------------------functions-------------------------------------------    
+
+#------------------------------------------------------------------functions-------------------------------------------
+
+
+
+
+
+
 def randomWord(length):
     return ''.join(random.choice(string.lowercase) for i in range(length))
-
 def computeAlphaK(freq,polarization):
     """@RECOMMENDATION ITU-R P.838-3
     Specific attenuation model for rain for use in prediction methods
@@ -101,11 +122,7 @@ def st(mes=True):
 
 def computePrecip(db,baseline_decibel,Aw):
     #nuber of link in table link
-    #print "num of link"
     link_num=db.count("link")
-    #print link_num
-    
-    #nuber of records in table record
     
     record_num=db.count("record")
     print "num of record"
@@ -113,20 +130,31 @@ def computePrecip(db,baseline_decibel,Aw):
     
     #create view of record sorting by time asc!
     db_view=randomWord(5)
-    #print "name of view %s"%db_view 
-    sql="CREATE %s %s AS SELECT * from record2 ORDER BY time::date asc ,time::time asc; "% (view_statement, db_view)
-    db.executeSql(sql,False,True)
-   
-    xx=100
-    sql=" select time,a as x,lenght,polarization,frequency from %s order by recordid limit %d ; "%(db_view, xx)
-    resu=db.executeSql(sql,True,True)
-  
-    recordid = 1
+    #print "name of view %s"%db_view
+    #db_view="testT"
     
+
+    
+    sql="CREATE %s %s.%s AS SELECT * from %s ORDER BY time::date asc ,time::time asc; "% (view_statement, schema_name,db_view,record_tb_name)
+    db.executeSql(sql,False,True)
+    
+    xx=1000
+    sql=" select time,a,lenght,polarization,frequency from %s.%s order by recordid limit %d ; "%(schema_name,db_view, xx)
+    resu=db.executeSql(sql,True,True)
+    
+     #optimalization of commit
     db.setIsoLvl(0)
+    temptb=randomWord(5)
+    sql="create table %s.%s (precipitation real ,recordid integer);"%(schema_name,temptb)
+    db.executeSql(sql,False,True)
+    #mesasure computing time
     st()
+    #open blankfile
+    io= open("precip","wr")
+    
+    recordid = 1
+    temp= []
     for record in resu:
-        
     #coef_a_k[alpha, k]
         coef_a_k= computeAlphaK(record[4],record[3])
     #final precipiatation is R1    
@@ -137,19 +165,32 @@ def computePrecip(db,baseline_decibel,Aw):
         beta=1/coef_a_k[0]
         R1=(yr/beta)**(1/alfa)
         #print "R1 %s"%R1
+        out=str(R1)+"|"+str(recordid)+"\n"
         
-        sql="UPDATE record2 SET precipitation ='%s' where recordid = %d;"%(R1,recordid)
-        #print "sql %s"%sql
-        db.executeSql(sql,False) 
+        temp.append(out)
         recordid += 1
         
-         
+   
+    io.writelines(temp)
+    io.close()
+    
+    io=open("precip","r")
+    db.copyfrom(io,"test_copy")
+    io.close()
+    
+    sql="update %s set precipitation= %s.%s.precipitation from %s.%s where record2.recordid=%s.%s.recordid"%(record_tb_name,schema_name,temptb,schema_name,temptb,schema_name,temptb)
+    db.executeSql(sql,False,True)
     st(False)
+    
+    
     print 'AMD Phenom X3 ocek cas minut %s'%((record_num * (restime / xx)) / 60)
-    sql="DROP %s %s"% (view_statement, db_view);
+    #sql="DROP %s %s"% (view_statement, db_view);
+    #db.executeSql(sql,False,True)
+    sql="drop table %s.%s"%(schema_name,db_view)
+    db.executeSql(sql,False,True)
+    sql="drop table %s.%s"%(schema_name,temptb)
     db.executeSql(sql,False,True)
     
- 
 def sumPrecip(db,sumprecip,from_time,to_time):
     #@function sumPrecip make db views for all timestamps
     view_db="matviewfortimestamp"
@@ -158,8 +199,9 @@ def sumPrecip(db,sumprecip,from_time,to_time):
     
     sql="CREATE %s %s as select\
         linkid,sum(precipitation)as x,count(precipitation) as xx,date_trunc('%s',time)\
-        as timestamp FROM record GROUP BY linkid,date_trunc('%s',time)\
-        ORDER BY timestamp"%(view_statement, view_db,sumprecip,sumprecip)
+        as timestamp FROM %s GROUP BY linkid,date_trunc('%s',time)\
+        ORDER BY timestamp"%(view_statement, view_db,sumprecip,record_tb_name,sumprecip)
+    
     data=db.executeSql(sql,False,True)
    
     #num of rows of materialized view
@@ -191,8 +233,8 @@ def sumPrecip(db,sumprecip,from_time,to_time):
         
     cur_timestamp=first_timestamp
 
-    schema_name = "time_windows"
-    data=db.executeSql("CREATE SCHEMA %s" % schema_name,False,True)
+    
+    
     while cur_timestamp!=last_timestamp:
         a=time.strftime("%Y_%m_%d_%H_%M", time.strptime(str(cur_timestamp), "%Y-%m-%d %H:%M:%S"))
         view_name="view%s"%a
@@ -243,12 +285,7 @@ def main():
     else:
         db_password= None
     
-    sumprecip=('second','minute', 'hour', 'day')
-    sprc=sumprecip[1]
-    baseline_decibel=1
-    Aw=1.5
-    
-    
+
     try:
         #if required password and user    
         if db_password:        
@@ -268,11 +305,61 @@ def main():
     except psycopg2.OperationalError, e:
         sys.exit("I am unable to connect to the database (db=%s, user=%s). %s" % (db_name, db_user, e))
         
-        
-   #compute precipitation    
-    computePrecip(db,baseline_decibel,Aw)
     
-    #sumPrecip(db,sprc,"2013-09-08 23:59:00","2013-09-09 00:03:00")
+    
+    
+    
+    if first_fun:
+        sql="CREATE EXTENSION postgis;"
+        db.executeSql(sql,False,True)
+        sql="Enable Topology CREATE EXTENSION postgis_topology;"
+        db.executeSql(sql,False,True)
+        sql="SELECT AddGeometryColumn   ('public','node','geom',4326,'POINT',2); "
+        db.executeSql(sql,False,True)
+        sql="SELECT AddGeometryColumn  ('public','link','geom',4326,'LINESTRING',2); "
+        db.executeSql(sql,False,True)
+        sql="UPDATE node SET geom = ST_SetSRID(ST_MakePoint(long, lat), 4326); "
+        db.executeSql(sql,False,True)
+        sql="UPDATE link SET geom = st_makeline(n1.geom,n2.geom) \
+        FROM node AS n1 JOIN link AS l ON n1.nodeid = fromnodeid JOIN node AS n2 ON n2.nodeid = tonodeid WHERE link.linkid = l.linkid; "
+        db.executeSql(sql,False,True)
+        sql="alter table record add column polarization char(1); "
+        db.executeSql(sql,False,True)
+        sql="alter table record add column lenght real; "
+        db.executeSql(sql,False,True)
+        sql="alter table record add column precipitation real; "
+        db.executeSql(sql,False,True)
+        sql="alter table record add column a real; "
+        db.executeSql(sql,False,True)
+        sql="update record set a= rxpower-txpower;  "
+        db.executeSql(sql,False,True)
+        sql="update record  set polarization=link.polarization from link where record.linkid=link.linkid;"
+        db.executeSql(sql,False,True)
+        sql="update record  set lenght=ST_Length(link.geom,false) from link where record.linkid=link.linkid;"
+        db.executeSql(sql,False,True)
+        sql="alter table record add column id integer PRIMARY KEY DEFAULT nextval('oid'); " 
+        db.executeSql(sql,False,True)
+        sql="CREATE SEQUENCE serial START 1; "
+        db.executeSql(sql,False,True)
+        sql="alter table record add column id integer PRIMARY KEY DEFAULT nextval('serial'); "
+        db.executeSql(sql,False,True)
+        sql="CREATE INDEX idindex ON record USING btree(recordid); "
+        db.executeSql(sql,False,True)
+        sql="CREATE INDEX timeindex ON record USING btree (time); "
+        db.executeSql(sql,False,True)
+        
+        
+        
+    sumprecip=('second','minute', 'hour', 'day')
+    sprc=sumprecip[1]
+    baseline_decibel=1
+    Aw=1.5
+   #compute precipitation
+    data=db.executeSql("CREATE SCHEMA %s" % schema_name,False,True)
+    if recalculate_precitp:
+       computePrecip(db,baseline_decibel,Aw)
+    
+    #sumPrecip(db,sprc,fromtime,totime)
  
     
     

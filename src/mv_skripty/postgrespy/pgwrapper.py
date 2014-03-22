@@ -37,6 +37,25 @@ class pgwrapper:
                         self.connection.set_session('read committed')
                 elif lvl==1:
                         self.connection.set_session(readonly=True, autocommit=False)
+        
+        
+        def copyfrom(self,afile,table):
+                 try:
+                        self.cursor.copy_from(afile,table,sep='|')
+                        self.connection.commit()
+
+                 except Exception,err:
+                        self.connection.rollback()
+                        print "   Catched error (as expected):\n", err
+                        pass
+        
+        def copyexpert(self,sql, data):
+                try:
+                        self.cursor.copy_expert(sql,data)
+                except Exception:
+                        self.connection.rollback()
+                        pass
+                
                          
         def executeSql(self,sql,results=True,commit=False):
                 # Excute the SQL statement.
