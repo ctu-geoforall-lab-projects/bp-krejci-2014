@@ -14,7 +14,7 @@ first start hint
 psql createdb name
 psql psql letnany < /path/to/sql/dump 
 '''
-first_fun=True #first run, make geometry, prepare columns
+first_run=0 #first run, make geometry, prepare columns
 
 
 
@@ -29,7 +29,7 @@ schema_name = "temp"  #new scheme, no source
 fromtime= "2013-09-08 23:59:00"
 totime="2013-09-09 00:03:00"
 record_tb_name= "record"
-recalculate_precitp=False
+recalculate_precitp=True
 
 
 #------------------------------------------------------------------functions-------------------------------------------
@@ -37,7 +37,42 @@ recalculate_precitp=False
 
 
 
-
+def firstrun(db):
+        sql="CREATE EXTENSION postgis;"
+        db.executeSql(sql,False,True)
+        #sql="CREATE EXTENSION postgis_topology;"
+        #db.executeSql(sql,False,True)
+        sql="SELECT AddGeometryColumn   ('public','node','geom',4326,'POINT',2); "
+        db.executeSql(sql,False,True)
+        sql="SELECT AddGeometryColumn  ('public','link','geom',4326,'LINESTRING',2); "
+        db.executeSql(sql,False,True)
+        sql="UPDATE node SET geom = ST_SetSRID(ST_MakePoint(long, lat), 4326); "
+        db.executeSql(sql,False,True)
+        sql="UPDATE link SET geom = st_makeline(n1.geom,n2.geom) \
+        FROM node AS n1 JOIN link AS l ON n1.nodeid = fromnodeid JOIN node AS n2 ON n2.nodeid = tonodeid WHERE link.linkid = l.linkid; "
+        db.executeSql(sql,False,True)
+        sql="alter table record add column polarization char(1); "
+        db.executeSql(sql,False,True)
+        sql="alter table record add column lenght real; "
+        db.executeSql(sql,False,True)
+        sql="alter table record add column precipitation real; "
+        db.executeSql(sql,False,True)
+        sql="alter table record add column a real; "
+        db.executeSql(sql,False,True)
+        sql="update record set a= rxpower-txpower;  "
+        db.executeSql(sql,False,True)
+        sql="update record  set polarization=link.polarization from link where record.linkid=link.linkid;"
+        db.executeSql(sql,False,True)
+        sql="update record  set lenght=ST_Length(link.geom,false) from link where record.linkid=link.linkid;"
+        db.executeSql(sql,False,True)
+        sql="CREATE SEQUENCE serial START 1; "
+        db.executeSql(sql,False,True)
+        sql="alter table record add column recordid integer default nextval('serial'); "
+        db.executeSql(sql,False,True)
+        sql="CREATE INDEX idindex ON record USING btree(recordid); "
+        db.executeSql(sql,False,True)
+        sql="CREATE INDEX timeindex ON record USING btree (time); "
+        db.executeSql(sql,False,True)
 
 def randomWord(length):
     return ''.join(random.choice(string.lowercase) for i in range(length))
@@ -131,21 +166,18 @@ def computePrecip(db,baseline_decibel,Aw):
     #create view of record sorting by time asc!
     db_view=randomWord(5)
     #print "name of view %s"%db_view
-    #db_view="testT"
-    
-
     
     sql="CREATE %s %s.%s AS SELECT * from %s ORDER BY time::date asc ,time::time asc; "% (view_statement, schema_name,db_view,record_tb_name)
     db.executeSql(sql,False,True)
     
-    xx=1000
-    sql=" select time,a,lenght,polarization,frequency from %s.%s order by recordid limit %d ; "%(schema_name,db_view, xx)
+    xx=10000000
+    sql=" select time,a,lenght,polarization,frequency,linkid from %s.%s order by recordid limit %d ; "%(schema_name,db_view, xx)
     resu=db.executeSql(sql,True,True)
     
      #optimalization of commit
     db.setIsoLvl(0)
-    temptb=randomWord(5)
-    sql="create table %s.%s (precipitation real ,recordid integer);"%(schema_name,temptb)
+    temptb="result_"+randomWord(4)
+    sql="create table %s.%s ( linkid integer,time timestamp, precipitation real);"%(schema_name,temptb)
     db.executeSql(sql,False,True)
     #mesasure computing time
     st()
@@ -165,7 +197,8 @@ def computePrecip(db,baseline_decibel,Aw):
         beta=1/coef_a_k[0]
         R1=(yr/beta)**(1/alfa)
         #print "R1 %s"%R1
-        out=str(R1)+"|"+str(recordid)+"\n"
+        #linkid time precip
+        out=str(record[5])+"|"+str(record[0])+"|"+str(R1)+"\n"
         
         temp.append(out)
         recordid += 1
@@ -175,21 +208,22 @@ def computePrecip(db,baseline_decibel,Aw):
     io.close()
     
     io=open("precip","r")
-    db.copyfrom(io,"test_copy")
+
+    db.copyfrom(io,"%s.%s"%(schema_name,temptb))
     io.close()
+    #sql="CREATE INDEX recoindex ON %s.%s USING btree (recordid)"%(schema_name,temptb)
     
-    sql="update %s set precipitation= %s.%s.precipitation from %s.%s where record2.recordid=%s.%s.recordid"%(record_tb_name,schema_name,temptb,schema_name,temptb,schema_name,temptb)
+    #sql="update %s set precipitation= %s.%s.precipitation from %s.%s where %s.recordid=%s.%s.recordid"%(record_tb_name,schema_name,temptb,schema_name,temptb,record_tb_name,schema_name,temptb)
     db.executeSql(sql,False,True)
     st(False)
     
     
     print 'AMD Phenom X3 ocek cas minut %s'%((record_num * (restime / xx)) / 60)
-    #sql="DROP %s %s"% (view_statement, db_view);
-    #db.executeSql(sql,False,True)
+
     sql="drop table %s.%s"%(schema_name,db_view)
     db.executeSql(sql,False,True)
-    sql="drop table %s.%s"%(schema_name,temptb)
-    db.executeSql(sql,False,True)
+    #sql="drop table %s.%s"%(schema_name,temptb)
+    #db.executeSql(sql,False,True)
     
 def sumPrecip(db,sumprecip,from_time,to_time):
     #@function sumPrecip make db views for all timestamps
@@ -309,47 +343,8 @@ def main():
     
     
     
-    if first_fun:
-        sql="CREATE EXTENSION postgis;"
-        db.executeSql(sql,False,True)
-        sql="Enable Topology CREATE EXTENSION postgis_topology;"
-        db.executeSql(sql,False,True)
-        sql="SELECT AddGeometryColumn   ('public','node','geom',4326,'POINT',2); "
-        db.executeSql(sql,False,True)
-        sql="SELECT AddGeometryColumn  ('public','link','geom',4326,'LINESTRING',2); "
-        db.executeSql(sql,False,True)
-        sql="UPDATE node SET geom = ST_SetSRID(ST_MakePoint(long, lat), 4326); "
-        db.executeSql(sql,False,True)
-        sql="UPDATE link SET geom = st_makeline(n1.geom,n2.geom) \
-        FROM node AS n1 JOIN link AS l ON n1.nodeid = fromnodeid JOIN node AS n2 ON n2.nodeid = tonodeid WHERE link.linkid = l.linkid; "
-        db.executeSql(sql,False,True)
-        sql="alter table record add column polarization char(1); "
-        db.executeSql(sql,False,True)
-        sql="alter table record add column lenght real; "
-        db.executeSql(sql,False,True)
-        sql="alter table record add column precipitation real; "
-        db.executeSql(sql,False,True)
-        sql="alter table record add column a real; "
-        db.executeSql(sql,False,True)
-        sql="update record set a= rxpower-txpower;  "
-        db.executeSql(sql,False,True)
-        sql="update record  set polarization=link.polarization from link where record.linkid=link.linkid;"
-        db.executeSql(sql,False,True)
-        sql="update record  set lenght=ST_Length(link.geom,false) from link where record.linkid=link.linkid;"
-        db.executeSql(sql,False,True)
-        sql="alter table record add column id integer PRIMARY KEY DEFAULT nextval('oid'); " 
-        db.executeSql(sql,False,True)
-        sql="CREATE SEQUENCE serial START 1; "
-        db.executeSql(sql,False,True)
-        sql="alter table record add column id integer PRIMARY KEY DEFAULT nextval('serial'); "
-        db.executeSql(sql,False,True)
-        sql="CREATE INDEX idindex ON record USING btree(recordid); "
-        db.executeSql(sql,False,True)
-        sql="CREATE INDEX timeindex ON record USING btree (time); "
-        db.executeSql(sql,False,True)
-        
-        
-        
+    if first_run: firstrun(db)
+ 
     sumprecip=('second','minute', 'hour', 'day')
     sprc=sumprecip[1]
     baseline_decibel=1

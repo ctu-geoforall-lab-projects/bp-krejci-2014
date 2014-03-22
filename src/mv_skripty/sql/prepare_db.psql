@@ -40,15 +40,10 @@ set lenght=ST_Length(link.geom,false)
 from link
 where record.linkid=link.linkid;
 
-
-
-create table record2 as select * from record order by time; 
-
-
 CREATE SEQUENCE serial START 1;
-alter table record2 add column id integer PRIMARY KEY DEFAULT nextval('serial')
+alter table record2 add column id integer PRIMARY KEY DEFAULT nextval('serial');
 
-alter table record2 add column id integer PRIMARY KEY DEFAULT nextval('oid')
+alter table record2 add column id integer PRIMARY KEY DEFAULT nextval('oid');
 
 
 --add column frequency
