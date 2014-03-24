@@ -8,31 +8,28 @@ import math
 import timeit 
 import time
 import psycopg2
-
+from pgwrapper import pgwrapper as pg
 '''
 first start hint 
 psql createdb name
-psql psql letnany < /path/to/sql/dump 
+psql letnany < /path/to/sql/dump 
 '''
-first_run=0 #first run, make geometry, prepare columns
+first_run=False #first run, make geometry, prepare columns
+recalculate_precip=1
+view="view"
+
 
 
 
 mesuretime=0
 restime=0
-# Import our wrapper.
-from pgwrapper import pgwrapper as pg
-
-#view_statement = "MATERIALIZED VIEW"
 view_statement = "TABLE"
-schema_name = "temp"  #new scheme, no source
-fromtime= "2013-09-08 23:59:00"
-totime="2013-09-09 00:03:00"
+schema_name = "temp3"  #new scheme, no source
+fromtime= "2013-09-09 19:59:00"
+totime="2013-09-09 23:59:00"
 record_tb_name= "record"
-recalculate_precitp=True
 
 
-#------------------------------------------------------------------functions-------------------------------------------
 
 
 
@@ -144,8 +141,7 @@ def computeAlphaK(freq,polarization):
     
         av=(av + ma_av * math.log10(freq) + ca_av)
         
-        return (av,kv)
-    
+        return (av,kv)   
 def st(mes=True):
     if mes:
         global mesuretime
@@ -156,36 +152,40 @@ def st(mes=True):
         print "time is: ", restime
 
 def computePrecip(db,baseline_decibel,Aw):
-    #nuber of link in table link
+    #nuber of link and record in table link
     link_num=db.count("link")
-    
     record_num=db.count("record")
     print "num of record"
     print record_num
     
-    #create view of record sorting by time asc!
-    db_view=randomWord(5)
-    #print "name of view %s"%db_view
-    
-    sql="CREATE %s %s.%s AS SELECT * from %s ORDER BY time::date asc ,time::time asc; "% (view_statement, schema_name,db_view,record_tb_name)
-    db.executeSql(sql,False,True)
-    
-    xx=10000000
-    sql=" select time,a,lenght,polarization,frequency,linkid from %s.%s order by recordid limit %d ; "%(schema_name,db_view, xx)
+    #select values for computing
+    xx=record_num
+    sql=" select time,a,lenght,polarization,frequency,linkid from %s order by recordid limit %d ; "%(record_tb_name, xx)
     resu=db.executeSql(sql,True,True)
     
-     #optimalization of commit
+    #optimalization of commits
     db.setIsoLvl(0)
-    temptb="result_"+randomWord(4)
+    
+    #crate table for results
+    global temptb
+    temptb="result_" + randomWord(4)
     sql="create table %s.%s ( linkid integer,time timestamp, precipitation real);"%(schema_name,temptb)
     db.executeSql(sql,False,True)
+    
+    #save name of result table for next run without compute precip
+    r= open("last_res","wr")
+    r.write(temptb)
+    r.close()
+    
     #mesasure computing time
     st()
+    
     #open blankfile
     io= open("precip","wr")
     
     recordid = 1
     temp= []
+    
     for record in resu:
     #coef_a_k[alpha, k]
         coef_a_k= computeAlphaK(record[4],record[3])
@@ -196,93 +196,91 @@ def computePrecip(db,baseline_decibel,Aw):
         alfa=1/coef_a_k[1]
         beta=1/coef_a_k[0]
         R1=(yr/beta)**(1/alfa)
-        #print "R1 %s"%R1
-        #linkid time precip
+        
+        #string for output flatfile
         out=str(record[5])+"|"+str(record[0])+"|"+str(R1)+"\n"
         
         temp.append(out)
         recordid += 1
         
-   
+    #write values to flat file
     io.writelines(temp)
     io.close()
     
     io=open("precip","r")
-
     db.copyfrom(io,"%s.%s"%(schema_name,temptb))
     io.close()
-    #sql="CREATE INDEX recoindex ON %s.%s USING btree (recordid)"%(schema_name,temptb)
     
-    #sql="update %s set precipitation= %s.%s.precipitation from %s.%s where %s.recordid=%s.%s.recordid"%(record_tb_name,schema_name,temptb,schema_name,temptb,record_tb_name,schema_name,temptb)
-    db.executeSql(sql,False,True)
-    st(False)
-    
-    
-    print 'AMD Phenom X3 ocek cas minut %s'%((record_num * (restime / xx)) / 60)
-
-    sql="drop table %s.%s"%(schema_name,db_view)
-    db.executeSql(sql,False,True)
     #sql="drop table %s.%s"%(schema_name,temptb)
-    #db.executeSql(sql,False,True)
+    #db.executeSql(sql,False,True) 
+    st(False)
+    print 'AMD Phenom X3 ocek cas minut %s'%((record_num * (restime / xx)) / 60)
     
 def sumPrecip(db,sumprecip,from_time,to_time):
     #@function sumPrecip make db views for all timestamps
-    view_db="matviewfortimestamp"
+    io=open("last_res",'r')
+    temptb=io.read()
+    io.close()
+    print temptb
     
     #summing values per (->user)timestep interval
-    
-    sql="CREATE %s %s as select\
-        linkid,sum(precipitation)as x,count(precipitation) as xx,date_trunc('%s',time)\
-        as timestamp FROM %s GROUP BY linkid,date_trunc('%s',time)\
-        ORDER BY timestamp"%(view_statement, view_db,sumprecip,record_tb_name,sumprecip)
-    
+    view_db="sum_"+randomWord(3)
+    sql="CREATE %s %s.%s as select\
+        linkid,avg(precipitation)as precip_mm_h, date_trunc('%s',time)\
+        as timestamp FROM %s.%s GROUP BY linkid, date_trunc('%s',time)\
+        ORDER BY timestamp"%(view_statement, schema_name, view_db ,sumprecip ,schema_name,temptb ,sumprecip)    
     data=db.executeSql(sql,False,True)
    
     #num of rows of materialized view
-    record_num=db.count(view_db)
+    record_num=db.count("%s.%s"%(schema_name,view_db))
     
-    #the user's choice or all record 
+    #the user's choice or all records 
     if from_time and to_time:
         first_timestamp=from_time
         last_timestamp=to_time
     else:    
         #get first timestamp
-        sql="select timestamp from %s limit 1"%view_db
+        sql="select timestamp from %s.%s limit 1"%(schema_name,view_db)
         first_timestamp=db.executeSql(sql)[0][0]
         
         #get last timestep
-        sql="select timestamp from %s offset %s"%(view_db,record_num-1)
+        sql="select timestamp from  %s.%s offset %s"%(schema_name,view_db,record_num-1)
         last_timestamp=db.executeSql(sql)[0][0]
     
-    #make view per(->user) interval for all timestamp, for all links
+    #make view per(->user) interval for all timestamp and for all links
     time_const=0
     if sumprecip=="minute":
         tc=60
     elif sumprecip=='second':
-        tc=0
+        tc=1
     elif sumPrecip=="hour" :
         tc=3600
     else:
         tc=216000
         
     cur_timestamp=first_timestamp
-
     
-    
-    while cur_timestamp!=last_timestamp:
+    while str(cur_timestamp)!=str(last_timestamp):
+        #crate name of view
         a=time.strftime("%Y_%m_%d_%H_%M", time.strptime(str(cur_timestamp), "%Y-%m-%d %H:%M:%S"))
-        view_name="view%s"%a
+        view_name="%s%s"%(view,a)
         print "(timestamp'%s'+ %s * interval '1 second')" % (first_timestamp,time_const)
-        sql="CREATE VIEW %s.%s as select * from %s where timestamp=(timestamp'%s'+ %s * interval '1 second')"%(schema_name,view_name,view_db,first_timestamp,time_const)
+        
+        #create view
+        sql="CREATE table %s.%s as select * from %s.%s where timestamp=(timestamp'%s'+ %s * interval '1 second')"%(schema_name,view_name,schema_name,view_db,first_timestamp,time_const)
         data=db.executeSql(sql,False,True)
         
         #go to next time interval
         time_const+=tc
         
-        #compute cur_timestamp (need for loop while)
+        #compute cur_timestamp (need for loop)
         sql="select (timestamp'%s')+ %s* interval '1 second'"%(cur_timestamp,tc)
-        cur_timestamp=db.executeSql(sql)[0][0]   
-    
+        cur_timestamp=db.executeSql(sql)[0][0]
+        print cur_timestamp
+        print last_timestamp
+        
+    sql="drop table %s.%s"%(schema_name,view_db)
+    db.executeSql(sql,False,True) 
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
     #parser = argparse.ArgumentParser ()
@@ -340,21 +338,22 @@ def main():
         sys.exit("I am unable to connect to the database (db=%s, user=%s). %s" % (db_name, db_user, e))
         
     
-    
-    
-    
     if first_run: firstrun(db)
  
-    sumprecip=('second','minute', 'hour', 'day')
-    sprc=sumprecip[1]
-    baseline_decibel=1
+   
+    baseline_decibel=3
     Aw=1.5
-   #compute precipitation
+
     data=db.executeSql("CREATE SCHEMA %s" % schema_name,False,True)
-    if recalculate_precitp:
+    #compute precipitation
+    if recalculate_precip:
        computePrecip(db,baseline_decibel,Aw)
-    
-    #sumPrecip(db,sprc,fromtime,totime)
+       
+       
+    #make time wiindows
+    sumprecip=('second','minute', 'hour', 'day')
+    sprc=sumprecip[1]  
+    sumPrecip(db,sprc,fromtime,totime)
  
     
     

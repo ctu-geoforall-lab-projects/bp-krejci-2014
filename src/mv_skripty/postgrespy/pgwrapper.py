@@ -59,7 +59,7 @@ class pgwrapper:
                          
         def executeSql(self,sql,results=True,commit=False):
                 # Excute the SQL statement.
-                #print sql
+                print sql
                 try:
                         self.cursor.execute(sql)
                 except Exception, e:
@@ -76,22 +76,13 @@ class pgwrapper:
                         results = self.cursor.fetchall()
                         # Return the results.1
                         return results
-        '''
-        def executeSqlP(self,sql,data):
-                # Excute the SQL statement.
-                try:
-                        self.cursor.mogrify(sql,data)
-                except Exception, e:
-                        self.connection.rollback()
-                        print e.pgerror
-                        pass
-                self.connection.commit()
-        '''
+
+  
         
         def count(self, table):
                 """!Count the number of rows.
                 @param table         : Name of the table to count row"""
-                sql_count='SELECT COUNT(*) FROM "' + table + '"'
+                sql_count='SELECT COUNT(*) FROM ' + table 
                 self.cursor.execute(sql_count)
                 n=self.cursor.fetchall()[0][0]
                 return n
