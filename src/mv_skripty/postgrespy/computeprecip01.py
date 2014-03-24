@@ -9,13 +9,139 @@ import timeit
 import time
 import psycopg2
 from pgwrapper import pgwrapper as pg
+from grass.script import parser, run_command, mlist_pairs, message, fatal, find_file
+try:
+    from grass.script import core as grass
+except ImportError:
+    import grass
+except:
+    raise Exception ("Cannot find 'grass' Python module. Python is supported by GRASS from version >= 6.4" )
+
+##########################################################
+######################## Required ########################
+##########################################################
+#%module
+#% description: Module for working with microwave links
+#%end
+
+#%flag
+#% key: first_run
+#% description: First run (prepare columns, make geometry etc)
+#%end
+
+#%flag
+#% key: compute_precip
+#% description: Compute precip in db (not necessary if you computed precip in the past)
+#%end
+
+#%flag
+#% key: mk_time_windows
+#% description: Create time windows in db (not necessary if created in the past)
+#%end
+
+
+##########################################################
+############## guisection: Precipitation #################
+##########################################################
+
+
+#%option 
+#% key: baseline
+#% label: Baseline value
+#% description: This options set baseline A0[dB]. note (Ar=A-A0-Aw)
+#% type: double
+#% guisection: Precipitation
+#% required: yes
+#%end
+
+#%option 
+#% key: aw
+#% label: Aw value
+#% description: This options set Aw[dB] value for safety. note (Ar=A-A0-Aw)
+#% type: double
+#% guisection: Precipitation
+#% required: yes
+#%end
+
+
+
+
+
+##########################################################
+############## guisection: database works ################
+##########################################################
+#%option
+#% key: host
+#% type: string
+#% label: Host
+#% description: Host name of the machine on which the server is running.
+#% guisection: Database
+#% required : no
+#%end
+
+#%option
+#% key: port
+#% type: integer
+#% label: Port
+#% description: TCP port on which the server is listening, usually 5432.
+#% guisection: Database
+#% required : no
+#%end
+
+#%option
+#% key: database
+#% type: string
+#% key_desc : name
+#% gisprompt: old_dbname,dbname,dbname
+#% label: Database
+#% description: Database name
+#% guisection: Database
+#% required : yes
+#%end
+
+#%option
+#% key: schema
+#% type: string
+#% label: Schema
+#% description: Database schema.
+#% guisection: Database
+#% required : no
+#%end
+
+#%option
+#% key: user
+#% type: string
+#% label: User
+#% description: Connect to the database as the user username instead of the  default.
+#% guisection: Database
+#% required : no
+#%end
+
+#%option
+#% key: password
+#% type: string
+#% label: Password
+#% description: Password will be stored in flat file!
+#% guisection: Database
+#% required : no
+#%end
+
+############################################
+############## interpolation ##############
+############################################
+
+
+
+
+
 '''
 first start hint 
 psql createdb name
 psql letnany < /path/to/sql/dump 
 '''
-first_run=False #first run, make geometry, prepare columns
-recalculate_precip=1
+ #first run, make geometry, prepare columns
+compute_precip=0
+mk_time_windows=0
 view="view"
 
 
@@ -31,9 +157,67 @@ record_tb_name= "record"
 
 
 
+def dbConnGrass():
+    host = options['host']
+    port = options['port']
+    database = options['database']
+    schema = options['schema']
+    user = options['user']
+    password = options['password']
 
+    # Test connection
+    conn = "dbname=" + database
+    if host: conn += ",host=" + host
+    if port: conn += ",port=" + port
 
+    # Unfortunately we cannot test untill user/password is set
+    if user or password:
+        print "Setting login (db.login) ... "
+        sys.stdout.flush()
+        if grass.run_command('db.login', driver = "pg", database = conn, user = user, password = password) != 0:
+            grass.fatal("Cannot login")
 
+    # Try to connect
+    print "Testing connection ..."
+    sys.stdout.flush()
+    if grass.run_command('db.select', quiet = True, flags='c', driver= "pg", database=conn, sql="select version()" ) != 0:
+        if user or password:
+            print "Deleting login (db.login) ..."
+            sys.stdout.flush()
+            if grass.run_command('db.login', quiet = True, driver = "pg", database = conn, user = "", password = "") != 0:
+                print "Cannot delete login."
+                sys.stdout.flush()
+        grass.fatal("Cannot connect to database.")
+
+    if grass.run_command('db.connect', driver = "pg", database = conn, schema = schema) != 0:
+        grass.fatal("Cannot connect to database.")
+
+def dbConnPy():
+    host = options['host']
+    port = options['port']
+    database = options['database']
+    schema = options['schema']
+    user = options['user']
+    password = options['password']
+    try:
+        #if require password and user    
+        if db_password:        
+            db = pg(dbname=database, host=host,
+                    user=db_user, passwd = db_password)
+            print " #required password and user "
+        #if required only user
+        elif db_user and not db_password:         
+            db = pg(dbname=database, host=host,
+                    user=db_user)
+            print "required only user"
+        #if not required user and passwd   
+        else:
+            db = pg(dbname=database, host=host)
+            print "not required user and passwd"
+    except psycopg2.OperationalError, e:
+        sys.exit("I am unable to connect to the database (db=%s, user=%s). %s" % (db_name, db_user, e))
+        return db
+    
 def firstrun(db):
         sql="CREATE EXTENSION postgis;"
         db.executeSql(sql,False,True)
@@ -73,6 +257,7 @@ def firstrun(db):
 
 def randomWord(length):
     return ''.join(random.choice(string.lowercase) for i in range(length))
+
 def computeAlphaK(freq,polarization):
     """@RECOMMENDATION ITU-R P.838-3
     Specific attenuation model for rain for use in prediction methods
@@ -142,6 +327,7 @@ def computeAlphaK(freq,polarization):
         av=(av + ma_av * math.log10(freq) + ca_av)
         
         return (av,kv)   
+
 def st(mes=True):
     if mes:
         global mesuretime
@@ -151,7 +337,10 @@ def st(mes=True):
         restime=time.time() - mesuretime
         print "time is: ", restime
 
-def computePrecip(db,baseline_decibel,Aw):
+def computePrecip(db):
+    
+    baseline_decibel= options['baseline']
+    Aw=options['aw']
     #nuber of link and record in table link
     link_num=db.count("link")
     record_num=db.count("record")
@@ -214,8 +403,8 @@ def computePrecip(db,baseline_decibel,Aw):
     #sql="drop table %s.%s"%(schema_name,temptb)
     #db.executeSql(sql,False,True) 
     st(False)
-    print 'AMD Phenom X3 ocek cas minut %s'%((record_num * (restime / xx)) / 60)
-    
+    print 'AMD Phenom X3 ocek cas minut %s'%((record_num * (restime / xx)) / 60)    
+
 def sumPrecip(db,sumprecip,from_time,to_time):
     #@function sumPrecip make db views for all timestamps
     io=open("last_res",'r')
@@ -281,22 +470,54 @@ def sumPrecip(db,sumprecip,from_time,to_time):
         
     sql="drop table %s.%s"%(schema_name,view_db)
     db.executeSql(sql,False,True) 
+
+def grass():
+    ##set up and connect to postgres database in grass##
+#make string for connect database- example(database="host=myserver.itc.it,dbname=mydb")
+    dbconn="dbname=" + db_name
+    if db_host: dbconn += ",host = " + db_host
+    if db_port: dbconn += ",port = " + db_port
+#if required password and user    
+    if db_password:  
+        run_command('db.login',user = db_user, driver = 'pg', database = dbconn, password = db_password) 
+#if required only user
+    elif db_user and not db_password: 
+        run_command('db.login',user = db_user, driver = 'pg', database = dbconn)
+    
+    g.run_command('db.connect',
+                driver = 'pg',
+                database = dbconn)
+    
+    g.run_command('v.in.ogr',
+                dsn ="./",
+                layer = link,
+                output = link1,
+                quiet = True,
+                overwrite = True,)
+    
+    g.run_command('v.category',
+                input=link1,
+                output=link_nat,
+                op="transfer",
+                layer="1,2")
+
+    g.run_command('v.db.connect',
+                link_nat,
+                layer=1,
+                table=link,
+                key=linkid)
+    
+    g.run_command('v.db.connect',
+                link_nat,
+                layer=2,
+                table=record_test,
+                key=linkid)
+    
+
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
-    #parser = argparse.ArgumentParser ()
-    #group1 = parser.add_argument_group('group1', 'group database')
-    #group1.add_argument("host", help = 'database host')
-    #group1.add_argument("db_name", help = 'database name')
-    #group1.add_argument("db_schema", help = 'database schema')
-    #group1.add_argument("port", help = 'port')
-    #group1.add_argument("user", help = 'database user')
-    #group1.add_argument("password", help = 'database password')
-    
-    #group2 = parser.add_argument_group('group2', 'group precipitation')
-    #group2.add_argument("sumprecip", help = 'summing interval of precipitation in ['second','minute', 'hour', 'day', 'week', 'month', 'quarter'] write string!!)
-    #group2.add_argument("baseline_decibel", help = 'baseline of frequency for compute precip')
-    #group2.add_argument("freq_const", help = 'minus constant in [decibel] ')
-    
+
+    '''
     print "hello "
     db_schema="public"
     if len(sys.argv) > 1:
@@ -316,45 +537,29 @@ def main():
         db_password = sys.argv[3]
     else:
         db_password= None
+    '''
     
-
-    try:
-        #if required password and user    
-        if db_password:        
-            db = pg(dbname=db_name, host=db_host,
-                    user=db_user, passwd = db_password)
-            print " #required password and user "
-        #if required only user
-        elif db_user and not db_password:         
-            db = pg(dbname=db_name, host=db_host,
-                    user=db_user)
-            print "required only user"
-        #if not required user and passwd   
-        else:
-            db = pg(dbname=db_name, host=db_host,
-                    user=db_user)
-            print "not required user and passwd"
-    except psycopg2.OperationalError, e:
-        sys.exit("I am unable to connect to the database (db=%s, user=%s). %s" % (db_name, db_user, e))
-        
+    #connect to database psycopg
+    db=dbconn()
     
-    if first_run: firstrun(db)
- 
+    #first run- prepare db
+    if flags['first_run']:
+        firstrun(db)
    
-    baseline_decibel=3
-    Aw=1.5
 
     data=db.executeSql("CREATE SCHEMA %s" % schema_name,False,True)
     #compute precipitation
-    if recalculate_precip:
-       computePrecip(db,baseline_decibel,Aw)
-       
+    if flags['compute_precip']:
+       computePrecip(db)
        
     #make time wiindows
-    sumprecip=('second','minute', 'hour', 'day')
-    sprc=sumprecip[1]  
-    sumPrecip(db,sprc,fromtime,totime)
- 
+    if flags['mk_time_windows']:
+        sumprecip=('second','minute', 'hour', 'day')
+        sprc=sumprecip[1] 
+        sumPrecip(db,sprc,fromtime,totime)
+        
+        
+    grass()
     
     
 main()

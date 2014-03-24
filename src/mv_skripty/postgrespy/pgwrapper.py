@@ -7,7 +7,7 @@ import psycopg2.extensions
 
 
 class pgwrapper:
-        def __init__(self, dbname, host='', user='', passwd=''):
+        def __init__(self,dbname, host='localhost',user='',passwd=''):
                 self.dbname = dbname                    # Database name which connect to.
                 self.host = host                        # Host name (default is "localhost")
                 self.user = user                        # User name for login to the database.
@@ -16,17 +16,21 @@ class pgwrapper:
                 self.cursor = self.setCursor()          # Generate cursor.
                 
         def setConnect(self):
-                conn_string = "dbname='%s' user='%s'" % (self.dbname, self.user)
+                conn_string = "dbname='%s' user='%s' host='%s'" % (self.dbname, self.user,self.host)
                 if self.host:
                         conn_string += " host='%s'" % self.host
                 if self.password:
                         conn_string += " passwd='%s'" % self.password
-                
+
                 conn = ppg.connect(conn_string)
                 return conn
         
         def setCursor(self):
                 return self.connection.cursor()
+        
+        
+        
+        
          #http://www.postgresql.org/docs/current/static/transaction-iso.html#XACT-REPEATABLE-READ
          #http://initd.org/psycopg/docs/extensions.html#isolation-level-constants
          #http://initd.org/psycopg/docs/connection.html#connection.set_session
