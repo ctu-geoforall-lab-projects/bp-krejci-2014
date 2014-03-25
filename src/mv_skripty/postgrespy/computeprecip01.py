@@ -8,70 +8,34 @@ import math
 import timeit 
 import time
 import psycopg2
+import atexit
 from pgwrapper import pgwrapper as pg
-from grass.script import parser, run_command, mlist_pairs, message, fatal, find_file
+
+
 try:
-    from grass.script import core as grass
+    from grass.script import message,core as grass  
 except ImportError:
     import grass
 except:
     raise Exception ("Cannot find 'grass' Python module. Python is supported by GRASS from version >= 6.4" )
 
-##########################################################
-######################## Required ########################
-##########################################################
+
+
 #%module
 #% description: Module for working with microwave links
 #%end
-
-#%flag
-#% key: first_run
-#% description: First run (prepare columns, make geometry etc)
-#%end
-
-#%flag
-#% key: compute_precip
-#% description: Compute precip in db (not necessary if you computed precip in the past)
-#%end
-
-#%flag
-#% key: mk_time_windows
-#% description: Create time windows in db (not necessary if created in the past)
-#%end
-
-
 ##########################################################
-############## guisection: Precipitation #################
+################### Interpolation ########################
 ##########################################################
-
-
-#%option 
-#% key: baseline
-#% label: Baseline value
-#% description: This options set baseline A0[dB]. note (Ar=A-A0-Aw)
-#% type: double
-#% guisection: Precipitation
-#% required: yes
-#%end
-
-#%option 
-#% key: aw
-#% label: Aw value
-#% description: This options set Aw[dB] value for safety. note (Ar=A-A0-Aw)
-#% type: double
-#% guisection: Precipitation
-#% required: yes
-#%end
-
-
 
 
 
 ##########################################################
-############## guisection: database works ################
+############## guisection: database work ################
 ##########################################################
+
 #%option
-#% key: host
+#% key:host
 #% type: string
 #% label: Host
 #% description: Host name of the machine on which the server is running.
@@ -125,28 +89,82 @@ except:
 #% guisection: Database
 #% required : no
 #%end
+##########################################################
+############## guisection: Preprocesing #################
+##########################################################
+
+#%option 
+#% key: fromtime
+#% label: First timestamp "YYYY-MM-DD H:M:S"
+#% description: Set first timestamp in format "YYYY-MM-DD H:M:S"
+#% type: string
+#% guisection: Preprocesing
+#%end
+
+#%option 
+#% key: totime
+#% label: Last timestamp "YYYY-MM-DD H:M:S"
+#% description: Set last timestamp in format "YYYY-MM-DD H:M:S"
+#% type: string
+#% guisection: Preprocesing
+#%end
+
+#%option 
+#% key: baseline
+#% label: Baseline value
+#% description: This options set baseline A0[dB]. note (Ar=A-A0-Aw)
+#% type: double
+#% guisection: Preprocesing
+#%end
+
+#%option 
+#% key: aw
+#% label: Aw value
+#% description: This options set Aw[dB] value for safety. note (Ar=A-A0-Aw)
+#% type: double
+#% guisection: Preprocesing
+#%end
+
+#%flag
+#% key:f
+#% description: First run (prepare columns, make geometry etc)
+#% required : no
+#% guisection: Preprocesing
+#%end
+
+#%flag
+#% key:c
+#% description: Compute precip in db (not necessary if you computed precip in the past)
+#% required : no
+#% guisection: Preprocesing
+#%end
+
+#%flag
+#% key:m
+#% description: Create time windows in db (not necessary if created in the past)
+#% required : no
+#% guisection: Preprocesing
+#%end
+
+
+
+
 
 ############################################
-############## interpolation ##############
+######################## info ##############
 ############################################
 
+#%flag
+#% key:t
+#% description: Get info about timestamp(first,last) in db 
+#% required : no
+#% guisection: Info
+#%end
 
 
 
 
-'''
-first start hint 
-psql createdb name
-psql letnany < /path/to/sql/dump 
-'''
- #first run, make geometry, prepare columns
-compute_precip=0
-mk_time_windows=0
 view="view"
-
-
-
-
 mesuretime=0
 restime=0
 view_statement = "TABLE"
@@ -154,10 +172,17 @@ schema_name = "temp3"  #new scheme, no source
 fromtime= "2013-09-09 19:59:00"
 totime="2013-09-09 23:59:00"
 record_tb_name= "record"
+temp_windows_names=[]
 
-
-
-def dbConnGrass():
+def print_message(msg):
+    print '-' * 80
+    print msg
+    print '-' * 80
+    print 
+    sys.stdout.flush()
+    
+def dbConnGrass(host,port,database,schema,user,password):
+    print_message("Connecting to db-GRASS...")
     host = options['host']
     port = options['port']
     database = options['database']
@@ -172,8 +197,7 @@ def dbConnGrass():
 
     # Unfortunately we cannot test untill user/password is set
     if user or password:
-        print "Setting login (db.login) ... "
-        sys.stdout.flush()
+        print_message("Setting login (db.login) ... ")
         if grass.run_command('db.login', driver = "pg", database = conn, user = user, password = password) != 0:
             grass.fatal("Cannot login")
 
@@ -182,43 +206,43 @@ def dbConnGrass():
     sys.stdout.flush()
     if grass.run_command('db.select', quiet = True, flags='c', driver= "pg", database=conn, sql="select version()" ) != 0:
         if user or password:
-            print "Deleting login (db.login) ..."
-            sys.stdout.flush()
+            pprint_message( "Deleting login (db.login) ...")
             if grass.run_command('db.login', quiet = True, driver = "pg", database = conn, user = "", password = "") != 0:
-                print "Cannot delete login."
-                sys.stdout.flush()
+                print_message("Cannot delete login.")
         grass.fatal("Cannot connect to database.")
 
     if grass.run_command('db.connect', driver = "pg", database = conn, schema = schema) != 0:
         grass.fatal("Cannot connect to database.")
 
 def dbConnPy():
-    host = options['host']
-    port = options['port']
-    database = options['database']
-    schema = options['schema']
-    user = options['user']
-    password = options['password']
+    print_message("Conecting to db by psycopg")
+    db_host = options['host']
+    db_name = options['database']
+    db_user = options['user']
+    db_password = options['password']
+    
     try:
         #if require password and user    
         if db_password:        
-            db = pg(dbname=database, host=host,
+            db = pg(dbname=db_name, host=db_host,
                     user=db_user, passwd = db_password)
             print " #required password and user "
         #if required only user
         elif db_user and not db_password:         
-            db = pg(dbname=database, host=host,
+            db = pg(dbname=db_name, host=db_host,
                     user=db_user)
             print "required only user"
         #if not required user and passwd   
         else:
-            db = pg(dbname=database, host=host)
+            db = pg(dbname=db_name, host=db_host)
             print "not required user and passwd"
     except psycopg2.OperationalError, e:
         sys.exit("I am unable to connect to the database (db=%s, user=%s). %s" % (db_name, db_user, e))
-        return db
+    return db
     
-def firstrun(db):
+def firstRun(db):
+        print_message("Preparing database...")
+    
         sql="CREATE EXTENSION postgis;"
         db.executeSql(sql,False,True)
         #sql="CREATE EXTENSION postgis_topology;"
@@ -338,22 +362,22 @@ def st(mes=True):
         print "time is: ", restime
 
 def computePrecip(db):
+    print_message("Prepare db for computing precipitation...")
     
     baseline_decibel= options['baseline']
+    baseline_decibel=float(baseline_decibel)
     Aw=options['aw']
+    Aw=float(Aw)
+    
     #nuber of link and record in table link
     link_num=db.count("link")
     record_num=db.count("record")
-    print "num of record"
-    print record_num
+    print_message("Numer of records %s"%record_num)
     
     #select values for computing
     xx=record_num
     sql=" select time,a,lenght,polarization,frequency,linkid from %s order by recordid limit %d ; "%(record_tb_name, xx)
     resu=db.executeSql(sql,True,True)
-    
-    #optimalization of commits
-    db.setIsoLvl(0)
     
     #crate table for results
     global temptb
@@ -366,6 +390,9 @@ def computePrecip(db):
     r.write(temptb)
     r.close()
     
+    
+    #optimalization of commits
+    db.setIsoLvl(0)
     #mesasure computing time
     st()
     
@@ -374,28 +401,28 @@ def computePrecip(db):
     
     recordid = 1
     temp= []
+    print_message("Computing precipitation...")
     
     for record in resu:
     #coef_a_k[alpha, k]
         coef_a_k= computeAlphaK(record[4],record[3])
+        
     #final precipiatation is R1    
         Ar=(-1)*record[1]-baseline_decibel-Aw
-        yr=Ar/record[2]
-        
+        yr=Ar/record[2]  
         alfa=1/coef_a_k[1]
         beta=1/coef_a_k[0]
         R1=(yr/beta)**(1/alfa)
         
-        #string for output flatfile
+    #string for output flatfile
         out=str(record[5])+"|"+str(record[0])+"|"+str(R1)+"\n"
-        
         temp.append(out)
         recordid += 1
         
     #write values to flat file
     io.writelines(temp)
     io.close()
-    
+    print_message("Write precipitation to database...")
     io=open("precip","r")
     db.copyfrom(io,"%s.%s"%(schema_name,temptb))
     io.close()
@@ -406,6 +433,7 @@ def computePrecip(db):
     print 'AMD Phenom X3 ocek cas minut %s'%((record_num * (restime / xx)) / 60)    
 
 def sumPrecip(db,sumprecip,from_time,to_time):
+    print_message("Creating time windows...")
     #@function sumPrecip make db views for all timestamps
     io=open("last_res",'r')
     temptb=io.read()
@@ -447,14 +475,20 @@ def sumPrecip(db,sumprecip,from_time,to_time):
     else:
         tc=216000
         
+        
     cur_timestamp=first_timestamp
-    
+    i=0
+    global temp_windows_names
+    io2=open("timewindow","wr")
+    temp=[]
     while str(cur_timestamp)!=str(last_timestamp):
         #crate name of view
         a=time.strftime("%Y_%m_%d_%H_%M", time.strptime(str(cur_timestamp), "%Y-%m-%d %H:%M:%S"))
         view_name="%s%s"%(view,a)
         print "(timestamp'%s'+ %s * interval '1 second')" % (first_timestamp,time_const)
+        temp.append(view_name)
         
+        i+=1
         #create view
         sql="CREATE table %s.%s as select * from %s.%s where timestamp=(timestamp'%s'+ %s * interval '1 second')"%(schema_name,view_name,schema_name,view_db,first_timestamp,time_const)
         data=db.executeSql(sql,False,True)
@@ -467,56 +501,70 @@ def sumPrecip(db,sumprecip,from_time,to_time):
         cur_timestamp=db.executeSql(sql)[0][0]
         print cur_timestamp
         print last_timestamp
+    
         
+    #write values to flat file
+    io2.writelines(temp)
+    io2.close()
+    
+    
     sql="drop table %s.%s"%(schema_name,view_db)
     db.executeSql(sql,False,True) 
 
-def grass():
-    ##set up and connect to postgres database in grass##
-#make string for connect database- example(database="host=myserver.itc.it,dbname=mydb")
-    dbconn="dbname=" + db_name
-    if db_host: dbconn += ",host = " + db_host
-    if db_port: dbconn += ",port = " + db_port
-#if required password and user    
-    if db_password:  
-        run_command('db.login',user = db_user, driver = 'pg', database = dbconn, password = db_password) 
-#if required only user
-    elif db_user and not db_password: 
-        run_command('db.login',user = db_user, driver = 'pg', database = dbconn)
+def grassWork():
+
+    dbConnGrass(host,port,database,schema,user,password)
     
-    g.run_command('db.connect',
-                driver = 'pg',
-                database = dbconn)
+    io=open('timewindow','r')
+    timewindow=io.read()
+    r=0
+    for window in timewindow:
+        temp_windows_names[r]=window
+        r+=1
+        
     
-    g.run_command('v.in.ogr',
-                dsn ="./",
-                layer = link,
-                output = link1,
+    
+    grass.run_command('v.in.ogr',
+                layer = 'link',
+                output = 'link',
                 quiet = True,
                 overwrite = True,)
     
-    g.run_command('v.category',
-                input=link1,
-                output=link_nat,
+    grass.run_command('v.category',
+                input='link',
+                output='link_nat',
                 op="transfer",
                 layer="1,2")
+    
+    grass.run_command('g.region',
+                      vect='link_nat',
+                      res=10 )
+    
+    grass.run_command('v.db.connect',
+                    map='link_nat',
+                    layer=1,
+                    table=link,
+                    key=linkid)
+    
+    
+    for window in temp_windows_names:
 
-    g.run_command('v.db.connect',
-                link_nat,
-                layer=1,
-                table=link,
-                key=linkid)
-    
-    g.run_command('v.db.connect',
-                link_nat,
-                layer=2,
-                table=record_test,
-                key=linkid)
-    
+        grass.run_command('v.db.connect',
+                    map='link_nat',
+                    layer=2,
+                    table=window,
+                    key=linkid)
+        
+        grass.run_command('v.to.rast',
+                    input='link_nat',
+                    layer=2,
+                    output=window)
+        
 
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
-
+    print_message("Script is running...")
+    
     '''
     print "hello "
     db_schema="public"
@@ -538,28 +586,50 @@ def main():
     else:
         db_password= None
     '''
+
+
+ 
+    
+    
     
     #connect to database psycopg
-    db=dbconn()
-    
-    #first run- prepare db
-    if flags['first_run']:
-        firstrun(db)
-   
-
-    data=db.executeSql("CREATE SCHEMA %s" % schema_name,False,True)
-    #compute precipitation
-    if flags['compute_precip']:
-       computePrecip(db)
+    db=dbConnPy()
+    if flags['t']:
+        sql="create view tt as select time from %s order by time"%record_tb_name
+        db.executeSql(sql,False,True)
+        #get first timestamp
+        sql="select time from tt limit 1"
+        first_timestamp=db.executeSql(sql,True,True)[0][0]
+        print_message('First timestamp is %s'%first_timestamp)
+        record_num=db.count(record_tb_name)
+        
+        #get last timestep
+        sql="select time from  tt offset %s"%(record_num-1)
+        last_timestamp=db.executeSql(sql,True,True)[0][0]
+        print_message('Last timestamp is %s'%last_timestamp)
+        sql="drop view tt"
+        db.executeSql(sql,False,True)
+    else:    
+        #first run- prepare db
+        if flags['f']:
+            firstRun(db)
        
-    #make time wiindows
-    if flags['mk_time_windows']:
-        sumprecip=('second','minute', 'hour', 'day')
-        sprc=sumprecip[1] 
-        sumPrecip(db,sprc,fromtime,totime)
-        
-        
-    grass()
     
+        #compute precipitation
+        if flags['c']:
+            data=db.executeSql("CREATE SCHEMA %s" % schema_name,False,True)
+            computePrecip(db)
+           
+        #make time wiindows
+        if flags['m']:
+            sumprecip=('second','minute', 'hour', 'day')
+            sprc=sumprecip[1] 
+            sumPrecip(db,sprc,fromtime,totime)
+            
+            
+        grassWork()
     
+if __name__ == "__main__":
+    options, flags = grass.parser()
+
 main()

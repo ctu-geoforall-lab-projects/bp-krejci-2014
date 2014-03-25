@@ -50,7 +50,8 @@ class pgwrapper:
 
                  except Exception,err:
                         self.connection.rollback()
-                        print "   Catched error (as expected):\n", err
+                        self.print_message( "   Catched error (as expected):\n", err)
+                        
                         pass
         
         def copyexpert(self,sql, data):
@@ -63,7 +64,7 @@ class pgwrapper:
                          
         def executeSql(self,sql,results=True,commit=False):
                 # Excute the SQL statement.
-                print sql
+                self.print_message (sql)
                 try:
                         self.cursor.execute(sql)
                 except Exception, e:
@@ -73,7 +74,6 @@ class pgwrapper:
                 
                 if commit:        
                         self.connection.commit()
-                        print 'commited'
 
                 if results :
                         # Get the results.
@@ -111,3 +111,9 @@ class pgwrapper:
                 # Excute the SQL statement.
                 self.cursor.execute(sql_update_col)
                 
+        def print_message(self,msg):
+                print '-' * 80
+                print msg
+                print '-' * 80
+                print 
+                sys.stdout.flush()
