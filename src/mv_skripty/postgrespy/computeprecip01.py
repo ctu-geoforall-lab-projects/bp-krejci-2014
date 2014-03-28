@@ -24,9 +24,20 @@ except:
 #%module
 #% description: Module for working with microwave links
 #%end
+
+#%option G_OPT_M_MAPSET
+#% label: Name of working mapset
+#% required: yes
+#%end
 ##########################################################
 ########## guisection: Interpolation #####################
 ##########################################################
+
+#%flag
+#% key:i
+#% description: Run GRASS analysis
+#% guisection: Interpolation
+#%end
 
 
 
@@ -129,21 +140,18 @@ except:
 #%flag
 #% key:f
 #% description: First run (prepare columns, make geometry etc)
-#% required : no
 #% guisection: Preprocesing
 #%end
 
 #%flag
 #% key:c
 #% description: Compute precip in db (not necessary if you computed precip in the past)
-#% required : no
 #% guisection: Preprocesing
 #%end
 
 #%flag
 #% key:m
 #% description: Create time windows in db (not necessary if created in the past)
-#% required : no
 #% guisection: Preprocesing
 #%end
 
@@ -151,7 +159,7 @@ except:
 #% key: step
 #% label: Interpolate points along links per meter (not necessary if created in the past)
 #% description: Interpolate points along links per meter (not necessary if created in the past)
-#% type: real
+#% type: integer
 #% guisection: Preprocesing
 #%end
 
@@ -162,7 +170,6 @@ except:
 #%flag
 #% key:t
 #% description: Print info about timestamp(first,last) in db 
-#% required : no
 #% guisection: Print
 #%end
 ############################################
@@ -171,8 +178,7 @@ except:
 
 #%flag
 #% key:r
-#% description: Remove working schema
-#% required : no
+#% description: Remove temp working schema
 #%end
 
 
@@ -190,7 +196,7 @@ totime="2013-09-09 23:59:00"
 record_tb_name= "record"
 temp_windows_names=[]
 R=6371
-path= os.path.dirname(os.path.realpath(__file__))
+path= os.path.dirname(os.path.realpath(__file__))+"/tmpdata"
 
 def intrpolatePoints(db):
     print_message("Interpolating points along lines...")
@@ -199,10 +205,16 @@ def intrpolatePoints(db):
     sql="select ST_AsText(link.geom),ST_Length(link.geom,false), linkid from link"
     resu=db.executeSql(sql,True,True)
     
-    nametable="linkpoint"+str(step).replace(".","_")+"m"
+    nametable="linkpoints"+str(step).replace('.0','_')+"m"
     sql="DROP TABLE IF EXISTS %s.%s"%(schema_name,nametable)
     db.executeSql(sql,False,True)
-   
+    try:
+        io= open(path+"/linkpointsname","wr")
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+    io.write(nametable)
+    io.close
+    
     sql="create table %s.%s (linkid integer,long real,lat real) "%(schema_name,nametable)
     db.executeSql(sql,False,True)
 
@@ -257,7 +269,7 @@ def intrpolatePoints(db):
     io.flush()
     io.close()
     
-    print_message("Writeing interpolated points to database...")
+    print_message("Writing interpolated points to database...")
     io1=open(path+"/linknode","r")
     db.copyfrom(io1,"%s.%s"%(schema_name,nametable))
     io1.close()
@@ -269,8 +281,6 @@ def intrpolatePoints(db):
     (ST_SetSRID(ST_MakePoint(long, lat),4326)); "%(schema_name,nametable)
     db.executeSql(sql,False,True)
     
-
-
 def destinationPointWGS(lat1,lon1,brng,s):
     a = 6378137
     b = 6356752.3142
@@ -338,21 +348,20 @@ def bearing(lat1,lon1,lat2,lon2):
     return (brng+360) % 360;
 
 def print_message(msg):
-    print '-' * 80
     print msg
     print '-' * 80
-    print 
     sys.stdout.flush()
     
-def dbConnGrass():
+def dbConnGrass(host,port,database,schema,user,password):
     print_message("Connecting to db-GRASS...")
+    '''
     host = options['host']
     port = options['port']
     database = options['database']
     schema = options['schema']
     user = options['user']
     password = options['password']
-
+    '''
     # Test connection
     conn = "dbname=" + database
     if host: conn += ",host=" + host
@@ -375,6 +384,7 @@ def dbConnGrass():
 
     if grass.run_command('db.connect', driver = "pg", database = conn, schema = schema) != 0:
         grass.fatal("Cannot connect to database.")
+    print_message("End of connect procedure")
 
 def dbConnPy():
     print_message("Conecting to database by psycopg")
@@ -569,17 +579,17 @@ def computePrecip(db):
     print_message("Computing precipitation...")
     
     for record in resu:
-    #coef_a_k[alpha, k]
+        #coef_a_k[alpha, k]
         coef_a_k= computeAlphaK(record[4],record[3])
         
-    #final precipiatation is R1    
+        #final precipiatation is R1    
         Ar=(-1)*record[1]-baseline_decibel-Aw
         yr=Ar/record[2]  
         alfa=1/coef_a_k[1]
         beta=1/coef_a_k[0]
         R1=(yr/beta)**(1/alfa)
         
-    #string for output flatfile
+        #string for output flatfile
         out=str(record[5])+"|"+str(record[0])+"|"+str(R1)+"\n"
         temp.append(out)
         recordid += 1
@@ -601,10 +611,7 @@ def computePrecip(db):
     #sql="drop table %s.%s"%(schema_name,temptb)
     #db.executeSql(sql,False,True) 
     st(False)
-    print 'Computing time %s'%((record_num * (restime / xx)) / 60)    
-
-
-
+       
 def sumPrecip(db,sumprecip,from_time,to_time):
     print_message("Creating time windows...")
     #@function sumPrecip make db views for all timestamps
@@ -692,49 +699,105 @@ def sumPrecip(db,sumprecip,from_time,to_time):
 
 def grassWork():
     #TODO
+    print_message("GRASS analysis")
+    host = options['host']
+    port = options['port']
+    database = options['database']
+    schema = options['schema']
+    user = options['user']
+    password = options['password']
     
+    mapset=options['mapset']
     
+    dbConnGrass(host,port,database,schema,user,password)
+
+
+    try:
+        io=open(path +"/linkpointsname","r")
+        lpoints_table=io.read()
+        io.close
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+    print_message(mapset)
+
+    #import link(line)
     grass.run_command('v.in.ogr',
+                dsn='./',
                 layer = 'link',
                 output = 'link',
+                type='line',
                 quiet = True,
                 overwrite = True,)
     
+    
+    #conenct to schema temp
+    dbConnGrass(host,port,database,schema_name,user,password)
+    
+    #import link(interpolated points)
+    grass.run_command('v.in.ogr',
+                dsn='./',
+                layer = lpoints_table,
+                output = lpoints_table,
+                type='point',
+                quiet = True,
+                overwrite = True,)
+    
+    #make two cat
+    lpoints_table_cat=lpoints_table+"_cat"
+    vcatpoints=lpoints_table_cat+"@"+mapset
+    print_message(vcatpoints)
     grass.run_command('v.category',
-                input='link',
-                output='link_nat',
+                input=lpoints_table,
+                output=vcatpoints,
                 op="transfer",
                 layer="1,2")
     
-    grass.run_command('g.region',
-                      vect='link_nat',
-                      res=10 )
+    #connect interpol. points
+    grass.run_command('v.db.connect',
+                map=vcatpoints,
+                table=lpoints_table,
+                key='linkid',
+                flags='o')   
     
-    
-    for window in temp_windows_names:
-
-        grass.run_command('v.db.connect',
-                    map='link_nat',
-                    layer=2,
-                    table=window,
-                    key=linkid)
-        
-        grass.run_command('v.to.rast',
-                    input='link_nat',
-                    layer=2,
-                    output=window)
-   
+    try:
+        with open(path+"/timewindow",'r') as f:
+            for win in f:
+                #connect timewindow(precip    
+                grass.run_command('v.db.connect',
+                            map=vcatpoints,
+                            table=win,
+                            layer='2',
+                            key='linkid',
+                            flags='o')
+                
+                #TODO(interpolace?)
+                
+                
+                
+                #delete connection to 2. layer
+                grass.run_command('v.db.connect',
+                            map=vcatpoints,
+                            layer='2',
+                            flags='d') 
+              
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
 
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
+    
+    try: 
+        os.makedirs(path)
+    except OSError:
+        if not os.path.isdir(path):
+            raise
+    
+    
         print_message("Module is running...")
         db=dbConnPy()
-        print_message(path)
         if flags['r']:
             sql="drop schema %s CASCADE" % schema_name
             db.executeSql(sql,False,True)
-        
-        global temp_windows_names
 
         #first run- prepare db
         if flags['f']:
@@ -745,15 +808,22 @@ def main():
             data=db.executeSql("CREATE SCHEMA %s" % schema_name,False,True)
             computePrecip(db)
            
-        #make time wiindows
+        #make time windows
         if flags['m']:
             sumprecip=('minute', 'hour', 'day')
             sprc=sumprecip[0] 
             sumPrecip(db,sprc,fromtime,totime)
             
+        #interpolate points    
         if options['step']:
-            intrpolatePoints(db)   
-        #grassWork()
+            intrpolatePoints(db)
+            
+        #grass work
+        if flags['i']:
+            grassWork()
+        
+        
+        #print first and last timestamp
         if flags['t']:
             sql="create view tt as select time from %s order by time"%record_tb_name
             db.executeSql(sql,False,True)
