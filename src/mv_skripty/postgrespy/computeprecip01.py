@@ -173,7 +173,125 @@ fromtime= "2013-09-09 19:59:00"
 totime="2013-09-09 23:59:00"
 record_tb_name= "record"
 temp_windows_names=[]
+R=6378
 
+def intrpolatePoints(db):
+    step_km=0.1
+    
+    sql="select ST_AsText(ST_Transform(link.geom,40000)),ST_Length(ST_Transform(link.geom,40000),false), linkid from link"
+    resu=db.executeSql(sql,True,True)
+    
+    nametable="linkpoint"+str(step_km).replace(".","_")+"km"
+    sql="drop table  %s.%s"%(schema_name,nametable)
+    db.executeSql(sql,False,True)
+   
+    sql="create table %s.%s (linkid integer,long real,lat real) "%(schema_name,nametable)
+    db.executeSql(sql,False,True)
+    
+    
+      
+    latlong=[]
+    dist=[]
+    linkid=[]
+    points=[]
+    a=0
+    
+    io= open("linknode","wr")
+    temp=[]
+    for record in resu:
+        tmp=record[0]
+        tmp = tmp.replace("LINESTRING(", "")
+        tmp = tmp.replace(" ", ",")
+        tmp = tmp.replace(")", "")
+        tmp = tmp.split(",")
+        
+        latlong.append(tmp)
+        
+        lon1=latlong[a][0]
+        lat1=latlong[a][1]
+        lon2=latlong[a][2]
+        lat2=latlong[a][3]
+      
+        
+        dist=record[1]/1000
+        
+        linkid=record[2]
+        
+        az=bearing(lat1,lon1,lat2,lon2)
+        distt=dist
+         
+        print_message(latlong[a])
+        print_message(az)
+        print_message(dist)
+        a+=1
+        x=0
+        while abs(distt) > step_km:
+            
+            lat1 ,lon1=destinationPoint(lat1,lon1,az,step_km)
+            distt-=step_km
+            out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+"\n"
+            temp.append(out)
+            print_message(temp[x])   
+            x+=1
+        
+    io.writelines(temp)
+    io.close()
+    print_message("Write link-points to database...")
+    io1=open("linknode","r")
+    db.copyfrom(io1,"%s.%s"%(schema_name,nametable))
+    io1.close()
+            
+    sql="SELECT AddGeometryColumn  ('%s','%s','geom',4326,'POINT',2); "%(schema_name,nametable)
+    db.executeSql(sql,False,True)        
+            
+   
+    sql="UPDATE %s.%s SET geom = \
+    ST_Transform   (ST_SetSRID(ST_MakePoint(long, lat),40000),4326); "%(schema_name,nametable)
+    db.executeSql(sql,False,True)
+    
+    print_message('done')
+    
+    
+def destinationPoint(lat1,lon1,brng,d):
+    lat1=math.radians(float(lat1))
+    lon1=math.radians(float(lon1))
+    brng=math.radians(float(brng))
+    d=float(d)
+    global R
+    
+    brng=math.radians(brng)
+    
+    lat2 = math.asin( math.sin(lat1)*math.cos(d/R) +\
+             math.cos(lat1)*math.sin(d/R)*math.cos(brng))
+
+    lon2 = lon1 + math.atan2(math.sin(brng)*math.sin(d/R)*math.cos(lat1),\
+             math.cos(d/R)-math.sin(lat1)*math.sin(lat2))
+    lon2 = (lon2+3*math.pi) % (2*math.pi) - math.pi;
+    lat2 = math.degrees(lat2)
+    lon2 = math.degrees(lon2)
+    return (lat2,lon2)
+
+def bearing(lat1,lon1,lat2,lon2):
+    
+    lat1=float(lat1)
+    lat2=float(lat2)
+    lon1=float(lon1)
+    lon2=float(lon2)
+    
+    lat1 = math.radians(lat1)
+    lat2 = math.radians(lat2)
+    lon1 = math.radians(lon1)
+    lon2 = math.radians(lon2)
+    dlon = math.radians(lon2-lon1)
+ 
+
+    y = math.sin(dlon) * math.cos(lat2);
+    x = math.cos(lat1)*math.sin(lat2) -math.sin(lat1)*math.cos(lat2)*math.cos(dlon);
+    brng = math.atan2(y, x);
+  
+    return math.degrees(brng)+360
+
+    
 def print_message(msg):
     print '-' * 80
     print msg
@@ -181,7 +299,7 @@ def print_message(msg):
     print 
     sys.stdout.flush()
     
-def dbConnGrass(host,port,database,schema,user,password):
+def dbConnGrass():
     print_message("Connecting to db-GRASS...")
     host = options['host']
     port = options['port']
@@ -242,7 +360,7 @@ def dbConnPy():
     
 def firstRun(db):
         print_message("Preparing database...")
-    
+        
         sql="CREATE EXTENSION postgis;"
         db.executeSql(sql,False,True)
         #sql="CREATE EXTENSION postgis_topology;"
@@ -277,6 +395,8 @@ def firstRun(db):
         sql="CREATE INDEX idindex ON record USING btree(recordid); "
         db.executeSql(sql,False,True)
         sql="CREATE INDEX timeindex ON record USING btree (time); "
+        db.executeSql(sql,False,True)
+        sql="""insert into spatial_ref_sys values(40000, 'ME', 1, 'GEOGCS["Normal Sphere (r=6370997)",DATUM["unknown",SPHEROID["sphere",6370997,0]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433]]','+proj=longlat +ellps=sphere +no_defs');"""
         db.executeSql(sql,False,True)
 
 def randomWord(length):
@@ -506,17 +626,19 @@ def sumPrecip(db,sumprecip,from_time,to_time):
     #write values to flat file
     io2.writelines(temp)
     io2.close()
-    
+    del io2
     
     sql="drop table %s.%s"%(schema_name,view_db)
     db.executeSql(sql,False,True) 
 
 def grassWork():
 
-    dbConnGrass(host,port,database,schema,user,password)
     
-    io=open('timewindow','r')
-    timewindow=io.read()
+    
+    io3=open("timewindow","wr")
+    timewindow=io3.read()
+    io3.closed
+    del io3
     r=0
     for window in timewindow:
         temp_windows_names[r]=window
@@ -540,11 +662,6 @@ def grassWork():
                       vect='link_nat',
                       res=10 )
     
-    grass.run_command('v.db.connect',
-                    map='link_nat',
-                    layer=1,
-                    table=link,
-                    key=linkid)
     
     
     for window in temp_windows_names:
@@ -592,8 +709,12 @@ def main():
     
     
     
-    #connect to database psycopg
+
     db=dbConnPy()
+    
+    intrpolatePoints(db)
+    
+    
     if flags['t']:
         sql="create view tt as select time from %s order by time"%record_tb_name
         db.executeSql(sql,False,True)
@@ -609,12 +730,11 @@ def main():
         print_message('Last timestamp is %s'%last_timestamp)
         sql="drop view tt"
         db.executeSql(sql,False,True)
-    else:    
+    else:
         #first run- prepare db
         if flags['f']:
             firstRun(db)
        
-    
         #compute precipitation
         if flags['c']:
             data=db.executeSql("CREATE SCHEMA %s" % schema_name,False,True)
@@ -627,7 +747,7 @@ def main():
             sumPrecip(db,sprc,fromtime,totime)
             
             
-        grassWork()
+        #grassWork()
     
 if __name__ == "__main__":
     options, flags = grass.parser()
