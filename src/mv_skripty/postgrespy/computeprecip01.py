@@ -10,7 +10,7 @@ import time
 import psycopg2
 import atexit
 from pgwrapper import pgwrapper as pg
-
+from math import sin, cos, atan2,degrees,radians, tan,sqrt
 
 try:
     from grass.script import message,core as grass  
@@ -28,7 +28,13 @@ except:
 ################### Interpolation ########################
 ##########################################################
 
-
+#%option 
+#% key: step
+#% label: Point step
+#% description: Interpolation points along links per meter (necessery for interpolation)
+#% type: double
+#% guisection: Preprocesing
+#%end
 
 ##########################################################
 ############## guisection: database work ################
@@ -89,6 +95,7 @@ except:
 #% guisection: Database
 #% required : no
 #%end
+
 ##########################################################
 ############## guisection: Preprocesing #################
 ##########################################################
@@ -148,17 +155,15 @@ except:
 
 
 
-
-
 ############################################
 ######################## info ##############
 ############################################
 
 #%flag
 #% key:t
-#% description: Get info about timestamp(first,last) in db 
+#% description: Print info about timestamp(first,last) in db 
 #% required : no
-#% guisection: Info
+#% guisection: Print
 #%end
 
 
@@ -173,16 +178,16 @@ fromtime= "2013-09-09 19:59:00"
 totime="2013-09-09 23:59:00"
 record_tb_name= "record"
 temp_windows_names=[]
-R=6378
+R=6371
 
 def intrpolatePoints(db):
-    step_km=0.1
+    step=flags['step']
     
-    sql="select ST_AsText(ST_Transform(link.geom,40000)),ST_Length(ST_Transform(link.geom,40000),false), linkid from link"
+    sql="select ST_AsText(link.geom),ST_Length(link.geom,false), linkid from link"
     resu=db.executeSql(sql,True,True)
     
-    nametable="linkpoint"+str(step_km).replace(".","_")+"km"
-    sql="drop table  %s.%s"%(schema_name,nametable)
+    nametable="linkpoint"+str(step).replace(".","_")+"m"
+    sql="DROP TABLE IF EXISTS %s.%s"%(schema_name,nametable)
     db.executeSql(sql,False,True)
    
     sql="create table %s.%s (linkid integer,long real,lat real) "%(schema_name,nametable)
@@ -195,7 +200,7 @@ def intrpolatePoints(db):
     linkid=[]
     points=[]
     a=0
-    
+    x=0    
     io= open("linknode","wr")
     temp=[]
     for record in resu:
@@ -211,29 +216,31 @@ def intrpolatePoints(db):
         lat1=latlong[a][1]
         lon2=latlong[a][2]
         lat2=latlong[a][3]
-      
+        print_message("lon1 %s, lat1 %s, lon2 %s, lat2 %s"%(lon1,lat1,lon2,lat2))
         
-        dist=record[1]/1000
+        dist=record[1]
         
         linkid=record[2]
         
-        az=bearing(lat1,lon1,lat2,lon2)
-        distt=dist
-         
-        print_message(latlong[a])
-        print_message(az)
-        print_message(dist)
-        a+=1
-        x=0
-        while abs(distt) > step_km:
-            
-            lat1 ,lon1=destinationPoint(lat1,lon1,az,step_km)
-            distt-=step_km
-            out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+"\n"
-            temp.append(out)
-            print_message(temp[x])   
-            x+=1
         
+        az=bearing(lat1,lon1,lat2,lon2)
+        print_message("linkid %s"%linkid)
+        print_message("azimut %s"%az)
+        print_message("dist %s"%dist)
+        distt=dist
+        
+        a+=1
+        while abs(distt) > step:
+            lat1 ,lon1,finalBrg,backBrg=destinationPointWGS(lat1,lon1,az,step)
+            az=finalBrg
+
+            distt-=step
+            out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+"\n"
+            print_message(out)
+            print_message("azimut zmena %s"%az)
+            temp.append(out)  
+            x+=1
+
     io.writelines(temp)
     io.close()
     print_message("Write link-points to database...")
@@ -244,54 +251,80 @@ def intrpolatePoints(db):
     sql="SELECT AddGeometryColumn  ('%s','%s','geom',4326,'POINT',2); "%(schema_name,nametable)
     db.executeSql(sql,False,True)        
             
-   
     sql="UPDATE %s.%s SET geom = \
-    ST_Transform   (ST_SetSRID(ST_MakePoint(long, lat),40000),4326); "%(schema_name,nametable)
+    (ST_SetSRID(ST_MakePoint(long, lat),4326)); "%(schema_name,nametable)
     db.executeSql(sql,False,True)
     
     print_message('done')
     
     
-def destinationPoint(lat1,lon1,brng,d):
+
+def destinationPointWGS(lat1,lon1,brng,s):
+    a = 6378137
+    b = 6356752.3142
+    f = 1/298.257223563
     lat1=math.radians(float(lat1))
     lon1=math.radians(float(lon1))
-    brng=math.radians(float(brng))
-    d=float(d)
-    global R
+    brg=math.radians(float(brng))
     
-    brng=math.radians(brng)
     
-    lat2 = math.asin( math.sin(lat1)*math.cos(d/R) +\
-             math.cos(lat1)*math.sin(d/R)*math.cos(brng))
-
-    lon2 = lon1 + math.atan2(math.sin(brng)*math.sin(d/R)*math.cos(lat1),\
-             math.cos(d/R)-math.sin(lat1)*math.sin(lat2))
-    lon2 = (lon2+3*math.pi) % (2*math.pi) - math.pi;
-    lat2 = math.degrees(lat2)
-    lon2 = math.degrees(lon2)
-    return (lat2,lon2)
-
+    sb=sin(brg)
+    cb=cos(brg)
+    tu1=(1-f)*tan(lat1)
+    cu1=1/sqrt((1+tu1*tu1))
+    su1=tu1*cu1
+    s2=atan2(tu1, cb)
+    sa = cu1*sb
+    csa=1-sa*sa
+    us=csa*(a*a - b*b)/(b*b)
+    A=1+us/16384*(4096+us*(-768+us*(320-175*us)))
+    B = us/1024*(256+us*(-128+us*(74-47*us)))
+    s1=s/(b*A)
+    s1p = 2*math.pi
+    #Loop through the following while condition is true.
+    while abs(s1-s1p) > 1e-12:
+        cs1m=cos(2*s2+s1)
+        ss1=sin(s1)
+        cs1=cos(s1)
+        ds1=B*ss1*(cs1m+B/4*(cs1*(-1+2*cs1m*cs1m)- B/6*cs1m*(-3+4*ss1*ss1)*(-3+4*cs1m*cs1m)))
+        s1p=s1
+        s1=s/(b*A)+ds1
+    #Continue calculation after the loop.
+    t=su1*ss1-cu1*cs1*cb
+    lat2=atan2(su1*cs1+cu1*ss1*cb, (1-f)*sqrt(sa*sa + t*t))
+    l2=atan2(ss1*sb, cu1*cs1-su1*ss1*cb)
+    c=f/16*csa*(4+f*(4-3*csa))
+    l=l2-(1-c)*f*sa* (s1+c*ss1*(cs1m+c*cs1*(-1+2*cs1m*cs1m)))
+    d=atan2(sa, -t)
+    finalBrg=d+2*math.pi
+    backBrg=d+math.pi
+    lon2 = lon1+l;
+   # Convert lat2, lon2, finalBrg and backBrg to degrees
+    lat2 =degrees( lat2) 
+    lon2 = degrees(lon2 )
+    finalBrg = degrees(finalBrg )
+    backBrg = degrees(backBrg )
+    #b = a - (a/flat)
+    #flat = a / (a - b)
+    finalBrg =(finalBrg+360) % 360;
+    backBrg=(backBrg+360) % 360;
+    
+    return (lat2,lon2,finalBrg,backBrg)
+    
 def bearing(lat1,lon1,lat2,lon2):
     
-    lat1=float(lat1)
-    lat2=float(lat2)
-    lon1=float(lon1)
-    lon2=float(lon2)
+    lat1=math.radians(float(lat1))
+    lon1=math.radians(float(lon1))
+    lat2=math.radians(float(lat2))
+    lon2=math.radians(float(lon2))
+    dLon=(lon2-lon1)
     
-    lat1 = math.radians(lat1)
-    lat2 = math.radians(lat2)
-    lon1 = math.radians(lon1)
-    lon2 = math.radians(lon2)
-    dlon = math.radians(lon2-lon1)
- 
+    y = math.sin(dLon) * math.cos(lat2);
+    x = math.cos(lat1)*math.sin(lat2) - math.sin(lat1)*math.cos(lat2)*math.cos(dLon);
+    brng = math.degrees(math.atan2(y, x))
+          
+    return (brng+360) % 360;
 
-    y = math.sin(dlon) * math.cos(lat2);
-    x = math.cos(lat1)*math.sin(lat2) -math.sin(lat1)*math.cos(lat2)*math.cos(dlon);
-    brng = math.atan2(y, x);
-  
-    return math.degrees(brng)+360
-
-    
 def print_message(msg):
     print '-' * 80
     print msg
