@@ -65,7 +65,7 @@ class pgwrapper:
                          
         def executeSql(self,sql,results=True,commit=False):
                 # Excute the SQL statement.
-                self.print_message (sql)
+                #self.print_message (sql)
                 try:
                         self.cursor.execute(sql)
                 except Exception, e:

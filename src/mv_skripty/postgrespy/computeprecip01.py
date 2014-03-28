@@ -25,16 +25,10 @@ except:
 #% description: Module for working with microwave links
 #%end
 ##########################################################
-################### Interpolation ########################
+########## guisection: Interpolation #####################
 ##########################################################
 
-#%option 
-#% key: step
-#% label: Point step
-#% description: Interpolation points along links per meter (necessery for interpolation)
-#% type: real
-#% guisection: Interpolation
-#%end
+
 
 ##########################################################
 ############## guisection: database work ################
@@ -82,7 +76,7 @@ except:
 #% key: user
 #% type: string
 #% label: User
-#% description: Connect to the database as the user username instead of the  default.
+#% description: Connect to the database as the user username instead of the default.
 #% guisection: Database
 #% required : no
 #%end
@@ -91,13 +85,13 @@ except:
 #% key: password
 #% type: string
 #% label: Password
-#% description: Password will be stored in flat file!
+#% description: Password will be stored in file!
 #% guisection: Database
 #% required : no
 #%end
 
 ##########################################################
-############## guisection: Preprocesing #################
+############## guisection: Preprocesing ##################
 ##########################################################
 
 #%option 
@@ -119,7 +113,7 @@ except:
 #%option 
 #% key: baseline
 #% label: Baseline value
-#% description: This options set baseline A0[dB]. note (Ar=A-A0-Aw)
+#% description: This options set baseline A0[dB]. note (Ar=A-A0-Aw) i.e. 2
 #% type: double
 #% guisection: Preprocesing
 #%end
@@ -127,7 +121,7 @@ except:
 #%option 
 #% key: aw
 #% label: Aw value
-#% description: This options set Aw[dB] value for safety. note (Ar=A-A0-Aw)
+#% description: This options set Aw[dB] value for safety. note (Ar=A-A0-Aw) i.e. 1.5
 #% type: double
 #% guisection: Preprocesing
 #%end
@@ -153,7 +147,13 @@ except:
 #% guisection: Preprocesing
 #%end
 
-
+#%option 
+#% key: step
+#% label: Interpolate points along links per meter (not necessary if created in the past)
+#% description: Interpolate points along links per meter (not necessary if created in the past)
+#% type: real
+#% guisection: Preprocesing
+#%end
 
 ############################################
 ######################## info ##############
@@ -165,6 +165,17 @@ except:
 #% required : no
 #% guisection: Print
 #%end
+############################################
+#################### optional ##############
+############################################
+
+#%flag
+#% key:r
+#% description: Remove working schema
+#% required : no
+#%end
+
+
 
 
 
@@ -179,10 +190,12 @@ totime="2013-09-09 23:59:00"
 record_tb_name= "record"
 temp_windows_names=[]
 R=6371
+path= os.path.dirname(os.path.realpath(__file__))
 
 def intrpolatePoints(db):
+    print_message("Interpolating points along lines...")
     step=options['step']
-    print_message(step)
+    step=float(step)
     sql="select ST_AsText(link.geom),ST_Length(link.geom,false), linkid from link"
     resu=db.executeSql(sql,True,True)
     
@@ -192,16 +205,22 @@ def intrpolatePoints(db):
    
     sql="create table %s.%s (linkid integer,long real,lat real) "%(schema_name,nametable)
     db.executeSql(sql,False,True)
-    
-    
-      
+
     latlong=[]
     dist=[]
     linkid=[]
     points=[]
     a=0
-    x=0    
-    io= open("linknode","wr")
+    x=0
+    
+    
+    try:
+        io= open(path+"/linknode","wr")
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+        
+        
+        
     temp=[]
     for record in resu:
         tmp=record[0]
@@ -216,17 +235,11 @@ def intrpolatePoints(db):
         lat1=latlong[a][1]
         lon2=latlong[a][2]
         lat2=latlong[a][3]
-        print_message("lon1 %s, lat1 %s, lon2 %s, lat2 %s"%(lon1,lat1,lon2,lat2))
         
         dist=record[1]
-        
         linkid=record[2]
-        
-        
+    
         az=bearing(lat1,lon1,lat2,lon2)
-        print_message("linkid %s"%linkid)
-        print_message("azimut %s"%az)
-        print_message("dist %s"%dist)
         distt=dist
         
         a+=1
@@ -236,15 +249,16 @@ def intrpolatePoints(db):
 
             distt-=step
             out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+"\n"
-            print_message(out)
-            print_message("azimut zmena %s"%az)
+
             temp.append(out)  
             x+=1
 
     io.writelines(temp)
+    io.flush()
     io.close()
-    print_message("Write link-points to database...")
-    io1=open("linknode","r")
+    
+    print_message("Writeing interpolated points to database...")
+    io1=open(path+"/linknode","r")
     db.copyfrom(io1,"%s.%s"%(schema_name,nametable))
     io1.close()
             
@@ -255,9 +269,7 @@ def intrpolatePoints(db):
     (ST_SetSRID(ST_MakePoint(long, lat),4326)); "%(schema_name,nametable)
     db.executeSql(sql,False,True)
     
-    print_message('done')
-    
-    
+
 
 def destinationPointWGS(lat1,lon1,brng,s):
     a = 6378137
@@ -353,11 +365,10 @@ def dbConnGrass():
             grass.fatal("Cannot login")
 
     # Try to connect
-    print "Testing connection ..."
-    sys.stdout.flush()
+    print_message( "Testing connection ...")
     if grass.run_command('db.select', quiet = True, flags='c', driver= "pg", database=conn, sql="select version()" ) != 0:
         if user or password:
-            pprint_message( "Deleting login (db.login) ...")
+            print_message( "Deleting login (db.login) ...")
             if grass.run_command('db.login', quiet = True, driver = "pg", database = conn, user = "", password = "") != 0:
                 print_message("Cannot delete login.")
         grass.fatal("Cannot connect to database.")
@@ -366,7 +377,7 @@ def dbConnGrass():
         grass.fatal("Cannot connect to database.")
 
 def dbConnPy():
-    print_message("Conecting to db by psycopg")
+    print_message("Conecting to database by psycopg")
     db_host = options['host']
     db_name = options['database']
     db_user = options['user']
@@ -377,16 +388,14 @@ def dbConnPy():
         if db_password:        
             db = pg(dbname=db_name, host=db_host,
                     user=db_user, passwd = db_password)
-            print " #required password and user "
         #if required only user
         elif db_user and not db_password:         
             db = pg(dbname=db_name, host=db_host,
                     user=db_user)
-            print "required only user"
         #if not required user and passwd   
         else:
             db = pg(dbname=db_name, host=db_host)
-            print "not required user and passwd"
+            
     except psycopg2.OperationalError, e:
         sys.exit("I am unable to connect to the database (db=%s, user=%s). %s" % (db_name, db_user, e))
     return db
@@ -428,8 +437,6 @@ def firstRun(db):
         sql="CREATE INDEX idindex ON record USING btree(recordid); "
         db.executeSql(sql,False,True)
         sql="CREATE INDEX timeindex ON record USING btree (time); "
-        db.executeSql(sql,False,True)
-        sql="""insert into spatial_ref_sys values(40000, 'ME', 1, 'GEOGCS["Normal Sphere (r=6370997)",DATUM["unknown",SPHEROID["sphere",6370997,0]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433]]','+proj=longlat +ellps=sphere +no_defs');"""
         db.executeSql(sql,False,True)
 
 def randomWord(length):
@@ -515,7 +522,7 @@ def st(mes=True):
         print "time is: ", restime
 
 def computePrecip(db):
-    print_message("Prepare db for computing precipitation...")
+    print_message("Prepare database for computing precipitation...")
     
     baseline_decibel= options['baseline']
     baseline_decibel=float(baseline_decibel)
@@ -525,7 +532,7 @@ def computePrecip(db):
     #nuber of link and record in table link
     link_num=db.count("link")
     record_num=db.count("record")
-    print_message("Numer of records %s"%record_num)
+    print_message("Number of records %s"%record_num)
     
     #select values for computing
     xx=record_num
@@ -539,19 +546,24 @@ def computePrecip(db):
     db.executeSql(sql,False,True)
     
     #save name of result table for next run without compute precip
-    r= open("last_res","wr")
-    r.write(temptb)
-    r.close()
-    
+    try:
+        r= open(path+"/last_res","wr")
+        r.write(temptb)
+        r.close()
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
     
     #optimalization of commits
     db.setIsoLvl(0)
     #mesasure computing time
     st()
     
-    #open blankfile
-    io= open("precip","wr")
-    
+    try:
+        io= open(path+"/precip","wr")
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+        
+        
     recordid = 1
     temp= []
     print_message("Computing precipitation...")
@@ -573,32 +585,51 @@ def computePrecip(db):
         recordid += 1
         
     #write values to flat file
-    io.writelines(temp)
-    io.close()
+    try:
+        io.writelines(temp)
+        io.flush
+        io.close()
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+        
+        
     print_message("Write precipitation to database...")
-    io=open("precip","r")
+    io=open(path+"/precip","r")
     db.copyfrom(io,"%s.%s"%(schema_name,temptb))
     io.close()
     
     #sql="drop table %s.%s"%(schema_name,temptb)
     #db.executeSql(sql,False,True) 
     st(False)
-    print 'AMD Phenom X3 ocek cas minut %s'%((record_num * (restime / xx)) / 60)    
+    print 'Computing time %s'%((record_num * (restime / xx)) / 60)    
+
+
 
 def sumPrecip(db,sumprecip,from_time,to_time):
     print_message("Creating time windows...")
     #@function sumPrecip make db views for all timestamps
-    io=open("last_res",'r')
-    temptb=io.read()
-    io.close()
-    print temptb
-    
+    try:
+        io=open(path+"/last_res",'r')
+        temptb=io.read()
+        io.close()
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+            
+    #make view per(->user) interval for all timestamp and for all links
+    time_const=0
+    if sumprecip=="minute":
+        tc=60
+    elif sumPrecip=="hour" :
+        tc=3600
+    else:
+        tc=216000
+        
     #summing values per (->user)timestep interval
     view_db="sum_"+randomWord(3)
     sql="CREATE %s %s.%s as select\
-        linkid,avg(precipitation)as precip_mm_h, date_trunc('%s',time)\
+        linkid,(avg(precipitation))/%s as precip_mm_%s, date_trunc('%s',time)\
         as timestamp FROM %s.%s GROUP BY linkid, date_trunc('%s',time)\
-        ORDER BY timestamp"%(view_statement, schema_name, view_db ,sumprecip ,schema_name,temptb ,sumprecip)    
+        ORDER BY timestamp"%(view_statement, schema_name, view_db ,tc ,sumprecip ,sumprecip,schema_name,temptb ,sumprecip)    
     data=db.executeSql(sql,False,True)
    
     #num of rows of materialized view
@@ -616,30 +647,23 @@ def sumPrecip(db,sumprecip,from_time,to_time):
         #get last timestep
         sql="select timestamp from  %s.%s offset %s"%(schema_name,view_db,record_num-1)
         last_timestamp=db.executeSql(sql)[0][0]
-    
-    #make view per(->user) interval for all timestamp and for all links
-    time_const=0
-    if sumprecip=="minute":
-        tc=60
-    elif sumprecip=='second':
-        tc=1
-    elif sumPrecip=="hour" :
-        tc=3600
-    else:
-        tc=216000
-        
-        
+     
     cur_timestamp=first_timestamp
     i=0
-    global temp_windows_names
-    io2=open("timewindow","wr")
+
+    try:
+        io2=open(path+"/timewindow","wr")
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+        
     temp=[]
     while str(cur_timestamp)!=str(last_timestamp):
         #crate name of view
         a=time.strftime("%Y_%m_%d_%H_%M", time.strptime(str(cur_timestamp), "%Y-%m-%d %H:%M:%S"))
         view_name="%s%s"%(view,a)
-        print "(timestamp'%s'+ %s * interval '1 second')" % (first_timestamp,time_const)
-        temp.append(view_name)
+        #print "(timestamp'%s'+ %s * interval '1 second')" % (first_timestamp,time_const)
+        vv=view_name+"\n"
+        temp.append(vv)
         
         i+=1
         #create view
@@ -652,31 +676,22 @@ def sumPrecip(db,sumprecip,from_time,to_time):
         #compute cur_timestamp (need for loop)
         sql="select (timestamp'%s')+ %s* interval '1 second'"%(cur_timestamp,tc)
         cur_timestamp=db.executeSql(sql)[0][0]
-        print cur_timestamp
-        print last_timestamp
+        #print cur_timestamp
+        #print last_timestamp
     
         
     #write values to flat file
-    io2.writelines(temp)
-    io2.close()
-    del io2
-    
+    try:
+        io2.writelines(temp)
+        io2.close()
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+        
     sql="drop table %s.%s"%(schema_name,view_db)
     db.executeSql(sql,False,True) 
 
 def grassWork():
-
-    
-    
-    io3=open("timewindow","wr")
-    timewindow=io3.read()
-    io3.closed
-    del io3
-    r=0
-    for window in timewindow:
-        temp_windows_names[r]=window
-        r+=1
-        
+    #TODO
     
     
     grass.run_command('v.in.ogr',
@@ -696,7 +711,6 @@ def grassWork():
                       res=10 )
     
     
-    
     for window in temp_windows_names:
 
         grass.run_command('v.db.connect',
@@ -709,61 +723,19 @@ def grassWork():
                     input='link_nat',
                     layer=2,
                     output=window)
-        
+   
 
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
-    print_message("Script is running...")
-    
-    '''
-    print "hello "
-    db_schema="public"
-    if len(sys.argv) > 1:
-        db_name = sys.argv[1]
-    else:
-        db_name="letnany"
-    if len(sys.argv) == 3: # hack for geo102 (TODO: fix it)
-        db_host = '' 
-    else:
-        db_host="localhost"
-    db_port="5432"
-    if len(sys.argv) > 2:
-        db_user = sys.argv[2]
-    else:
-        db_user='matt'
-    if len(sys.argv) > 3:
-        db_password = sys.argv[3]
-    else:
-        db_password= None
-    '''
-
-
- 
-    
-    
-    
-
-    db=dbConnPy()
-    
-    intrpolatePoints(db)
-    
-    
-    if flags['t']:
-        sql="create view tt as select time from %s order by time"%record_tb_name
-        db.executeSql(sql,False,True)
-        #get first timestamp
-        sql="select time from tt limit 1"
-        first_timestamp=db.executeSql(sql,True,True)[0][0]
-        print_message('First timestamp is %s'%first_timestamp)
-        record_num=db.count(record_tb_name)
+        print_message("Module is running...")
+        db=dbConnPy()
+        print_message(path)
+        if flags['r']:
+            sql="drop schema %s CASCADE" % schema_name
+            db.executeSql(sql,False,True)
         
-        #get last timestep
-        sql="select time from  tt offset %s"%(record_num-1)
-        last_timestamp=db.executeSql(sql,True,True)[0][0]
-        print_message('Last timestamp is %s'%last_timestamp)
-        sql="drop view tt"
-        db.executeSql(sql,False,True)
-    else:
+        global temp_windows_names
+
         #first run- prepare db
         if flags['f']:
             firstRun(db)
@@ -775,12 +747,30 @@ def main():
            
         #make time wiindows
         if flags['m']:
-            sumprecip=('second','minute', 'hour', 'day')
-            sprc=sumprecip[1] 
+            sumprecip=('minute', 'hour', 'day')
+            sprc=sumprecip[0] 
             sumPrecip(db,sprc,fromtime,totime)
             
-            
+        if options['step']:
+            intrpolatePoints(db)   
         #grassWork()
+        if flags['t']:
+            sql="create view tt as select time from %s order by time"%record_tb_name
+            db.executeSql(sql,False,True)
+            #get first timestamp
+            sql="select time from tt limit 1"
+            first_timestamp=db.executeSql(sql,True,True)[0][0]
+            print_message('First timestamp is %s'%first_timestamp)
+            record_num=db.count(record_tb_name)
+            
+            #get last timestep
+            sql="select time from  tt offset %s"%(record_num-1)
+            last_timestamp=db.executeSql(sql,True,True)[0][0]
+            print_message('Last timestamp is %s'%last_timestamp)
+            sql="drop view tt"
+            db.executeSql(sql,False,True)
+            
+        print_message('DONE')
     
 if __name__ == "__main__":
     options, flags = grass.parser()
