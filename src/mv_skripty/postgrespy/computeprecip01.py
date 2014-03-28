@@ -32,8 +32,8 @@ except:
 #% key: step
 #% label: Point step
 #% description: Interpolation points along links per meter (necessery for interpolation)
-#% type: double
-#% guisection: Preprocesing
+#% type: real
+#% guisection: Interpolation
 #%end
 
 ##########################################################
@@ -181,8 +181,8 @@ temp_windows_names=[]
 R=6371
 
 def intrpolatePoints(db):
-    step=flags['step']
-    
+    step=options['step']
+    print_message(step)
     sql="select ST_AsText(link.geom),ST_Length(link.geom,false), linkid from link"
     resu=db.executeSql(sql,True,True)
     
