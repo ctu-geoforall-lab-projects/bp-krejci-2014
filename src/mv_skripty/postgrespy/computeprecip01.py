@@ -214,7 +214,7 @@ def intrpolatePoints(db):
     sql="select ST_AsText(link.geom),ST_Length(link.geom,false), linkid from link"
     resu=db.executeSql(sql,True,True)
     
-    nametable="linkpoints"+str(step).replace('.0','_')+"m"
+    nametable="linkpoints"+str(step).replace('.0','')
     sql="DROP TABLE IF EXISTS %s.%s"%(schema_name,nametable)
     db.executeSql(sql,False,True)
     try:
@@ -745,16 +745,18 @@ def grassWork():
     print_message('v.in.ogr')
     
     grass.run_command('v.in.ogr',
-                dsn="PG:host=localhost dbname=letnany user=matt",
-                layer = points_schema,
-                output = points_ogr,
-                #overwrite=True,
-                flags='t',
-                type='point')
+                    dsn="PG:host=localhost dbname=letnany user=matt",
+                    layer = points_schema,
+                    output = points_ogr,
+                    overwrite=True,
+                    flags='t',
+                    type='point')
 
 
     points_m=points_ogr+'@'+mapset
-    points_nat=points + "nat"
+    points_nat=points + "_nat"
+    
+    #if exist from before
     rm=points_nat+'@'+mapset
     
     grass.run_command('g.remove',
@@ -763,59 +765,61 @@ def grassWork():
     
     print_message('v.category')
     grass.run_command('v.category',
-                input=points_m,
-                output=points_nat,
-                op="transfer",
-                overwrite=True,
-                layer="1,2")
+                    input=points_m,
+                    output=points_nat,
+                    op="transfer",
+                    overwrite=True,
+                    layer="1,2")
 
     print_message('g.remove')
     grass.run_command('g.remove',
                       vect=points_m)   
  
-    print_message('v.db.connect')
+
    
     dbConnGrass(host,port,database,schema_name,user,password)
     points_nat_m=points_nat+'@'+mapset
-    ''' 
+    
     grass.run_command('v.db.connect',
-                map=points_nat_m,
-                table=points_schema,
-                key='point_id',
-                )
-     
+                    map=points_nat_m,
+                    table=points_schema,
+                    key='linkid',
+                    layer='1',
+                    overwrite=True,
+                    flags='o',
+                    quiet=True)
+    
+  
+    print_message('v.db.connect loop for')
     try:
         with open(path+"/timewindow",'r') as f:
             for win in f:
                 #connect timewindow(precip    
+                win=schema_name+'.'+win
+                print_message(win)
                 grass.run_command('v.db.connect',
-                            map=vcatpoints,
+                            map=points_nat_m,
                             table=win,
-                            layer='2',
                             key='linkid',
-                            flags='o')
+                            layer='2',
+                            overwrite=True,
+                            flags='o',
+                            quiet=True)
                 
                 #TODO(interpolace?)
-                
+                break
                 
                 
                 #delete connection to 2. layer
                 grass.run_command('v.db.connect',
-                            map=vcatpoints,
+                            map=points_nat_m,
                             layer='2',
                             flags='d') 
               
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
 
-    
-    
 
-    grass.run_command("db.connect",
-                      driver="sqlite",
-                      database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db',
-                      )
-    '''
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
     
