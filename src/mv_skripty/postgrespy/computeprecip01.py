@@ -20,7 +20,9 @@ except:
     raise Exception ("Cannot find 'grass' Python module. Python is supported by GRASS from version >= 6.4" )
 
 
-
+##########################################################
+################## guisection: required ##################
+##########################################################
 #%module
 #% description: Module for working with microwave links
 #%end
@@ -30,7 +32,7 @@ except:
 #% required: yes
 #%end
 ##########################################################
-########## guisection: Interpolation #####################
+################# guisection: Interpolation ##############
 ##########################################################
 
 #%flag
@@ -40,9 +42,8 @@ except:
 #%end
 
 
-
 ##########################################################
-############## guisection: database work ################
+############## guisection: database work #################
 ##########################################################
 
 #%option
@@ -102,7 +103,7 @@ except:
 #%end
 
 ##########################################################
-############## guisection: Preprocesing ##################
+############## guisection: Preprocessing #################
 ##########################################################
 
 #%option 
@@ -110,7 +111,7 @@ except:
 #% label: First timestamp "YYYY-MM-DD H:M:S"
 #% description: Set first timestamp in format "YYYY-MM-DD H:M:S"
 #% type: string
-#% guisection: Preprocesing
+#% guisection: Preprocessing
 #%end
 
 #%option 
@@ -118,7 +119,7 @@ except:
 #% label: Last timestamp "YYYY-MM-DD H:M:S"
 #% description: Set last timestamp in format "YYYY-MM-DD H:M:S"
 #% type: string
-#% guisection: Preprocesing
+#% guisection: Preprocessing
 #%end
 
 #%option 
@@ -126,7 +127,7 @@ except:
 #% label: Baseline value
 #% description: This options set baseline A0[dB]. note (Ar=A-A0-Aw) i.e. 2
 #% type: double
-#% guisection: Preprocesing
+#% guisection: Preprocessing
 #%end
 
 #%option 
@@ -134,25 +135,25 @@ except:
 #% label: Aw value
 #% description: This options set Aw[dB] value for safety. note (Ar=A-A0-Aw) i.e. 1.5
 #% type: double
-#% guisection: Preprocesing
+#% guisection: Preprocessing
 #%end
 
 #%flag
 #% key:f
 #% description: First run (prepare columns, make geometry etc)
-#% guisection: Preprocesing
+#% guisection: Preprocessing
 #%end
 
 #%flag
 #% key:c
 #% description: Compute precip in db (not necessary if you computed precip in the past)
-#% guisection: Preprocesing
+#% guisection: Preprocessing
 #%end
 
 #%flag
 #% key:m
 #% description: Create time windows in db (not necessary if created in the past)
-#% guisection: Preprocesing
+#% guisection: Preprocessing
 #%end
 
 #%option 
@@ -160,27 +161,29 @@ except:
 #% label: Interpolation step per meter
 #% description: Interpolate points along links per meter (not necessary if created in the past)
 #% type: integer
-#% guisection: Preprocesing
+#% guisection: Preprocessing
 #%end
 
 #%flag
 #% key:p
 #% description: Interpolate points along links per meter (not necessary if created in the past)
-#% guisection: Preprocesing
+#% guisection: Preprocessing
 #%end
 
-############################################
-######################## info ##############
-############################################
 
+##########################################################
+################## guisection: info ######################
+##########################################################
 #%flag
 #% key:t
 #% description: Print info about timestamp(first,last) in db 
 #% guisection: Print
 #%end
-############################################
-#################### optional ##############
-############################################
+
+
+##########################################################
+############### guisection: optional #####################
+##########################################################
 
 #%flag
 #% key:r
@@ -221,7 +224,7 @@ def intrpolatePoints(db):
     io.write(nametable)
     io.close
     
-    sql="create table %s.%s (linkid integer,long real,lat real) "%(schema_name,nametable)
+    sql="create table %s.%s (linkid integer,long real,lat real,point_id serial PRIMARY KEY) "%(schema_name,nametable)
     db.executeSql(sql,False,True)
 
     latlong=[]
@@ -266,7 +269,7 @@ def intrpolatePoints(db):
             az=finalBrg
 
             distt-=step
-            out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+"\n"
+            out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+'|'+str(x)+"\n"
 
             temp.append(out)  
             x+=1
@@ -285,6 +288,11 @@ def intrpolatePoints(db):
             
     sql="UPDATE %s.%s SET geom = \
     (ST_SetSRID(ST_MakePoint(long, lat),4326)); "%(schema_name,nametable)
+    db.executeSql(sql,False,True)
+    
+    sql="alter table %s.%s drop column lat"%(schema_name,nametable)
+    db.executeSql(sql,False,True)
+    sql="alter table %s.%s drop column long"%(schema_name,nametable)
     db.executeSql(sql,False,True)
     
 def destinationPointWGS(lat1,lon1,brng,s):
@@ -377,12 +385,12 @@ def dbConnGrass(host,port,database,schema,user,password):
     if port: conn += ",port=" + port
     # Unfortunately we cannot test untill user/password is set
     if user or password:
-        print_message("Setting login (db.login) ... ")
+        #print_message("Setting login (db.login) ... ")
         if grass.run_command('db.login', driver = "pg", database = conn, user = user, password = password) != 0:
             grass.fatal("Cannot login")
 
     # Try to connect
-    print_message( "Testing connection ...")
+
     if grass.run_command('db.select', quiet = True, flags='c', driver= "pg", database=conn, sql="select version()" ) != 0:
         if user or password:
             print_message( "Deleting login (db.login) ...")
@@ -393,8 +401,8 @@ def dbConnGrass(host,port,database,schema,user,password):
     if grass.run_command('db.connect', driver = "pg", database = conn, schema = schema) != 0:
         grass.fatal("Cannot connect to database.")
     else:
-        print '-' * 80
-        print_message("Connected to")
+        #print '-' * 80
+        #print_message("Connected to...")
         grass.run_command('db.connect',flags='p')
     
 def dbConnPy():
@@ -720,55 +728,62 @@ def grassWork():
     
     mapset=options['mapset']
     
-    dbConnGrass(host,port,database,schema,user,password)
-
-
     try:
         io=open(path +"/linkpointsname","r")
-        lpoints_table=io.read()
+        points=io.read()
         io.close
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
-    print_message(mapset)
+    
+  
 
-    #import link(line)
+    #dbConnGrass(host,port,database,schema_name,user,password)
+    
+
+    points_schema=schema_name+'.'+points
+    points_ogr=points+"_ogr"
+    print_message('v.in.ogr')
+    
     grass.run_command('v.in.ogr',
-                dsn='./',
-                layer = 'link',
-                output = 'link',
-                quiet = True,
-                overwrite = True)
+                dsn="PG:host=localhost dbname=letnany user=matt",
+                layer = points_schema,
+                output = points_ogr,
+                #overwrite=True,
+                flags='t',
+                type='point')
+
+
+    points_m=points_ogr+'@'+mapset
+    points_nat=points + "nat"
+    rm=points_nat+'@'+mapset
+    
+    grass.run_command('g.remove',
+                      vect=rm)
     
     
-    #conenct to schema temp
-    dbConnGrass(host,port,database,schema_name,user,password)
-    
-    #import link(interpolated points)
-    grass.run_command('v.in.ogr',
-                dsn='./',
-                layer = lpoints_table+"@"+mapset,
-                output = lpoints_table,
-                type='point',
-                quiet = True,
-                overwrite = True)
-    
-    #make two cat
-    lpoints_table_cat=lpoints_table+"_cat"
-    vcatpoints=lpoints_table_cat+"@"+mapset
-    print_message(vcatpoints)
+    print_message('v.category')
     grass.run_command('v.category',
-                input=lpoints_table,
-                output=vcatpoints,
+                input=points_m,
+                output=points_nat,
                 op="transfer",
+                overwrite=True,
                 layer="1,2")
-    
-    #connect interpol. points
+
+    print_message('g.remove')
+    grass.run_command('g.remove',
+                      vect=points_m)   
+ 
+    print_message('v.db.connect')
+   
+    dbConnGrass(host,port,database,schema_name,user,password)
+    points_nat_m=points_nat+'@'+mapset
+    ''' 
     grass.run_command('v.db.connect',
-                map=vcatpoints,
-                table=lpoints_table,
-                key='linkid',
-                flags='o')   
-    '''
+                map=points_nat_m,
+                table=points_schema,
+                key='point_id',
+                )
+     
     try:
         with open(path+"/timewindow",'r') as f:
             for win in f:
@@ -792,6 +807,14 @@ def grassWork():
               
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
+
+    
+    
+
+    grass.run_command("db.connect",
+                      driver="sqlite",
+                      database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db',
+                      )
     '''
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
