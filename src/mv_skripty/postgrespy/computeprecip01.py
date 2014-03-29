@@ -157,9 +157,15 @@ except:
 
 #%option 
 #% key: step
-#% label: Interpolate points along links per meter (not necessary if created in the past)
+#% label: Interpolation step per meter
 #% description: Interpolate points along links per meter (not necessary if created in the past)
 #% type: integer
+#% guisection: Preprocesing
+#%end
+
+#%flag
+#% key:p
+#% description: Interpolate points along links per meter (not necessary if created in the past)
 #% guisection: Preprocesing
 #%end
 
@@ -362,11 +368,13 @@ def dbConnGrass(host,port,database,schema,user,password):
     user = options['user']
     password = options['password']
     '''
+    
+    
+    
     # Test connection
     conn = "dbname=" + database
     if host: conn += ",host=" + host
     if port: conn += ",port=" + port
-
     # Unfortunately we cannot test untill user/password is set
     if user or password:
         print_message("Setting login (db.login) ... ")
@@ -384,8 +392,11 @@ def dbConnGrass(host,port,database,schema,user,password):
 
     if grass.run_command('db.connect', driver = "pg", database = conn, schema = schema) != 0:
         grass.fatal("Cannot connect to database.")
-    print_message("End of connect procedure")
-
+    else:
+        print '-' * 80
+        print_message("Connected to")
+        grass.run_command('db.connect',flags='p')
+    
 def dbConnPy():
     print_message("Conecting to database by psycopg")
     db_host = options['host']
@@ -725,9 +736,8 @@ def grassWork():
                 dsn='./',
                 layer = 'link',
                 output = 'link',
-                type='line',
                 quiet = True,
-                overwrite = True,)
+                overwrite = True)
     
     
     #conenct to schema temp
@@ -736,11 +746,11 @@ def grassWork():
     #import link(interpolated points)
     grass.run_command('v.in.ogr',
                 dsn='./',
-                layer = lpoints_table,
+                layer = lpoints_table+"@"+mapset,
                 output = lpoints_table,
                 type='point',
                 quiet = True,
-                overwrite = True,)
+                overwrite = True)
     
     #make two cat
     lpoints_table_cat=lpoints_table+"_cat"
@@ -758,7 +768,7 @@ def grassWork():
                 table=lpoints_table,
                 key='linkid',
                 flags='o')   
-    
+    '''
     try:
         with open(path+"/timewindow",'r') as f:
             for win in f:
@@ -782,7 +792,7 @@ def grassWork():
               
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
-
+    '''
 #------------------------------------------------------------------main-------------------------------------------    
 def main():
     
@@ -796,7 +806,7 @@ def main():
         print_message("Module is running...")
         db=dbConnPy()
         if flags['r']:
-            sql="drop schema %s CASCADE" % schema_name
+            sql="drop schema IF EXISTS %s CASCADE" % schema_name
             db.executeSql(sql,False,True)
 
         #first run- prepare db
@@ -815,8 +825,11 @@ def main():
             sumPrecip(db,sprc,fromtime,totime)
             
         #interpolate points    
-        if options['step']:
-            intrpolatePoints(db)
+        if flags['p']:
+            if not options['step']:
+                grass.fatal('Missing parameter "step" for interpolation')
+            else:
+                intrpolatePoints(db)
             
         #grass work
         if flags['i']:
