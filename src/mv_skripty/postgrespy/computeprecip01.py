@@ -736,7 +736,7 @@ def grassWork():
         print "I/O error({0}): {1}".format(errno, strerror)
     
   
-
+    #zkousel jsem pripojit se k db pomoci funkce dbConnGrass() a pak v.in.ogr dsn='./' nejde to
     #dbConnGrass(host,port,database,schema_name,user,password)
     
 
@@ -744,24 +744,23 @@ def grassWork():
     points_ogr=points+"_ogr"
     print_message('v.in.ogr')
     
+    dsn1="PG:host=localhost dbname="+database+" user="+user
     grass.run_command('v.in.ogr',
-                    dsn="PG:host=localhost dbname=letnany user=matt",
+                    dsn=dsn1,
                     layer = points_schema,
                     output = points_ogr,
                     overwrite=True,
                     flags='t',
                     type='point')
 
-
     points_m=points_ogr+'@'+mapset
     points_nat=points + "_nat"
     
-    #if exist from before
+    #clear from before try
     rm=points_nat+'@'+mapset
     
     grass.run_command('g.remove',
                       vect=rm)
-    
     
     print_message('v.category')
     grass.run_command('v.category',
@@ -785,11 +784,9 @@ def grassWork():
                     table=points_schema,
                     key='linkid',
                     layer='1',
-                    overwrite=True,
                     flags='o',
                     quiet=True)
     
-  
     print_message('v.db.connect loop for')
     try:
         with open(path+"/timewindow",'r') as f:
@@ -807,7 +804,8 @@ def grassWork():
                             quiet=True)
                 
                 #TODO(interpolace?)
-                break
+                
+                break# jen kvuli debug
                 
                 
                 #delete connection to 2. layer
