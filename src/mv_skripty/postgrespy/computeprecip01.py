@@ -13,11 +13,9 @@ from pgwrapper import pgwrapper as pg
 from math import sin, cos, atan2,degrees,radians, tan,sqrt
 
 try:
-    from grass.script import message,core as grass  
+    from grass.script import core as grass  
 except ImportError:
-    import grass
-except:
-    raise Exception ("Cannot find 'grass' Python module. Python is supported by GRASS from version >= 6.4" )
+    sys.exit("Cannot find 'grass' Python module. Python is supported by GRASS from version >= 6.4")
 
 
 ##########################################################
@@ -27,10 +25,6 @@ except:
 #% description: Module for working with microwave links
 #%end
 
-#%option G_OPT_M_MAPSET
-#% label: Name of working mapset
-#% required: yes
-#%end
 ##########################################################
 ################# guisection: Interpolation ##############
 ##########################################################
@@ -40,7 +34,6 @@ except:
 #% description: Run GRASS analysis
 #% guisection: Interpolation
 #%end
-
 
 ##########################################################
 ############## guisection: database work #################
@@ -191,10 +184,6 @@ except:
 #%end
 
 
-
-
-
-
 view="view"
 mesuretime=0
 restime=0
@@ -205,7 +194,7 @@ totime="2013-09-09 23:59:00"
 record_tb_name= "record"
 temp_windows_names=[]
 R=6371
-path= os.path.dirname(os.path.realpath(__file__))+"/tmpdata"
+path= os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmpdata")
 
 def intrpolatePoints(db):
     print_message("Interpolating points along lines...")
@@ -236,7 +225,7 @@ def intrpolatePoints(db):
     
     
     try:
-        io= open(path+"/linknode","wr")
+        io= open(os.path.join(path, "linknode"), "wr")
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
         
@@ -245,7 +234,7 @@ def intrpolatePoints(db):
     temp=[]
     for record in resu:
         tmp=record[0]
-        tmp = tmp.replace("LINESTRING(", "")
+        tmp = tmp.replace("LINESTRING(", "") ### ???
         tmp = tmp.replace(" ", ",")
         tmp = tmp.replace(")", "")
         tmp = tmp.split(",")
@@ -362,10 +351,12 @@ def bearing(lat1,lon1,lat2,lon2):
     return (brng+360) % 360;
 
 def print_message(msg):
-    print msg
-    print '-' * 80
-    sys.stdout.flush()
-    
+    print >> sys.stderr, msg
+    print >> sys.stderr, '-' * 80
+    ### sys.stdout.flush()
+    ### nebo
+    ### grass.message(msg)
+
 def dbConnGrass(host,port,database,schema,user,password):
     print_message("Connecting to db-GRASS...")
     '''
@@ -726,7 +717,7 @@ def grassWork():
     user = options['user']
     password = options['password']
     
-    mapset=options['mapset']
+    mapset=grass.gisenv()['MAPSET']
     
     try:
         io=open(path +"/linkpointsname","r")
@@ -744,43 +735,36 @@ def grassWork():
     points_ogr=points+"_ogr"
     print_message('v.in.ogr')
     
-    dsn1="PG:host=localhost dbname="+database+" user="+user
+    dsn1="PG:dbname="+database+" user="+user
     grass.run_command('v.in.ogr',
                     dsn=dsn1,
                     layer = points_schema,
                     output = points_ogr,
                     overwrite=True,
                     flags='t',
-                    type='point')
-
-    points_m=points_ogr+'@'+mapset
+                    type='point') 
     points_nat=points + "_nat"
     
-    #clear from before try
-    rm=points_nat+'@'+mapset
-    
-    grass.run_command('g.remove',
-                      vect=rm)
+    # if vector already exits, remove dblink (original table)
+    if grass.find_file(points_nat, element='vector')['fullname']:
+        grass.run_command('v.db.connect', map=points_nat, flags='d', layer='1')
     
     print_message('v.category')
     grass.run_command('v.category',
-                    input=points_m,
+                    input=points_ogr,
                     output=points_nat,
                     op="transfer",
                     overwrite=True,
                     layer="1,2")
-
     print_message('g.remove')
-    grass.run_command('g.remove',
-                      vect=points_m)   
- 
+    #grass.run_command('g.remove',
+    #                  vect=points_ogr)   
 
    
     dbConnGrass(host,port,database,schema_name,user,password)
-    points_nat_m=points_nat+'@'+mapset
     
     grass.run_command('v.db.connect',
-                    map=points_nat_m,
+                    map=points_nat,
                     table=points_schema,
                     key='linkid',
                     layer='1',
@@ -795,7 +779,7 @@ def grassWork():
                 win=schema_name+'.'+win
                 print_message(win)
                 grass.run_command('v.db.connect',
-                            map=points_nat_m,
+                            map=points_nat,
                             table=win,
                             key='linkid',
                             layer='2',
@@ -810,7 +794,7 @@ def grassWork():
                 
                 #delete connection to 2. layer
                 grass.run_command('v.db.connect',
-                            map=points_nat_m,
+                            map=points_nat,
                             layer='2',
                             flags='d') 
               
