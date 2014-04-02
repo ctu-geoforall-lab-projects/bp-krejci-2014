@@ -197,7 +197,7 @@ def intrpolatePoints(db):
     sql="DROP TABLE IF EXISTS %s.%s"%(schema_name,nametable)    #if table exist than drop
     db.executeSql(sql,False,True)
     
-    try:
+    try: #open file for interpol. points.
         io= open(os.path.join(path,"linkpointsname"),"wr")
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
@@ -207,10 +207,10 @@ def intrpolatePoints(db):
     sql="create table %s.%s (linkid integer,long real,lat real,point_id serial PRIMARY KEY) "%(schema_name,nametable)   #create table where will be intrpol. points.
     db.executeSql(sql,False,True)
 
-    latlong=[]
-    dist=[]
-    linkid=[]
-    points=[]
+    latlong=[] #list of  [lon1 lat1 lon2 lat2]
+    dist=[]    #list of distances between nodes on one link
+    linkid=[]   #linkid value
+    
     a=0 #index of latlong row
     x=0 #just id in table with interpol. points (currently not necessery)
      
@@ -239,11 +239,11 @@ def intrpolatePoints(db):
     
         az=bearing(lat1,lon1,lat2,lon2) #compute approx. azimut on sphere
         a+=1
-        while abs(dist) > step:
-            lat1 ,lon1, finalBrg, backBrg=destinationPointWGS(lat1,lon1,az,step)
+        while abs(dist) > step:         #compute points per step while is not achieve second node on link
+            lat1 ,lon1, finalBrg, backBrg=destinationPointWGS(lat1,lon1,az,step)  #return interpol. point and set current point as starting point(for next loop), also return azimut for next point
             az=finalBrg
 
-            dist-=step
+            dist-=step  #reduce distance 
             out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+'|'+str(x)+"\n" # set string for one row in table wit interpol points
             temp.append(out)  
             x+=1
