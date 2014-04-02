@@ -240,12 +240,11 @@ def intrpolatePoints(db):
         az=bearing(lat1,lon1,lat2,lon2) #compute approx. azimut on sphere
         a+=1
         while abs(dist) > step:         #compute points per step while is not achieve second node on link
-            lat1 ,lon1, finalBrg, backBrg=destinationPointWGS(lat1,lon1,az,step)  #return interpol. point and set current point as starting point(for next loop), also return azimut for next point
-            az=finalBrg
+            lat1 ,lon1, az, backBrg=destinationPointWGS(lat1,lon1,az,step)  #return interpol. point and set current point as starting point(for next loop), also return azimut for next point
+            dist-=step  #reduce distance
 
-            dist-=step  #reduce distance 
             out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+'|'+str(x)+"\n" # set string for one row in table wit interpol points
-            temp.append(out)  
+            temp.append(out)
             x+=1
 
     io.writelines(temp)            #write interpolated points to flat file
@@ -593,7 +592,7 @@ def computePrecip(db):
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
         
-    print_message("Write precipitation to database...")
+    print_message("Writing precipitation to database...")
     io1=open(os.path.join(path,"precip"),"r")
     db.copyfrom(io1,"%s.%s"%(schema_name,temptb))
     io1.close()
@@ -769,13 +768,13 @@ def grassWork():
                             key='linkid',
                             layer='2',
                             quiet=True)
-
+               
                 #remove connection to 2. layer
                 grass.run_command('v.db.connect',
                             map=points_nat,
                             layer='2',
                             flags='d') 
-                sys.exit()
+                
                 
                 
     except IOError as (errno,strerror):
