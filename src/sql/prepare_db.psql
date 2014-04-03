@@ -25,10 +25,10 @@ UPDATE link SET geom = st_makeline(n1.geom,n2.geom)
 alter table record add column polarization char(1);
 alter table record add column lenght real;
 alter table record add column precipitation real;
-alter table recprd add column a;
+alter table record add column a real;
 
-update record
-set a= rxrpower-txpower;
+      update record
+set a=rxpower-txpower;
 
 update record 
 set polarization=link.polarization
