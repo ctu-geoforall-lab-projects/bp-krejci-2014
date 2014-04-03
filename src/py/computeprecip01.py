@@ -384,20 +384,18 @@ def dbConnPy():
     db_password = options['password']
     
     try:
-        #if require password and user    
-        if db_password:        
-            db = pg(dbname=db_name, host=db_host,
-                    user=db_user, passwd = db_password)
-        #if required only user
-        elif db_user and not db_password:         
-            db = pg(dbname=db_name, host=db_host,
-                    user=db_user)
-        #if not required user and passwd   
-        else:
-            db = pg(dbname=db_name, host=db_host)
+        conninfo = { 'dbname' : db_name }
+        if db_host:
+            conninfo['host'] = db_host
+        if db_user:
+            conninfo['user'] = db_user
+        if db_password:
+            conninfo['passwd'] = db_password
             
+        db = pg(**conninfo)
+
     except psycopg2.OperationalError, e:
-        grass.fatal("Unable to connect to the database (db=%s, user=%s). %s" % (db_name, db_user, e))
+        grass.fatal("Unable to connect to the database <%s>. %s" % (db_name, e))
     
     return db
     
