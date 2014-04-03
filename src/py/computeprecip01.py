@@ -335,12 +335,8 @@ def bearing(lat1,lon1,lat2,lon2):
     return (brng+360) % 360;
 
 def print_message(msg):
-    print >> sys.stderr, msg
-   
-    ### sys.stdout.flush()
-    ### nebo
-    ### grass.message(msg)
-    print >> sys.stderr, '-' * 60
+    grass.message(msg)
+    grass.message('-' * 60)
     
 def dbConnGrass(host,port,database,schema,user,password):
     print_message("Connecting to db-GRASS...")
@@ -401,7 +397,8 @@ def dbConnPy():
             db = pg(dbname=db_name, host=db_host)
             
     except psycopg2.OperationalError, e:
-        sys.exit("I am unable to connect to the database (db=%s, user=%s). %s" % (db_name, db_user, e))
+        grass.fatal("Unable to connect to the database (db=%s, user=%s). %s" % (db_name, db_user, e))
+    
     return db
     
 def firstRun(db):
