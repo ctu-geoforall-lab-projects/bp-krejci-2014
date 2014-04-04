@@ -1,0 +1,56 @@
+\select@language {english}
+\select@language {english}
+\select@language {czech}
+\contentsline {section}{\IeC {\'U}vod}{10}{section*.2}
+\contentsline {section}{\numberline {1}M\IeC {\v e}\IeC {\v r}en\IeC {\'\i } de\IeC {\v s}\IeC {\v t}ov\IeC {\'y}ch sr\IeC {\'a}\IeC {\v z}ek}{12}{section.1}
+\contentsline {subsection}{\numberline {1.1}Historie stru\IeC {\v c}n\IeC {\v e}}{12}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Sou\IeC {\v c}asn\IeC {\'e} n\IeC {\'a}stroje na m\IeC {\v e}\IeC {\v r}en\IeC {\'\i } a odhad sr\IeC {\'a}\IeC {\v z}ek}{13}{subsection.1.2}
+\contentsline {subsubsection}{\numberline {1.2.1}Sr\IeC {\'a}\IeC {\v z}kom\IeC {\v e}ry}{13}{subsubsection.1.2.1}
+\contentsline {subsubsection}{\numberline {1.2.2}Radar}{16}{subsubsection.1.2.2}
+\contentsline {subsubsection}{\numberline {1.2.3}Satelitn\IeC {\'\i } dru\IeC {\v z}ice}{16}{subsubsection.1.2.3}
+\contentsline {subsection}{\numberline {1.3}Mikrovlnn\IeC {\'e} spoje}{16}{subsection.1.3}
+\contentsline {subsubsection}{\numberline {1.3.1}Problematika}{16}{subsubsection.1.3.1}
+\contentsline {subsubsection}{\numberline {1.3.2}V\IeC {\'y}po\IeC {\v c}et sr\IeC {\'a}\IeC {\v z}ky}{16}{subsubsection.1.3.2}
+\contentsline {subsubsection}{\numberline {1.3.3}Srovn\IeC {\'a}n\IeC {\'\i } s ostatn\IeC {\'\i }mi metodami}{16}{subsubsection.1.3.3}
+\contentsline {subsubsection}{\numberline {1.3.4}Potenci\IeC {\'a}l v hydrometeorologii}{16}{subsubsection.1.3.4}
+\contentsline {section}{\numberline {2}Interpolace sr\IeC {\'a}\IeC {\v z}ek}{16}{section.2}
+\contentsline {section}{\numberline {3}GRASS GIS modul}{16}{section.3}
+\contentsline {subsection}{\numberline {3.1}Funkcionalita}{16}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Implementa\IeC {\v c}n\IeC {\'\i } n\IeC {\'a}stroje}{16}{subsection.3.2}
+\contentsline {subsubsection}{\numberline {3.2.1}GRASS API}{16}{subsubsection.3.2.1}
+\contentsline {subsubsection}{\numberline {3.2.2}PostgreSQL}{16}{subsubsection.3.2.2}
+\contentsline {subsubsection}{\numberline {3.2.3}Psycopg?}{16}{subsubsection.3.2.3}
+\contentsline {subsection}{\numberline {3.3}Vstup}{16}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}V\IeC {\'y}stup}{16}{subsection.3.4}
+\contentsline {section}{\numberline {4}\IeC {\v C}asoprostorov\IeC {\'e} anal\IeC {\'y}zy}{16}{section.4}
+\contentsline {subsection}{\numberline {4.1}Vyu\IeC {\v z}itelnost}{16}{subsection.4.1}
+\contentsline {section}{\numberline {5}Z\IeC {\'a}v\IeC {\v e}r}{16}{section.5}
+\contentsline {section}{\numberline {6}P\IeC {\v r}\IeC {\'\i }loha}{16}{section.6}
+\contentsline {subsection}{\numberline {6.1}Dokumentace}{16}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}U\IeC {\v z}ivatelsk\IeC {\'a} p\IeC {\v r}\IeC {\'\i }ru\IeC {\v c}ka}{16}{subsection.6.2}
+\contentsline {subsubsection}{\numberline {6.2.1}GRASS GIS -- ps.map}{18}{subsubsection.6.2.1}
+\contentsline {subsection}{\numberline {6.3}Porovn\IeC {\'a}n\IeC {\'\i } program\IeC {\r u} z~hlediska u\IeC {\v z}ivatelsk\IeC {\'e}ho rozhran\IeC {\'\i }}{19}{subsection.6.3}
+\contentsline {subsubsection}{\numberline {6.3.1}Obecn\IeC {\'e} z\IeC {\'a}sady GUI}{20}{subsubsection.6.3.1}
+\contentsline {subsubsection}{\numberline {6.3.2}ArcGIS}{22}{subsubsection.6.3.2}
+\contentsline {subsubsection}{\numberline {6.3.3}gvSIG}{25}{subsubsection.6.3.3}
+\contentsline {subsubsection}{\numberline {6.3.4}QGIS}{26}{subsubsection.6.3.4}
+\contentsline {subsection}{\numberline {6.4}Shrnut\IeC {\'\i } porovn\IeC {\'a}n\IeC {\'\i }}{27}{subsection.6.4}
+\contentsline {subsubsection}{\numberline {6.4.1}Uk\IeC {\'a}zky mapov\IeC {\'y}ch v\IeC {\'y}stup\IeC {\r u}}{27}{subsubsection.6.4.1}
+\contentsline {section}{\numberline {7}Syst\IeC {\'e}m GRASS GIS}{28}{section.7}
+\contentsline {subsection}{\numberline {7.1}Z\IeC {\'a}kladn\IeC {\'\i } pojmy}{29}{subsection.7.1}
+\contentsline {subsection}{\numberline {7.2}GUI syst\IeC {\'e}mu GRASS}{30}{subsection.7.2}
+\contentsline {subsection}{\numberline {7.3}Modul ps.map}{31}{subsection.7.3}
+\contentsline {subsubsection}{\numberline {7.3.1}Konfigura\IeC {\v c}n\IeC {\'\i } soubor}{31}{subsubsection.7.3.1}
+\contentsline {subsubsection}{\numberline {7.3.2}Volba rozsahu zobrazovan\IeC {\'e}ho \IeC {\'u}zem\IeC {\'\i }}{32}{subsubsection.7.3.2}
+\contentsline {subsubsection}{\numberline {7.3.3}Nekonzistence a chyby v~modulu ps.map}{33}{subsubsection.7.3.3}
+\contentsline {section}{\numberline {8}GUI wx.psmap pro modul ps.map}{35}{section.8}
+\contentsline {subsection}{\numberline {8.1}Instalace wx.psmap}{36}{subsection.8.1}
+\contentsline {subsection}{\numberline {8.2}Podklady a pou\IeC {\v z}it\IeC {\'e} knihovny}{36}{subsection.8.2}
+\contentsline {subsection}{\numberline {8.3}Funkcionalita aplikace wx.psmap}{36}{subsection.8.3}
+\contentsline {subsection}{\numberline {8.4}Vzhled a ovl\IeC {\'a}d\IeC {\'a}n\IeC {\'\i } wx.psmap}{38}{subsection.8.4}
+\contentsline {subsection}{\numberline {8.5}Probl\IeC {\'e}my p\IeC {\v r}i tvorb\IeC {\v e} wx.psmap}{39}{subsection.8.5}
+\contentsline {subsection}{\numberline {8.6}Budouc\IeC {\'\i } v\IeC {\'y}voj aplikace wx.psmap}{42}{subsection.8.6}
+\contentsline {section}{Z\IeC {\'a}v\IeC {\v e}r}{42}{section*.39}
+\contentsline {section}{Seznam pou\IeC {\v z}it\IeC {\'y}ch zkratek}{44}{section*.41}
+\contentsline {section}{Pou\IeC {\v z}it\IeC {\'e} zdroje}{45}{section*.43}
+\contentsline {section}{\numberline {A}Instalace syst\IeC {\'e}mu GRASS}{48}{appendix.A}

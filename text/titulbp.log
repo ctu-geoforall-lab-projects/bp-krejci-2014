@@ -1,0 +1,665 @@
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.3.31)  31 MAR 2014 11:35
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**titulbp.tex
+(./titulbp.tex
+LaTeX2e <2011/06/27>
+Babel <3.9f> and hyphenation patterns for 4 languages loaded.
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1 \begin{center}
+                  
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Overfull \hbox (20.0pt too wide) in paragraph at lines 1--1
+[] 
+ []
+
+! Undefined control sequence.
+l.26 {\Large
+            \velka{\napisCVUT}}\\
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no ƒ in font cmcsc10!
+Missing character: There is no å in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no © in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no © in font cmcsc10!
+Missing character: There is no ƒ in font cmcsc10!
+Missing character: There is no ç in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no ≠ in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no © in font cmcsc10!
+
+Overfull \hbox (16.51103pt too wide) in paragraph at lines 26--26
+ \OT1/cmr/m/sc/10 esk 
+ []
+
+
+Overfull \hbox (29.55545pt too wide) in paragraph at lines 26--26
+ \OT1/cmr/m/sc/10 vysok 
+ []
+
+
+Overfull \hbox (17.84438pt too wide) in paragraph at lines 26--26
+ \OT1/cmr/m/sc/10 uen 
+ []
+
+
+Overfull \hbox (27.31094pt too wide) in paragraph at lines 26--26
+ \OT1/cmr/m/sc/10 tech- 
+ []
+
+
+Overfull \hbox (21.42212pt too wide) in paragraph at lines 26--26
+ \OT1/cmr/m/sc/10 nick 
+ []
+
+
+Overfull \hbox (6.13332pt too wide) in paragraph at lines 26--26
+ \OT1/cmr/m/sc/10 v 
+ []
+
+
+Overfull \hbox (30.17204pt too wide) in paragraph at lines 26--26
+ \OT1/cmr/m/sc/10 Praze 
+ []
+
+! Undefined control sequence.
+<recently read> \Large 
+                       
+l.27 \velka{\Large\napisFS}
+                           \\
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no ≠ in font cmcsc10!
+
+Overfull \hbox (40.42474pt too wide) in paragraph at lines 27--27
+ []\OT1/cmr/m/sc/10 Fakulta 
+ []
+
+
+Overfull \hbox (38.71094pt too wide) in paragraph at lines 27--27
+ \OT1/cmr/m/sc/10 stavebn 
+ []
+
+! Undefined control sequence.
+l.29 {\LARGE
+            \velka{\napisBakalarka}}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no ° in font cmcsc10!
+Missing character: There is no ≈ in font cmcsc10!
+Missing character: There is no ô in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no ° in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no ° in font cmcsc10!
+
+Overfull \hbox (42.397pt too wide) in paragraph at lines 29--30
+ []\OT1/cmr/m/sc/10 Bakalsk 
+ []
+
+
+Overfull \hbox (23.08876pt too wide) in paragraph at lines 29--30
+ \OT1/cmr/m/sc/10 prce 
+ []
+
+! Undefined control sequence.
+l.31 {\large
+            \napisPraha\hfill\napisAutor}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no P in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 4 in font nullfont!
+Missing character: There is no M in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no ƒ in font nullfont!
+Missing character: There is no õ in font nullfont!
+Missing character: There is no j in font nullfont!
+Missing character: There is no K in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no j in font nullfont!
+Missing character: There is no ƒ in font nullfont!
+Missing character: There is no ç in font nullfont!
+Missing character: There is no √ in font nullfont!
+Missing character: There is no ≠ in font nullfont!
+
+! LaTeX Error: The font size command \normalsize is not defined:
+               there is probably something wrong with the class file.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.32 \newpage
+             
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+! Undefined control sequence.
+l.36 {\Large
+            \velka{\napisCVUT}}\\
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no ƒ in font cmcsc10!
+Missing character: There is no å in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no © in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no © in font cmcsc10!
+Missing character: There is no ƒ in font cmcsc10!
+Missing character: There is no ç in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no ≠ in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no © in font cmcsc10!
+
+Overfull \hbox (16.51103pt too wide) in paragraph at lines 36--36
+ []\OT1/cmr/m/sc/10 esk 
+ []
+
+
+Overfull \hbox (29.55545pt too wide) in paragraph at lines 36--36
+ \OT1/cmr/m/sc/10 vysok 
+ []
+
+
+Overfull \hbox (17.84438pt too wide) in paragraph at lines 36--36
+ \OT1/cmr/m/sc/10 uen 
+ []
+
+
+Overfull \hbox (27.31094pt too wide) in paragraph at lines 36--36
+ \OT1/cmr/m/sc/10 tech- 
+ []
+
+
+Overfull \hbox (21.42212pt too wide) in paragraph at lines 36--36
+ \OT1/cmr/m/sc/10 nick 
+ []
+
+
+Overfull \hbox (6.13332pt too wide) in paragraph at lines 36--36
+ \OT1/cmr/m/sc/10 v 
+ []
+
+
+Overfull \hbox (30.17204pt too wide) in paragraph at lines 36--36
+ \OT1/cmr/m/sc/10 Praze 
+ []
+
+! Undefined control sequence.
+l.37 {\Large
+            \velka{\napisFS}}\\
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no ≠ in font cmcsc10!
+
+Overfull \hbox (40.42474pt too wide) in paragraph at lines 37--37
+ []\OT1/cmr/m/sc/10 Fakulta 
+ []
+
+
+Overfull \hbox (38.71094pt too wide) in paragraph at lines 37--37
+ \OT1/cmr/m/sc/10 stavebn 
+ []
+
+! Undefined control sequence.
+l.38 {\Large
+            \velka{\napisObor}}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+Overfull \hbox (26.62209pt too wide) in paragraph at lines 38--39
+ []\OT1/cmr/m/sc/10 Obor 
+ []
+
+
+Overfull \hbox (31.2776pt too wide) in paragraph at lines 38--39
+ \OT1/cmr/m/sc/10 geoin- 
+ []
+
+
+Overfull \hbox (21.28879pt too wide) in paragraph at lines 38--39
+ \OT1/cmr/m/sc/10 for- 
+ []
+
+
+Overfull \hbox (34.35538pt too wide) in paragraph at lines 38--39
+ \OT1/cmr/m/sc/10 matika 
+ []
+
+! Undefined control sequence.
+l.40 \includegraphics
+                     [width=3cm]{logo_cvut_cb} %~
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no [ in font nullfont!
+Missing character: There is no w in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no = in font nullfont!
+Missing character: There is no 3 in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no m in font nullfont!
+Missing character: There is no ] in font nullfont!
+Missing character: There is no l in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no g in font nullfont!
+Missing character: There is no o in font nullfont!
+! Missing $ inserted.
+<inserted text> 
+                $
+l.40 \includegraphics[width=3cm]{logo_
+                                      cvut_cb} %~
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 40.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 40.
+! Extra }, or forgotten $.
+l.40 \includegraphics[width=3cm]{logo_cvut_cb}
+                                               %~
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.41 \vfill
+           
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+
+Overfull \hbox (26.98085pt too wide) in paragraph at lines 40--41
+ []$[]\OML/cmm/m/it/10 vut[]b$ 
+ []
+
+! Undefined control sequence.
+l.42 {\Large
+            \velka{\napisBakalarka}}\\
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no ° in font cmcsc10!
+Missing character: There is no ≈ in font cmcsc10!
+Missing character: There is no ô in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no ° in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no ° in font cmcsc10!
+
+Overfull \hbox (42.397pt too wide) in paragraph at lines 42--42
+ []\OT1/cmr/m/sc/10 Bakalsk 
+ []
+
+
+Overfull \hbox (23.08876pt too wide) in paragraph at lines 42--42
+ \OT1/cmr/m/sc/10 prce 
+ []
+
+! Undefined control sequence.
+l.43 {\Large
+            \velka{\napisNazevI\\
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no Ω in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no ° in font cmcsc10!
+Missing character: There is no ≈ in font cmcsc10!
+Missing character: There is no æ in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no Ω in font cmcsc10!
+
+Overfull \hbox (36.69426pt too wide) in paragraph at lines 44--44
+ []\OT1/cmr/m/sc/10 Analza 
+ []
+
+
+Overfull \hbox (6.13332pt too wide) in paragraph at lines 44--44
+ \OT1/cmr/m/sc/10 a 
+ []
+
+
+Overfull \hbox (35.3554pt too wide) in paragraph at lines 44--44
+ \OT1/cmr/m/sc/10 vizual- 
+ []
+
+
+Overfull \hbox (25.4443pt too wide) in paragraph at lines 44--44
+ \OT1/cmr/m/sc/10 izace 
+ []
+
+
+Overfull \hbox (41.04427pt too wide) in paragraph at lines 44--44
+ \OT1/cmr/m/sc/10 srkovch 
+ []
+
+
+Overfull \hbox (17.3999pt too wide) in paragraph at lines 44--44
+ \OT1/cmr/m/sc/10 dat 
+ []
+
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no Ω in font cmcsc10!
+Missing character: There is no ƒ in font cmcsc10!
+Missing character: There is no ç in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no ≠ in font cmcsc10!
+Missing character: There is no ≈ in font cmcsc10!
+Missing character: There is no Ø in font cmcsc10!
+Missing character: There is no √ in font cmcsc10!
+Missing character: There is no ≠ in font cmcsc10!
+
+Overfull \hbox (5.0222pt too wide) in paragraph at lines 44--44
+ []\OT1/cmr/m/sc/10 z 
+ []
+
+
+Overfull \hbox (64.35527pt too wide) in paragraph at lines 44--44
+ \OT1/cmr/m/sc/10 mikrovlnnch 
+ []
+
+
+Overfull \hbox (38.46643pt too wide) in paragraph at lines 44--44
+ \OT1/cmr/m/sc/10 teleko- 
+ []
+
+
+Overfull \hbox (17.37769pt too wide) in paragraph at lines 44--44
+ \OT1/cmr/m/sc/10 mu- 
+ []
+
+
+Overfull \hbox (39.82207pt too wide) in paragraph at lines 44--44
+ \OT1/cmr/m/sc/10 nikanch 
+ []
+
+
+Overfull \hbox (20.75546pt too wide) in paragraph at lines 44--44
+ \OT1/cmr/m/sc/10 spoj 
+ []
+
+
+Overfull \hbox (15.71101pt too wide) in paragraph at lines 44--44
+ \OT1/cmr/m/sc/10 po- 
+ []
+
+
+Overfull \hbox (19.73323pt too wide) in paragraph at lines 44--44
+ \OT1/cmr/m/sc/10 moc 
+ []
+
+
+Overfull \hbox (18.68034pt too wide) in paragraph at lines 44--44
+ \OT1/cmr/m/sc/10 GIS 
+ []
+
+! Undefined control sequence.
+l.45 {\large
+            \velka{\napisNazevAjI\\
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+Overfull \hbox (43.18309pt too wide) in paragraph at lines 46--46
+ []\OT1/cmr/m/sc/10 Analysis 
+ []
+
+
+Overfull \hbox (18.51106pt too wide) in paragraph at lines 46--46
+ \OT1/cmr/m/sc/10 and 
+ []
+
+
+Overfull \hbox (35.3554pt too wide) in paragraph at lines 46--46
+ \OT1/cmr/m/sc/10 vizual- 
+ []
+
+
+Overfull \hbox (17.95546pt too wide) in paragraph at lines 46--46
+ \OT1/cmr/m/sc/10 iza- 
+ []
+
+
+Overfull \hbox (21.42212pt too wide) in paragraph at lines 46--46
+ \OT1/cmr/m/sc/10 tion 
+ []
+
+
+Overfull \hbox (11.71107pt too wide) in paragraph at lines 46--46
+ \OT1/cmr/m/sc/10 of 
+ []
+
+
+Overfull \hbox (25.08878pt too wide) in paragraph at lines 46--46
+ \OT1/cmr/m/sc/10 rain- 
+ []
+
+
+Overfull \hbox (25.44434pt too wide) in paragraph at lines 46--46
+ \OT1/cmr/m/sc/10 falls 
+ []
+
+
+Overfull \hbox (22.86653pt too wide) in paragraph at lines 46--46
+ \OT1/cmr/m/sc/10 data 
+ []
+
+
+Overfull \hbox (24.97768pt too wide) in paragraph at lines 46--46
+ \OT1/cmr/m/sc/10 from 
+ []
+
+
+Overfull \hbox (52.75531pt too wide) in paragraph at lines 46--47
+ []\OT1/cmr/m/sc/10 microwave 
+ []
+
+
+Overfull \hbox (25.2221pt too wide) in paragraph at lines 46--47
+ \OT1/cmr/m/sc/10 links 
+ []
+
+
+Overfull \hbox (14.48882pt too wide) in paragraph at lines 46--47
+ \OT1/cmr/m/sc/10 us- 
+ []
+
+
+Overfull \hbox (15.56659pt too wide) in paragraph at lines 46--47
+ \OT1/cmr/m/sc/10 ing 
+ []
+
+
+Overfull \hbox (18.68034pt too wide) in paragraph at lines 46--47
+ \OT1/cmr/m/sc/10 GIS 
+ []
+
+! Undefined control sequence.
+l.48 {\large
+            %
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+Missing character: There is no V in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no u in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no √ in font nullfont!
+Missing character: There is no ≠ in font nullfont!
+Missing character: There is no p in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no √ in font nullfont!
+Missing character: There is no ° in font nullfont!
+Missing character: There is no c in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no : in font nullfont!
+Missing character: There is no I in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no g in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no M in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no L in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no n in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no P in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no D in font nullfont!
+Missing character: There is no . in font nullfont!
+Missing character: There is no K in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no g in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no m in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no i in font nullfont!
+Missing character: There is no k in font nullfont!
+Missing character: There is no y in font nullfont!
+Missing character: There is no P in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no 2 in font nullfont!
+Missing character: There is no 0 in font nullfont!
+Missing character: There is no 1 in font nullfont!
+Missing character: There is no 4 in font nullfont!
+Missing character: There is no M in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no t in font nullfont!
+Missing character: There is no ƒ in font nullfont!
+Missing character: There is no õ in font nullfont!
+Missing character: There is no j in font nullfont!
+Missing character: There is no K in font nullfont!
+Missing character: There is no r in font nullfont!
+Missing character: There is no e in font nullfont!
+Missing character: There is no j in font nullfont!
+Missing character: There is no ƒ in font nullfont!
+Missing character: There is no ç in font nullfont!
+Missing character: There is no √ in font nullfont!
+Missing character: There is no ≠ in font nullfont!
+! Missing } inserted.
+<inserted text> 
+                }
+l.53 \end{center}
+                 
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+)
+! Emergency stop.
+<*> titulbp.tex
+               
+*** (job aborted, no legal \end found)
+
+ 
+Here is how much of TeX's memory you used:
+ 30 strings out of 494997
+ 393 string characters out of 6180234
+ 47804 words of memory out of 5000000
+ 3338 multiletter control sequences out of 15000+600000
+ 3941 words of font info for 15 fonts, out of 8000000 for 9000
+ 24 hyphenation exceptions out of 8191
+ 19i,4n,14p,109b,186s stack positions out of 5000i,500n,10000p,200000b,80000s
+!  ==> Fatal error occurred, no output PDF file produced!

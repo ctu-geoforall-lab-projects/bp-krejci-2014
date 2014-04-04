@@ -1,0 +1,53 @@
+\begin{center}
+%napisy
+\newcommand{\napisCVUT}{České vysoké učení technické v Praze}
+\newcommand{\napisFS}{Fakulta stavební}
+\newcommand{\napisObor}{Obor geoinformatika}
+\newcommand{\napisKatedra}{Katedra geomatiky}
+\newcommand{\napisVedouci}{Ing. Martin Landa Ph.D.}
+\newcommand{\napisAutor}{Matěj Krejčí}
+\newcommand{\napisDatum}{Praha 2014}
+\newcommand{\napisNazevI}{Analýza a vizualizace srážkových dat }
+\newcommand{\napisNazevII}{z mikrovlnných telekomunikačních spojů pomocí GIS}
+\newcommand{\napisNazevAjI}{Analysis and vizualization of rainfalls data from}
+\newcommand{\napisNazevAjII}{microwave links using GIS}
+\newcommand{\napisBakalarka}{Bakalářská práce}
+\newcommand{\napisPraha}{Praha 2014}
+%
+% prikazy
+%\newcommand{\velka}[1]{\uppercase{#1}}
+\newcommand{\velka}[1]{\textsc{#1}}
+%
+% 
+\newif\ifpatitul
+\patitultrue
+
+\ifpatitul
+{\Large\velka{\napisCVUT}}\\
+\velka{\Large\napisFS}\\
+\vfill
+{\LARGE\velka{\napisBakalarka}}
+\vfill
+{\large\napisPraha\hfill\napisAutor}
+\newpage
+\fi%patitul
+
+
+{\Large\velka{\napisCVUT}}\\
+{\Large\velka{\napisFS}}\\
+{\Large\velka{\napisObor}}
+\vfill
+\includegraphics[width=3cm]{logo_cvut_cb} %~
+\vfill
+{\Large\velka{\napisBakalarka}}\\
+{\Large\velka{\napisNazevI\\
+\napisNazevII}}\\
+{\large\velka{\napisNazevAjI\\
+\napisNazevAjII}}
+\vfill
+{\large%
+Vedoucí práce: \napisVedouci\\
+\napisKatedra\\
+\bigskip
+\napisDatum\hfill\napisAutor}
+\end{center}
