@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.3.31)  4 APR 2014 12:34
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.3.31)  4 APR 2014 23:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -321,109 +321,51 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip55
 )
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2013/01/14 v2.14 AMS math features
-\@mathmargin=\skip56
-
-For additional information on amsmath, use the `?' option.
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
-Package: amstext 2000/06/29 v2.01
-
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
-File: amsgen.sty 1999/11/30 v2.0
-\@emptytoks=\toks22
-\ex@=\dimen120
-))
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
-Package: amsbsy 1999/11/29 v1.2d
-\pmbraise@=\dimen121
-)
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
-Package: amsopn 1999/12/14 v2.01 operator names
-)
-\inf@bad=\count113
-LaTeX Info: Redefining \frac on input line 210.
-\uproot@=\count114
-\leftroot@=\count115
-LaTeX Info: Redefining \overline on input line 306.
-\classnum@=\count116
-\DOTSCASE@=\count117
-LaTeX Info: Redefining \ldots on input line 378.
-LaTeX Info: Redefining \dots on input line 381.
-LaTeX Info: Redefining \cdots on input line 466.
-\Mathstrutbox@=\box28
-\strutbox@=\box29
-\big@size=\dimen122
-LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
-\macc@depth=\count118
-\c@MaxMatrixCols=\count119
-\dotsspace@=\muskip11
-\c@parentequation=\count120
-\dspbrk@lvl=\count121
-\tag@help=\toks23
-\row@=\count122
-\column@=\count123
-\maxfields@=\count124
-\andhelp@=\toks24
-\eqnshift@=\dimen123
-\alignsep@=\dimen124
-\tagshift@=\dimen125
-\tagwidth@=\dimen126
-\totwidth@=\dimen127
-\lineht@=\dimen128
-\@envbody=\toks25
-\multlinegap=\skip57
-\multlinetaggap=\skip58
-\mathdisplay@stack=\toks26
-LaTeX Info: Redefining \[ on input line 2665.
-LaTeX Info: Redefining \] on input line 2666.
-)
 (/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
-\fancy@headwidth=\skip59
-\f@ncyO@elh=\skip60
-\f@ncyO@erh=\skip61
-\f@ncyO@olh=\skip62
-\f@ncyO@orh=\skip63
-\f@ncyO@elf=\skip64
-\f@ncyO@erf=\skip65
-\f@ncyO@olf=\skip66
-\f@ncyO@orf=\skip67
+\fancy@headwidth=\skip56
+\f@ncyO@elh=\skip57
+\f@ncyO@erh=\skip58
+\f@ncyO@olh=\skip59
+\f@ncyO@orh=\skip60
+\f@ncyO@elf=\skip61
+\f@ncyO@erf=\skip62
+\f@ncyO@olf=\skip63
+\f@ncyO@orf=\skip64
 )
 (/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2010/09/12 v5.6 Page Geometry
-\Gm@cnth=\count125
-\Gm@cntv=\count126
-\c@Gm@tempcnt=\count127
-\Gm@bindingoffset=\dimen129
-\Gm@wd@mp=\dimen130
-\Gm@odd@mp=\dimen131
-\Gm@even@mp=\dimen132
-\Gm@layoutwidth=\dimen133
-\Gm@layoutheight=\dimen134
-\Gm@layouthoffset=\dimen135
-\Gm@layoutvoffset=\dimen136
-\Gm@dimlist=\toks27
+\Gm@cnth=\count113
+\Gm@cntv=\count114
+\c@Gm@tempcnt=\count115
+\Gm@bindingoffset=\dimen120
+\Gm@wd@mp=\dimen121
+\Gm@odd@mp=\dimen122
+\Gm@even@mp=\dimen123
+\Gm@layoutwidth=\dimen124
+\Gm@layoutheight=\dimen125
+\Gm@layouthoffset=\dimen126
+\Gm@layoutvoffset=\dimen127
+\Gm@dimlist=\toks22
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count128
-\lst@gtempboxa=\box30
-\lst@token=\toks28
-\lst@length=\count129
-\lst@currlwidth=\dimen137
-\lst@column=\count130
-\lst@pos=\count131
-\lst@lostspace=\dimen138
-\lst@width=\dimen139
-\lst@newlines=\count132
-\lst@lineno=\count133
-\lst@maxwidth=\dimen140
+\lst@mode=\count116
+\lst@gtempboxa=\box28
+\lst@token=\toks23
+\lst@length=\count117
+\lst@currlwidth=\dimen128
+\lst@column=\count118
+\lst@pos=\count119
+\lst@lostspace=\dimen129
+\lst@width=\dimen130
+\lst@newlines=\count120
+\lst@lineno=\count121
+\lst@maxwidth=\dimen131
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2013/07/10 1.5 (Carsten Heinz)
-\c@lstnumber=\count134
-\lst@skipnumbers=\count135
-\lst@framebox=\box31
+\c@lstnumber=\count122
+\lst@skipnumbers=\count123
+\lst@framebox=\box29
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
 File: listings.cfg 2013/06/27 1.5pre1 listings configuration
@@ -432,37 +374,37 @@ Package: listings 2013/07/10 1.5 (Carsten Heinz)
  (./BP.aux)
 \openout1 = `BP.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
 
 (/usr/share/texlive/texmf-dist/tex/latex/ucs/ucsencs.def
 File: ucsencs.def 2011/01/21 Fixes to fontencodings LGR, T3
 )
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count136
-\scratchdimen=\dimen141
-\scratchbox=\box32
-\nofMPsegments=\count137
-\nofMParguments=\count138
-\everyMPshowfont=\toks29
-\MPscratchCnt=\count139
-\MPscratchDim=\dimen142
-\MPnumerator=\count140
-\makeMPintoPDFobject=\count141
-\everyMPtoPDFconversion=\toks30
+\scratchcounter=\count124
+\scratchdimen=\dimen132
+\scratchbox=\box30
+\nofMPsegments=\count125
+\nofMParguments=\count126
+\everyMPshowfont=\toks24
+\MPscratchCnt=\count127
+\MPscratchDim=\dimen133
+\MPnumerator=\count128
+\makeMPintoPDFobject=\count129
+\everyMPtoPDFconversion=\toks25
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
@@ -483,8 +425,8 @@ Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\AtBeginShipoutBox=\box33
-Package hyperref Info: Link coloring OFF on input line 112.
+\AtBeginShipoutBox=\box31
+Package hyperref Info: Link coloring OFF on input line 111.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -492,11 +434,11 @@ Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count142
+\c@section@level=\count130
 )
-LaTeX Info: Redefining \ref on input line 112.
-LaTeX Info: Redefining \pageref on input line 112.
-LaTeX Info: Redefining \nameref on input line 112.
+LaTeX Info: Redefining \ref on input line 111.
+LaTeX Info: Redefining \pageref on input line 111.
+LaTeX Info: Redefining \nameref on input line 111.
 
 (./BP.out) (./BP.out)
 \@outlinefile=\write3
@@ -537,7 +479,7 @@ LaTeX Info: Redefining \nameref on input line 112.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\c@lstlisting=\count143
+\c@lstlisting=\count131
 (./titulbp.tex (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-1.def
 File: uni-1.def 2013/05/13 UCS: Unicode data U+0100..U+01FF
 )
@@ -546,14 +488,14 @@ File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
 ) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<logo_cvut_cb.pdf, id=224, 366.97101pt x 279.444pt>
+<logo_cvut_cb.pdf, id=139, 366.97101pt x 279.444pt>
 File: logo_cvut_cb.pdf Graphic file (type pdf)
  <use logo_cvut_cb.pdf>
 Package pdftex.def Info: logo_cvut_cb.pdf used on input line 40.
 (pdftex.def)             Requested size: 85.35826pt x 64.99564pt.
 )
 [2 <./logo_cvut_cb.pdf>] (./listsezadanim.tex
-<../formulare/zadanibp.pdf, id=231, 597.55246pt x 845.07718pt>
+<../formulare/zadanibp.pdf, id=146, 597.55246pt x 845.07718pt>
 File: ../formulare/zadanibp.pdf Graphic file (type pdf)
 
 <use ../formulare/zadanibp.pdf>
@@ -564,7 +506,7 @@ File: ../formulare/zadanibp.pdf Graphic file (type pdf)
 Package pdftex.def Info: ../formulare/zadanibp.pdf used on input line 5.
 (pdftex.def)             Requested size: 597.551pt x 845.07512pt.
 
-<../formulare/zadanibp.pdf, id=232, page=1, 597.55246pt x 845.07718pt>
+<../formulare/zadanibp.pdf, id=147, page=1, 597.55246pt x 845.07718pt>
 File: ../formulare/zadanibp.pdf Graphic file (type pdf)
 
 <use ../formulare/zadanibp.pdf, page 1>
@@ -596,362 +538,205 @@ Package pdftex.def Info: ../formulare/zadanibp.pdf, page1 used on input line 5.
 
 (pdftex.def)             Requested size: 597.57834pt x 845.1138pt.
  [3 <../formulare/zadanibp.pdf>])
-Overfull \hbox (3.00124pt too wide) in paragraph at lines 122--127
-\OT1/cmr/m/n/10.95 nn^^Sych spoj^^Wu teleko-mu-nika^^Tcn^^S^^Pch oper^^Sator^^W
-u. Data ke zpra-cov^^San^^S^^P jsou ve uzlo^^Tzeny
- []
-
 [4] (./prohlaseniapodekovani.tex
 (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-32.def
 File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
-) [5] [6])
-(./BP.toc [7] [8])
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 11.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 11.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 11.
+ [5] [6])
+(./BP.toc [7])
 \tf@toc=\write4
 \openout4 = `BP.toc'.
 
- [9] [10] [11]
+ [8] [9] [10]
 
 Package hyperref Warning: Composite letter `\textasciicaron+e'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 166.
+(hyperref)                removing `\textasciicaron' on input line 164.
 
 
 Package hyperref Warning: Composite letter `\textasciicaron+r'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 166.
+(hyperref)                removing `\textasciicaron' on input line 164.
 
 
 Package hyperref Warning: Composite letter `\textasciicaron+t'
 (hyperref)                not defined in PD1 encoding,
+(hyperref)                removing `\textasciicaron' on input line 164.
+
+
+Package hyperref Warning: Composite letter `\textasciicaron+c'
+(hyperref)                not defined in PD1 encoding,
 (hyperref)                removing `\textasciicaron' on input line 166.
 
 
+Package hyperref Warning: Composite letter `\textasciicaron+e'
+(hyperref)                not defined in PD1 encoding,
+(hyperref)                removing `\textasciicaron' on input line 166.
+
+[11]
+
 Package hyperref Warning: Composite letter `\textasciicaron+c'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 168.
+(hyperref)                removing `\textasciicaron' on input line 176.
 
 
 Package hyperref Warning: Composite letter `\textasciicaron+e'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 168.
-
-[12]
-
-Package hyperref Warning: Composite letter `\textasciicaron+c'
-(hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 178.
-
-
-Package hyperref Warning: Composite letter `\textasciicaron+e'
-(hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 178.
+(hyperref)                removing `\textasciicaron' on input line 176.
 
 
 Package hyperref Warning: Composite letter `\textasciicaron+r'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 178.
+(hyperref)                removing `\textasciicaron' on input line 176.
 
 
 Package hyperref Warning: Composite letter `\textasciicaron+e'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 182.
+(hyperref)                removing `\textasciicaron' on input line 180.
 
 
-Overfull \hbox (15.64868pt too wide) in paragraph at lines 188--189
- []\OT1/cmr/bx/n/12 Ombrometr \OT1/cmr/m/n/12 je je-den z ne-jed-nodu^^Ts^^Ts^^
-S^^Pch typ^^Wu sr^^Sa^^Tzkom^^Teru. Je tvo^^Tren v^^Salcem s n^^Salevkou,
+Overfull \hbox (9.76595pt too wide) in paragraph at lines 185--186
+[]\OT1/cmr/m/n/12 je je-den z ne-jed-nodu^^Ts^^Ts^^S^^Pch typ^^Wu sr^^Sa^^Tzkom
+^^Teru. Je tvo^^Tren v^^Salcem s n^^Salevkou,
+ []
+
+[12]
+Overfull \hbox (7.97267pt too wide) in paragraph at lines 195--196
+[]\OT1/cmr/bx/n/12 V^^Syhody \OT1/cmr/m/n/12 om-bro-grafu jsou v mo^^Tznosti ko
+n-tinu^^Saln^^S^^Pho sle-dov^^San^^S^^P sr^^Sa^^Tzkov^^Sych ^^Suhrn^^Wu. 
+ []
+
+
+Overfull \hbox (20.22623pt too wide) in paragraph at lines 205--206
+\OT1/cmr/m/n/12 do-state^^Tcn^^Te rychl^^Seho p^^Trekl^^Sap^^Ten^^S^^P ^^Tclunk
+u v^^Sysledn^^Se ^^Suhrny sr^^Sa^^Tzek b^^Syt podhodnoceny.[[]] 
+ []
+
+
+Overfull \hbox (7.69302pt too wide) in paragraph at lines 211--212
+\OT1/cmr/m/n/12 p^^Tresnost v^^Sahov^^Seho sr^^Sa^^Tzkom^^Teru nen^^S^^P z^^Sav
+isl^^Sa na in-ten-zit^^Te sr^^Sa^^Tzek oproti sr^^Sa^^Tzkom^^Teru
  []
 
 [13]
-Overfull \hbox (4.98482pt too wide) in paragraph at lines 197--198
-[]\OT1/cmr/m/n/12 t^^Techto m^^Te^^Tr^^S^^Pc^^S^^Pch sta-nic jsou v p^^Tresnost
-i. []Udaje z nich z^^S^^Pskan^^Se jsou v^^Tet^^Tsinou
+Overfull \hbox (34.05511pt too wide) in paragraph at lines 223--224
+[]\OT1/cmr/m/n/12 maj^^S^^P vyh^^Tr^^S^^Pvan^^Se ^^Tclunkov^^Se sr^^Sa^^Tzkom^^
+Tery. Jsou zp^^Wusobeny vypa^^Trov^^San^^S^^Pm
  []
 
 
+Overfull \hbox (5.6843pt too wide) in paragraph at lines 224--225
+[]\OT1/cmr/m/n/12 je hlavn^^S^^Pm probl^^Semem ^^Tclunkov^^Sych sr^^Sa^^Tzkom^^
+Teru. P^^Tri velk^^Sych de^^Tst^^S^^Pch
+ []
+
+[14]
+
 Package hyperref Warning: Composite letter `\textasciicaron+c'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 218.
+(hyperref)                removing `\textasciicaron' on input line 247.
+
+
+Package hyperref Warning: Composite letter `\textasciicaron+e'
+(hyperref)                not defined in PD1 encoding,
+(hyperref)                removing `\textasciicaron' on input line 248.
+
+
+Package hyperref Warning: Composite letter `\textasciicaron+r'
+(hyperref)                not defined in PD1 encoding,
+(hyperref)                removing `\textasciicaron' on input line 248.
 
 
 Package hyperref Warning: Composite letter `\textasciicaron+c'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 224.
+(hyperref)                removing `\textasciicaron' on input line 256.
 
 
 Package hyperref Warning: Composite letter `\textasciicaron+C'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 230.
+(hyperref)                removing `\textasciicaron' on input line 262.
 
 
 Package hyperref Warning: Composite letter `\textasciicaron+e'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 232.
+(hyperref)                removing `\textasciicaron' on input line 264.
 
 
 Package hyperref Warning: Composite letter `\textasciicaron+r'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 233.
+(hyperref)                removing `\textasciicaron' on input line 265.
 
 
 Package hyperref Warning: Composite letter `\textasciicaron+r'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 235.
+(hyperref)                removing `\textasciicaron' on input line 267.
 
 
 Package hyperref Warning: Composite letter `\textasciicaron+c'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 235.
-
-[14] [15]
-Overfull \vbox (189.31638pt too high) has occurred while \output is active []
-
-
-[16]
-
-LaTeX Warning: Reference `fig:gmt' on page 17 undefined on input line 278.
-
-[17] [18]
-
-LaTeX Warning: Reference `fig:mapinfo' on page 19 undefined on input line 361.
-
-
-Package hyperref Warning: Composite letter `\textring+u'
-(hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textring' on input line 381.
-
-[19] [20] [21]
-
-LaTeX Warning: Reference `sec:porovnani_moznosti:ArcGIS' on page 22 undefined o
-n input line 503.
-
-[22]
-
-LaTeX Warning: Reference `fig:ArcGIS_text_dialog' on page 23 undefined on input
- line 533.
-
-[23]
-
-LaTeX Warning: Reference `fig:ArcGIS_graticule_wizard' on page 24 undefined on 
-input line 593.
-
-[24]
-
-LaTeX Warning: Reference `fig:gvSIG_dialogy' on page 25 undefined on input line
- 640.
-
-
-LaTeX Warning: Reference `fig:gvSIG_toolbar' on page 25 undefined on input line
- 660.
-
-[25]
-
-LaTeX Warning: Reference `fig:QGIS_panel' on page 26 undefined on input line 69
-1.
-
-[26]
-
-Package hyperref Warning: Composite letter `\textring+u'
-(hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textring' on input line 740.
-
-
-LaTeX Warning: Reference `priloha:vystupy' on page 27 undefined on input line 7
-41.
-
-
-LaTeX Warning: Reference `priloha:vystupy:arcgis1' on page 27 undefined on inpu
-t line 741.
-
-
-LaTeX Warning: Reference `priloha:vystupy:psmap1' on page 27 undefined on input
- line 742.
-
-
-LaTeX Warning: Reference `sec:porovnani_moznosti:QGIS' on page 27 undefined on 
-input line 754.
-
-[27]
-
-LaTeX Warning: Reference `priloha:vystupy:arcgis2' on page 28 undefined on inpu
-t line 763.
-
-
-LaTeX Warning: Reference `priloha:vystupy:psmap2' on page 28 undefined on input
- line 763.
-
-
-LaTeX Warning: Reference `priloha:vystupy:psmap1' on page 28 undefined on input
- line 773.
-
-
-Overfull \hbox (37.98785pt too wide) in paragraph at lines 763--777
-\OT1/cmr/m/n/12 v an-g-lick^^Sem ja-zyce, viz v^^Sy^^Tse. V^^Sysledek uka-zuje,
- ^^Tze s po-moc^^S^^P mo-dulu ps.map (prost^^Trednictv^^S^^Pm
- []
-
-[28] [29]
-
-LaTeX Warning: Reference `fig:wxgui' on page 30 undefined on input line 868.
-
-[30]
-
-Package hyperref Warning: Composite letter `\textasciicaron+c'
-(hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 913.
-
-
-LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <12> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 930.
-
-
-[31] [32]
-
-LaTeX Warning: Reference `fig:sour_systemy' on page 33 undefined on input line 
-1005.
-
-[33] [34] [35]
-
-LaTeX Warning: Reference `priloha:instalace_GUI' on page 36 undefined on input 
-line 1141.
-
-[36] [37]
-
-LaTeX Warning: Reference `priloha:screenshot:psmap' on page 38 undefined on inp
-ut line 1255.
-
-
-LaTeX Warning: Reference `priloha:screenshot:psmap' on page 38 undefined on inp
-ut line 1255.
-
-
-LaTeX Warning: Reference `fig:psmap_toolbar' on page 38 undefined on input line
- 1261.
-
-[38]
-
-Package hyperref Warning: Composite letter `\textasciicaron+r'
-(hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 1295.
+(hyperref)                removing `\textasciicaron' on input line 267.
 
 
 Package hyperref Warning: Composite letter `\textasciicaron+e'
 (hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 1295.
+(hyperref)                removing `\textasciicaron' on input line 284.
 
-[39] [40] [41]
+[15] [16]
+Overfull \vbox (229.7998pt too high) has occurred while \output is active []
 
-Package hyperref Warning: Composite letter `\textasciicaron+e'
-(hyperref)                not defined in PD1 encoding,
-(hyperref)                removing `\textasciicaron' on input line 1425.
 
-[42] [43]
-Overfull \hbox (1.14137pt too wide) in paragraph at lines 1462--1486
+[17]
+Overfull \hbox (1.14137pt too wide) in paragraph at lines 292--316
 [] 
  []
 
-[44]
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 1511
-.
+[18]
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 341.
+
  (/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
 File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <12> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 1511.
-
- [45]
-Underfull \hbox (badness 2846) in paragraph at lines 1624--1627
-[]\OT1/cmr/m/n/12 GRASS-Wiki. \OT1/cmr/m/it/12 GUI for ps.map \OT1/cmr/m/n/12 [
-on-line]. Last mo-di-fied 16 April 2011
- []
-
-
-Underfull \hbox (badness 1946) in paragraph at lines 1658--1662
-[]\OT1/cmr/m/n/12 ARCDATA PRAHA, s.r.o. \OT1/cmr/m/it/12 AR-C-DATA PRAHA - Arc[
-]CR 500 \OT1/cmr/m/n/12 [on-line].
- []
-
-
-Underfull \hbox (badness 6188) in paragraph at lines 1666--1672
-[]\OT1/cmr/m/n/12 GeoWikiCZ. \OT1/cmr/m/it/12 153YZOD Zpra-cov^^San^^S^^P ob-ra
--zov^^Sych dat -- cvi^^Tcen^^S^^P 1 \OT1/cmr/m/n/12 [on-
- []
-
-
-Underfull \hbox (badness 1454) in paragraph at lines 1666--1672
-\OT1/cmr/m/n/12 line]. Na-po-sledy edi-tov^^Sano 4. 10. 2010 [cit. 2011-04-02].
- URL: \OML/cmm/m/it/12 <[]$\OT1/cmtt/m/n/12 http :
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1666--1672
-\OT1/cmtt/m/n/12 / / geo . fsv . cvut . cz / wiki / index . php ? title = 153YZ
-OD _ Zpracov % C3 % A1n % C3 %
- []
-
-[46]
-Underfull \hbox (badness 10000) in paragraph at lines 1689--1694
-[]\OT1/cmr/m/n/12 Wikipedia: the free en-cyclo-pe-dia. \OT1/cmr/m/it/12 Mul-tip
-le do-cu-ment in-ter-face \OT1/cmr/m/n/12 [on-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1689--1694
-\OML/cmm/m/it/12 <[]$\OT1/cmtt/m/n/12 http : / / en . wikipedia . org / w / ind
-ex . php ? title = Multiple _ document _
- []
-
-
-Underfull \hbox (badness 1205) in paragraph at lines 1699--1703
-[]\OT1/cmr/m/it/12 ArcGIS Help Lib-rary \OT1/cmr/m/n/12 [on-line]. c1995-2010 E
-sri, last mo-di-fied 9/14/2010
- []
-
-[47]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1750.
- [48]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1750.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 341.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 377.
+ [19]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 377.
  (./BP.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1750.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1750.
-
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 377.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 377.
 Package rerunfilecheck Info: File `BP.out' has not changed.
-(rerunfilecheck)             Checksum: 326C2AC7BC71D00FE9ADF217C5A406AD;3819.
-
-
-LaTeX Warning: There were undefined references.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1750.
+(rerunfilecheck)             Checksum: C5D6F4FC98D99014B67D12B46690C6E7;2176.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 377.
  ) 
 Here is how much of TeX's memory you used:
- 12863 strings out of 494997
- 181791 string characters out of 6180234
- 288163 words of memory out of 5000000
- 15672 multiletter control sequences out of 15000+600000
- 15741 words of font info for 56 fonts, out of 8000000 for 9000
+ 11730 strings out of 494997
+ 169458 string characters out of 6180234
+ 270337 words of memory out of 5000000
+ 14707 multiletter control sequences out of 15000+600000
+ 11772 words of font info for 41 fonts, out of 8000000 for 9000
  25 hyphenation exceptions out of 8191
- 44i,18n,48p,1425b,1303s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 44i,18n,45p,1425b,623s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmsl12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss1
-2.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi12.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on BP.pdf (48 pages, 647550 bytes).
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmsl12.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmtt12.pfb>
+Output written on BP.pdf (19 pages, 470668 bytes).
 PDF statistics:
- 937 PDF objects out of 1000 (max. 8388607)
- 806 compressed objects within 9 object streams
- 216 named destinations out of 1000 (max. 500000)
- 440 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 441 PDF objects out of 1000 (max. 8388607)
+ 351 compressed objects within 4 object streams
+ 71 named destinations out of 1000 (max. 500000)
+ 272 words of extra memory for PDF output out of 10000 (max. 10000000)
 
