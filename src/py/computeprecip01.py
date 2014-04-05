@@ -611,7 +611,7 @@ def sumPrecip(db,sumprecip,from_time,to_time):
         tc=3600
     else:
         tc=216000
-        
+       
     #summing values per (->user)timestep interval
     view_db="sum_"+randomWord(3)
     sql="CREATE %s %s.%s as select\
@@ -619,7 +619,7 @@ def sumPrecip(db,sumprecip,from_time,to_time):
         as timestamp FROM %s.%s GROUP BY linkid, date_trunc('%s',time)\
         ORDER BY timestamp"%(view_statement, schema_name, view_db ,tc ,sumprecip ,sumprecip,schema_name,temptb ,sumprecip)    
     data=db.executeSql(sql,False,True)
-   
+     
     #num of rows of materialized view
     record_num=db.count("%s.%s"%(schema_name,view_db))
     
@@ -642,7 +642,7 @@ def sumPrecip(db,sumprecip,from_time,to_time):
         io2=open(os.path.join(path,"timewindow"),"wr")
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
-        
+       
     temp=[]
     cur_timestamp=first_timestamp
     while str(cur_timestamp)!=str(last_timestamp):
@@ -666,7 +666,7 @@ def sumPrecip(db,sumprecip,from_time,to_time):
         cur_timestamp=db.executeSql(sql)[0][0]
         #print cur_timestamp
         #print last_timestamp
-    
+    sys.exit() 
         
     #write values to flat file
     try:
@@ -788,11 +788,11 @@ def main():
         
         sql="select column_name from INFORMATION_SCHEMA.COLUMNS where table_name = 'link';"
         attributes=db.executeSql(sql,True,True)
-        db_prepared=True  
+        db_prepared=False  
         for attr in attributes:
             if attr=="geom":
                 print_message(attr)
-                db_prepared=False  
+                db_prepared=True  
             
         if not db_prepared:
             firstRun(db)
