@@ -787,8 +787,12 @@ def main():
         #connect to database by python lib psycopg
         db=dbConnPy()
         
-        sql="select case when exists (SELECT geom FROM link limit 1) then 1 else 0 end"
-        db_prepared=db.executeSql(sql,True,True)[0][0]
+        sql="select column_name from INFORMATION_SCHEMA.COLUMNS where table_name = 'link';"
+        attributes=db.executeSql(sql,True,True)
+        db_prepared=False  
+        for attr in attributes:
+            if attr=="geom": db_prepared=True  
+        
         if not db_prepared:
             firstRun(db)
 
