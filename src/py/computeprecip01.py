@@ -638,7 +638,6 @@ def sumPrecip(db,sumprecip,from_time,to_time):
      
    
     i=0
-
     try:
         io2=open(os.path.join(path,"timewindow"),"wr")
     except IOError as (errno,strerror):
@@ -789,10 +788,12 @@ def main():
         
         sql="select column_name from INFORMATION_SCHEMA.COLUMNS where table_name = 'link';"
         attributes=db.executeSql(sql,True,True)
-        db_prepared=False  
+        db_prepared=True  
         for attr in attributes:
-            if attr=="geom": db_prepared=True  
-        
+            if attr=="geom":
+                print_message(attr)
+                db_prepared=False  
+            
         if not db_prepared:
             firstRun(db)
 
