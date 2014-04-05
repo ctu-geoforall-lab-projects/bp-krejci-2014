@@ -788,13 +788,11 @@ def main():
         
         sql="select column_name from INFORMATION_SCHEMA.COLUMNS where table_name = 'link';"
         attributes=db.executeSql(sql,True,True)
-        db_prepared=False  
-        for attr in attributes:
-            if attr=="geom":
-                print_message(attr)
-                db_prepared=True  
-            
-        if not db_prepared:
+        db_prepare=True
+        for attr in range(0,len(attributes)):  
+            if attributes[attr][0]=="geom":
+                db_prepare=False       
+        if db_prepare:
             firstRun(db)
 
         #print first and last timestamp
