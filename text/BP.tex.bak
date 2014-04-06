@@ -284,16 +284,67 @@ Vhodná vizualizace těchto dat je důležitým předpokladem pro vylepšení st
 převod útlumu signálu MV spojů na srážkové intenzity i pro další využití těchto dat. 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.5\textwidth]{./img/srazky/microwave_link.png}
+    \includegraphics[width=0.6\textwidth]{./img/srazky/microwave_link.png}
     \caption[Rušení radaru]{\centering Schématické znázornění útlumu MV dešťovými srážkami  \footnotemark }
  \end{figure}   
 \footnotetext{\url{http://lte.epfl.ch/files/content/sites/lte/files/Research/microwave_link.png}}
     
 \subsubsection{Princip}
-Mikrovlny jsou elektromagnetické vlny o vlnové délce v rozpětí  od 1 mm do 1 m. Tomu odpovídá frekvence 0.3 GHz až 300 GHz. V oblasti telekomunikací především mobilních operátorů se tohoto typu vln využívá ke komunikaci mezi jednotlivými vysílači a vysílači s mobilními telefony. Pro rekonstrukci srážek se využívá prvního případu, tedy komunikaci mezi vysílači. Tyto mikrovlnné spoje pracují na frekvencích v rozsahu 24-39 GHz (Praha). Hlavním zdrojem útlumu tohoto frekvenčního rozsahu jsou dešťové kapky. Jednotlivé spoje se vždy skládají ze dvou vysílačů. Vysílač neustále odesílá MV vlny, které jsou nositelem informace zajímavé především pro telekomunikace. Vedlejším produktem této komunikace je údaj o intenzitě signálu, jehož základní jednotkou je decibel[dB]. Zaznamenat hodnotu intenzity signálu odeslaného a druhým přijímačem přijatého je možné bez dalších hardware instalací či úprav. Pomocí fyzikálně-parametrického modelu dle doporučení ITU-R\cite{itu} lze vypočítat srážky.
+Mikrovlny jsou elektromagnetické vlny o vlnové délce v rozpětí  od 1 [mm] do 1 [m]. Tomu odpovídá frekvence 0.3  až 300 [GHz]. V oblasti telekomunikací především mobilních operátorů se tohoto typu vln využívá ke komunikaci mezi jednotlivými vysílači a vysílači s mobilními telefony. Pro rekonstrukci srážek se využívá prvního případu, tedy komunikaci mezi vysílači. Tyto mikrovlnné spoje pracují na frekvencích v rozsahu 24-39 [GHz] (Praha). Hlavním zdrojem útlumu tohoto frekvenčního rozsahu jsou dešťové kapky. Jednotlivé spoje se vždy skládají ze dvou vysílačů. Vysílač neustále odesílá MV vlny, které jsou nositelem informace zajímavé především pro telekomunikace. Vedlejším produktem této komunikace je údaj o intenzitě signálu, jehož základní jednotkou je decibel [dB]. Zaznamenat hodnotu intenzity signálu odeslaného a druhým přijímačem přijatého je možné bez dalších hardware instalací či úprav. Pomocí fyzikálně-parametrického modelu dle doporučení ITU-R\cite{itu} lze vypočítat průměrné srážky na pomyslné spojnici MV spoje.
 
 \subsubsection{Výpočet srážek}
-Vysílané intenzity signálu jednotlivých MV jsou konstantní. Z
+Vysílané hodnoty intenzit signálu \emph{tx} jednotlivých MV spojů jsou konstantní. Jednotlivé spoje jsou charakterizovány hodnotami:
+\begin{itemize}
+\item \textbf{Frekvence} \emph{f} rozsahu 24-39 [GHz]
+\item \textbf{Polarizace} signálu ve vertikální \emph{V} či horizontální poloze \emph{H}
+\item \textbf{Vzdálenost} \emph{L} která je vypočtená v daném souřadnicovém systému v kilometrech[km]
+\end{itemize}
+Přijaté hodnoty intenzit \emph{rx} jsou nositelem informace o útlumu potenciálních srážek. Rozdílem vyslané \emph{tx} a přijaté \emph{tx} intenzity dostaneme výsledný útlum \emph{A} v jednotkách decibel[dB].
+\begin{equation}
+ A=rx-tx
+\end{equation}
+Dalším krokem je určení \emph{baseline}, tedy hodnoty \emph{ $A_{0}$ }   která představuje konstantní útlum intenzity signálu MV spoje bez vlivu útlumu signálu dešťovými kapkami. Tato konstanta je v jednotce decibel[dB]. Parametrická konstanta  \emph{$A_{w}$ }, se určuje jakožto !!!!!!nevim. Z toho plyne výsledný útlum \emph{$A_{r}$ }[dB].
+\begin{equation}
+ Ar=A-A_{0}-A_{w}
+\end{equation}
+ Výsledný útlum je třeba převést na specifický útlum \emph{$\gamma_{R} $} [dB/km] pro danou vzdálenost \emph{L} mezi vysílači MV spojů. 
+\begin{equation}
+\gamma_{R} =\frac{A_{r}}{L}
+\end{equation}
+Dle doporučení ITU P.838 \cite{itu} je specifický útlum  \emph{$\gamma_{R} $} a intenzitu srážek  \emph{R} [mm/h] ve vztahu
+\begin{equation}
+\gamma_{R}=kR^{\alpha}
+\end{equation}
+Koeficienty \emph{k} a \emph{$\alpha$} jsou určeny jakožto funkce  frekvencí \emph{f}[GHz] v rozsahu od 1 do 1000[GHz], z následujících rovnic.
+
+\begin{equation}
+log_{10}k=\sum_{j=1}^{4} a_{j} exp\left [ -\left ( \frac{log_{10}f-b_{j}}{c_{j}} \right )^{2} \right ]+m {_{k}}log_{10}f+c_{k}
+\end{equation}
+
+\begin{equation}
+\alpha=\sum_{j=1}^{5} a_{j} exp\left [ -\left ( \frac{log_{10}f-b_{j}}{c_{j}} \right )^{2} \right ]+m{_{\alpha }}log_{10}f+c_{\alpha }
+\end{equation}
+kde:
+
+\emph{f}: frekvence [GHz]
+
+\emph{$\alpha$}:  dle polarizace \emph{$\alpha_{H}$} nebo \emph{$\alpha_{V}$}
+
+\emph{k}: dle polarizace  \emph{$k_{H}$} nebo \emph{$k_{V}$}
+\bigskip
+
+{\raggedright{}Hodnoty pro dané konstanty jsou součástí dokumentu ITU-R \cite{itu}.}
+
+{\raggedright{}Inverzním vztahem dostaneme výslednou intenzitu srážek. }
+
+
+
+
+\begin{equation}
+R=\left ( \frac{1}{\gamma _{R}} \right )^{\left ( \frac{1}{\alpha } \right )}  \gamma _{R}^{\left ( \frac{1}{\alpha } \right )}
+\end{equation}
+
+
 \subsubsection{Chyby}
 
 Dešťové srážky se skládají z dešťových kapek, které nabývají mnoha variací velikosti a tvarů. 
@@ -320,17 +371,17 @@ commercial cellular telephone networks is a new source of information, which may
 
 \subsubsection{Chyby}
 \subsubsection{Konzistence dat}
-
 \subsubsection{Potenciál v hydrometeorologii}
+
+
 \section{Interpolace srážek}
+
 \section{GRASS GIS modul}
 \subsection{Funkcionalita}
-
 \subsection{Implementační nástroje}
 \subsubsection{GRASS API}
 \subsubsection{PostgreSQL}
 \subsubsection{Psycopg?}
-
 \subsection{Vstup}   
 \subsubsection{Data}
 \subsection{Výstup}
@@ -338,6 +389,7 @@ commercial cellular telephone networks is a new source of information, which may
 
 \section{Časoprostorové analýzy}
 \subsection{Využitelnost}
+
 \section{Závěr}
 \section{Příloha}
 \subsection{Dokumentace}
@@ -371,7 +423,7 @@ Cílem této práce bylo
 \textbf{GRASS}& Geographical Resources Analysis Support System\\
 \textbf{GUI}& Graphical User Interface (Grafické uživatelské rozhraní)\\
 \textbf{XML}& Extensible Markup Language\\
-
+\textbf{ITU}& International Telecommunication Union\\
 
 
 \end{tabular}

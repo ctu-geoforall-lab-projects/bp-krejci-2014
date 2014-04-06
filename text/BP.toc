@@ -10,26 +10,27 @@
 \contentsline {subsection}{\numberline {1.3}Mikrovlnn\IeC {\'e} spoje}{17}{subsection.1.3}
 \contentsline {subsubsection}{\numberline {1.3.1}Princip}{17}{subsubsection.1.3.1}
 \contentsline {subsubsection}{\numberline {1.3.2}V\IeC {\'y}po\IeC {\v c}et sr\IeC {\'a}\IeC {\v z}ek}{18}{subsubsection.1.3.2}
-\contentsline {subsubsection}{\numberline {1.3.3}Chyby}{18}{subsubsection.1.3.3}
-\contentsline {subsection}{\numberline {1.4}Srovn\IeC {\'a}n\IeC {\'\i } metod m\IeC {\v e}\IeC {\v r}en\IeC {\'\i } sr\IeC {\'a}\IeC {\v z}ek}{18}{subsection.1.4}
-\contentsline {subsubsection}{\numberline {1.4.1}Chyby}{20}{subsubsection.1.4.1}
-\contentsline {subsubsection}{\numberline {1.4.2}Konzistence dat}{20}{subsubsection.1.4.2}
-\contentsline {subsubsection}{\numberline {1.4.3}Potenci\IeC {\'a}l v hydrometeorologii}{20}{subsubsection.1.4.3}
-\contentsline {section}{\numberline {2}Interpolace sr\IeC {\'a}\IeC {\v z}ek}{20}{section.2}
-\contentsline {section}{\numberline {3}GRASS GIS modul}{20}{section.3}
-\contentsline {subsection}{\numberline {3.1}Funkcionalita}{20}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Implementa\IeC {\v c}n\IeC {\'\i } n\IeC {\'a}stroje}{20}{subsection.3.2}
-\contentsline {subsubsection}{\numberline {3.2.1}GRASS API}{20}{subsubsection.3.2.1}
-\contentsline {subsubsection}{\numberline {3.2.2}PostgreSQL}{20}{subsubsection.3.2.2}
-\contentsline {subsubsection}{\numberline {3.2.3}Psycopg?}{20}{subsubsection.3.2.3}
-\contentsline {subsection}{\numberline {3.3}Vstup}{20}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}V\IeC {\'y}stup}{20}{subsection.3.4}
-\contentsline {section}{\numberline {4}\IeC {\v C}asoprostorov\IeC {\'e} anal\IeC {\'y}zy}{20}{section.4}
-\contentsline {subsection}{\numberline {4.1}Vyu\IeC {\v z}itelnost}{20}{subsection.4.1}
-\contentsline {section}{\numberline {5}Z\IeC {\'a}v\IeC {\v e}r}{20}{section.5}
-\contentsline {section}{\numberline {6}P\IeC {\v r}\IeC {\'\i }loha}{20}{section.6}
-\contentsline {subsection}{\numberline {6.1}Dokumentace}{20}{subsection.6.1}
-\contentsline {subsection}{\numberline {6.2}U\IeC {\v z}ivatelsk\IeC {\'a} p\IeC {\v r}\IeC {\'\i }ru\IeC {\v c}ka}{20}{subsection.6.2}
-\contentsline {section}{Z\IeC {\'a}v\IeC {\v e}r}{20}{section*.13}
-\contentsline {section}{Seznam pou\IeC {\v z}it\IeC {\'y}ch zkratek}{21}{section*.15}
-\contentsline {section}{Pou\IeC {\v z}it\IeC {\'e} zdroje}{22}{section*.17}
+\contentsline {subsubsection}{\numberline {1.3.3}Chyby}{19}{subsubsection.1.3.3}
+\contentsline {subsection}{\numberline {1.4}Srovn\IeC {\'a}n\IeC {\'\i } metod m\IeC {\v e}\IeC {\v r}en\IeC {\'\i } sr\IeC {\'a}\IeC {\v z}ek}{19}{subsection.1.4}
+\contentsline {subsubsection}{\numberline {1.4.1}Chyby}{22}{subsubsection.1.4.1}
+\contentsline {subsubsection}{\numberline {1.4.2}Konzistence dat}{22}{subsubsection.1.4.2}
+\contentsline {subsubsection}{\numberline {1.4.3}Potenci\IeC {\'a}l v hydrometeorologii}{22}{subsubsection.1.4.3}
+\contentsline {section}{\numberline {2}Interpolace sr\IeC {\'a}\IeC {\v z}ek}{22}{section.2}
+\contentsline {section}{\numberline {3}GRASS GIS modul}{22}{section.3}
+\contentsline {subsection}{\numberline {3.1}Funkcionalita}{22}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Implementa\IeC {\v c}n\IeC {\'\i } n\IeC {\'a}stroje}{22}{subsection.3.2}
+\contentsline {subsubsection}{\numberline {3.2.1}GRASS API}{22}{subsubsection.3.2.1}
+\contentsline {subsubsection}{\numberline {3.2.2}PostgreSQL}{22}{subsubsection.3.2.2}
+\contentsline {subsubsection}{\numberline {3.2.3}Psycopg?}{22}{subsubsection.3.2.3}
+\contentsline {subsection}{\numberline {3.3}Vstup}{22}{subsection.3.3}
+\contentsline {subsubsection}{\numberline {3.3.1}Data}{22}{subsubsection.3.3.1}
+\contentsline {subsection}{\numberline {3.4}V\IeC {\'y}stup}{22}{subsection.3.4}
+\contentsline {section}{\numberline {4}\IeC {\v C}asoprostorov\IeC {\'e} anal\IeC {\'y}zy}{22}{section.4}
+\contentsline {subsection}{\numberline {4.1}Vyu\IeC {\v z}itelnost}{22}{subsection.4.1}
+\contentsline {section}{\numberline {5}Z\IeC {\'a}v\IeC {\v e}r}{22}{section.5}
+\contentsline {section}{\numberline {6}P\IeC {\v r}\IeC {\'\i }loha}{22}{section.6}
+\contentsline {subsection}{\numberline {6.1}Dokumentace}{22}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}U\IeC {\v z}ivatelsk\IeC {\'a} p\IeC {\v r}\IeC {\'\i }ru\IeC {\v c}ka}{22}{subsection.6.2}
+\contentsline {section}{Z\IeC {\'a}v\IeC {\v e}r}{22}{section*.13}
+\contentsline {section}{Seznam pou\IeC {\v z}it\IeC {\'y}ch zkratek}{23}{section*.15}
+\contentsline {section}{Pou\IeC {\v z}it\IeC {\'e} zdroje}{24}{section*.17}
