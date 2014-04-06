@@ -786,6 +786,7 @@ def main():
         #connect to database by python lib psycopg
         db=dbConnPy()
         
+        #check database if is prepare
         sql="select column_name from INFORMATION_SCHEMA.COLUMNS where table_name = 'link';"
         attributes=db.executeSql(sql,True,True)
         db_prepare=True

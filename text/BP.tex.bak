@@ -11,6 +11,10 @@
 \usepackage{mdwlist}\usepackage{subfig}
 \usepackage[final]{pdfpages}
 \usepackage[final,pdftex, colorlinks=false]{hyperref}
+\usepackage{pdfpages}
+\usepackage{perpage} %the perpage package
+\MakePerPage{footnote} %the perpage package command
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % pro podmineny preklad
@@ -105,7 +109,7 @@ morecomment=[l]{\#},
 \section*{#1}
 \markboth{\uppercase{#1}}{}
 }
-\hyphenation{ArcGIS}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
@@ -151,7 +155,7 @@ TODO
 
 Enviromentální modelování se v posledních době rozšířilo ve velkém měřítku. Velkou částí k tomu přispěla dostupnost informačních technologií a s ním spojený zájem vědeckých pracovišť o tento obor. Již ze samotného názvu vyplývá, že enviromentální modelování se zabývá životním prostředím a jeho modelováním. Pod tento obor spadá nespočetné množství podoborů, které se především liší kladením rozdílných otázek. Specifikovat jednotnou definici pro enviromentálního modelování je pro jeho multidisciplinaritu velmi obtížné. Modelování přírodních procesů vzniklo v důsledku zájmu člověka o pochopení přírody. Studium a simulace přírodních jevů z oborů fyzikálních, matematických, biologických a chemických v dnešní době velmi usnadňuje člověku život a v některých regionech je člověk i přímo závislý na zprostředkovaných výsledcích, které jsou produktem enviromentálních modelů. 
 
-Modelování dešťových srážek(dále srážek) je jednou z velkých disciplín z oboru enviromentálního modelování. Když se poohlédneme do první poloviny 19. století, tak právě meteorologie byla jednou z prvních disciplín, která definovala pojem enviromentální modelování, tak jak ho chápeme nyní. Modelování srážek na zemském povrchu se s vývojem klimatu stává v poslední době důležitým úkolem. Oproti rozvoji fyzikálně numerických modelů a to především díky stále se zvyšujícím výpočetním výkonům počítače, nebyl technologické pokrok ve sběru srážkových dat v posledních desetiletích takřka zaznamenán. Pracovníky meteorologických a hydrologických ústavů ve vývoji brzdí nedostatečná, nepřesná a neaktuální srážková data, které jsou jedním z hlavních vstupu pro další modely. Studie z posledních let poukazují na možnost využití mikrovlnných(dále MV) spojů vysílačů telekomunikačních operátorů ke sběru srážkových dat. Tento zdroj je levnější a přesnější než sběr pomocí radaru.\cite{radar_meterology} Největší potenciál sběru srážkových dat v reálném čase je ve vylepšení městských odtokových modelů. Pro efektivitu těchto modelů je sběr dat v reálném čase nutností.
+Modelování dešťových srážek je jednou z velkých disciplín z oboru enviromentálního modelování. Když se poohlédneme do první poloviny 19. století, tak právě meteorologie byla jednou z prvních disciplín, která definovala pojem enviromentální modelování, tak jak ho chápeme nyní. Modelování srážek na zemském povrchu se s vývojem klimatu stává v poslední době důležitým úkolem. Oproti rozvoji fyzikálně numerických modelů a to především díky stále se zvyšujícím výpočetním výkonům počítače, nebyl technologické pokrok ve sběru srážkových dat v posledních desetiletích takřka zaznamenán. Pracovníky meteorologických a hydrologických ústavů ve vývoji brzdí nedostatečně přesná a neaktuální srážková data, která jsou jedním z hlavních vstupu pro další modely. Studie z posledních let poukazují na možnost využití mikrovlnných(MV) spojů vysílačů telekomunikačních operátorů ke sběru srážkových dat. Tento zdroj je levnější a přesnější než sběr pomocí radaru.\cite{radar_meterology} Největší potenciál sběru přesných srážkových dat v reálném čase je ve vylepšení městských odtokových modelů. Pro efektivitu těchto modelů je sběr dat dostatečném rozlišení a v reálném čase nutností.
 
 Hlavním cílem této práce je vyvinutí nástroje pro zpracování hrubých dat z MV vysílačů v prostředí GIS, čímž se zpřístupní nespočet dalších analýz pro vývoj tohoto poměrně mladého výzkumu. Téma práce bylo založeno na požadavcích zpracovatele projektu, který se zabývá problematikou odhadu srážek z MV zdrojů v rámci projektu TeleMAS v souvislosti s modelováním srážko-odtokových procesů v městských povodích. Tento projekt je řešen v úzké vědecké spolupráci s ETH-Eawag a odborné spolupráci se společnostmi T-Mobile a Veolia ČR a nyní nově s Ericsson Research (Sweden).  
 
@@ -168,7 +172,7 @@ Podíváme-li se do historie a opomeneme nejasné zmínky měření srážek z o
 
 Mezníkem ve sběru srážkových dat se bezesporu stal radar. Jak již bylo zmíněné, že nic nevzniká bez vyšší motivace, v tomto případě to byl vojenský konflikt. Při druhé světové válce byl do provozu uveden první experimentální radar, který sloužil k metrologickému pozorování. Přesněji tomu bylo roku 1930 v USA. \cite{flash_floods} Roku 1959 následovalo první vytvoření radarové sítě WRS-57 v USA. Postupem času se poté rozšíří metoda odhadu srážek radarem zcela globálně. 
 
-Nástup satelitních družic se datuje v šedesátých letech 19. století. Logickou návazností na první satelitní družice vzniká obor, který dnes známe pod pojmem dálkový průzkum země(DPZ). Jedná se o zcela nový obor 20. století vyplývající z technologického pokroku. Oproti výše zmíněným metodám není DPZ striktně zaměřen pouze pro hydrometeorologické účely. Jednotlivé družice jsou svým vybavením určeny pro měření různých veličin a jevů. V této kapitole se dále budeme soustředit především na družice metrologické. Je zde důležité zmínit historicky první meteo družici Vanguard 2 z let 17. února 1959\cite{vanguard} a o mnoho úspěšnější družici 1. dubna 1960 s označením TIROS-1.
+%Nástup satelitních družic se datuje v šedesátých letech 19. století. Logickou návazností na první satelitní družice vzniká %obor, který dnes známe pod pojmem dálkový průzkum země(DPZ). Jedná se o zcela nový obor 20. století vyplývající z %technologického pokroku. Oproti výše zmíněným metodám není DPZ striktně zaměřen pouze pro hydrometeorologické účely. %Jednotlivé družice jsou svým vybavením určeny pro měření různých veličin a jevů. V této kapitole se dále budeme soustředit %především na družice metrologické. Je zde důležité zmínit historicky první meteo družici Vanguard 2 z let 17. února %1959\cite{vanguard} a o mnoho úspěšnější družici 1. dubna 1960 s označením TIROS-1.
      
 
 
@@ -224,25 +228,96 @@ Měření srážek srážkoměry jsou ovlivněny mnoha faktory, které určují 
 \item[Sklápění člunku] je hlavním problémem člunkových srážkoměru. Při velkých deštích vstupuje do voda do trychtýře i když je člunek ve stavu vylévání. To způsobuje odvádění vody která nebyla změřena. 
 
 \end{description}
-
+\newpage
 \subsubsection{Meteorologický radar}
+Radarová měření díky plošnému pokrytí a dobrému prostorovému i časovému rozlišení dat jsou vhodné pro synoptickou a leteckou meteorologii. Poskytují přehled v reálném čase o pohybu a struktuře srážkových systémů, umožňují velmi krátkodobou předpověď v řádech minut až hodin a z níž plynoucí varování před nebezpečnými meteorologickými jevy.\cite{radar_chmu}
 \paragraph*{Princip}
 radaru je založen na dopplerovském jevu.\cite{radar_meterology} Vysílací zařízení generuje opakovaně v řádu mikrosekund krátké elektromagnetické pulsy, které jsou vysílány ve tvaru úzkého svazku do atmosféry. Elektromagnetická energie se v atmosféře odráží jak od meteorologických objektů tak i objektů jiných(letadla, terén). Část elektromagnetické energie, která není pohlcena nebo odražena jiným směrem je detekována přijímačem radaru. Ze známé polohy antény, síly signálu a doby mezi jeho vysláním a přijetím se určí vzdálenost a poloha objektu, srážky. 
 Pro meteorologické účely se využívá především dlouhých vlnových délek v rozsahu 1-10 cm, kterému odpovídá přibližně desetinásobek velikosti průměrných dešťových kapek nebo pevných částic. Kratších vlnových délek se využívá k zaznamenání menších částic jako je například mlha. Zde nastává problem v rychlém oslabení signálu.\cite{doppler}
 
 \paragraph*{Srážková data}se měří obvykle v intervalu 5-15 minut. Horizontální rozlišení dat bývá 2×2 km, vertikální 1 km. Toto prostorové rozlišení je nutné, aby bylo možné zachytit jednotlivá srážková jádra přeháněk. Radarové odrazy jsou interpretovány plošně a jsou zobrazovány v barevné stupnici intenzit srážek.
 \paragraph*{Rozsah} meteorologického radaru bývá okolo 250 km. Hodnoty naměřené radarem mohou být použity pro odhad okamžitých intenzit srážek do vzdálenosti přibližně 150 km od radaru.\cite{kohout}
+\subsubsection*{Chyby radarových snímků}
+\begin{description}
+\item[Nemeteorologické objekty] které představují nejčastěji letadla. Ty způsobují na snímcích radaru izolované body ve větších výškách.
+
+\item[Ostře ohraničené buňky] jsou důsledkem nestabilitou a vlastním šumem radaru. Tato chyba tvoří občasné jednotlivé pixely s malou odrazivostí, případně soustředěné do tvaru paprsku.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./img/srazky/0612032030-gif.png}
+    \caption[Ostře ohraničené buňky]{\centering Příklad ostře ohraničených buněk  \footnotemark}
+    %\label{fig:Srazky}
+\end{figure}
+\footnotetext{\url{http://www.meteoradar.cz/obr/0612032030.gif}}
+
+\item[Rušení radaru] jiným signálem na blízké frekvenci způsobují ostré radiální paprsky, případně spirály. Často tato rušení způsobují WiFi sítě.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./img/srazky/0706181530-gif.png}
+    \caption[Rušení radaru]{\centering Příklad rušení radaru radiálními paprsky \footnotemark }
+   %\label{fig:Srazky}
+\end{figure}
+
+
+
+\footnotetext{\url{http://www.meteoradar.cz/obr/0706181530.gif}}
+
+
+\end{description}
+
+
+%\subsubsection{Satelitní družice}
 
 
 
 
-
-
-\subsubsection{Satelitní družice}
 \subsection{Mikrovlnné spoje}
-\subsubsection{Problematika}
-\subsubsection{Výpočet srážky}
+Mikrovlnné (MV) spoje jsou rádiové systémy široce využívané v oblasti telekomunikací (zejména 
+mobilními operátory) k bezdrátovému propojení dvou vzdálených stanovišť. MV spoje operují na 
+frekvencích, kde dešťové kapky představují hlavní zdroj útlumu signálu. Analýza útlumu signálu 
+umožňuje poměrně přesně odhadnout průměrnou srážkovou intenzitu podél spoje. Vzhledem 
+k hustotě sítě MV spojů (např. v Praze řádově stovky až tisíce) jde o relevantní zdroj srážkové 
+informace, který má velký potenciál zlepšit prostorovou informaci o srážkových intenzitách. Využití 
+standardních GIS nástrojů může výrazně zefektivnit jak zpracování dat, tak jejich následnou správu. 
+Vhodná vizualizace těchto dat je důležitým předpokladem pro vylepšení stávajících modelů pro 
+převod útlumu signálu MV spojů na srážkové intenzity i pro další využití těchto dat. 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./img/srazky/microwave_link.png}
+    \caption[Rušení radaru]{\centering Schématické znázornění útlumu MV dešťovými srážkami  \footnotemark }
+ \end{figure}   
+\footnotetext{\url{http://lte.epfl.ch/files/content/sites/lte/files/Research/microwave_link.png}}
+    
+\subsubsection{Princip}
+Mikrovlny jsou elektromagnetické vlny o vlnové délce v rozpětí  od 1 mm do 1 m. Tomu odpovídá frekvence 0.3 GHz až 300 GHz. V oblasti telekomunikací především mobilních operátorů se tohoto typu vln využívá ke komunikaci mezi jednotlivými vysílači a vysílači s mobilními telefony. Pro rekonstrukci srážek se využívá prvního případu, tedy komunikaci mezi vysílači. Tyto mikrovlnné spoje pracují na frekvencích v rozsahu 24-39 GHz (Praha). Hlavním zdrojem útlumu tohoto frekvenčního rozsahu jsou dešťové kapky. Jednotlivé spoje se vždy skládají ze dvou vysílačů. Vysílač neustále odesílá MV vlny, které jsou nositelem informace zajímavé především pro telekomunikace. Vedlejším produktem této komunikace je údaj o intenzitě signálu, jehož základní jednotkou je decibel[dB]. Zaznamenat hodnotu intenzity signálu odeslaného a druhým přijímačem přijatého je možné bez dalších hardware instalací či úprav. Pomocí fyzikálně-parametrického modelu dle doporučení ITU-R\cite{itu} lze vypočítat srážky.
+
+\subsubsection{Výpočet srážek}
+Vysílané intenzity signálu jednotlivých MV jsou konstantní. Z
+\subsubsection{Chyby}
+
+Dešťové srážky se skládají z dešťových kapek, které nabývají mnoha variací velikosti a tvarů. 
+
+
+
+
+Hydrometeorological Application of Microwave Links: Measurement of Evaporation 
+and Precipitatio
 \subsection{Srovnání metod měření srážek}
+
+
+%http://www.erad2010.org/pdf/POSTER/Thursday/04_Networks/10_ERAD2010_0058_extended.pdf
+There is an urgent need for high-quality rainfall observations with high spatial and temporal resolutions. Weather radars are 
+in principle suited for that purpose, but often need adjustment due to gross errors. In most cases only few rain gauge 
+measurements are available to adjust the radar data in real-time. The estimation of rainfall using microwave links from 
+commercial cellular telephone networks is a new source of information, which may provide a partial solution to this problem
+
+%http://journals.ametsoc.org/doi/pdf/10.1175/1520-0450%281991%29030%3C0032%3AACOMTF%3E2.0.CO%3B2
+
+
+
+
+
 \subsubsection{Chyby}
 \subsubsection{Konzistence dat}
 
@@ -250,12 +325,17 @@ Pro meteorologické účely se využívá především dlouhých vlnových déle
 \section{Interpolace srážek}
 \section{GRASS GIS modul}
 \subsection{Funkcionalita}
+
 \subsection{Implementační nástroje}
 \subsubsection{GRASS API}
 \subsubsection{PostgreSQL}
 \subsubsection{Psycopg?}
+
 \subsection{Vstup}   
+\subsubsection{Data}
 \subsection{Výstup}
+
+
 \section{Časoprostorové analýzy}
 \subsection{Využitelnost}
 \section{Závěr}
@@ -342,16 +422,20 @@ In: Metodický předpis č. 13. Ostrava, 2013. URL:\textless\url {http://old.chm
 
 
 \bibitem{doppler}
-DOVIAK, R. J.; D. S. Zrnic , \textit{Doppler Radar and Weather Observations (2nd ed.)}
+DOVIAK, R. J.; D. S. Zrnic. \textit{Doppler Radar and Weather Observations (2nd ed.)}
 (1993), San Diego CA: Academic Press, ISBN 0-12-221420-X.
 
 \bibitem{kohout}
 KOHOUT, Jan. \textit{Zpracování a prezentace srážkových dat měřících stanic meteorologického radaru pro ČHMÚ. Informační technologie pro praxi.}
 Ostrava: TANGER, 2003. s. 101-103. ISBN 80-85988-90-9.
 
+\bibitem{radar_chmu}
+KRÁČMAR, Jan. Český hydrometeorologický ústav. \textit{Meteorologické radiolokátory.} ČHMÚ.
+[online]. 1997-2011 [cit. 2014-04-06]. URL:\textless\url {http://portal.chmi.cz/files/portal/docs/meteo/rad/info_radar/index.html}
 
-
-
+\bibitem{itu}
+RECOMMENDATION ITU-R P.838-3. \textit{Specific attenuation model for rain for use in prediction methods}. 
+ITU-R, (1992-1999-2003-2005). URL:\textless\url {https://www.itu.int/dms_pubrec/itu-r/rec/p/R-REC-P.838-3-200503-I!!PDF-E.pdf}
 
 
 
