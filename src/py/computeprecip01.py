@@ -375,6 +375,7 @@ def dbConnGrass(host,port,database,schema,user,password):
         #print '-' * 80
         #print_message("Connected to...")
         grass.run_command('db.connect',flags='p')
+
     
 def dbConnPy():
     print_message("Conecting to database by psycopg driver")
@@ -707,13 +708,14 @@ def grassWork():
     
     print_message('v.in.ogr')
     grass.run_command('v.in.ogr',
+                    dns=./,
                     layer = points_schema,
                     output = points_ogr,
                     overwrite=True,
                     flags='t',
                     type='point')
     
-
+    sys.exit()
     points_nat=points + "_nat"
    
     # if vector already exits, remove dblink (original table)
