@@ -14,7 +14,8 @@
 \usepackage{pdfpages}
 \usepackage{perpage} %the perpage package
 \MakePerPage{footnote} %the perpage package command
-
+\usepackage{amsmath}
+\usepackage{hyperref}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % pro podmineny preklad
@@ -312,7 +313,7 @@ Dalším krokem je určení \emph{baseline}, tedy hodnoty \emph{ $A_{0}$ }   kte
 \gamma_{R} =\frac{A_{r}}{L}
 \end{equation}
 Dle doporučení ITU P.838 \cite{itu} je specifický útlum  \emph{$\gamma_{R} $} a intenzitu srážek  \emph{R} [mm/h] ve vztahu
-\begin{equation}
+\begin{equation}\label{eq:gamma}
 \gamma_{R}=kR^{\alpha}
 \end{equation}
 Koeficienty \emph{k} a \emph{$\alpha$} jsou určeny jakožto funkce  frekvencí \emph{f}[GHz] v rozsahu od 1 do 1000[GHz], z následujících rovnic.
@@ -331,11 +332,11 @@ kde:
 \emph{$\alpha$}:  dle polarizace \emph{$\alpha_{H}$} nebo \emph{$\alpha_{V}$}
 
 \emph{k}: dle polarizace  \emph{$k_{H}$} nebo \emph{$k_{V}$}
-\bigskip
 
 {\raggedright{}Hodnoty pro dané konstanty jsou součástí dokumentu ITU-R \cite{itu}.}
+\bigskip
 
-{\raggedright{}Inverzním vztahem dostaneme výslednou intenzitu srážek. }
+{\raggedright{}Inverzním vztahem rovnice \eqref{eq:gamma} dostaneme výslednou intenzitu srážek \emph{R}. }
 
 
 

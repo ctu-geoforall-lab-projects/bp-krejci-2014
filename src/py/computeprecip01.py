@@ -689,6 +689,9 @@ def grassWork():
     password = options['password']
     mapset=grass.gisenv()['MAPSET']
     
+    
+    dbConnGrass(host,port,database,schema,user,password)
+                
     try:
         io=open(os.path.join(path,"linkpointsname"),"r")
         points=io.read()
@@ -704,7 +707,6 @@ def grassWork():
     
     print_message('v.in.ogr')
     grass.run_command('v.in.ogr',
-                    dsn=dsn1,
                     layer = points_schema,
                     output = points_ogr,
                     overwrite=True,
