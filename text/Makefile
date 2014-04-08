@@ -19,6 +19,9 @@ pdf: # fig
 # $(SVGPDF): %.pdf: %.svg
 # 	inkscape -z --export-pdf=$@ --export-area-drawing --export-dpi=300 $<
 
+final:
+	mv $(FILE).tex matej-krejci-bp-2014.pdf
+
 clean:
 	rm -f *~ *.aux *.log *.out *.toc
 #	rm -f $(SVGPDF)
