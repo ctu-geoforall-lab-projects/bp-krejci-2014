@@ -291,7 +291,7 @@ převod útlumu signálu MV spojů na srážkové intenzity i pro další využi
 \footnotetext{\url{http://lte.epfl.ch/files/content/sites/lte/files/Research/microwave_link.png}}
     
 \subsubsection{Princip}
-Mikrovlny jsou elektromagnetické vlny o vlnové délce v rozpětí  od 1 [mm] do 1 [m]. Tomu odpovídá frekvence 0.3  až 300 [GHz]. V oblasti telekomunikací především mobilních operátorů se tohoto typu vln využívá ke komunikaci mezi jednotlivými vysílači a vysílači s mobilními telefony. Pro rekonstrukci srážek se využívá prvního případu, tedy komunikaci mezi vysílači. Tyto mikrovlnné spoje pracují na frekvencích v rozsahu 24-39 [GHz] (Praha). Hlavním zdrojem útlumu tohoto frekvenčního rozsahu jsou dešťové kapky. Jednotlivé spoje se vždy skládají ze dvou vysílačů. Vysílač neustále odesílá MV vlny, které jsou nositelem informace zajímavé především pro telekomunikace. Vedlejším produktem této komunikace je údaj o intenzitě signálu, jehož základní jednotkou je decibel [dB]. Zaznamenat hodnotu intenzity signálu odeslaného a druhým přijímačem přijatého je možné bez dalších hardware instalací či úprav. Pomocí fyzikálně-parametrického modelu dle doporučení ITU-R\cite{itu} lze vypočítat průměrné srážky na pomyslné spojnici MV spoje.
+Mikrovlny jsou elektromagnetické vlny o délce v rozpětí  od 1 [mm] do 1 [m]. Tomu odpovídá frekvence 0.3  až 300 [GHz]. V oblasti telekomunikací především mobilních operátorů se tohoto typu vln využívá ke komunikaci mezi jednotlivými vysílači a vysílači s mobilními telefony. Pro rekonstrukci srážek se využívá prvního případu, tedy komunikaci mezi vysílači. Tyto mikrovlnné spoje pracují na frekvencích v rozsahu 24-39 [GHz] (Praha). Hlavním zdrojem útlumu tohoto frekvenčního rozsahu jsou dešťové kapky. Jednotlivé spoje se vždy skládají ze dvou vysílačů. Vysílač neustále odesílá MV vlny, které jsou nositelem informace zajímavé především pro telekomunikace. Vedlejším produktem této komunikace je údaj o intenzitě signálu, jehož základní jednotkou je decibel [dB]. Zaznamenat hodnotu intenzity signálu odeslaného a druhým přijímačem přijatého je možné bez dalších hardware instalací či úprav. Pomocí fyzikálně-parametrického modelu dle doporučení ITU-R\cite{itu} lze vypočítat průměrné srážky na pomyslné spojnici MV spoje.
 
 \subsubsection{Výpočet srážek}
 Vysílané hodnoty intenzit signálu \emph{tx} jednotlivých MV spojů jsou konstantní. Jednotlivé spoje jsou charakterizovány hodnotami:
@@ -336,13 +336,11 @@ kde:
 {\raggedright{}Hodnoty pro dané konstanty jsou součástí dokumentu ITU-R \cite{itu}.}
 \bigskip
 
-{\raggedright{}Inverzním vztahem rovnice \eqref{eq:gamma} dostaneme výslednou intenzitu srážek \emph{R}. }
-
-
+{\raggedright{}Inverzním vztahem rovnice \eqref{eq:gamma} dostaneme výslednou intenzitu srážek \emph{R} [mm/h]. }
 
 
 \begin{equation}
-R=\left ( \frac{1}{\gamma _{R}} \right )^{\left ( \frac{1}{\alpha } \right )}  \gamma _{R}^{\left ( \frac{1}{\alpha } \right )}
+R=\left ( \frac{\gamma_{r}}{k} \right )^{\frac{1}{\alpha }}
 \end{equation}
 
 
