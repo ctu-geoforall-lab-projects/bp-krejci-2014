@@ -39,6 +39,42 @@ except ImportError:
 ##########################################################
 
 #%option
+#% key: database
+#% type: string
+#% key_desc : name
+#% gisprompt: old_dbname,dbname,dbname
+#% description: PotgreSQL database containing input data
+#% guisection: Database
+#% required : yes
+#%end
+
+#%option
+#% key: schema
+#% type: string
+#% description: Database schema
+#% guisection: Database
+#% required : no
+#%end
+
+#%option
+#% key: user
+#% type: string
+#% label: User name
+#% description: Connect to the database as the user username instead of the default.
+#% guisection: Database
+#% required : no
+#%end
+
+#%option
+#% key: password
+#% type: string
+#% label: Password
+#% description: Password will be stored in file!
+#% guisection: Database
+#% required : no
+#%end
+
+#%option
 #% key:host
 #% type: string
 #% label: Host
@@ -56,44 +92,6 @@ except ImportError:
 #% required : no
 #%end
 
-#%option
-#% key: database
-#% type: string
-#% key_desc : name
-#% gisprompt: old_dbname,dbname,dbname
-#% label: Database
-#% description: Database name
-#% guisection: Database
-#% required : yes
-#%end
-
-#%option
-#% key: schema
-#% type: string
-#% label: Schema
-#% description: Database schema.
-#% guisection: Database
-#% required : no
-#%end
-
-#%option
-#% key: user
-#% type: string
-#% label: User
-#% description: Connect to the database as the user username instead of the default.
-#% guisection: Database
-#% required : no
-#%end
-
-#%option
-#% key: password
-#% type: string
-#% label: Password
-#% description: Password will be stored in file!
-#% guisection: Database
-#% required : no
-#%end
-
 ##########################################################
 ############## guisection: Preprocessing #################
 ##########################################################
@@ -104,6 +102,7 @@ except ImportError:
 #% options: minute, hour, day
 #% multiple: yes
 #% guisection: Preprocessing
+#% answer: minute
 #%end
 
 #%option 
@@ -125,29 +124,19 @@ except ImportError:
 #%option 
 #% key: baseline
 #% label: Baseline value
-#% description: This options set baseline A0[dB]. note (Ar=A-A0-Aw) i.e. 2
+#% description: This options set baseline A0[dB] (see the manual)
 #% type: double
 #% guisection: Preprocessing
+#% required: yes
 #%end
 
 #%option 
 #% key: aw
 #% label: Aw value
-#% description: This options set Aw[dB] value for safety. note (Ar=A-A0-Aw) i.e. 1.5
+#% description: This options set Aw[dB] value for safety (see the manual)
 #% type: double
 #% guisection: Preprocessing
-#%end
-
-#%flag
-#% key:p
-#% description: Do not compute precip in db.
-#% guisection: Preprocessing
-#%end
-
-#%flag
-#% key:i
-#% description: Do not interpolate points along links.
-#% guisection: Preprocessing
+#% answer: 1.5
 #%end
 
 #%option 
@@ -156,7 +145,21 @@ except ImportError:
 #% description: Interpolate points along links per meter (not necessary if created in the past)
 #% type: integer
 #% guisection: Preprocessing
+#% answer: 500
 #%end
+
+#%flag
+#% key:p
+#% description: Do not compute precip in db
+#% guisection: Preprocessing
+#%end
+
+#%flag
+#% key:i
+#% description: Do not interpolate points along links
+#% guisection: Preprocessing
+#%end
+
 
 ##########################################################
 ############### guisection: optional #####################
@@ -639,6 +642,7 @@ def sumPrecip(db,sumprecip,from_time,to_time):
      
    
     i=0
+    
     try:
         io2=open(os.path.join(path,"timewindow"),"wr")
     except IOError as (errno,strerror):
@@ -667,8 +671,7 @@ def sumPrecip(db,sumprecip,from_time,to_time):
         cur_timestamp=db.executeSql(sql)[0][0]
         #print cur_timestamp
         #print last_timestamp
-    sys.exit() 
-        
+    
     #write values to flat file
     try:
         io2.writelines(temp)
@@ -708,7 +711,7 @@ def grassWork():
     
     print_message('v.in.ogr')
     grass.run_command('v.in.ogr',
-                    dns=./,
+#                    dns='./',
                     layer = points_schema,
                     output = points_ogr,
                     overwrite=True,
@@ -838,33 +841,21 @@ def main():
         intervals = options['interval'].split(',')
         if ',' in str(options['interval']):
             grass.fatal('You can choose only one method (minute, hour, day)')
-        else:
-          if 'minute'  == options['interval']:
-            print_message('Removing time windows...')
+
+        print_message('Removing time windows...')
+        if os.path.exists(os.path.join(path,"timewindow")):
             with open(os.path.join(path,"timewindow"),'r') as f:
                 for win in f:
                     sql="drop table %s.%s"%(schema_name,win)
                     db.executeSql(sql,False,True)
-                sumPrecip(db,'minute',fromtime,totime)
-                      
-          elif 'hour'== options['interval']:
-                for win in f:
-                        sql="drop table %s.%s"%(schema_name,win)
-                        db.executeSql(sql,False,True)
-                sumPrecip(db,'hour',fromtime,totime)
-                      
-          elif 'day' == options['interval']:
-                for win in f:
-                    sql="drop table %s.%s"%(schema_name,win)
-                    db.executeSql(sql,False,True)
-                sumPrecip(db,'day',fromtime,totime)
-                
+        sumPrecip(db, options['interval'] ,fromtime,totime)
+                        
         #interpol. points
         if not flags['i']:
             if not options['step']:
                 grass.fatal('Missing value for "step" for interpolation')
-            else:
-                intrpolatePoints(db)
+            
+            intrpolatePoints(db)
             
         #grass work
         if flags['g']:
