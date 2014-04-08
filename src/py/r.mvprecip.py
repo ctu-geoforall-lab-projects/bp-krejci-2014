@@ -36,10 +36,6 @@ except ImportError:
 #% required : yes
 #%end
 
-##########################################################
-################# guisection: Interpolation ##############
-##########################################################
-
 #%option 
 #% key: baseline
 #% label: Baseline value
@@ -49,11 +45,8 @@ except ImportError:
 #% required: yes
 #%end
 
-#%flag
-#% key:g
-#% description: Run GRASS analysis
-#% guisection: Interpolation
-#%end
+
+
 ##########################################################
 ############## guisection: Preprocessing #################
 ##########################################################
@@ -100,6 +93,46 @@ except ImportError:
 #% guisection: Preprocessing
 #% answer: 500
 #%end
+
+##########################################################
+################# guisection: Interpolation ##############
+##########################################################
+
+#%flag
+#% key:g
+#% description: Run GRASS analysis
+#% guisection: Interpolation
+#%end
+
+#%option
+#% key: interpolation
+#% label: Type of interpolation
+#% options: bspline, idw, rst
+#% guisection: Interpolation
+#% answer: rst
+#%end
+
+
+#%option 
+#% key: isettings
+#% label: Interpolation command string
+#% description: Additional settings for choosen interpolation (see manual)
+#% type: string
+#% guisection: Interpolation
+#%end
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ##########################################################
 ############## guisection: database work #################
@@ -158,21 +191,30 @@ except ImportError:
 #% description: Remove temporary data folder
 #%end
 
+#%flag
+#% key:q
+#% description: Do not set region from modul settings
+#%end
+
+#%option
+#% key: schema
+#% type: string
+#% label: Name of db schema for results
+#% answer: temp4
+#%end
+
 
 
 
 #EXAMPLE
-#r.mvprecip.py database=letnany baseline=1 fromtime=2013-09-09 19:59:00 totime=2013-09-09 20:05:00
+#r.mvprecip.py database=letnany baseline=1 fromtime="2013-09-09 19:59:00" totime="2013-09-09 20:05:00"
 
-
-
-
+path= os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmpdata")
 view="view"
 view_statement = "TABLE"
-schema_name = "temp3"  #new scheme, no source
+  #new scheme, no source
 record_tb_name= "record"
 comp_precip="computed_precip"
-sum_precip='minute'
 R=6371
 mesuretime=0
 restime=0
@@ -180,8 +222,63 @@ temp_windows_names=[]
 
 
 
-path= os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmpdata")
+def precipInterpolationCustom(points_nat,win):
+    
+    itype=options['interpolation']
+    attribute_col='precip_mm_' + options['interval']
+    out=win + '_' + itype
+    istring=options['isettings']
+    
+    if itype == 'rst':
+        grass.run_command('v.surf.rst',
+                          eval(istring),
+                          input=points_nat,
+                          zcolumn = attribute_col,
+                          elevation=out,
+                          overwrite=True,
+                         )
+        
+    elif itype == 'bspline':
+         a
+         grass.run_command('v.surf.bspline',
 
+                           input=points_nat,
+                           column = attribute_col,
+                           raster_output=out,
+                           overwrite=True)
+    else:
+         grass.run_command('v.surf.idw',
+                           eval(istring),
+                           input=points_nat,
+                           column = attribute_col,
+                           output=out,
+                           overwrite=True)        
+       
+def precipInterpolationDefault(points_nat,win):
+    itype=options['interpolation']
+    attribute_col='precip_mm_' + options['interval']
+    out=win + '_' + itype
+    
+    if itype == 'rst':
+        grass.run_command('v.surf.rst',
+                          input=points_nat,
+                          zcolumn = attribute_col,
+                          elevation=out,
+                          overwrite=True)
+        
+    elif itype == 'bspline':
+         grass.run_command('v.surf.bspline',
+                           input=points_nat,
+                           column = attribute_col,
+                           raster_output=out,
+                           overwrite=True)
+    else:
+         grass.run_command('v.surf.idw',
+                           input=points_nat,
+                           column = attribute_col,
+                           output=out,
+                           overwrite=True)        
+    
 def isTableExist(db,schema,table):
     sql="SELECT EXISTS( SELECT * \
          FROM information_schema.tables \
@@ -193,8 +290,9 @@ def isTableExist(db,schema,table):
     return resu
     
 def intrpolatePoints(db):
+    
     print_message("Interpolating points along lines...")
-
+    schema_name = options['schema']
     step=options['step'] #interpolation step per meters
     step=float(step)
     sql="select ST_AsText(link.geom),ST_Length(link.geom,false), linkid from link" 
@@ -348,14 +446,6 @@ def print_message(msg):
     
 def dbConnGrass(host,port,database,user,password):
     print_message("Connecting to db-GRASS...")
-    '''
-    host = options['host']
-    port = options['port']
-    database = options['database']
-    user = options['user']
-    password = options['password']
-    '''
-     
     
     # Unfortunately we cannot test untill user/password is set
     if user or password:
@@ -538,7 +628,7 @@ def st(mes=True):
 
 def computePrecip(db):
     print_message("Prepare database for computing precipitation...")
-    
+    schema_name = options['schema']
     baseline_decibelx= options['baseline']
     baseline_decibel=float(baseline_decibelx)
     Awx=options['aw']
@@ -612,10 +702,10 @@ def computePrecip(db):
 def makeTimeWin(db):
     print_message("Creating time windows...")
     #@function sumPrecip make db views for all timestamps
-    
+    schema_name = options['schema']
     from_time= options['fromtime']
     to_time=options['totime']
-
+    sum_precip=options['interval']
     
     if sum_precip=="minute":
         tc=60
@@ -706,13 +796,12 @@ def grassWork():
     host = options['host']
     port = options['port']
     database = options['database']
-    schema = options['schema']
     user = options['user']
     password = options['password']
     mapset=grass.gisenv()['MAPSET']
+    schema_name = options['schema']
     
-    
-    dbConnGrass(host,port,database,schema,user,password)
+    #dbConnGrass(host,port,database,user,password)
                 
     try:
         io=open(os.path.join(path,"linkpointsname"),"r")
@@ -720,8 +809,7 @@ def grassWork():
         io.close
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
-        
-        
+         
     points_schema=schema_name+'.'+points
     points_ogr=points+"_ogr"
     
@@ -729,7 +817,7 @@ def grassWork():
     
     print_message('v.in.ogr')
     grass.run_command('v.in.ogr',
-#                    dns='./',
+                    dsn=dsn1,
                     layer = points_schema,
                     output = points_ogr,
                     overwrite=True,
@@ -740,18 +828,15 @@ def grassWork():
    
     # if vector already exits, remove dblink (original table)
     if grass.find_file(points_nat, element='vector')['fullname']:
-        
         print_message('remove link to layer 1 and 2')
         grass.run_command('v.db.connect',
                           map=points_nat,
                           flags='d',
                           layer='1')
-        
         grass.run_command('v.db.connect',
                           map=points_nat,
                           flags='d',
                           layer='2')
-        
         
     print_message('v.category')
     grass.run_command('v.category',
@@ -766,44 +851,51 @@ def grassWork():
                     map=points_nat,
                     table=points_schema,
                     key='linkid',
-                    layer='1',
+                    layer='2',
                     quiet=True)
-
-#    sys.exit()
-
+    
+    if not flags['q']:
+        grass.run_command('g.region',
+                          vect=points_ogr,
+                          n='n+00:00:01',
+                          s='s+00:00:01',
+                          e='e+00:00:01',
+                          w='w+00:00:01',
+                          res='00:00:01')
+    
     try:
-        with open(os.path.join(path,"timewindow"),'r') as f:
-            
-            print_message('v.db.connect loop')
-                        
+        with open(os.path.join(path,"timewindow"),'r') as f:            
             for win in f.read().splitlines():
                 
                 win=schema_name + '.' + win
-                print_message(win)
-                
-
                 grass.run_command('v.db.connect',
-                            map=points_nat,
-                            table=win,
-                            key='linkid',
-                            layer='2',
-                            quiet=True)
-               
+                                map=points_nat,
+                                table=win,
+                                key='linkid',
+                                layer='1',
+                                quiet=True)
+                
+                precipInterpolationDefault(points_nat,win)
+                
+                if options['isettings']:
+                    precipInterpolationCustom(points_nat,win)
+                else:
+                    precipInterpolationDefault(points_nat,win)
+                    
                 #remove connection to 2. layer
                 grass.run_command('v.db.connect',
-                            map=points_nat,
-                            layer='2',
-                            flags='d') 
+                                map=points_nat,
+                                layer='1',
+                                flags='d')
                 
-    
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
-#computeprecip01.py -g -p -i database=letnany user=matt step=500                 
 
+ 
 ############################ main ############################
 def main():
         print_message("Module is running...")
-
+        schema_name = options['schema']
         try: 
             os.makedirs(path)
         except OSError:
@@ -844,10 +936,13 @@ def main():
         if flags['r']:
             sql="drop schema IF EXISTS %s CASCADE" % schema_name
             db.executeSql(sql,False,True)
+            print_message("Schema removed")
+            sys.exit()
             
 ##remove temp folder
         if flags['t']:
             shutil.rmtree(path)
+            print_message("Schema removed")
             sys.exit()
         
 ##compute precipitation
@@ -860,8 +955,8 @@ def main():
             pass
         #compare current and new settings     
         new_precip_config=options['baseline']+"|"+options['aw']
-        
-        if ( not isTableExist(db,schema_name,comp_precip)) or (curr_precip_config!=new_precip_config):
+        print_message(isTableExist(db,schema_name,comp_precip))
+        if ( isTableExist(db,schema_name,comp_precip)) or (curr_precip_config!=new_precip_config):
             if not options['baseline'] or not options['aw']:
                 grass.fatal('Missing value for "baseline" or "aw" for compute precipitation')
             sql="drop schema IF EXISTS %s CASCADE" % schema_name
