@@ -353,26 +353,21 @@ def dbConnGrass(host,port,database,schema,user,password):
     '''
      
     
-    # Test connection
-    conn = "dbname=" + database
-    if host: conn += ",host=" + host
-    if port: conn += ",port=" + port
     # Unfortunately we cannot test untill user/password is set
     if user or password:
         #print_message("Setting login (db.login) ... ")
-        if grass.run_command('db.login', driver = "pg", database = conn, user = user, password = password) != 0:
+        if grass.run_command('db.login', driver = "pg", database = database, user = user, password = password) != 0:
             grass.fatal("Cannot login")
 
     # Try to connect
-
-    if grass.run_command('db.select', quiet = True, flags='c', driver= "pg", database=conn, sql="select version()" ) != 0:
+    if grass.run_command('db.select', quiet = True, flags='c', driver= "pg", database=database, sql="select version()" ) != 0:
         if user or password:
             print_message( "Deleting login (db.login) ...")
-            if grass.run_command('db.login', quiet = True, driver = "pg", database = conn, user = "", password = "") != 0:
+            if grass.run_command('db.login', quiet = True, driver = "pg", database = database, user = "", password = "") != 0:
                 print_message("Cannot delete login.")
         grass.fatal("Cannot connect to database.")
 
-    if grass.run_command('db.connect', driver = "pg", database = conn, schema = schema) != 0:
+    if grass.run_command('db.connect', driver = "pg", database = database, schema = schema) != 0:
         grass.fatal("Cannot connect to database.")
     else:
         #print '-' * 80
@@ -718,7 +713,6 @@ def grassWork():
                     flags='t',
                     type='point')
     
-    sys.exit()
     points_nat=points + "_nat"
    
     # if vector already exits, remove dblink (original table)
@@ -744,7 +738,6 @@ def grassWork():
                     overwrite=True,
                     layer="1,2")
     
-    
     print_message('v.db.connect')
     grass.run_command('v.db.connect',
                     map=points_nat,
@@ -752,17 +745,20 @@ def grassWork():
                     key='linkid',
                     layer='1',
                     quiet=True)
-    
+
+#    sys.exit()
+
     try:
         with open(os.path.join(path,"timewindow"),'r') as f:
             
             print_message('v.db.connect loop')
-            
-            for win in f:
+                        
+            for win in f.read().splitlines():
                 
                 win=schema_name + '.' + win
                 print_message(win)
                 
+
                 grass.run_command('v.db.connect',
                             map=points_nat,
                             table=win,
@@ -776,8 +772,7 @@ def grassWork():
                             layer='2',
                             flags='d') 
                 
-                
-                
+    
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
 #computeprecip01.py -g -p -i database=letnany user=matt step=500                 
