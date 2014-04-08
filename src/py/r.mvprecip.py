@@ -9,6 +9,7 @@ import timeit
 import time
 import psycopg2
 import atexit
+import shutil
 from pgwrapper import pgwrapper as pg
 from math import sin, cos, atan2,degrees,radians, tan,sqrt
 
@@ -24,19 +25,6 @@ except ImportError:
 #%module
 #% description: Module for working with microwave links
 #%end
-##########################################################
-################# guisection: Interpolation ##############
-##########################################################
-
-#%flag
-#% key:g
-#% description: Run GRASS analysis
-#% guisection: Interpolation
-#%end
-
-##########################################################
-############## guisection: database work #################
-##########################################################
 
 #%option
 #% key: database
@@ -47,6 +35,75 @@ except ImportError:
 #% guisection: Database
 #% required : yes
 #%end
+
+##########################################################
+################# guisection: Interpolation ##############
+##########################################################
+
+#%option 
+#% key: baseline
+#% label: Baseline value
+#% description: This options set baseline A0[dB] (see the manual)
+#% type: double
+#% guisection: Preprocessing
+#% required: yes
+#%end
+
+#%flag
+#% key:g
+#% description: Run GRASS analysis
+#% guisection: Interpolation
+#%end
+##########################################################
+############## guisection: Preprocessing #################
+##########################################################
+
+#%option
+#% key: interval
+#% description: Summing precipitation per
+#% options: minute, hour, day
+#% multiple: yes
+#% guisection: Preprocessing
+#% answer: minute
+#%end
+
+#%option 
+#% key: fromtime
+#% label: First timestamp "YYYY-MM-DD H:M:S"
+#% description: Set first timestamp for create timewindows
+#% type: string
+#% guisection: Preprocessing
+#%end
+
+#%option 
+#% key: totime
+#% label: Last timestamp "YYYY-MM-DD H:M:S"
+#% description: Set last timestamp in format for create timewindows
+#% type: string
+#% guisection: Preprocessing
+#%end
+
+#%option 
+#% key: aw
+#% label: Aw value
+#% description: This options set Aw[dB] value for safety (see the manual)
+#% type: double
+#% guisection: Preprocessing
+#% answer: 1.5
+#%end
+
+#%option 
+#% key: step
+#% label: Interpolation step per meter
+#% description: Interpolate points along links per meter.
+#% type: integer
+#% guisection: Preprocessing
+#% answer: 500
+#%end
+
+##########################################################
+############## guisection: database work #################
+##########################################################
 
 #%option
 #% key: user
@@ -83,79 +140,13 @@ except ImportError:
 #% guisection: Database
 #% required : no
 #%end
-
-##########################################################
-############## guisection: Preprocessing #################
-##########################################################
-
-#%option
-#% key: interval
-#% description: Summing precipitation per
-#% options: minute, hour, day
-#% multiple: yes
-#% guisection: Preprocessing
-#% answer: minute
-#%end
-
-#%option 
-#% key: fromtime
-#% label: First timestamp "YYYY-MM-DD H:M:S"
-#% description: Set first timestamp in format "YYYY-MM-DD H:M:S"
-#% type: string
-#% guisection: Preprocessing
-#%end
-
-#%option 
-#% key: totime
-#% label: Last timestamp "YYYY-MM-DD H:M:S"
-#% description: Set last timestamp in format "YYYY-MM-DD H:M:S"
-#% type: string
-#% guisection: Preprocessing
-#%end
-
-#%option 
-#% key: baseline
-#% label: Baseline value
-#% description: This options set baseline A0[dB] (see the manual)
-#% type: double
-#% guisection: Preprocessing
-#% required: yes
-#%end
-
-#%option 
-#% key: aw
-#% label: Aw value
-#% description: This options set Aw[dB] value for safety (see the manual)
-#% type: double
-#% guisection: Preprocessing
-#% answer: 1.5
-#%end
-
-#%option 
-#% key: step
-#% label: Interpolation step per meter
-#% description: Interpolate points along links per meter (not necessary if created in the past)
-#% type: integer
-#% guisection: Preprocessing
-#% answer: 500
-#%end
-
-#%flag
-#% key:p
-#% description: Compute precip in db
-#% guisection: Preprocessing
-#%end
-
-#%flag
-#% key:i
-#% description: Interpolate points along links
-#% guisection: Preprocessing
-#%end
-
-
 ##########################################################
 ############### guisection: optional #####################
 ##########################################################
+#%flag
+#% key:p
+#% description: Print info about timestamp(first,last) in db 
+#%end
 
 #%flag
 #% key:r
@@ -164,25 +155,34 @@ except ImportError:
 
 #%flag
 #% key:t
-#% description: Print info about timestamp(first,last) in db 
+#% description: Remove temporary data folder
 #%end
 
+
+
+
+#EXAMPLE
+#r.mvprecip.py database=letnany baseline=1 fromtime=2013-09-09 19:59:00 totime=2013-09-09 20:05:00
+
+
+
+
 view="view"
-mesuretime=0
-restime=0
 view_statement = "TABLE"
 schema_name = "temp3"  #new scheme, no source
-fromtime= "2013-09-09 19:59:00"
-totime="2013-09-09 20:05:00"
 record_tb_name= "record"
-temp_windows_names=[]
-R=6371
 comp_precip="computed_precip"
+sum_precip='minute'
+R=6371
+mesuretime=0
+restime=0
+temp_windows_names=[]
+
+
 
 path= os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmpdata")
 
-def isTableExist(schema,table,db):
-    
+def isTableExist(db,schema,table):
     sql="SELECT EXISTS( SELECT * \
          FROM information_schema.tables \
          WHERE \
@@ -190,9 +190,7 @@ def isTableExist(schema,table,db):
          table_name = '%s');"%(schema,table)
     
     resu=db.executeSql(sql,True,True)
-    
-    if resu=='f': return False
-    else: return True
+    return resu
     
 def intrpolatePoints(db):
     print_message("Interpolating points along lines...")
@@ -381,7 +379,7 @@ def dbConnGrass(host,port,database,user,password):
         grass.run_command('db.connect',flags='p')
 
 def dbConnPy():
-    print_message("Conecting to database by psycopg driver")
+    print_message("Connecting to database by Psycopg driver...")
     db_host = options['host']
     db_name = options['database']
     db_user = options['user']
@@ -408,39 +406,53 @@ def firstRun(db):
         
         sql="CREATE EXTENSION postgis;"
         db.executeSql(sql,False,True)
-        #sql="CREATE EXTENSION postgis_topology;"
-        #db.executeSql(sql,False,True)
+        print_message("1/16")
         sql="SELECT AddGeometryColumn   ('public','node','geom',4326,'POINT',2); "
         db.executeSql(sql,False,True)
+        print_message("2/16")
         sql="SELECT AddGeometryColumn  ('public','link','geom',4326,'LINESTRING',2); "
         db.executeSql(sql,False,True)
+        print_message("3/16")
         sql="UPDATE node SET geom = ST_SetSRID(ST_MakePoint(long, lat), 4326); "
         db.executeSql(sql,False,True)
+        print_message("4/16")
         sql="UPDATE link SET geom = st_makeline(n1.geom,n2.geom) \
         FROM node AS n1 JOIN link AS l ON n1.nodeid = fromnodeid JOIN node AS n2 ON n2.nodeid = tonodeid WHERE link.linkid = l.linkid; "
         db.executeSql(sql,False,True)
+        print_message("5/16")
         sql="alter table record add column polarization char(1); "
         db.executeSql(sql,False,True)
+        print_message("6/16")
         sql="alter table record add column lenght real; "
         db.executeSql(sql,False,True)
+        print_message("7/16")
         sql="alter table record add column precipitation real; "
         db.executeSql(sql,False,True)
+        print_message("8/16")
         sql="alter table record add column a real; "
         db.executeSql(sql,False,True)
+        print_message("9/16")
         sql="update record set a= rxpower-txpower;  "
         db.executeSql(sql,False,True)
+        print_message("10/16")
         sql="update record  set polarization=link.polarization from link where record.linkid=link.linkid;"
         db.executeSql(sql,False,True)
+        print_message("11/16")
         sql="update record  set lenght=ST_Length(link.geom,false) from link where record.linkid=link.linkid;"
         db.executeSql(sql,False,True)
+        print_message("12/16")
         sql="CREATE SEQUENCE serial START 1; "
         db.executeSql(sql,False,True)
+        print_message("13/16")
         sql="alter table record add column recordid integer default nextval('serial'); "
         db.executeSql(sql,False,True)
+        print_message("14/16")
         sql="CREATE INDEX idindex ON record USING btree(recordid); "
         db.executeSql(sql,False,True)
+        print_message("15/16")
         sql="CREATE INDEX timeindex ON record USING btree (time); "
         db.executeSql(sql,False,True)
+        print_message("16/16")
 
 def randomWord(length):
     return ''.join(random.choice(string.lowercase) for i in range(length))
@@ -527,11 +539,19 @@ def st(mes=True):
 def computePrecip(db):
     print_message("Prepare database for computing precipitation...")
     
-    baseline_decibel= options['baseline']
-    baseline_decibel=float(baseline_decibel)
-    Aw=options['aw']
-    Aw=float(Aw)
+    baseline_decibelx= options['baseline']
+    baseline_decibel=float(baseline_decibelx)
+    Awx=options['aw']
+    Aw=float(Awx)
     
+    try:
+        io1=open(os.path.join(path,"compute_precip_info"),"wr")
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+    io1.write(baseline_decibelx+'|'+Awx)
+    io1.close 
+    
+
     #nuber of link and record in table link
     link_num=db.count("link")
     record_num=db.count("record")
@@ -589,16 +609,17 @@ def computePrecip(db):
     io1.close()
     os.remove(os.path.join(path,"precip"))
        
-def sumPrecip(db,sumprecip,from_time,to_time):
+def makeTimeWin(db):
     print_message("Creating time windows...")
     #@function sumPrecip make db views for all timestamps
     
-            
-    #make view per(->user) interval for all timestamp and for all links
-    time_const=0
-    if sumprecip=="minute":
+    from_time= options['fromtime']
+    to_time=options['totime']
+
+    
+    if sum_precip=="minute":
         tc=60
-    elif sumPrecip=="hour" :
+    elif sum_precip=="hour" :
         tc=3600
     else:
         tc=216000
@@ -608,7 +629,7 @@ def sumPrecip(db,sumprecip,from_time,to_time):
     sql="CREATE %s %s.%s as select\
         linkid,(avg(precipitation))/%s as precip_mm_%s, date_trunc('%s',time)\
         as timestamp FROM %s.%s GROUP BY linkid, date_trunc('%s',time)\
-        ORDER BY timestamp"%(view_statement, schema_name, view_db ,tc ,sumprecip ,sumprecip,schema_name,comp_precip ,sumprecip)    
+        ORDER BY timestamp"%(view_statement, schema_name, view_db ,tc ,sum_precip ,sum_precip,schema_name,comp_precip ,sum_precip)    
     data=db.executeSql(sql,False,True)
      
     #num of rows of materialized view
@@ -626,15 +647,25 @@ def sumPrecip(db,sumprecip,from_time,to_time):
         #get last timestep
         sql="select timestamp from  %s.%s offset %s"%(schema_name,view_db,record_num-1)
         last_timestamp=db.executeSql(sql)[0][0]
-     
-   
-    i=0
-    
+
+
+    #save first and last timewindow to file. On first line file include time step "minute","hour"etc
+    try:
+        io1=open(os.path.join(path,"time_window_info"),"wr")
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+    io1.write(sum_precip+'|'+first_timestamp+'|'+last_timestamp)
+    io1.close    
+        
+        
+    #open file for saveing names of timewindows 
     try:
         io2=open(os.path.join(path,"timewindow"),"wr")
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
-       
+                
+    time_const=0    
+    i=0
     temp=[]
     cur_timestamp=first_timestamp
     while str(cur_timestamp)!=str(last_timestamp):
@@ -771,16 +802,17 @@ def grassWork():
 
 ############################ main ############################
 def main():
-    print_message("Module is running...")
-    try: 
-        os.makedirs(path)
-    except OSError:
-        if not os.path.isdir(path):
-            raise
-        #connect to database by python lib psycopg
+        print_message("Module is running...")
+
+        try: 
+            os.makedirs(path)
+        except OSError:
+            if not os.path.isdir(path):
+                raise
+##connect to database by python lib psycopg
         db=dbConnPy()
         
-        #check database if is prepare
+#check database if is prepare
         sql="select column_name from INFORMATION_SCHEMA.COLUMNS where table_name = 'link';"
         attributes=db.executeSql(sql,True,True)
         db_prepare=True
@@ -789,9 +821,9 @@ def main():
                 db_prepare=False       
         if db_prepare:
             firstRun(db)
-
-        #print first and last timestamp
-        if flags['t']:
+            
+##print first and last timestamp
+        if flags['p']:
             sql="create view tt as select time from %s order by time"%record_tb_name
             db.executeSql(sql,False,True)
             #get first timestamp
@@ -808,16 +840,28 @@ def main():
             db.executeSql(sql,False,True)
             sys.exit()
         
-        #drop workong schema
+##drop working schema
         if flags['r']:
             sql="drop schema IF EXISTS %s CASCADE" % schema_name
             db.executeSql(sql,False,True)
+            
+##remove temp folder
+        if flags['t']:
+            shutil.rmtree(path)
+            sys.exit()
         
-        #compute precipitation
+##compute precipitation
+        curr_precip_config="null"        
+        try:
+            io0=open(os.path.join(path,"compute_precip_info"),"r")
+            curr_precip_config=io0.readline()
+            io0.close 
+        except:
+            pass
+        #compare current and new settings     
+        new_precip_config=options['baseline']+"|"+options['aw']
         
-        
-        
-        if flags['p'] or not isTableExist(schema_name,comp_precip):
+        if ( not isTableExist(db,schema_name,comp_precip)) or (curr_precip_config!=new_precip_config):
             if not options['baseline'] or not options['aw']:
                 grass.fatal('Missing value for "baseline" or "aw" for compute precipitation')
             sql="drop schema IF EXISTS %s CASCADE" % schema_name
@@ -825,46 +869,48 @@ def main():
             sql="CREATE SCHEMA %s"% schema_name
             db.executeSql(sql,False,True)
             computePrecip(db)
-           
-        #make time windows
-        intervals = options['interval'].split(',')
-        if ',' in str(options['interval']):
-            grass.fatal('You can choose only one method (minute, hour, day)')
-
-        print_message('Removing time windows...')
-        if os.path.exists(os.path.join(path,"timewindow")):
-            with open(os.path.join(path,"timewindow"),'r') as f:
-                for win in f:
-                    sql="drop table IF EXISTS %s.%s "%(schema_name,win)
-                    db.executeSql(sql,False,True)
-        sumPrecip(db, options['interval'] ,fromtime,totime)
+          
+##make time windows
+        curr_timewindow_config="null"
+        try:
+            io1=open(os.path.join(path,"time_window_info"),"r")
+            curr_timewindow_config=io1.readline()
+            io1.close
+        except:
+            pass
+        #compare current and new settings   
+        new_timewindow_config=options['interval']+'|'+options['fromtime']+'|'+options['totime']
+        if curr_timewindow_config!=new_timewindow_config:
+            intervals = options['interval'].split(',')
+            if ',' in str(options['interval']):
+                grass.fatal('You can choose only one method (minute, hour, day)')
+    
+            print_message('Removing time windows...')
+            if os.path.exists(os.path.join(path,"timewindow")):
+                with open(os.path.join(path,"timewindow"),'r') as f:
+                    for win in f.read().splitlines():
+                        sql="drop table IF EXISTS %s.%s "%(schema_name,win)
+                        db.executeSql(sql,False,True)
+            makeTimeWin(db)
                       
-                      
-                      
-           
-           
-         #interpol. points          
-           
+##interpol. points          
         step=options['step'] #interpolation step per meters
         step=float(step)
-        nametable="linkpoints"+str(step).replace('.0','')
-        
+        new_table_name="linkpoints"+str(step).replace('.0','')
+        curr_table_name='null'
         try:
-            io2=open(os.path.join(path,"linkpointsname"),"wr")
-        except IOError as (errno,strerror):
-            print "I/O error({0}): {1}".format(errno, strerror)
-        tb_points_name=io2.read()
-  
-        if (isTableExist(schema_name,tb_points_name) and nametable!=tb_points_name) or flags['i']:                    
+            io2=open(os.path.join(path,"linkpointsname"),"r")
+            curr_table_name=io2.readline()
+            io2.close
+        except:
+            pass
+        #check if table exist or if exist with different step or if -> interpol. one more time   
+        if (isTableExist(db,schema_name,curr_table_name) and new_table_name!=curr_table_name):                    
             if not options['step']:
                 grass.fatal('Missing value for "step" for interpolation')
             intrpolatePoints(db)
-            
-            
-            
-            
-            
-        #grass work
+   
+##grass work
         if flags['g']:
             grassWork()
         
