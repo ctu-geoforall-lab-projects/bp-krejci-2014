@@ -10,6 +10,7 @@ import time
 import psycopg2
 import atexit
 import shutil
+from datetime import datetime
 from pgwrapper import pgwrapper as pg
 from math import sin, cos, atan2,degrees,radians, tan,sqrt
 
@@ -156,23 +157,6 @@ except ImportError:
 #% required : no
 #%end
 
-#%option
-#% key:host
-#% type: string
-#% label: Host
-#% description: Host name of the machine on which the server is running.
-#% guisection: Database
-#% required : no
-#%end
-
-#%option
-#% key: port
-#% type: integer
-#% label: Port
-#% description: TCP port on which the server is listening, usually 5432.
-#% guisection: Database
-#% required : no
-#%end
 ##########################################################
 ############### guisection: optional #####################
 ##########################################################
@@ -286,7 +270,8 @@ def isTableExist(db,schema,table):
          table_schema = '%s' AND \
          table_name = '%s');"%(schema,table)
     
-    resu=db.executeSql(sql,True,True)
+    resu=db.executeSql(sql,True,True)[0][0]
+
     return resu
     
 def intrpolatePoints(db):
@@ -444,7 +429,7 @@ def print_message(msg):
     grass.message(msg)
     grass.message('-' * 60)
     
-def dbConnGrass(host,port,database,user,password):
+def dbConnGrass(database,user,password):
     print_message("Connecting to db-GRASS...")
     
     # Unfortunately we cannot test untill user/password is set
@@ -470,15 +455,12 @@ def dbConnGrass(host,port,database,user,password):
 
 def dbConnPy():
     print_message("Connecting to database by Psycopg driver...")
-    db_host = options['host']
     db_name = options['database']
     db_user = options['user']
     db_password = options['password']
     
     try:
         conninfo = { 'dbname' : db_name }
-        if db_host:
-            conninfo['host'] = db_host
         if db_user:
             conninfo['user'] = db_user
         if db_password:
@@ -703,10 +685,10 @@ def makeTimeWin(db):
     print_message("Creating time windows...")
     #@function sumPrecip make db views for all timestamps
     schema_name = options['schema']
-    from_time= options['fromtime']
-    to_time=options['totime']
+    from_time= datetime.strptime(options['fromtime'], "%Y-%m-%d %H:%M:%S")
+    to_time=datetime.strptime(options['totime'], "%Y-%m-%d %H:%M:%S")
     sum_precip=options['interval']
-    
+
     if sum_precip=="minute":
         tc=60
     elif sum_precip=="hour" :
@@ -724,19 +706,22 @@ def makeTimeWin(db):
      
     #num of rows of materialized view
     record_num=db.count("%s.%s"%(schema_name,view_db))
-    
-    #the user's choice or all records 
-    if from_time and to_time:
-        first_timestamp=from_time
-        last_timestamp=to_time
-    else:    
-        #get first timestamp
-        sql="select timestamp from %s.%s limit 1"%(schema_name,view_db)
-        first_timestamp=db.executeSql(sql)[0][0]
+
+
+##set first and last timestamp
+    #get first timestamp
+    sql="select timestamp from %s.%s limit 1"%(schema_name,view_db)
+    timestamp_min=db.executeSql(sql)[0][0]
         
-        #get last timestep
-        sql="select timestamp from  %s.%s offset %s"%(schema_name,view_db,record_num-1)
-        last_timestamp=db.executeSql(sql)[0][0]
+    #get last timestep
+    sql="select timestamp from  %s.%s offset %s"%(schema_name,view_db,record_num-1)
+    timestamp_max=db.executeSql(sql)[0][0]
+    if from_time:        
+        if timestamp_min <from_time:
+            timestamp_min=from_time
+    if to_time:       
+        if timestamp_max > to_time: 
+            timestamp_max=to_time
 
 
     #save first and last timewindow to file. On first line file include time step "minute","hour"etc
@@ -744,7 +729,7 @@ def makeTimeWin(db):
         io1=open(os.path.join(path,"time_window_info"),"wr")
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
-    io1.write(sum_precip+'|'+first_timestamp+'|'+last_timestamp)
+    io1.write(sum_precip+'|'+str(timestamp_min)+'|'+str(timestamp_max))
     io1.close    
         
         
@@ -757,18 +742,18 @@ def makeTimeWin(db):
     time_const=0    
     i=0
     temp=[]
-    cur_timestamp=first_timestamp
-    while str(cur_timestamp)!=str(last_timestamp):
+    cur_timestamp=timestamp_min
+    while str(cur_timestamp)!=str(timestamp_max):
         #crate name of view
         a=time.strftime("%Y_%m_%d_%H_%M", time.strptime(str(cur_timestamp), "%Y-%m-%d %H:%M:%S"))
         view_name="%s%s"%(view,a)
-        #print "(timestamp'%s'+ %s * interval '1 second')" % (first_timestamp,time_const)
+        #print "(timestamp'%s'+ %s * interval '1 second')" % (timestamp_min,time_const)
         vv=view_name+"\n"
         temp.append(vv)
         
         i+=1
         #create view
-        sql="CREATE table %s.%s as select * from %s.%s where timestamp=(timestamp'%s'+ %s * interval '1 second')"%(schema_name,view_name,schema_name,view_db,first_timestamp,time_const)
+        sql="CREATE table %s.%s as select * from %s.%s where timestamp=(timestamp'%s'+ %s * interval '1 second')"%(schema_name,view_name,schema_name,view_db,timestamp_min,time_const)
         data=db.executeSql(sql,False,True)
         
         #go to next time interval
@@ -778,7 +763,7 @@ def makeTimeWin(db):
         sql="select (timestamp'%s')+ %s* interval '1 second'"%(cur_timestamp,tc)
         cur_timestamp=db.executeSql(sql)[0][0]
         #print cur_timestamp
-        #print last_timestamp
+        #print timestamp_max
     
     #write values to flat file
     try:
@@ -793,15 +778,13 @@ def makeTimeWin(db):
 def grassWork():
     #TODO
     print_message("GRASS analysis")
-    host = options['host']
-    port = options['port']
     database = options['database']
     user = options['user']
     password = options['password']
     mapset=grass.gisenv()['MAPSET']
     schema_name = options['schema']
     
-    #dbConnGrass(host,port,database,user,password)
+    dbConnGrass(database,user,password)
                 
     try:
         io=open(os.path.join(path,"linkpointsname"),"r")
@@ -817,11 +800,11 @@ def grassWork():
     
     print_message('v.in.ogr')
     grass.run_command('v.in.ogr',
-                    dsn=dsn1,
+                    dsn="PG:",
                     layer = points_schema,
                     output = points_ogr,
                     overwrite=True,
-                    flags='t',
+                    flags='tl',
                     type='point')
     
     points_nat=points + "_nat"
@@ -920,14 +903,14 @@ def main():
             db.executeSql(sql,False,True)
             #get first timestamp
             sql="select time from tt limit 1"
-            first_timestamp=db.executeSql(sql,True,True)[0][0]
-            print_message('First timestamp is %s'%first_timestamp)
+            timestamp_min=db.executeSql(sql,True,True)[0][0]
+            print_message('First timestamp is %s'%timestamp_min)
             record_num=db.count(record_tb_name)
             
             #get last timestep
             sql="select time from  tt offset %s"%(record_num-1)
-            last_timestamp=db.executeSql(sql,True,True)[0][0]
-            print_message('Last timestamp is %s'%last_timestamp)
+            timestamp_max=db.executeSql(sql,True,True)[0][0]
+            print_message('Last timestamp is %s'%timestamp_max)
             sql="drop view tt"
             db.executeSql(sql,False,True)
             sys.exit()
@@ -942,24 +925,29 @@ def main():
 ##remove temp folder
         if flags['t']:
             shutil.rmtree(path)
-            print_message("Schema removed")
+            print_message("Folder removed")
             sys.exit()
         
 ##compute precipitation
         curr_precip_config="null"        
         try:
             io0=open(os.path.join(path,"compute_precip_info"),"r")
-            curr_precip_config=io0.readline()
-            io0.close 
-        except:
-            pass
+            try:
+                curr_precip_config=io0.readline()
+                io0.close() 
+            finally:
+                    io0.close()
+        except IOError:
+                pass
+        
         #compare current and new settings     
         new_precip_config=options['baseline']+"|"+options['aw']
-        print_message(isTableExist(db,schema_name,comp_precip))
-        if ( isTableExist(db,schema_name,comp_precip)) or (curr_precip_config!=new_precip_config):
+        if not (isTableExist(db,schema_name,comp_precip)) or  (curr_precip_config!=new_precip_config):
             if not options['baseline'] or not options['aw']:
                 grass.fatal('Missing value for "baseline" or "aw" for compute precipitation')
             sql="drop schema IF EXISTS %s CASCADE" % schema_name
+            shutil.rmtree(path)
+            os.makedirs(path)
             db.executeSql(sql,False,True)
             sql="CREATE SCHEMA %s"% schema_name
             db.executeSql(sql,False,True)
@@ -1000,7 +988,7 @@ def main():
         except:
             pass
         #check if table exist or if exist with different step or if -> interpol. one more time   
-        if (isTableExist(db,schema_name,curr_table_name) and new_table_name!=curr_table_name):                    
+        if not (isTableExist(db,schema_name,curr_table_name) or new_table_name!=curr_table_name):                    
             if not options['step']:
                 grass.fatal('Missing value for "step" for interpolation')
             intrpolatePoints(db)
