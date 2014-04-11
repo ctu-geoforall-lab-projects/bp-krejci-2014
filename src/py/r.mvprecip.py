@@ -45,37 +45,13 @@ except ImportError:
 ############## guisection: Preprocessing #################
 ##########################################################
 
-#%option
-#% key: interval
-#% description: Summing precipitation per
-#% options: minute, hour, day
-#% multiple: yes
-#% guisection: Preprocessing
-#% answer: minute
-#%end
 
-#%option 
-#% key: fromtime
-#% label: First timestamp "YYYY-MM-DD H:M:S"
-#% description: Set first timestamp for create timewindows
-#% type: string
-#% guisection: Preprocessing
-#%end
-
-#%option 
-#% key: totime
-#% label: Last timestamp "YYYY-MM-DD H:M:S"
-#% description: Set last timestamp in format for create timewindows
-#% type: string
-#% guisection: Preprocessing
-#%end
 
 #%option 
 #% key: quantile
-#% label: Quantile for compute baseline
-#% description: Choose quantile in % 
+#% label: Quantile in % for set baseline
 #% type: integer
-#% guisection: Preprocessing
+#% guisection: Precipitation
 #% answer: 96
 #%end
 
@@ -84,24 +60,16 @@ except ImportError:
 #% label: Aw value
 #% description: This options set Aw[dB] value for safety (see the manual)
 #% type: double
-#% guisection: Preprocessing
+#% guisection: Precipitation
 #% answer: 1.5
 #%end
 
-#%option 
-#% key: step
-#% label: Interpolation step per meter
-#% description: Interpolate points along links per meter.
-#% type: integer
-#% guisection: Preprocessing
-#% answer: 500
-#%end
+
 
 #%option G_OPT_F_INPUT 
 #% key: baseline
-#% label: Baseline value
-#% description: Baseline in db in format "linkid;baseline"
-#% guisection: Preprocessing
+#% label: Baseline values in format "linkid;baseline"
+#% guisection: Precipitation
 #% required: no
 #%end
 
@@ -109,9 +77,60 @@ except ImportError:
 #%option G_OPT_F_INPUT
 #% key: rgauges
 #% label: Name of input rain gauges file
-#% guisection: Preprocessing
+#% guisection: Precipitation
 #% required: no
 #%end
+
+##########################################################
+################# guisection: Timewindows ##############
+##########################################################
+#%option
+#% key: interval
+#% description: Summing precipitation per
+#% options: minute, hour, day
+#% multiple: yes
+#% guisection: Time-windows
+#% answer: minute
+#%end
+
+#%option 
+#% key: fromtime
+#% label: First timestamp "YYYY-MM-DD H:M:S"
+#% description: Set first timestamp for create timewindows
+#% type: string
+#% guisection: Time-windows
+#%end
+
+#%option 
+#% key: totime
+#% label: Last timestamp "YYYY-MM-DD H:M:S"
+#% description: Set last timestamp in format for create timewindows
+#% type: string
+#% guisection: Time-windows
+#%end
+
+#%option 
+#% key: maxp
+#% label: Set max precip value in mm/h
+#% description: All greater precipitation than maxp will be ignore 
+#% type: float
+#% guisection: Time-windows
+#%end
+
+
+
+#%option G_OPT_F_INPUT
+#% key: lignore
+#% label: Linkid ignore list
+#% guisection: Time-windows
+#% required: no
+#%end
+
+
+
+
+
+
 
 
 
@@ -142,7 +161,14 @@ except ImportError:
 #% guisection: Interpolation
 #%end
 
-
+#%option 
+#% key: step
+#% label: Interpolation step per meter
+#% description: Interpolate points along links per meter.
+#% type: integer
+#% guisection: Interpolation
+#% answer: 500
+#%end
 
 
 
@@ -199,7 +225,7 @@ except ImportError:
 #% key: schema
 #% type: string
 #% label: Name of db schema for results
-#% answer: temp4
+#% answer: temp5
 #%end
 
 
@@ -227,7 +253,6 @@ def readBaselineFromText(pathh):
         reader = csv.reader(infile,delimiter=';')
         mydict = {float(rows[0]):float(rows[1]) for rows in reader}
     return mydict
-
     
 def readRaingaugesCsv():
     rgpath=options['rgauges']
@@ -283,36 +308,15 @@ def computeBaseline(db):
         except IOError as (errno,strerror):
             print "I/O error({0}): {1}".format(errno, strerror)
 
-
-
-
-    
 def precipInterpolationCustom(points_nat,win):
     
     itype=options['interpolation']
     attribute_col='precip_mm_' + options['interval']
-    out=win + '_' + itype
+    out=win + '_' + itype+'_custom'
     istring=options['isettings']
-    
-    if itype == 'rst':
-        #grass.run_command('v.surf.rst',input=points_nat,zcolumn = attribute_col,elevation=out, overwrite=True)
-        eval(istring)
-    elif itype == 'bspline':
-         a
-         grass.run_command('v.surf.bspline',
-
-                           input=points_nat,
-                           column = attribute_col,
-                           raster_output=out,
-                           overwrite=True)
-    else:
-         grass.run_command('v.surf.idw',
-                           eval(istring),
-                           input=points_nat,
-                           column = attribute_col,
-                           output=out,
-                           overwrite=True)        
-       
+    eval(istring)
+    #grass.run_command('v.surf.rst',input=points_nat,zcolumn = attribute_col,elevation=out, overwrite=True)
+   
 def precipInterpolationDefault(points_nat,win):
     itype=options['interpolation']
     attribute_col='precip_mm_' + options['interval']
@@ -719,7 +723,7 @@ def computePrecip(db):
 
     mydict={}
     if not options['baseline']:
-        print_message('Compute bselines...')
+        print_message('Computing baselines...')
         computeBaseline(db)
         links_dict=readBaselineFromText(os.path.join(path,'baseline'))
     else:
@@ -745,7 +749,10 @@ def computePrecip(db):
         #final precipiatation is R1    
         Ar=record[1]- baseline_decibel - Aw
         if Ar > 0.0001:
-            yr=Ar/record[2]  
+            #print_message(Ar)
+            #print_message(record[2])
+            
+            yr=Ar/(record[2]/1000  )
             R1=(yr/coef_a_k[1])**(1/coef_a_k[0])
         else: R1=0
         #string for output flatfile
@@ -767,6 +774,7 @@ def computePrecip(db):
     os.remove(os.path.join(path,"precip"))
        
 def makeTimeWin(db):
+    
     print_message("Creating time windows...")
     #@function sumPrecip make db views for all timestamps
     from_time=''
@@ -776,8 +784,9 @@ def makeTimeWin(db):
         from_time= datetime.strptime(options['fromtime'], "%Y-%m-%d %H:%M:%S")
     if options['totime']:    
         to_time=datetime.strptime(options['totime'], "%Y-%m-%d %H:%M:%S")
+    
+    
     sum_precip=options['interval']
-
     if sum_precip=="minute":
         tc=60
         tcc=60
@@ -788,18 +797,38 @@ def makeTimeWin(db):
         tc=1/24
         tcc=216000
        
-    #summing values per (->user)timestep interval
+##summing values per (->user)timestep interval
     view_db="sum_"+randomWord(3)
     sql="CREATE %s %s.%s as select\
         linkid,round(avg(precipitation)::numeric,3) as precip_mm_%s, date_trunc('%s',time)\
         as timestamp FROM %s.%s GROUP BY linkid, date_trunc('%s',time)\
         ORDER BY timestamp"%(view_statement, schema_name, view_db  ,sum_precip ,sum_precip,schema_name,comp_precip ,sum_precip)    
     data=db.executeSql(sql,False,True)
-     
-    #num of rows of materialized view
+    stamp=""
+    stamp1=""
+
+##remove ignored linkid    
+    if options['lignore']:
+        
+        lipath=options['lignore']
+        stamp=lipath
+        try:
+            with open(lipath,'r') as f:
+                for link in f.read().splitlines():
+                    sql="DELETE from %s.%s where linkid=%s "%(schema_name,view_db,link)
+                    db.executeSql(sql,False,True)
+                    
+        except IOError as (errno,strerror):
+                print "I/O error({0}): {1}".format(errno, strerror)
+                
+##remove records whit greater value then user set                
+    if options['maxp']:
+        stamp1=options['maxp']
+        sql="DELETE from %s.%s where precip_mm_%s>%s "%(schema_name,view_db,sum_precip,options['maxp'])
+        db.executeSql(sql,False,True)
+ 
+##num of rows 
     record_num=db.count("%s.%s"%(schema_name,view_db))
-
-
 ##set first and last timestamp
     #get first timestamp
     sql="select timestamp from %s.%s limit 1"%(schema_name,view_db)
@@ -808,6 +837,8 @@ def makeTimeWin(db):
     #get last timestep
     sql="select timestamp from  %s.%s offset %s"%(schema_name,view_db,record_num-1)
     timestamp_max=db.executeSql(sql)[0][0]
+    
+##check if user set timestamps from correct time interval    
     if options['fromtime']:        
         if timestamp_min <from_time:
             timestamp_min=from_time
@@ -816,56 +847,54 @@ def makeTimeWin(db):
             timestamp_max=to_time
 
 
-    #save first and last timewindow to file. On first line file include time step "minute","hour"etc
+##save first and last timewindow to file. On first line file include time step "minute","hour"etc
     try:
         io1=open(os.path.join(path,"time_window_info"),"wr")
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
-    io1.write(sum_precip+'|'+str(timestamp_min)+'|'+str(timestamp_max))
+    io1.write(sum_precip+'|'+str(timestamp_min)+'|'+str(timestamp_max)+stamp+stamp1)
     io1.close    
         
         
-    #open file for saveing names of timewindows 
+##save names of timewindows 
     try:
         io2=open(os.path.join(path,"timewindow"),"wr")
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
+        
                 
     time_const=0    
     i=0
     temp=[]
     cur_timestamp=timestamp_min
+    
+##making timewindows from time interval    
     while str(cur_timestamp)!=str(timestamp_max):
-        #crate name of view
+        
+    #crate name of view
         a=time.strftime("%Y_%m_%d_%H_%M", time.strptime(str(cur_timestamp), "%Y-%m-%d %H:%M:%S"))
         view_name="%s%s"%(view,a)
-        #print "(timestamp'%s'+ %s * interval '1 second')" % (timestamp_min,time_const)
-        vv=view_name+"\n"
-        temp.append(vv)
-        
-        i+=1
-        #create view
+        vw=view_name+"\n"
+        temp.append(vw)
+
+    #create view
         sql="CREATE table %s.%s as select * from %s.%s where timestamp=(timestamp'%s'+ %s * interval '1 second')"%(schema_name,view_name,schema_name,view_db,timestamp_min,time_const)
         data=db.executeSql(sql,False,True)
-        
-        #go to next time interval
-        time_const+=tcc
-        
-        #compute cur_timestamp (need for loop)
+
+    #compute cur_timestamp (need for loop)
         sql="select (timestamp'%s')+ %s* interval '1 second'"%(cur_timestamp,tcc)
         cur_timestamp=db.executeSql(sql)[0][0]
-        #print cur_timestamp
-        #print timestamp_max
+    #go to next time interval
+        time_const+=tcc
     
-    #write values to flat file
+##write values to flat file
     try:
         io2.writelines(temp)
         io2.close()
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
-        
+##drop temp table        
     sql="drop table %s.%s"%(schema_name,view_db)
-    #db.executeSql(sql,False,True) 
 
 def grassWork():
     #TODO
@@ -896,7 +925,7 @@ def grassWork():
                     layer = points_schema,
                     output = points_ogr,
                     overwrite=True,
-                    flags='tl',
+                    flags='t',
                     type='point')
     
     points_nat=points + "_nat"
@@ -949,9 +978,7 @@ def grassWork():
                                 key='linkid',
                                 layer='1',
                                 quiet=True)
-                
-                precipInterpolationDefault(points_nat,win)
-                
+
                 if options['isettings']:
                     precipInterpolationCustom(points_nat,win)
                 else:
@@ -962,11 +989,14 @@ def grassWork():
                                 map=points_nat,
                                 layer='1',
                                 flags='d')
-                
+              
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
+        
+###########################################################################
+############################ main #########################################
+##########################################################################
 
-############################ main ############################
 def main():
         print_message("Module is running...")
         schema_name = options['schema']
@@ -1058,7 +1088,7 @@ def main():
             sql="CREATE SCHEMA %s"% schema_name
             db.executeSql(sql,False,True)
             computePrecip(db)
-        sys.exit()   
+ 
 ##make time windows
         curr_timewindow_config="null"
         try:
@@ -1067,8 +1097,9 @@ def main():
             io1.close
         except:
             pass
+
         #compare current and new settings   
-        new_timewindow_config=options['interval']+'|'+options['fromtime']+'|'+options['totime']
+        new_timewindow_config=options['interval']+'|'+options['fromtime']+'|'+options['totime']+options['lignore']+options['maxp']
         if curr_timewindow_config!=new_timewindow_config:
             intervals = options['interval'].split(',')
             if ',' in str(options['interval']):
@@ -1094,7 +1125,7 @@ def main():
         except:
             pass
         #check if table exist or if exist with different step or if -> interpol. one more time   
-        if not (isTableExist(db,schema_name,curr_table_name) or new_table_name!=curr_table_name):                    
+        if not (isTableExist(db,schema_name,curr_table_name)) or new_table_name!=curr_table_name:                    
             if not options['step']:
                 grass.fatal('Missing value for "step" for interpolation')
             intrpolatePoints(db)
