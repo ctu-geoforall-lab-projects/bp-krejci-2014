@@ -11,7 +11,8 @@ import psycopg2
 import atexit
 import shutil
 import csv
-from datetime import datetime
+from collections import defaultdict
+from datetime import datetime ,timedelta
 from pgwrapper import pgwrapper as pg
 from math import sin, cos, atan2,degrees,radians, tan,sqrt
 
@@ -42,7 +43,7 @@ except ImportError:
 
 
 ##########################################################
-############## guisection: Preprocessing #################
+############## guisection: Baseline #################
 ##########################################################
 
 
@@ -51,33 +52,40 @@ except ImportError:
 #% key: quantile
 #% label: Quantile in % for set baseline
 #% type: integer
-#% guisection: Precipitation
+#% guisection: Baseline
 #% answer: 96
 #%end
 
 #%option 
 #% key: aw
-#% label: Aw value
+#% label: aw value
 #% description: This options set Aw[dB] value for safety (see the manual)
 #% type: double
-#% guisection: Precipitation
+#% guisection: Baseline
 #% answer: 1.5
 #%end
 
 
 
 #%option G_OPT_F_INPUT 
-#% key: baseline
+#% key: baselfile
 #% label: Baseline values in format "linkid;baseline"
-#% guisection: Precipitation
+#% guisection: Baseline
 #% required: no
 #%end
 
 
 #%option G_OPT_F_INPUT
+#% key: baseltime
+#% description: Set interval or just time when not raining (see the manual)
+#% guisection: Baseline
+#% required: no
+#%end
+
+#%option G_OPT_F_INPUT
 #% key: rgauges
 #% label: Name of input rain gauges file
-#% guisection: Precipitation
+#% guisection: Baseline
 #% required: no
 #%end
 
@@ -86,7 +94,7 @@ except ImportError:
 ##########################################################
 #%option
 #% key: interval
-#% description: Summing precipitation per
+#% label: Summing precipitation per
 #% options: minute, hour, day
 #% multiple: yes
 #% guisection: Time-windows
@@ -113,7 +121,7 @@ except ImportError:
 #% key: maxp
 #% label: Set max precip value in mm/h
 #% description: All greater precipitation than maxp will be ignore 
-#% type: float
+#% type: double
 #% guisection: Time-windows
 #%end
 
@@ -125,13 +133,6 @@ except ImportError:
 #% guisection: Time-windows
 #% required: no
 #%end
-
-
-
-
-
-
-
 
 
 ##########################################################
@@ -247,10 +248,82 @@ restime=0
 temp_windows_names=[]
 
 
-def readBaselineFromText(pathh):
+def setBaselineFromTime(db):
+    ##@function for reading file of intervals or just one moments when dont raining.
+    ##@format of input file(with key interval):
+    ##  interval
+    ##  2013-09-10 04:00:00
+    ##  2013-09-11 04:00:00
+    ##
+    ##@just one moment or moments
+    ##  2013-09-11 04:00:00
+    ##  2013-09-11 04:00:00
 
+    bpath=options['baseltime']
+    interval=False
+    tmp=[]
+    try:
+            f=open(bpath,'r')
+##parse input file
+
+            for line in f:
+                if 'i' in line[0]:          #get baseline form interval
+                    fromt = f.next()
+                    tot = f.next()
+                    sql="select linkid, avg(a) from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
+                    resu=db.executeSql(sql,True,True)
+                    tmp.append(resu)
+                    
+                else:                       ##get baseline one moment
+                    time=datetime.strptime(line.split("\n")[0], "%Y-%m-%d %H:%M:%S")
+                    fromt = time + timedelta(seconds=-60)
+                    tot = time + timedelta(seconds=+60)
+                    sql="select linkid, avg(a) from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
+                    resu=db.executeSql(sql,True,True)
+                    print_message(resu)
+                    tmp.append(resu)
+                    
+                    continue
+                try:
+                    f.next()
+                except:
+                    pass
+                
+    except IOError as (errno,strerror):
+                    print "I/O error({0}): {1}".format(errno, strerror)
+            
+    mydict={}
+    mydict1={}
+    i=True
+## sum all baseline per every linkid from get baseline dataset(next step avg)
+    for dataset in tmp:
+        mydict = {int(rows[0]):float(rows[1]) for rows in dataset}
+        if i == True:
+            mydict1=mydict
+            i=False
+            continue
+        for link,a in dataset:
+            mydict1[link]+=mydict[link]
+            
+    length=len(tmp)
+    links=len(tmp[0])
+    i=0
+##compute avq(divide sum by num of datasets)
+    for dataset in tmp:
+        for link,a in dataset:
+            i+=1
+            mydict1[link]=mydict1[link]/length
+            if i==links:
+                break
+        break
+##write values to baseline file
+    writer = csv.writer(open(os.path.join(path,'baseline'), 'wr'))
+    for key, value in mydict1.items():
+        writer.writerow([key, value])
+    
+def readBaselineFromText(pathh):
     with open(pathh, mode='r') as infile:
-        reader = csv.reader(infile,delimiter=';')
+        reader = csv.reader(infile,delimiter=',')
         mydict = {float(rows[0]):float(rows[1]) for rows in reader}
     return mydict
     
@@ -259,7 +332,7 @@ def readRaingaugesCsv():
     print_message(rgpath)
     try:
         with open(rgpath, 'rb') as f:
-            csv.register_dialect('mydial', delimiter=';',skipinitialspace=True)
+            csv.register_dialect('mydial', delimiter=',',skipinitialspace=True)
             reader = csv.reader(f, 'mydial')
             try: 
                 for row in reader:
@@ -268,7 +341,7 @@ def readRaingaugesCsv():
             except csv.Error as e:
                 sys.exit('file %s, line %d: %s' % (rgpath, reader.line_num, e))   
                 
-  
+        f.close()
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
        
@@ -291,8 +364,7 @@ def computeBaseline(db):
             ORDER BY quartile\
             limit 1"%(quantile,linkid)
             resu=db.executeSql(sql,True,True)[0][0]
-            #print_message(resu)
-            tmp.append(str(linkid)+';'+ str(resu)+'\n')
+            tmp.append(str(linkid)+','+ str(resu)+'\n')
 
         try:
             io0=open(os.path.join(path,"baseline"),"wr")
@@ -481,7 +553,7 @@ def destinationPointWGS(lat1,lon1,brng,s):
     d=atan2(sa, -t)
     finalBrg=d+2*math.pi
     backBrg=d+math.pi
-    lon2 = lon1+l;
+    lon2 = lon1+l
    # Convert lat2, lon2, finalBrg and backBrg to degrees
     lat2 =degrees( lat2) 
     lon2 = degrees(lon2 )
@@ -489,8 +561,8 @@ def destinationPointWGS(lat1,lon1,brng,s):
     backBrg = degrees(backBrg )
     #b = a - (a/flat)
     #flat = a / (a - b)
-    finalBrg =(finalBrg+360) % 360;
-    backBrg=(backBrg+360) % 360;
+    finalBrg =(finalBrg+360) % 360
+    backBrg=(backBrg+360) % 360
     
     return (lat2,lon2,finalBrg,backBrg)
     
@@ -502,11 +574,11 @@ def bearing(lat1,lon1,lat2,lon2):
     lon2=math.radians(float(lon2))
     dLon=(lon2-lon1)
     
-    y = math.sin(dLon) * math.cos(lat2);
-    x = math.cos(lat1)*math.sin(lat2) - math.sin(lat1)*math.cos(lat2)*math.cos(dLon);
+    y = math.sin(dLon) * math.cos(lat2)
+    x = math.cos(lat1)*math.sin(lat2) - math.sin(lat1)*math.cos(lat2)*math.cos(dLon)
     brng = math.degrees(math.atan2(y, x))
           
-    return (brng+360) % 360;
+    return (brng+360) % 360
 
 def print_message(msg):
     grass.message(msg)
@@ -722,13 +794,13 @@ def computePrecip(db):
     print_message("Computing precipitation...")
 
     mydict={}
-    if not options['baseline']:
+    if not options['baselfile']:
         print_message('Computing baselines...')
         computeBaseline(db)
         links_dict=readBaselineFromText(os.path.join(path,'baseline'))
     else:
         print_message('Read baseline from file...')
-        links_dict=readBaselineFromText(options['baseline'])
+        links_dict=readBaselineFromText(options['baselfile'])
         try:
             io1=open(os.path.join(path,"compute_precip_info"),"wr")
             io1.write('fromfile|'+options['aw'])
@@ -801,8 +873,8 @@ def makeTimeWin(db):
     view_db="sum_"+randomWord(3)
     sql="CREATE %s %s.%s as select\
         linkid,round(avg(precipitation)::numeric,3) as precip_mm_%s, date_trunc('%s',time)\
-        as timestamp FROM %s.%s GROUP BY linkid, date_trunc('%s',time)\
-        ORDER BY timestamp"%(view_statement, schema_name, view_db  ,sum_precip ,sum_precip,schema_name,comp_precip ,sum_precip)    
+        as time FROM %s.%s GROUP BY linkid, date_trunc('%s',time)\
+        ORDER BY time"%(view_statement, schema_name, view_db  ,sum_precip ,sum_precip,schema_name,comp_precip ,sum_precip)    
     data=db.executeSql(sql,False,True)
     stamp=""
     stamp1=""
@@ -831,11 +903,11 @@ def makeTimeWin(db):
     record_num=db.count("%s.%s"%(schema_name,view_db))
 ##set first and last timestamp
     #get first timestamp
-    sql="select timestamp from %s.%s limit 1"%(schema_name,view_db)
+    sql="select time from %s.%s limit 1"%(schema_name,view_db)
     timestamp_min=db.executeSql(sql)[0][0]
         
     #get last timestep
-    sql="select timestamp from  %s.%s offset %s"%(schema_name,view_db,record_num-1)
+    sql="select time from  %s.%s offset %s"%(schema_name,view_db,record_num-1)
     timestamp_max=db.executeSql(sql)[0][0]
     
 ##check if user set timestamps from correct time interval    
@@ -878,11 +950,11 @@ def makeTimeWin(db):
         temp.append(vw)
 
     #create view
-        sql="CREATE table %s.%s as select * from %s.%s where timestamp=(timestamp'%s'+ %s * interval '1 second')"%(schema_name,view_name,schema_name,view_db,timestamp_min,time_const)
+        sql="CREATE table %s.%s as select * from %s.%s where time=(time'%s'+ %s * interval '1 second')"%(schema_name,view_name,schema_name,view_db,timestamp_min,time_const)
         data=db.executeSql(sql,False,True)
 
     #compute cur_timestamp (need for loop)
-        sql="select (timestamp'%s')+ %s* interval '1 second'"%(cur_timestamp,tcc)
+        sql="select (time'%s')+ %s* interval '1 second'"%(cur_timestamp,tcc)
         cur_timestamp=db.executeSql(sql)[0][0]
     #go to next time interval
         time_const+=tcc
@@ -1011,6 +1083,8 @@ def main():
 ##connect to database by python lib psycopg
         db=dbConnPy()
         
+        setBaselineFromTime(db)
+        sys.exit()
 #check database if is prepare
         if not isAttributExist(db,'public','link','geom'):
             firstRun(db)
@@ -1068,13 +1142,13 @@ def main():
         new_precip_config='fromfile|'+options['aw']
         
         compute=False
-        if (curr_precip_config!=new_precip_config) and  options['baseline']:
+        if (curr_precip_config!=new_precip_config) and  options['baselfile']:
             compute=True
             print_message('1')
         if not (isTableExist(db,schema_name,comp_precip)):
             compute=True
             print_message('2')
-        if  quantil!=curr_precip_config and not options['baseline']:
+        if  quantil!=curr_precip_config and not options['baselfile']:
             compute=True
             print_message(quantil)
             print_message(new_precip_config)
