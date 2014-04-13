@@ -14,7 +14,7 @@ import csv
 from collections import defaultdict
 from datetime import datetime ,timedelta
 from pgwrapper import pgwrapper as pg
-from math import sin, cos, atan2,degrees,radians, tan,sqrt
+from math import sin, cos, atan2,degrees,radians, tan,sqrt,fabs 
 
 try:
     from grass.script import core as grass  
@@ -162,19 +162,27 @@ except ImportError:
 #% guisection: Interpolation
 #%end
 
+
+#%flag
+#% key:q
+#% description: Do not set region from modul settings
+#% guisection: Interpolation
+#%end
+
 #%option 
 #% key: step
-#% label: Interpolation step per meter
-#% description: Interpolate points along links per meter.
+#% label: Interpolate points along links per meter.
 #% type: integer
 #% guisection: Interpolation
 #% answer: 500
 #%end
 
-
-
-
-
+#%option G_OPT_F_INPUT
+#% key: color
+#% label: Set color table
+#% guisection: Interpolation
+#% required: no
+#%end
 
 
 ##########################################################
@@ -209,18 +217,9 @@ except ImportError:
 
 #%flag
 #% key:r
-#% description: Remove temporary working schema
+#% description: Remove temporary working schema and data folder
 #%end
 
-#%flag
-#% key:t
-#% description: Remove temporary data folder
-#%end
-
-#%flag
-#% key:q
-#% description: Do not set region from modul settings
-#%end
 
 #%option
 #% key: schema
@@ -248,187 +247,9 @@ restime=0
 temp_windows_names=[]
 
 
-def setBaselineFromTime(db):
-    ##@function for reading file of intervals or just one moments when dont raining.
-    ##@format of input file(with key interval):
-    ##  interval
-    ##  2013-09-10 04:00:00
-    ##  2013-09-11 04:00:00
-    ##
-    ##@just one moment or moments
-    ##  2013-09-11 04:00:00
-    ##  2013-09-11 04:00:00
+###########################
+##   Miscellaneous
 
-    bpath=options['baseltime']
-    interval=False
-    tmp=[]
-    try:
-            f=open(bpath,'r')
-##parse input file
-
-            for line in f:
-                if 'i' in line[0]:          #get baseline form interval
-                    fromt = f.next()
-                    tot = f.next()
-                    sql="select linkid, avg(a) from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
-                    resu=db.executeSql(sql,True,True)
-                    tmp.append(resu)
-                    
-                else:                       ##get baseline one moment
-                    time=datetime.strptime(line.split("\n")[0], "%Y-%m-%d %H:%M:%S")
-                    fromt = time + timedelta(seconds=-60)
-                    tot = time + timedelta(seconds=+60)
-                    sql="select linkid, avg(a) from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
-                    resu=db.executeSql(sql,True,True)
-                    print_message(resu)
-                    tmp.append(resu)
-                    
-                    continue
-                try:
-                    f.next()
-                except:
-                    pass
-                
-    except IOError as (errno,strerror):
-                    print "I/O error({0}): {1}".format(errno, strerror)
-            
-    mydict={}
-    mydict1={}
-    i=True
-## sum all baseline per every linkid from get baseline dataset(next step avg)
-    for dataset in tmp:
-        mydict = {int(rows[0]):float(rows[1]) for rows in dataset}
-        if i == True:
-            mydict1=mydict
-            i=False
-            continue
-        for link,a in dataset:
-            mydict1[link]+=mydict[link]
-            
-    length=len(tmp)
-    links=len(tmp[0])
-    i=0
-##compute avq(divide sum by num of datasets)
-    for dataset in tmp:
-        for link,a in dataset:
-            i+=1
-            mydict1[link]=mydict1[link]/length
-            if i==links:
-                break
-        break
-##write values to baseline file
-    writer = csv.writer(open(os.path.join(path,'baseline'), 'wr'))
-    for key, value in mydict1.items():
-        writer.writerow([key, value])
-    
-def readBaselineFromText(pathh):
-    with open(pathh, mode='r') as infile:
-        reader = csv.reader(infile,delimiter=',')
-        mydict = {float(rows[0]):float(rows[1]) for rows in reader}
-    return mydict
-    
-def readRaingaugesCsv():
-    rgpath=options['rgauges']
-    print_message(rgpath)
-    try:
-        with open(rgpath, 'rb') as f:
-            csv.register_dialect('mydial', delimiter=',',skipinitialspace=True)
-            reader = csv.reader(f, 'mydial')
-            try: 
-                for row in reader:
-                    print row
-                    #for val in row:        
-            except csv.Error as e:
-                sys.exit('file %s, line %d: %s' % (rgpath, reader.line_num, e))   
-                
-        f.close()
-    except IOError as (errno,strerror):
-        print "I/O error({0}): {1}".format(errno, strerror)
-       
-def computeBaseline(db):
-        quantile=options['quantile']
-        link_num=db.count("link")               
-        sql="SELECT linkid from link"
-        linksid=db.executeSql(sql,True,True)
-        tmp=[]
-         #for each link  compute baseline
-        for linkid in linksid:         
-            linkid=linkid[0]
-            sql="Select\
-            max(a) as maxAmount\
-            , avg(a) as avgAmount\
-            ,quartile\
-            FROM (SELECT a, ntile(%s) over (order by a) as quartile\
-            FROM record where linkid=%s ) x\
-            GROUP BY quartile\
-            ORDER BY quartile\
-            limit 1"%(quantile,linkid)
-            resu=db.executeSql(sql,True,True)[0][0]
-            tmp.append(str(linkid)+','+ str(resu)+'\n')
-
-        try:
-            io0=open(os.path.join(path,"baseline"),"wr")
-            io0.writelines(tmp)
-            io0.close()
-        except IOError as (errno,strerror):
-            print "I/O error({0}): {1}".format(errno, strerror)
-
-        try:
-            io1=open(os.path.join(path,"compute_precip_info"),"wr")
-            io1.write('quantile'+ quantile+'|'+options['aw'])
-            io1.close
-        except IOError as (errno,strerror):
-            print "I/O error({0}): {1}".format(errno, strerror)
-
-def precipInterpolationCustom(points_nat,win):
-    
-    itype=options['interpolation']
-    attribute_col='precip_mm_' + options['interval']
-    out=win + '_' + itype+'_custom'
-    istring=options['isettings']
-    eval(istring)
-    #grass.run_command('v.surf.rst',input=points_nat,zcolumn = attribute_col,elevation=out, overwrite=True)
-   
-def precipInterpolationDefault(points_nat,win):
-    itype=options['interpolation']
-    attribute_col='precip_mm_' + options['interval']
-    out=win + '_' + itype
-    
-    if itype == 'rst':
-        grass.run_command('v.surf.rst',
-                          input=points_nat,
-                          zcolumn = attribute_col,
-                          elevation=out,
-                          overwrite=True)
-        
-    elif itype == 'bspline':
-         grass.run_command('v.surf.bspline',
-                           input=points_nat,
-                           column = attribute_col,
-                           raster_output=out,
-                           overwrite=True)
-    else:
-         grass.run_command('v.surf.idw',
-                           input=points_nat,
-                           column = attribute_col,
-                           output=out,
-                           overwrite=True)        
-
-def isAttributExist(db,schema,table,columns):
-        sql="SELECT EXISTS( SELECT * FROM information_schema.columns WHERE \
-         table_schema = '%s' AND \
-         table_name = '%s' AND\
-         column_name='%s');"%(schema,table,columns)       
-        return db.executeSql(sql,True,True)[0][0]  
-            
-def isTableExist(db,schema,table):
-    sql="SELECT EXISTS( SELECT * \
-         FROM information_schema.tables \
-         WHERE \
-         table_schema = '%s' AND \
-         table_name = '%s');"%(schema,table)
-    return db.executeSql(sql,True,True)[0][0]
-    
 def intrpolatePoints(db):
     
     print_message("Interpolating points along lines...")
@@ -583,50 +404,23 @@ def bearing(lat1,lon1,lat2,lon2):
 def print_message(msg):
     grass.message(msg)
     grass.message('-' * 60)
-    
-def dbConnGrass(database,user,password):
-    print_message("Connecting to db-GRASS...")
-    # Unfortunately we cannot test untill user/password is set
-    if user or password:
-        #print_message("Setting login (db.login) ... ")
-        if grass.run_command('db.login', driver = "pg", database = database, user = user, password = password) != 0:
-            grass.fatal("Cannot login")
 
-    # Try to connect
-    if grass.run_command('db.select', quiet = True, flags='c', driver= "pg", database=database, sql="select version()" ) != 0:
-        if user or password:
-            print_message( "Deleting login (db.login) ...")
-            if grass.run_command('db.login', quiet = True, driver = "pg", database = database, user = "", password = "") != 0:
-                print_message("Cannot delete login.")
-        grass.fatal("Cannot connect to database.")
+def randomWord(length):
+    return ''.join(random.choice(string.lowercase) for i in range(length))
 
-    if grass.run_command('db.connect', driver = "pg", database = database) != 0:
-        grass.fatal("Cannot connect to database.")
+def st(mes=True):
+    if mes:
+        global mesuretime
+        global restime
+        mesuretime= time.time()
     else:
-        #print '-' * 80
-        #print_message("Connected to...")
-        grass.run_command('db.connect',flags='p')
+        restime=time.time() - mesuretime
+        print "time is: ", restime
 
-def dbConnPy():
-    print_message("Connecting to database by Psycopg driver...")
-    db_name = options['database']
-    db_user = options['user']
-    db_password = options['password']
-    
-    try:
-        conninfo = { 'dbname' : db_name }
-        if db_user:
-            conninfo['user'] = db_user
-        if db_password:
-            conninfo['passwd'] = db_password
-            
-        db = pg(**conninfo)
 
-    except psycopg2.OperationalError, e:
-        grass.fatal("Unable to connect to the database <%s>. %s" % (db_name, e))
-    
-    return db
-    
+###########################
+##   database work
+
 def firstRun(db):
         print_message("Preparing database...")
         
@@ -680,8 +474,616 @@ def firstRun(db):
         db.executeSql(sql,False,True)
         print_message("16/16")
 
-def randomWord(length):
-    return ''.join(random.choice(string.lowercase) for i in range(length))
+def dbConnGrass(database,user,password):
+    print_message("Connecting to db-GRASS...")
+    # Unfortunately we cannot test untill user/password is set
+    if user or password:
+        #print_message("Setting login (db.login) ... ")
+        if grass.run_command('db.login', driver = "pg", database = database, user = user, password = password) != 0:
+            grass.fatal("Cannot login")
+
+    # Try to connect
+    if grass.run_command('db.select', quiet = True, flags='c', driver= "pg", database=database, sql="select version()" ) != 0:
+        if user or password:
+            print_message( "Deleting login (db.login) ...")
+            if grass.run_command('db.login', quiet = True, driver = "pg", database = database, user = "", password = "") != 0:
+                print_message("Cannot delete login.")
+        grass.fatal("Cannot connect to database.")
+
+    if grass.run_command('db.connect', driver = "pg", database = database) != 0:
+        grass.fatal("Cannot connect to database.")
+    else:
+        #print '-' * 80
+        #print_message("Connected to...")
+        grass.run_command('db.connect',flags='p')
+
+def dbConnPy():
+    print_message("Connecting to database by Psycopg driver...")
+    db_name = options['database']
+    db_user = options['user']
+    db_password = options['password']
+    
+    try:
+        conninfo = { 'dbname' : db_name }
+        if db_user:
+            conninfo['user'] = db_user
+        if db_password:
+            conninfo['passwd'] = db_password
+            
+        db = pg(**conninfo)
+
+    except psycopg2.OperationalError, e:
+        grass.fatal("Unable to connect to the database <%s>. %s" % (db_name, e))
+    
+    return db
+    
+def isAttributExist(db,schema,table,columns):
+        sql="SELECT EXISTS( SELECT * FROM information_schema.columns WHERE \
+         table_schema = '%s' AND \
+         table_name = '%s' AND\
+         column_name='%s');"%(schema,table,columns)       
+        return db.executeSql(sql,True,True)[0][0]  
+            
+def isTableExist(db,schema,table):
+    sql="SELECT EXISTS( SELECT * \
+         FROM information_schema.tables \
+         WHERE \
+         table_schema = '%s' AND \
+         table_name = '%s');"%(schema,table)
+    return db.executeSql(sql,True,True)[0][0]
+  
+    
+###########################
+##   baseline compute
+
+def getBaselSet(db,is_changed,method):
+    if is_changed and method:
+        print_message("error getBaselSet")
+        sys.exit()
+
+##return f or t depends on "Is a new user configuration or not?"        
+    if is_changed==True:
+        curr_precip_conf=''
+        new_precip_conf=''
+        try:
+                io0=open(os.path.join(path,"compute_precip_info"),"r")
+                curr_precip_conf=io0.readline()
+                io0.close()
+                io0.close()
+        except IOError:
+                pass 
+        compute=False
+        
+        if options['baseltime']:
+            bpath=options['baseltime']
+            try:
+                f=open(bpath,'r')
+                for line in f:
+                    new_precip_conf+=line.replace("\n","")
+                    
+                new_precip_conf+='|'+options['aw']
+            except:
+                pass
+
+        elif options['baselfile']:
+            new_precip_conf='fromfile|'+options['aw']
+        else:
+            new_precip_conf='quantile'+ options['quantile']+'|'+options['aw']
+            
+        if curr_precip_conf !=new_precip_conf:
+            return True
+        else:
+            return False
+##Return dictionary of key:linkid value: baseline        
+    if method== True:
+        if not options['baselfile'] and not options['baseltime']:
+            print_message('Computing baselines...')
+            computeBaselineFromQuentile(db)
+            links_dict=readBaselineFromText(os.path.join(path,'baseline'))
+        
+        elif options['baselfile']:
+            print_message('Computing baseline from file...')
+            links_dict=readBaselineFromText(options['baselfile'])
+            
+            try:
+                io1=open(os.path.join(path,"compute_precip_info"),"wr")
+                io1.write('fromfile|'+options['aw'])
+                io1.close
+            except IOError as (errno,strerror):
+                print "I/O error({0}): {1}".format(errno, strerror)
+        
+        else:
+            print_message('Computing baseline from selected time...')
+            computeBaselineFromTime(db)
+            links_dict=readBaselineFromText(os.path.join(path,'baseline'))
+   
+        return  links_dict  
+
+def computeBaselineFromTime(db):
+    ##@function for reading file of intervals or just one moments when dont raining.
+    ##@format of input file(with key interval):
+    ##  interval
+    ##  2013-09-10 04:00:00
+    ##  2013-09-11 04:00:00
+    ##
+    ##@just one moment or moments
+    ##  2013-09-11 04:00:00
+    ##  2013-09-11 04:00:00
+
+    bpath=options['baseltime']
+    interval=False
+    tmp=[]
+    mark=[]
+    st=''
+    try:
+            f=open(bpath,'r')
+##parse input file
+            for line in f:
+                #print_message(line)
+                st=st+line.replace("\n","")
+                if 'i' in line.split("\n")[0]:          #get baseline form interval
+                    
+                    fromt = f.next()
+                    #print_message(fromt)
+                    st+=fromt.replace("\n","")
+                    tot = f.next()
+                    #print_message(tot)
+                    st+=tot.replace("\n","")
+                    sql="select linkid, avg(a) from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
+                    resu=db.executeSql(sql,True,True)
+                    tmp.append(resu)
+                    
+                else:                       ##get baseline one moment
+                    time=datetime.strptime(line.split("\n")[0], "%Y-%m-%d %H:%M:%S")
+                    st+=str(time).replace("\n","")
+                    fromt = time + timedelta(seconds=-60)
+                    tot = time + timedelta(seconds=+60)
+                    sql="select linkid, avg(a) from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
+                    resu=db.executeSql(sql,True,True)
+                    #print_message(resu)
+                    tmp.append(resu)
+                    
+                    continue
+                '''
+                try:
+                    f.next()
+                except:
+                    pass
+                '''
+    except IOError as (errno,strerror):
+                    print "I/O error({0}): {1}".format(errno, strerror)
+            
+    mydict={}
+    mydict1={}
+    i=True
+## sum all baseline per every linkid from get baseline dataset(next step avg)
+    for dataset in tmp:
+        mydict = {int(rows[0]):float(rows[1]) for rows in dataset}
+        if i == True:
+            mydict1=mydict
+            i=False
+            continue
+        for link,a in dataset:
+            mydict1[link]+=mydict[link]
+            
+    length=len(tmp)
+    links=len(tmp[0])
+    i=0
+##compute avq(divide sum by num of datasets)
+    for dataset in tmp:
+        for link,a in dataset:
+            i+=1
+            mydict1[link]=mydict1[link]/length
+            if i==links:
+                break
+        break
+    
+##write  unique mark to file
+    try:
+            io1=open(os.path.join(path,"compute_precip_info"),"wr")
+            st=st+'|'+options['aw']
+            io1.write(st)
+            io1.close
+    except IOError as (errno,strerror):
+            print "I/O error({0}): {1}".format(errno, strerror)    
+    
+    
+    
+##write values to baseline file
+    writer = csv.writer(open(os.path.join(path,'baseline'), 'wr'))
+    for key, value in mydict1.items():
+        writer.writerow([key, value])
+       
+def computeBaselineFromQuentile(db):
+        quantile=options['quantile']
+        link_num=db.count("link")               
+        sql="SELECT linkid from link"
+        linksid=db.executeSql(sql,True,True)
+        tmp=[]
+         #for each link  compute baseline
+        for linkid in linksid:         
+            linkid=linkid[0]
+            sql="Select\
+            max(a) as maxAmount\
+            , avg(a) as avgAmount\
+            ,quartile\
+            FROM (SELECT a, ntile(%s) over (order by a) as quartile\
+            FROM record where linkid=%s ) x\
+            GROUP BY quartile\
+            ORDER BY quartile\
+            limit 1"%(quantile,linkid)
+            resu=db.executeSql(sql,True,True)[0][0]
+            tmp.append(str(linkid)+','+ str(resu)+'\n')
+
+        try:
+            io0=open(os.path.join(path,"baseline"),"wr")
+            io0.writelines(tmp)
+            io0.close()
+        except IOError as (errno,strerror):
+            print "I/O error({0}): {1}".format(errno, strerror)
+
+        try:
+            io1=open(os.path.join(path,"compute_precip_info"),"wr")
+            io1.write('quantile'+ quantile+'|'+options['aw'])
+            io1.close
+        except IOError as (errno,strerror):
+            print "I/O error({0}): {1}".format(errno, strerror)
+
+def readBaselineFromText(pathh):
+    with open(pathh, mode='r') as infile:
+        reader = csv.reader(infile,delimiter=',')
+        mydict = {float(rows[0]):float(rows[1]) for rows in reader}
+    return mydict
+    
+def readRaingaugesCsv():
+    rgpath=options['rgauges']
+    print_message(rgpath)
+    try:
+        with open(rgpath, 'rb') as f:
+            csv.register_dialect('mydial', delimiter=',',skipinitialspace=True)
+            reader = csv.reader(f, 'mydial')
+            try: 
+                for row in reader:
+                    print row
+                    #for val in row:        
+            except csv.Error as e:
+                sys.exit('file %s, line %d: %s' % (rgpath, reader.line_num, e))   
+                
+        f.close()
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+
+
+###########################
+##   GRASS work
+
+def grassWork():
+    #TODO
+    print_message("GRASS analysis")
+    database = options['database']
+    user = options['user']
+    password = options['password']
+    mapset=grass.gisenv()['MAPSET']
+    schema_name = options['schema']
+    
+    dbConnGrass(database,user,password)
+                
+    try:
+        io=open(os.path.join(path,"linkpointsname"),"r")
+        points=io.read()
+        io.close
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+         
+    points_schema=schema_name+'.'+points
+    points_ogr=points+"_ogr"
+    
+    dsn1="PG:dbname="+database+" user="+user
+    
+    print_message('v.in.ogr')
+    grass.run_command('v.in.ogr',
+                    dsn="PG:",
+                    layer = points_schema,
+                    output = points_ogr,
+                    overwrite=True,
+                    flags='t',
+                    type='point')
+    
+    points_nat=points + "_nat"
+   
+    # if vector already exits, remove dblink (original table)
+    if grass.find_file(points_nat, element='vector')['fullname']:
+        print_message('remove link to layer 1 and 2')
+        grass.run_command('v.db.connect',
+                          map=points_nat,
+                          flags='d',
+                          layer='1')
+        grass.run_command('v.db.connect',
+                          map=points_nat,
+                          flags='d',
+                          layer='2')
+        
+    print_message('v.category')
+    grass.run_command('v.category',
+                    input=points_ogr,
+                    output=points_nat,
+                    option="transfer",
+                    overwrite=True,
+                    layer="1,2")
+    
+    print_message('v.db.connect')
+    grass.run_command('v.db.connect',
+                    map=points_nat,
+                    table=points_schema,
+                    key='linkid',
+                    layer='2',
+                    quiet=True)
+    
+    if not flags['q']:
+        grass.run_command('g.region',
+                          vect='link',
+                          res='00:00:01')
+    #00:00:1
+    try:
+        with open(os.path.join(path,"timewindow"),'r') as f:            
+            for win in f.read().splitlines():
+                
+                win=schema_name + '.' + win
+                grass.run_command('v.db.connect',
+                                map=points_nat,
+                                table=win,
+                                key='linkid',
+                                layer='1',
+                                quiet=True)
+
+                if options['isettings']:
+                    precipInterpolationCustom(points_nat,win)
+                else:
+                    precipInterpolationDefault(points_nat,win)
+                
+
+                #remove connection to 2. layer
+                grass.run_command('v.db.connect',
+                                map=points_nat,
+                                layer='1',
+                                flags='d')
+              
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+        
+def precipInterpolationCustom(points_nat,win):
+    
+    itype=options['interpolation']
+    attribute_col='precip_mm_' + options['interval']
+    out=win + '_' + itype+'_custom'
+    istring=options['isettings']
+    eval(istring)
+    grass.run_command('r.colors',
+                        map=out,
+                        rules=options['color'])
+                        
+    #grass.run_command('v.surf.rst',input=points_nat,zcolumn = attribute_col,elevation=out, overwrite=True)
+    
+def precipInterpolationDefault(points_nat,win):
+    itype=options['interpolation']
+    attribute_col='precip_mm_' + options['interval']
+    out=win + '_' + itype
+    
+    if itype == 'rst':
+        grass.run_command('v.surf.rst',
+                          input=points_nat,
+                          zcolumn = attribute_col,
+                          elevation=out,
+                          overwrite=True)
+        
+    elif itype == 'bspline':
+         grass.run_command('v.surf.bspline',
+                           input=points_nat,
+                           column = attribute_col,
+                           raster_output=out,
+                           overwrite=True)
+    else:
+         grass.run_command('v.surf.idw',
+                           input=points_nat,
+                           column = attribute_col,
+                           output=out,
+                           overwrite=True)        
+
+    grass.run_command('r.colors',
+                        map=out,
+                        rules=options['color'])
+    
+###########################
+##   Precipitation compute
+
+def computePrecip(db):
+    print_message("Preparing database for computing precipitation...")
+    
+    schema_name = options['schema']
+    Awx=options['aw']
+    Aw=float(Awx)
+    
+##nuber of link and record in table link
+    xx=db.count("record")
+    link_num=db.count("link")
+##select values for computing
+    sql=" select time, a,lenght,polarization,frequency,linkid from %s order by recordid limit %d ; "%(record_tb_name, xx)
+    resu=db.executeSql(sql,True,True)
+    
+    sql="create table %s.%s ( linkid integer,time timestamp, precipitation real);"%(schema_name,comp_precip)
+    db.executeSql(sql,False,True)
+    
+#save name of result table for next run without compute precip
+    
+##optimalization of commits
+    db.setIsoLvl(0)
+
+    try:
+        io= open(os.path.join(path,"precip"),"wr")
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+    
+    recordid = 1
+    temp= []
+    print_message("Computing precipitation...")
+##choose baseline source (quantile, user values, )
+    links_dict=getBaselSet(db,False,True)
+
+
+##check if baseline from text is correct
+    if len(links_dict)<link_num:
+        print_message("Missing baseline or linkid in text file")
+        sys.exit()
+        
+    for record in resu:
+        #coef_a_k[alpha, k]
+        coef_a_k= computeAlphaK(record[4],record[3])
+        #read value from dictionary
+        baseline_decibel=(links_dict[record[5]])
+        #final precipiatation is R1    
+        Ar=fabs(record[1]- baseline_decibel - Aw)
+        if Ar > 0.0001:
+            #print_message(Ar)
+            #print_message(record[2])
+            
+            yr=Ar/(record[2]/1000  )
+            R1=(yr/coef_a_k[1])**(1/coef_a_k[0])
+        else: R1=0
+        #string for output flatfile
+        out=str(record[5])+"|"+str(record[0])+"|"+str(R1)+"\n"
+        temp.append(out)
+        recordid += 1
+        
+##write values to flat file
+    try:
+        io.writelines(temp)
+        io.close()
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+        
+    print_message("Writing precipitation to database...")
+    io1=open(os.path.join(path,"precip"),"r")
+    db.copyfrom(io1,"%s.%s"%(schema_name,comp_precip))
+    io1.close()
+    os.remove(os.path.join(path,"precip"))
+       
+def makeTimeWin(db):
+    
+    print_message("Creating time windows...")
+    #@function sumPrecip make db views for all timestamps
+    schema_name = options['schema']
+    
+    
+    sum_precip=options['interval']
+    if sum_precip=="minute":
+        tc=60
+        tcc=60
+    elif sum_precip=="hour" :
+        tc=1
+        tcc=3600
+    else:
+        tc=1/24
+        tcc=216000
+       
+##summing values per (->user)timestep interval
+    view_db="sum_"+randomWord(3)
+    sql="CREATE %s %s.%s as select\
+        linkid,round(avg(precipitation)::numeric,3) as precip_mm_%s, date_trunc('%s',time)\
+        as time FROM %s.%s GROUP BY linkid, date_trunc('%s',time)\
+        ORDER BY time"%(view_statement, schema_name, view_db  ,sum_precip ,sum_precip,schema_name,comp_precip ,sum_precip)    
+    data=db.executeSql(sql,False,True)
+    stamp=""
+    stamp1=""
+
+##remove ignored linkid    
+    if options['lignore']:
+        
+        lipath=options['lignore']
+        stamp=lipath
+        try:
+            with open(lipath,'r') as f:
+                for link in f.read().splitlines():
+                    sql="DELETE from %s.%s where linkid=%s "%(schema_name,view_db,link)
+                    db.executeSql(sql,False,True)
+                    
+        except IOError as (errno,strerror):
+                print "I/O error({0}): {1}".format(errno, strerror)
+                
+##remove records whit greater value then user set                
+    if options['maxp']:
+        stamp1=options['maxp']
+        sql="DELETE from %s.%s where precip_mm_%s>%s "%(schema_name,view_db,sum_precip,options['maxp'])
+        db.executeSql(sql,False,True)
+ 
+##num of rows 
+    record_num=db.count("%s.%s"%(schema_name,view_db))
+##set first and last timestamp
+
+    #get first timestamp
+    sql="select time from %s.%s limit 1"%(schema_name,view_db)
+    timestamp_min=db.executeSql(sql)[0][0]
+        
+    #get last timestep
+    sql="select time from  %s.%s offset %s"%(schema_name,view_db,record_num-1)
+    timestamp_max=db.executeSql(sql)[0][0]
+
+    #from_time=datetime.strptime('0001-01-01 00:00:00', "%Y-%m-%d %H:%M:%S")
+    #to_time=datetime.strptime('9999-01-01 00:00:00', "%Y-%m-%d %H:%M:%S")
+
+    if options['fromtime']:
+        from_time= datetime.strptime(options['fromtime'], "%Y-%m-%d %H:%M:%S")
+        if timestamp_min <from_time:
+            timestamp_min=from_time
+    if options['totime']:    
+        to_time=datetime.strptime(options['totime'], "%Y-%m-%d %H:%M:%S")
+        if timestamp_max > to_time: 
+            timestamp_max=to_time    
+    
+##save first and last timewindow to file. On first line file include time step "minute","hour"etc
+    try:
+        io1=open(os.path.join(path,"time_window_info"),"wr")
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+    io1.write(sum_precip+'|'+str(timestamp_min)+'|'+str(timestamp_max)+stamp+stamp1)
+    io1.close    
+        
+        
+##save names of timewindows 
+    try:
+        io2=open(os.path.join(path,"timewindow"),"wr")
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+        
+                
+    time_const=0    
+    i=0
+    temp=[]
+    cur_timestamp=timestamp_min
+##making timewindows from time interval
+
+    while str(cur_timestamp)!=str(timestamp_max):
+    #crate name of view
+        a=time.strftime("%Y_%m_%d_%H_%M", time.strptime(str(cur_timestamp), "%Y-%m-%d %H:%M:%S"))
+        view_name="%s%s"%(view,a)
+        vw=view_name+"\n"
+        temp.append(vw)
+    #create view
+        sql="CREATE table %s.%s as select * from %s.%s where time=(timestamp'%s'+ %s * interval '1 second')"%(schema_name,view_name,schema_name,view_db,timestamp_min,time_const)
+        data=db.executeSql(sql,False,True)
+    #compute cur_timestamp (need for loop)
+        sql="select (timestamp'%s')+ %s* interval '1 second'"%(cur_timestamp,tcc)
+        cur_timestamp=db.executeSql(sql)[0][0]
+    #go to next time interval
+        time_const+=tcc
+    
+##write values to flat file
+    try:
+        io2.writelines(temp)
+        io2.close()
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
+##drop temp table        
+    sql="drop table %s.%s"%(schema_name,view_db)
 
 def computeAlphaK(freq,polarization):
     """@RECOMMENDATION ITU-R P.838-3
@@ -751,323 +1153,11 @@ def computeAlphaK(freq,polarization):
     
         av=(av + ma_av * math.log10(freq) + ca_av)
         
-        return (av,kv)   
-
-def st(mes=True):
-    if mes:
-        global mesuretime
-        global restime
-        mesuretime= time.time()
-    else:
-        restime=time.time() - mesuretime
-        print "time is: ", restime
-
-def computePrecip(db):
-    print_message("Preparing database for computing precipitation...")
-    
-    schema_name = options['schema']
-    Awx=options['aw']
-    Aw=float(Awx)
-    
-##nuber of link and record in table link
-    xx=db.count("record")
-    link_num=db.count("link")
-##select values for computing
-    sql=" select time, a,lenght,polarization,frequency,linkid from %s order by recordid limit %d ; "%(record_tb_name, xx)
-    resu=db.executeSql(sql,True,True)
-    
-    sql="create table %s.%s ( linkid integer,time timestamp, precipitation real);"%(schema_name,comp_precip)
-    db.executeSql(sql,False,True)
-    
-#save name of result table for next run without compute precip
-    
-##optimalization of commits
-    db.setIsoLvl(0)
-
-    try:
-        io= open(os.path.join(path,"precip"),"wr")
-    except IOError as (errno,strerror):
-        print "I/O error({0}): {1}".format(errno, strerror)
-    
-    recordid = 1
-    temp= []
-    print_message("Computing precipitation...")
-
-    mydict={}
-    if not options['baselfile']:
-        print_message('Computing baselines...')
-        computeBaseline(db)
-        links_dict=readBaselineFromText(os.path.join(path,'baseline'))
-    else:
-        print_message('Read baseline from file...')
-        links_dict=readBaselineFromText(options['baselfile'])
-        try:
-            io1=open(os.path.join(path,"compute_precip_info"),"wr")
-            io1.write('fromfile|'+options['aw'])
-            io1.close
-        except IOError as (errno,strerror):
-            print "I/O error({0}): {1}".format(errno, strerror)
-
-##check if baseline from text is correct
-    if len(links_dict)<link_num:
-        print_message("Missing baseline or linkid in text file")
-        sys.exit()
-        
-    for record in resu:
-        #coef_a_k[alpha, k]
-        coef_a_k= computeAlphaK(record[4],record[3])
-        #read value from dictionary
-        baseline_decibel=(links_dict[record[5]])
-        #final precipiatation is R1    
-        Ar=record[1]- baseline_decibel - Aw
-        if Ar > 0.0001:
-            #print_message(Ar)
-            #print_message(record[2])
-            
-            yr=Ar/(record[2]/1000  )
-            R1=(yr/coef_a_k[1])**(1/coef_a_k[0])
-        else: R1=0
-        #string for output flatfile
-        out=str(record[5])+"|"+str(record[0])+"|"+str(R1)+"\n"
-        temp.append(out)
-        recordid += 1
-        
-##write values to flat file
-    try:
-        io.writelines(temp)
-        io.close()
-    except IOError as (errno,strerror):
-        print "I/O error({0}): {1}".format(errno, strerror)
-        
-    print_message("Writing precipitation to database...")
-    io1=open(os.path.join(path,"precip"),"r")
-    db.copyfrom(io1,"%s.%s"%(schema_name,comp_precip))
-    io1.close()
-    os.remove(os.path.join(path,"precip"))
-       
-def makeTimeWin(db):
-    
-    print_message("Creating time windows...")
-    #@function sumPrecip make db views for all timestamps
-    from_time=''
-    to_time=''
-    schema_name = options['schema']
-    if options['fromtime']:
-        from_time= datetime.strptime(options['fromtime'], "%Y-%m-%d %H:%M:%S")
-    if options['totime']:    
-        to_time=datetime.strptime(options['totime'], "%Y-%m-%d %H:%M:%S")
+        return (av,kv)
     
     
-    sum_precip=options['interval']
-    if sum_precip=="minute":
-        tc=60
-        tcc=60
-    elif sum_precip=="hour" :
-        tc=1
-        tcc=3600
-    else:
-        tc=1/24
-        tcc=216000
-       
-##summing values per (->user)timestep interval
-    view_db="sum_"+randomWord(3)
-    sql="CREATE %s %s.%s as select\
-        linkid,round(avg(precipitation)::numeric,3) as precip_mm_%s, date_trunc('%s',time)\
-        as time FROM %s.%s GROUP BY linkid, date_trunc('%s',time)\
-        ORDER BY time"%(view_statement, schema_name, view_db  ,sum_precip ,sum_precip,schema_name,comp_precip ,sum_precip)    
-    data=db.executeSql(sql,False,True)
-    stamp=""
-    stamp1=""
-
-##remove ignored linkid    
-    if options['lignore']:
-        
-        lipath=options['lignore']
-        stamp=lipath
-        try:
-            with open(lipath,'r') as f:
-                for link in f.read().splitlines():
-                    sql="DELETE from %s.%s where linkid=%s "%(schema_name,view_db,link)
-                    db.executeSql(sql,False,True)
-                    
-        except IOError as (errno,strerror):
-                print "I/O error({0}): {1}".format(errno, strerror)
-                
-##remove records whit greater value then user set                
-    if options['maxp']:
-        stamp1=options['maxp']
-        sql="DELETE from %s.%s where precip_mm_%s>%s "%(schema_name,view_db,sum_precip,options['maxp'])
-        db.executeSql(sql,False,True)
- 
-##num of rows 
-    record_num=db.count("%s.%s"%(schema_name,view_db))
-##set first and last timestamp
-    #get first timestamp
-    sql="select time from %s.%s limit 1"%(schema_name,view_db)
-    timestamp_min=db.executeSql(sql)[0][0]
-        
-    #get last timestep
-    sql="select time from  %s.%s offset %s"%(schema_name,view_db,record_num-1)
-    timestamp_max=db.executeSql(sql)[0][0]
-    
-##check if user set timestamps from correct time interval    
-    if options['fromtime']:        
-        if timestamp_min <from_time:
-            timestamp_min=from_time
-    if options['totime']:       
-        if timestamp_max > to_time: 
-            timestamp_max=to_time
-
-
-##save first and last timewindow to file. On first line file include time step "minute","hour"etc
-    try:
-        io1=open(os.path.join(path,"time_window_info"),"wr")
-    except IOError as (errno,strerror):
-        print "I/O error({0}): {1}".format(errno, strerror)
-    io1.write(sum_precip+'|'+str(timestamp_min)+'|'+str(timestamp_max)+stamp+stamp1)
-    io1.close    
-        
-        
-##save names of timewindows 
-    try:
-        io2=open(os.path.join(path,"timewindow"),"wr")
-    except IOError as (errno,strerror):
-        print "I/O error({0}): {1}".format(errno, strerror)
-        
-                
-    time_const=0    
-    i=0
-    temp=[]
-    cur_timestamp=timestamp_min
-    
-##making timewindows from time interval    
-    while str(cur_timestamp)!=str(timestamp_max):
-        
-    #crate name of view
-        a=time.strftime("%Y_%m_%d_%H_%M", time.strptime(str(cur_timestamp), "%Y-%m-%d %H:%M:%S"))
-        view_name="%s%s"%(view,a)
-        vw=view_name+"\n"
-        temp.append(vw)
-
-    #create view
-        sql="CREATE table %s.%s as select * from %s.%s where time=(time'%s'+ %s * interval '1 second')"%(schema_name,view_name,schema_name,view_db,timestamp_min,time_const)
-        data=db.executeSql(sql,False,True)
-
-    #compute cur_timestamp (need for loop)
-        sql="select (time'%s')+ %s* interval '1 second'"%(cur_timestamp,tcc)
-        cur_timestamp=db.executeSql(sql)[0][0]
-    #go to next time interval
-        time_const+=tcc
-    
-##write values to flat file
-    try:
-        io2.writelines(temp)
-        io2.close()
-    except IOError as (errno,strerror):
-        print "I/O error({0}): {1}".format(errno, strerror)
-##drop temp table        
-    sql="drop table %s.%s"%(schema_name,view_db)
-
-def grassWork():
-    #TODO
-    print_message("GRASS analysis")
-    database = options['database']
-    user = options['user']
-    password = options['password']
-    mapset=grass.gisenv()['MAPSET']
-    schema_name = options['schema']
-    
-    dbConnGrass(database,user,password)
-                
-    try:
-        io=open(os.path.join(path,"linkpointsname"),"r")
-        points=io.read()
-        io.close
-    except IOError as (errno,strerror):
-        print "I/O error({0}): {1}".format(errno, strerror)
-         
-    points_schema=schema_name+'.'+points
-    points_ogr=points+"_ogr"
-    
-    dsn1="PG:dbname="+database+" user="+user
-    
-    print_message('v.in.ogr')
-    grass.run_command('v.in.ogr',
-                    dsn="PG:",
-                    layer = points_schema,
-                    output = points_ogr,
-                    overwrite=True,
-                    flags='t',
-                    type='point')
-    
-    points_nat=points + "_nat"
-   
-    # if vector already exits, remove dblink (original table)
-    if grass.find_file(points_nat, element='vector')['fullname']:
-        print_message('remove link to layer 1 and 2')
-        grass.run_command('v.db.connect',
-                          map=points_nat,
-                          flags='d',
-                          layer='1')
-        grass.run_command('v.db.connect',
-                          map=points_nat,
-                          flags='d',
-                          layer='2')
-        
-    print_message('v.category')
-    grass.run_command('v.category',
-                    input=points_ogr,
-                    output=points_nat,
-                    option="transfer",
-                    overwrite=True,
-                    layer="1,2")
-    
-    print_message('v.db.connect')
-    grass.run_command('v.db.connect',
-                    map=points_nat,
-                    table=points_schema,
-                    key='linkid',
-                    layer='2',
-                    quiet=True)
-    
-    if not flags['q']:
-        grass.run_command('g.region',
-                          vect=points_ogr,
-                          n='n+00:00:01',
-                          s='s+00:00:01',
-                          e='e+00:00:01',
-                          w='w+00:00:01',
-                          res='00:00:01')
-    
-    try:
-        with open(os.path.join(path,"timewindow"),'r') as f:            
-            for win in f.read().splitlines():
-                
-                win=schema_name + '.' + win
-                grass.run_command('v.db.connect',
-                                map=points_nat,
-                                table=win,
-                                key='linkid',
-                                layer='1',
-                                quiet=True)
-
-                if options['isettings']:
-                    precipInterpolationCustom(points_nat,win)
-                else:
-                    precipInterpolationDefault(points_nat,win)
-                    
-                #remove connection to 2. layer
-                grass.run_command('v.db.connect',
-                                map=points_nat,
-                                layer='1',
-                                flags='d')
-              
-    except IOError as (errno,strerror):
-        print "I/O error({0}): {1}".format(errno, strerror)
-        
-###########################################################################
-############################ main #########################################
-##########################################################################
+###########################
+##   main
 
 def main():
         print_message("Module is running...")
@@ -1083,18 +1173,11 @@ def main():
 ##connect to database by python lib psycopg
         db=dbConnPy()
         
-        setBaselineFromTime(db)
-        sys.exit()
 #check database if is prepare
         if not isAttributExist(db,'public','link','geom'):
             firstRun(db)
             
-#read rain gagues file             
-        if options['rgauges']:
-            sys.exit()
-            readRaingaugesCsv()
-            
-            
+
 ##print first and last timestamp
         if flags['p']:
             sql="create view tt as select time from %s order by time"%record_tb_name
@@ -1113,48 +1196,17 @@ def main():
             db.executeSql(sql,False,True)
             sys.exit()
         
-##drop working schema
+##drop working schema and remove temp folder
         if flags['r']:
             sql="drop schema IF EXISTS %s CASCADE" % schema_name
             db.executeSql(sql,False,True)
-            print_message("Schema removed")
-            sys.exit()
-            
-##remove temp folder
-        if flags['t']:
             shutil.rmtree(path)
-            print_message("Folder removed")
+            print_message("Folder and schema removed")
             sys.exit()
-        
+
 ##compute precipitation
-        curr_precip_config="null"        
-        try:
-            io0=open(os.path.join(path,"compute_precip_info"),"r")
-            try:
-                curr_precip_config=io0.readline()
-                io0.close() 
-            finally:
-                    io0.close()
-        except IOError:
-                pass
-            
-        quantil='quantile'+ options['quantile']+'|'+options['aw']
-        new_precip_config='fromfile|'+options['aw']
-        
-        compute=False
-        if (curr_precip_config!=new_precip_config) and  options['baselfile']:
-            compute=True
-            print_message('1')
-        if not (isTableExist(db,schema_name,comp_precip)):
-            compute=True
-            print_message('2')
-        if  quantil!=curr_precip_config and not options['baselfile']:
-            compute=True
-            print_message(quantil)
-            print_message(new_precip_config)
-            print_message('3')
-   
-        if compute:  
+
+        if getBaselSet(db,True,False): 
             sql="drop schema IF EXISTS %s CASCADE" % schema_name
             shutil.rmtree(path)
             os.makedirs(path)
@@ -1162,7 +1214,7 @@ def main():
             sql="CREATE SCHEMA %s"% schema_name
             db.executeSql(sql,False,True)
             computePrecip(db)
- 
+            
 ##make time windows
         curr_timewindow_config="null"
         try:
@@ -1174,7 +1226,8 @@ def main():
 
         #compare current and new settings   
         new_timewindow_config=options['interval']+'|'+options['fromtime']+'|'+options['totime']+options['lignore']+options['maxp']
-        if curr_timewindow_config!=new_timewindow_config:
+        
+        if curr_timewindow_config!=new_timewindow_config or not (options['interval'] or options['fromtime'] or options['totime'] or options['lignore'] or options['maxp']):
             intervals = options['interval'].split(',')
             if ',' in str(options['interval']):
                 grass.fatal('You can choose only one method (minute, hour, day)')
@@ -1191,7 +1244,7 @@ def main():
         step=options['step'] #interpolation step per meters
         step=float(step)
         new_table_name="linkpoints"+str(step).replace('.0','')
-        curr_table_name='null'
+        curr_table_name=''
         try:
             io2=open(os.path.join(path,"linkpointsname"),"r")
             curr_table_name=io2.readline()
