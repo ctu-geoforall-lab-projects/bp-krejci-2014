@@ -16,7 +16,7 @@
 \MakePerPage{footnote} %the perpage package command
 \usepackage{amsmath}
 \usepackage{hyperref}
-
+\usepackage{acronym}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % pro podmineny preklad
 % false je defaultně
@@ -158,27 +158,27 @@ Enviromentální modelování se v posledních době rozšířilo ve velkém mě
 
 Modelování dešťových srážek je jednou z velkých disciplín z oboru enviromentálního modelování. Když se poohlédneme do první poloviny 19. století, tak právě meteorologie byla jednou z prvních disciplín, která definovala pojem enviromentální modelování, tak jak ho chápeme nyní. Modelování srážek na zemském povrchu se s vývojem klimatu stává v poslední době důležitým úkolem. Oproti rozvoji fyzikálně numerických modelů a to především díky stále se zvyšujícím výpočetním výkonům počítače, nebyl technologické pokrok ve sběru srážkových dat v posledních desetiletích takřka zaznamenán. Pracovníky meteorologických a hydrologických ústavů ve vývoji brzdí nedostatečně přesná a neaktuální srážková data, která jsou jedním z hlavních vstupu pro další modely. Studie z posledních let poukazují na možnost využití mikrovlnných(MV) spojů vysílačů telekomunikačních operátorů ke sběru srážkových dat. Tento zdroj je levnější a přesnější než sběr pomocí radaru.\cite{radar_meterology} Největší potenciál sběru přesných srážkových dat v reálném čase je ve vylepšení městských odtokových modelů. Pro efektivitu těchto modelů je sběr dat dostatečném rozlišení a v reálném čase nutností.
 
-Hlavním cílem této práce je vyvinutí nástroje pro zpracování hrubých dat z MV vysílačů v prostředí GIS, čímž se zpřístupní nespočet dalších analýz pro vývoj tohoto poměrně mladého výzkumu. Téma práce bylo založeno na požadavcích zpracovatele projektu, který se zabývá problematikou odhadu srážek z MV zdrojů v rámci projektu TeleMAS v souvislosti s modelováním srážko-odtokových procesů v městských povodích. Tento projekt je řešen v úzké vědecké spolupráci s ETH-Eawag a odborné spolupráci se společnostmi T-Mobile a Veolia ČR a nyní nově s Ericsson Research (Sweden).  
+Hlavním cílem této práce je vyvinutí nástroje pro zpracování hrubých dat z MV vysílačů v prostředí GIS, čímž se zpřístupní nespočet dalších analýz pro vývoj tohoto poměrně mladého výzkumu. Téma práce bylo založeno na požadavcích zpracovatele projektu, který se zabývá problematikou odhadu srážek z MV zdrojů v rámci projektu TeleMAS v souvislosti s modelováním srážko-odtokových procesů v městských povodích. Jehož projekt je řešen v úzké vědecké spolupráci s ETH-Eawag a odborné spolupráci se společnostmi T-Mobile a Veolia ČR a nyní nově s Ericsson Research (Sweden).  
 
  
 
 
 
 
-\newpage
+
 \section{Měření dešťových srážek}
-První část této kapitola má za cíl přiblížit čtenáři současné metody měření dešťových srážek. Liší se především v přesnostech, časové ?variabilitě? a vhodností výstupu pro další využití. Tento úvod do problematiky měření srážek by měl napomoct k lepšímu pochopení výhod či nevýhod metody odhadu srážek pomocí MV, která bude v druhé části kapitoly představena a s těmito metodami porovnána. Nejdříve se ale podíváme trochu do historie.
+První část této kapitola má za cíl přiblížit čtenáři současné metody měření dešťových srážek. Liší se především v přesnostech, časové ?variabilitě? a vhodností výstupu pro další využití. Tento úvod do problematiky měření srážek by měl napomoct k lepšímu pochopení výhod či nevýhod metody odhadu srážek pomocí MV, která bude v druhé části kapitoly představena a s těmito metodami porovnána. Nejdříve se ale podíváme do historie.
 \subsection{Historie stručně}
-Podíváme-li se do historie a opomeneme nejasné zmínky měření srážek z období 100 n.l. v Palestině, dostaneme se k přelomu 14-15. století na území Korei za vlády krále Sejong.\cite{sejong} První náznak vynalezení srážkoměru vzniklo z rozhodnutí, že místo výkopů v pudě pro kontrolu vlhkosti, bude efektivnější mít standardizovaný nástroj na měření deště. Oproti neznámým metodám měření se alespoň dochovaly zmínky o rozměrech a tvaru srážkoměru. Hlavním účelem měření bylo efektnější rozhodování panovníka při určování výše daní z obdělávaných polí farmářů. S dalším mezníkem v historii vývoje srážkoměrů měl co do činění angličan Sir Christopher Wren v letech 1661.\cite{wren} Vynalezl srážkoměr, který fungoval na principu vážení kapaliny, čímž se velmi podobal současným standardům(jeden gram vody je ekvivalentem ke krychlovému centimetru objemu vody). První měření srážek v metrických jednotkách učinil pan Benjamin Franklin. Bylo tomu v letech 1790, kdy byl poprvé metrický systém definován a stejný rok se stal i panu Frenklin osudný. Od té doby se principiálně srážkoměry nemění. Samozřejmostí je, že se v průběhu staletí dochází k jejich  zpřesňování přesnosti měření, standardizaci a v posledních desetiletích především k automatizaci.
+Podíváme-li se do historie a opomeneme nejasné zmínky měření srážek z období 100 n.l. v Palestině, dostaneme se k přelomu 14-15. století na území Korei za vlády krále Sejong.\cite{sejong} První náznak vynalezení srážkoměru vzniklo z rozhodnutí, že místo výkopů v pudě pro kontrolu vlhkosti, bude efektivnější mít standardizovaný nástroj na měření deště. Oproti neznámým metodám měření se alespoň dochovaly zmínky o rozměrech a tvaru srážkoměru. Hlavním účelem měření bylo efektnější rozhodování panovníka při určování výše daní z obdělávaných polí farmářů. S dalším mezníkem v historii vývoje srážkoměrů měl co do činění angličan Sir Christopher Wren v letech 1661.\cite{wren} Vynalezl srážkoměr, který fungoval na principu vážení kapaliny, čímž se velmi podobal současným standardům(jeden gram vody je ekvivalentem ke krychlovému centimetru objemu vody). První měření srážek v metrických jednotkách učinil pan Benjamin Franklin. Bylo tomu v letech 1790, kdy byl poprvé metrický systém definován a stejný rok se stal i panu Frenklin osudným. Od té doby se principiálně srážkoměry nemění. Samozřejmostí je, že se v průběhu staletí dochází k jejich  zpřesňování přesnosti měření, standardizaci a v posledních desetiletích především k automatizaci.
 
 Mezníkem ve sběru srážkových dat se bezesporu stal radar. Jak již bylo zmíněné, že nic nevzniká bez vyšší motivace, v tomto případě to byl vojenský konflikt. Při druhé světové válce byl do provozu uveden první experimentální radar, který sloužil k metrologickému pozorování. Přesněji tomu bylo roku 1930 v USA. \cite{flash_floods} Roku 1959 následovalo první vytvoření radarové sítě WRS-57 v USA. Postupem času se poté rozšíří metoda odhadu srážek radarem zcela globálně. 
 
-%Nástup satelitních družic se datuje v šedesátých letech 19. století. Logickou návazností na první satelitní družice vzniká %obor, který dnes známe pod pojmem dálkový průzkum země(DPZ). Jedná se o zcela nový obor 20. století vyplývající z %technologického pokroku. Oproti výše zmíněným metodám není DPZ striktně zaměřen pouze pro hydrometeorologické účely. %Jednotlivé družice jsou svým vybavením určeny pro měření různých veličin a jevů. V této kapitole se dále budeme soustředit %především na družice metrologické. Je zde důležité zmínit historicky první meteo družici Vanguard 2 z let 17. února %1959\cite{vanguard} a o mnoho úspěšnější družici 1. dubna 1960 s označením TIROS-1.
+Nástup satelitních družic se datuje v šedesátých letech 19. století. Logickou návazností na první satelitní družice vzniká obor, který dnes známe pod pojmem dálkový průzkum země(DPZ). Jedná se o zcela nový obor 20. století vyplývající z technologického pokroku. Oproti výše zmíněným metodám není DPZ zaměřen pouze pro hydrometeorologické účely. Jednotlivé družice jsou svým vybavením určeny pro měření různých veličin a jevů. Mezi historicky první meteo družice patří Vanguard 2 z let 17. února 1959\cite{vanguard} a o mnoho úspěšnější pak 1. dubna 1960 družice TIROS-1. 
      
 
 
 
-\subsection{Současné nástroje na měření a odhad srážek}
+\subsection{Současné nástroje a metody }
 
 \paragraph*{Dešťové srážky}jsou definovány jako kondenzace vodní páry v kapalném nebo pevném stavu, které padají z oblohy či kondenzují přímo na zemském povrchu. Srážky mohou mít formu sněhových vloček- pevné skupenství, nebo formu dešťových kapek- kapalné skupenství. Množství srážek bývá udáváno v milimetrech kapalné vody spadlé na zemský povrch.\cite{wmo}
 
@@ -222,14 +222,14 @@ Srážkoměr je přístroj používaný v meteorologii a hydrologii k měření 
 \subsubsection*{Chyby při měření srážkoměrem} 
 Měření srážek srážkoměry jsou ovlivněny mnoha faktory, které určují konečnou přesnost a spolehlivost tohoto typu měření.
 \begin{description} 
-\item[Přístrojové chyby] se přesněji odvíjejí od jednotlivých zařízení. Přesnost u Ombrografů se pohybuje okolo 0.2 mm do  úhrnu srážek 20 mm za hodinu. Člunkové srážkoměry mají chybu měření 0.5 mm pro úhrn 20mm  srážek za hodinu. Chyby se zvyšují s výšší intenzitou srážek. Při srážkách 150 mm za  hodinu je chyba větší než 3\%. \cite{wmo}
+\item[Přístrojové chyby] se přesněji odvíjejí od jednotlivých zařízení. Přesnost u ombrografů se pohybuje okolo 0.2 mm do  úhrnu srážek 20 mm za hodinu. Člunkové srážkoměry mají chybu měření 0.5 mm pro úhrn 20mm  srážek za hodinu. Chyby se zvyšují s výšší intenzitou srážek. Při srážkách 150 mm za  hodinu je chyba větší než 3\%. \cite{wmo}
 \item[Proudění vzduchu] je jedním z nejvíce nežádoucích vlivů, které nejvýznamněji ovlivňují přesnost měření. Zamezení tomuto vlivu je velice obtížné zabránit. V nejlepším případech by mělo být ve vodorovné poloze. Z toho plynou nároky na umístění přístroje. Minimalizovat nežádoucí proudění větru se řeší pomocí několika pravidel: umístění mimo strmá území a zastavěné lokality. Umístění zařízení co nejníže k zemi. Umístění na trávník k zabránění vstupu odrážejících se kapek. 
 \item[Chyby ze smáčení] jsou způsobeny nedostatečné hydrofobním povrchem nádob a v případě srážkoměru s člunky v neúplném vylití kapaliny při vyprazdňování. Dalším faktorem jsou přírodní vlivy, především zachycování nečistot, prachu, pavučin a dalších materiálů absorbující kapalinu. Z toho se tvoří zbytkové vody, které tvoří další chyby. 
 \item[Chyby z odpařování] mají vyhřívané člunkové srážkoměry. Jsou způsobeny vypařováním vody s člunku což při malých srážkových úhrnech způsobuje značné chyby.
 \item[Sklápění člunku] je hlavním problémem člunkových srážkoměru. Při velkých deštích vstupuje do voda do trychtýře i když je člunek ve stavu vylévání. To způsobuje odvádění vody která nebyla změřena. 
 
 \end{description}
-\newpage
+
 \subsubsection{Meteorologický radar}
 Radarová měření díky plošnému pokrytí a dobrému prostorovému i časovému rozlišení dat jsou vhodné pro synoptickou a leteckou meteorologii. Poskytují přehled v reálném čase o pohybu a struktuře srážkových systémů, umožňují velmi krátkodobou předpověď v řádech minut až hodin a z níž plynoucí varování před nebezpečnými meteorologickými jevy.\cite{radar_chmu}
 \paragraph*{Princip}
@@ -239,13 +239,15 @@ Pro meteorologické účely se využívá především dlouhých vlnových déle
 \paragraph*{Srážková data}se měří obvykle v intervalu 5-15 minut. Horizontální rozlišení dat bývá 2×2 km, vertikální 1 km. Toto prostorové rozlišení je nutné, aby bylo možné zachytit jednotlivá srážková jádra přeháněk. Radarové odrazy jsou interpretovány plošně a jsou zobrazovány v barevné stupnici intenzit srážek.
 \paragraph*{Rozsah} meteorologického radaru bývá okolo 250 km. Hodnoty naměřené radarem mohou být použity pro odhad okamžitých intenzit srážek do vzdálenosti přibližně 150 km od radaru.\cite{kohout}
 \subsubsection*{Chyby radarových snímků}
+Nejlepší odhad srážek pomocí radiolokátoru by byl získán v případě měření odrazivostí blízko nad Zemí, jelikož právě tyto částice nejlépe reprezentují srážky dopadající na povrch. Tento způsob reálně není úplně možný, jelikož tento odhad je komplikován řadou pozemních cílů, zakřivením země a z toho plynoucí neviditelnost spodních částí atmosféry a v neposlední řadě terénními překážkami.
 \begin{description}
-\item[Nemeteorologické objekty] které představují nejčastěji letadla. Ty způsobují na snímcích radaru izolované body ve větších výškách.
+
+\item[Nemeteorologické objekty] na radarových snících jsou zaznamenávány a ruší přesnost výsledného snímku radaru.. Nejčastěji jsou tyto chyby způsobovány letadly či jinými vzdušnými prostředky. Na snímcích radaru se tyto vlivy zobrazují jakožto  izolované body ve větších výškách.
 
 \item[Ostře ohraničené buňky] jsou důsledkem nestabilitou a vlastním šumem radaru. Tato chyba tvoří občasné jednotlivé pixely s malou odrazivostí, případně soustředěné do tvaru paprsku.
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.5\textwidth]{./img/srazky/0612032030-gif.png}
+    \includegraphics[width=0.6\textwidth]{./img/srazky/0612032030-gif.png}
     \caption[Ostře ohraničené buňky]{\centering Příklad ostře ohraničených buněk  \footnotemark}
     %\label{fig:Srazky}
 \end{figure}
@@ -255,7 +257,7 @@ Pro meteorologické účely se využívá především dlouhých vlnových déle
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.5\textwidth]{./img/srazky/0706181530-gif.png}
+    \includegraphics[width=0.6\textwidth]{./img/srazky/0706181530-gif.png}
     \caption[Rušení radaru]{\centering Příklad rušení radaru radiálními paprsky \footnotemark }
    %\label{fig:Srazky}
 \end{figure}
@@ -263,14 +265,31 @@ Pro meteorologické účely se využívá především dlouhých vlnových déle
 
 
 \footnotetext{\url{http://www.meteoradar.cz/obr/0706181530.gif}}
-
-
 \end{description}
 
 
-%\subsubsection{Satelitní družice}
+\subsubsection{Dálkový průzkum země}
+Je důležité zmínit možnost získávání informací o srážkách pomocí \ac{DPZ}. Tento obor z hlediska meteorologie zaujímá zcela jiný náhled na měření srážek oproti předchozím metodám. \acs{DPZ} v meteorologii umožňuje globální pohled na  meteorologické jevy. Makro náhled na enviromentální jevy např. cyklóny, tropické bouře, tornáda či pohyb mraků je podstatný pro sledování a pochopení globálního vývoje klimatu. Do této kategorie spadá pozorování pomocí  družic na oběžných drahách a leteckých prostředků pohybujících se v zemské atmosféře. Družice se dále dělí podle typu drah na polární a geostacionární které jsou se pohybují nad stejným místem na zemi. Tyto satelity jsou umístěny nad rovníkem ve vzdálenostech okolo 36,000 km a pořizují snímky z dané hemisféry zeměkoule. Polární družice  se pohybují na orbitách přes severní a jižní pól. Rotace země těmto družicím umožňuje snímat jakékoliv místo na planetě zemi. Výhoda těchto družic oproti geostacionárním spočívá v bližší oběžné dráze obvykle okolo 870 km nad povrchem a z toho plynoucí lepší rozlišení snímků. 
+Meteorologické satelitní družice disponují různými druhy senzorů, které je dělí do kategorii podle měření různých meteorologických jevů např. teplota, srážky, mraky, radiace, sněhovou pokrývku atd. Měření se především liší  využitím různých kanálů, které pracují na rozdílných  vlnových délkách elektromagnetického spektra.
+ 
+\paragraph*{Princip} pozorování je založen na radiometrickém měření různých vlnových délek ve krátkých časových intervalech pomocí zrcadel umístěných na družicích, které skenují daný region a odesílají digitální data zpět na na zemi.
+\paragraph*{Elektromagnetické spektrum} se v meteorologii typicky využívá ve vlnových délkách spadajících do  viditelného a infračerveného spektra. Satelitní snímky v oblasti meteorologie se dělí na snímky viditelného spektra, infračerveného spektra a z hlediska určování srážek nejpodstatnější snímky zprostředkované kanály absorbující primárně vodní páry.
+
+\paragraph*{Satelitní snímky} v oblasti meteorologie se dělí na snímky viditelného spektra, infračerveného spektra a  snímky pobízené kanály absorbující vodní páry. 
+\begin{description}
+\item[IR odhady srážek] Odrazivost infračerveného spektra je velmi vhodná pro odhad srážek z mraků, které jsou chladnější a vyskytují se ve vyšších výškách. Tento fakt je výhodný, jelikož vrcholky mraků korelují s vyšším výskytem srážek. Pro přesnější odhad srážek se prostorově v různých časových okamžicích průměrují \acs{IR} teploty [k], které  se poté porovnávají s měřením srážek čímž se docílí vyšší korelace se skutečnými srážkami.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{./img/srazky/electrom.png}
+    \caption[Rušení radaru]{\centering Schématické znázornění útlumu MV dešťovými srážkami  \footnotemark }
+    \label{fig:spektr}
+ \end{figure}   
+\footnotetext{\url{http://www.goes-r.gov/users/comet/tropical/textbook_2nd_edition/media/graphics/emspect.gif}} 
 
 
+\item[Mikrovlnné kanály] využívané pro odhad srážek se pohybují ve vlnových délek v jednotkách [GHz]. Některé kanály jsou umístěny v oknech vlnových délek, kde atmosférické plyny absorbují velmi málo záření. Tato okna vlnových délek umožňují prohlédnutí přes mraky až na zemský povrch. Jejich doplňkem jsou naopak okna~\ref{fig:spektr}, jejichž vlnové délky silně absorbují srážky. Ty je výhodně k odhadu srážkových úhrnů. Odhad srážek pomocí mikrovln je nejpřesnější nad oceány, kde odrazivost pozadí srážek je rovnoměrná. Nad pevninami je odrazivost variabilní a tím se zhoršuje přesnost odhadu srážek. Rozlišení satelitních snímků  pořízených na frekvencích mikrovln se typicky pohybuje okolo 5x6 [km] 
+\end{description}
 
 
 \subsection{Mikrovlnné spoje}
@@ -282,16 +301,17 @@ k hustotě sítě MV spojů (např. v Praze řádově stovky až tisíce) jde o 
 informace, který má velký potenciál zlepšit prostorovou informaci o srážkových intenzitách. Využití 
 standardních GIS nástrojů může výrazně zefektivnit jak zpracování dat, tak jejich následnou správu. 
 Vhodná vizualizace těchto dat je důležitým předpokladem pro vylepšení stávajících modelů pro 
-převod útlumu signálu MV spojů na srážkové intenzity i pro další využití těchto dat. 
+převod útlumu signálu MV spojů na srážkové intenzity i pro další využití těchto dat.
+ 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.6\textwidth]{./img/srazky/microwave_link.png}
-    \caption[Rušení radaru]{\centering Schématické znázornění útlumu MV dešťovými srážkami  \footnotemark }
+    \includegraphics[width=0.9\textwidth]{./img/srazky/microwave_link.png}
+    \caption[Rušení radaru]{\centering Absorbce elektromagnetického spektra atmosférickými plyny  \footnotemark }
  \end{figure}   
-\footnotetext{\url{http://lte.epfl.ch/files/content/sites/lte/files/Research/microwave_link.png}}
+\footnotetext{\url{http://www.goes-r.gov/users/comet/tropical/textbook_2nd_edition/media/graphics/emspect.gif}}
     
 \subsubsection{Princip}
-Mikrovlny jsou elektromagnetické vlny o délce v rozpětí  od 1 [mm] do 1 [m]. Tomu odpovídá frekvence 0.3  až 300 [GHz]. V oblasti telekomunikací především mobilních operátorů se tohoto typu vln využívá ke komunikaci mezi jednotlivými vysílači a vysílači s mobilními telefony. Pro rekonstrukci srážek se využívá prvního případu, tedy komunikaci mezi vysílači. Tyto mikrovlnné spoje pracují na frekvencích v rozsahu 24-39 [GHz] (Praha). Hlavním zdrojem útlumu tohoto frekvenčního rozsahu jsou dešťové kapky. Jednotlivé spoje se vždy skládají ze dvou vysílačů. Vysílač neustále odesílá MV vlny, které jsou nositelem informace zajímavé především pro telekomunikace. Vedlejším produktem této komunikace je údaj o intenzitě signálu, jehož základní jednotkou je decibel [dB]. Zaznamenat hodnotu intenzity signálu odeslaného a druhým přijímačem přijatého je možné bez dalších hardware instalací či úprav. Pomocí fyzikálně-parametrického modelu dle doporučení ITU-R\cite{itu} lze vypočítat průměrné srážky na pomyslné spojnici MV spoje.
+Mikrovlny jsou elektromagnetické vlny o délce v rozpětí  od 1 [mm] do 1 [m]. Tomu odpovídá frekvence 0.3  až 300 [GHz]. V oblasti telekomunikací především mobilních operátorů se tohoto typu vln využívá ke komunikaci mezi jednotlivými vysílači a vysílači s mobilními telefony. Pro rekonstrukci srážek se využívá prvního případu, tedy komunikaci mezi vysílači. Tyto mikrovlnné spoje pracují na frekvencích v rozsahu 24-39 [GHz] (Praha). Hlavním zdrojem útlumu tohoto frekvenčního rozsahu jsou dešťové kapky. Jednotlivé spoje se vždy skládají ze dvou vysílačů. Vysílač neustále odesílá MV vlny, které jsou nositelem informace zajímavé především pro telekomunikace. Vedlejším produktem této komunikace je údaj o intenzitě signálu, jehož základní jednotkou je decibel [dB]. Zaznamenat hodnotu intenzity signálu odeslaného a druhým přijímačem přijatého je možné bez dalších hardware instalací či úprav. Pomocí fyzikálně-parametrického modelu dle doporučení ITU-R\cite{itu} lze vypočítat průměrné srážky na pomyslné linii MV spoje.
 
 \subsubsection{Výpočet srážek}
 Vysílané hodnoty intenzit signálu \emph{tx} jednotlivých MV spojů jsou konstantní. Jednotlivé spoje jsou charakterizovány hodnotami:
@@ -300,19 +320,19 @@ Vysílané hodnoty intenzit signálu \emph{tx} jednotlivých MV spojů jsou kons
 \item \textbf{Polarizace} signálu ve vertikální \emph{V} či horizontální poloze \emph{H}
 \item \textbf{Vzdálenost} \emph{L} která je vypočtená v daném souřadnicovém systému v kilometrech[km]
 \end{itemize}
-Přijaté hodnoty intenzit \emph{rx} jsou nositelem informace o útlumu potenciálních srážek. Rozdílem vyslané \emph{tx} a přijaté \emph{tx} intenzity dostaneme výsledný útlum \emph{A} v jednotkách decibel[dB].
+Přijaté hodnoty intenzit \emph{rx} jsou nositelem informace o útlumu potenciálních srážek. Rozdílem vyslané \emph{tx} a přijaté \emph{tx} intenzity dostaneme výsledný útlum \emph{$A_{r}$} v jednotkách decibel[dB].
 \begin{equation}
- A=rx-tx
+ A_{r}=rx-tx
 \end{equation}
-Dalším krokem je určení \emph{baseline}, tedy hodnoty \emph{ $A_{0}$ }   která představuje konstantní útlum intenzity signálu MV spoje bez vlivu útlumu signálu dešťovými kapkami. Tato konstanta je v jednotce decibel[dB]. Parametrická konstanta  \emph{$A_{w}$ }, se určuje jakožto !!!!!!nevim. Z toho plyne výsledný útlum \emph{$A_{r}$ }[dB].
-\begin{equation}
- Ar=A-A_{0}-A_{w}
+Dalším krokem je určení \emph{baseline}, tedy hodnoty \emph{ $A_{0}$ }   která představuje konstantní útlum intenzity signálu MV spoje bez vlivu útlumu signálu dešťovými kapkami. Tato konstanta je v jednotkách decibel[dB]. Parametrická konstanta  \emph{$A_{w}$ }, je hodnota nadměrného útlumu způsobená morkou anténou. Z toho plyne výsledný útlum \emph{$A_{m}$ }[dB].
+\begin{equation}\label{eq:Ar}
+ A_{m}=A_{r}-A_{0}-A_{w}
 \end{equation}
  Výsledný útlum je třeba převést na specifický útlum \emph{$\gamma_{R} $} [dB/km] pro danou vzdálenost \emph{L} mezi vysílači MV spojů. 
 \begin{equation}
-\gamma_{R} =\frac{A_{r}}{L}
+\gamma_{R} =\frac{A_{m}}{L}
 \end{equation}
-Dle doporučení ITU P.838 \cite{itu} je specifický útlum  \emph{$\gamma_{R} $} a intenzitu srážek  \emph{R} [mm/h] ve vztahu
+Dle doporučení ITU P.838 \cite{itu} je specifický útlum  \emph{$\gamma_{R} $} a intenzitu srážek  \emph{R} [$mm \cdot h^{-1}$] ve vztahu
 \begin{equation}\label{eq:gamma}
 \gamma_{R}=kR^{\alpha}
 \end{equation}
@@ -336,7 +356,7 @@ kde:
 {\raggedright{}Hodnoty pro dané konstanty jsou součástí dokumentu ITU-R \cite{itu}.}
 \bigskip
 
-{\raggedright{}Inverzním vztahem rovnice \eqref{eq:gamma} dostaneme výslednou intenzitu srážek \emph{R} [mm/h]. }
+{\raggedright{}Inverzním vztahem rovnice \eqref{eq:gamma} dostaneme výslednou intenzitu srážek \emph{R} [$mm \cdot h^{-1}$]. }
 
 
 \begin{equation}
@@ -345,46 +365,79 @@ R=\left ( \frac{\gamma_{r}}{k} \right )^{\frac{1}{\alpha }}
 
 
 \subsubsection{Chyby}
-
-Dešťové srážky se skládají z dešťových kapek, které nabývají mnoha variací velikosti a tvarů. 
-
-
+\label{subsec:chyby}
+Metoda odhadu srážek je založena na předpokladu, že dešťové kapky tlumí signál. Dešťové kapky nabývají mnoha variací velikosti a tvarů. Signál může být tlumen škálou objektů od vodní párou, jejímž zdrojem je povrch země, přes mrholení až po velké dešťové kapky. Vztah mezi intenzitou srážek \emph{R} a útlumem útlum  \emph{$\gamma_{R} $} je funkcí frekvence, polarizace a rozložení dešťových kapek\acs{DSD} s parametry  \emph{a} a \emph{b}. Pro tento vztah na frekvencích mezi 25 a 40 GHz platí takřka lineární závislost. V tomto frekvenčním rozmezí je model takřka nezávislí na teplotě, rozložení dešťových kapek a empiricky vykazuje chybovost méně než 10\emph{\%}. Na na nízkých frekvencích okolo 10 GHz je chybovost 20\emph{\%} a více. Přesnost určování srážek výše zmíněným modelem dle ITU P.838 je při těchto nízkých frekvencích mnohem více náchylná na rozložení kapek\acs{DSD}.\cite{dsd} 
 
 
-Hydrometeorological Application of Microwave Links: Measurement of Evaporation 
-and Precipitatio
-\subsection{Srovnání metod měření srážek}
+\paragraph*{Nejistoty modelu} založeného na vztahu \eqref{eq:Ar}, jsou především v závislosti  \emph{$\gamma_{A_{m}} $},\emph{$A_{w} $} na rozložení kapek \acs{DSD} podél MV spoje.
 
+\paragraph*{DSD} způsobují nejistoty při určení výsledného útlumu signálu \emph{$\gamma_{A_{m}} $}. Tyto chyby jsou způsobeny integrací jednotlivých úseků tlumících signál na linii MV spoje. \cite{mv1}
 
-%http://www.erad2010.org/pdf/POSTER/Thursday/04_Networks/10_ERAD2010_0058_extended.pdf
-There is an urgent need for high-quality rainfall observations with high spatial and temporal resolutions. Weather radars are 
-in principle suited for that purpose, but often need adjustment due to gross errors. In most cases only few rain gauge 
-measurements are available to adjust the radar data in real-time. The estimation of rainfall using microwave links from 
-commercial cellular telephone networks is a new source of information, which may provide a partial solution to this problem
+\paragraph*{Mokré antény}jsou značným zdrojem nejistot. Na vysílačích nejsou antény nijak kryty a při dešti moknou. Na anténách se vytváří tenký film vody, který ovlivňuje výsledný útlum signálu. Vytvoření modelu pro eliminaci tohoto problému se do značné míry podařilo (Schleiss et al., 2013)\cite{wetat}. Součástí výzkumu pod který tato práce částečně spadá, bude instalace krytu na antény, který zamezí jejich zmoknutí. Tato možnost doposud nebyla součástí žádné vědecké práce.
 
-%http://journals.ametsoc.org/doi/pdf/10.1175/1520-0450%281991%29030%3C0032%3AACOMTF%3E2.0.CO%3B2
+\paragraph*{Určení baseline } \emph{ $A_{0}$ } je jedním z důležitých a nejvíce ovlivňujících činitelů při výpočtu výsledné srážky \emph{R}. Tato hodnota se zcela mění v čase a je závislá na koncentraci vodní páry v atmosféře a scintilací. Útlum vysílaných a přijímaných vln ovlivňuje také teplota prostředí jímž vlna prochází. Dalším činitelem který může způsobovat kolísání signálu je vítr.
+Pro určování baseline se využívá různých metod například \acs{HMM} \cite{comparsinmv}, Retrieval Alghorithms \cite{countryw}. Metody určení baseline se dají klasifikovat na automatizované a uživatelské. Automatizovaným určováním baseline se myslí především algoritmy, které jsou schopny detekovat, kdy prší a kdy ne. Některé tyto algoritmy využívají statistických prostředků a jiné například určují období dešťů pomocí dat ze srážkoměrů \cite{countryw} či radaru. 
 
 
 
 
 
-\subsubsection{Chyby}
-\subsubsection{Konzistence dat}
-\subsubsection{Potenciál v hydrometeorologii}
+\subsection{Zhodnocení metod měření srážek}
+Tato podkapitola je zaměřena na shrnutí vlastností jednotlivých metod a jejich  porovnání s metodou MV spojů. Hodnocení jednotlivých metod s je založeno na  kritériích, které jsou pro měření srážek typické.
+\begin{itemize}
+\item\textbf{Časová spojitost}
+\item\textbf{Interval sběru dat}  
+\item\textbf{Prostorové rozlišení}
+\item\textbf{Disponibilita jednotlivých metod}
+\item\textbf{Chyby}
+\end{itemize}
+V současné době jsou v oblasti hydrometeorologie požadovány velmi přesná data ve vysokém prostorovém a časovém rozlišení. Tyto nároky jsou především vytvořeny  hydrologickými modely, jejichž výsledky napomáhají k lepší manipulaci na jednotlivých povodí. Kvalita vstupů dat do těchto modelů je rozhodující pro jejich správné výsledky a z nichž plynoucí zabránění nežádoucím katastrofám.
+
+\paragraph*{Srážkoměrné sítě} 
+tyto požadavky splňují jen částečně. Moderní srážkoměry splňují  kritérium schopnosti pokrytí spojité časové řady až v minutových intervalech. Hlavním záporem těchto sítí je nedostatečné pokrytí. Jelikož datovým výstupem těchto sítí  jsou bodová data, je zde problém v nedostatečné hustotě pokrytí srážkoměry, která prakticky nemůže být nikdy odstraněno.  Prostorové variabilita srážek, kde se jednotlivé  se mohou řádově lišit už ve stovkách metrů má za následek zachycení či naopak nezaznamenání lokálních maxim, které jsou ve výsledné plošné rekonstrukci zdrojem nezanedbatelných chyb. Měření moderními srážkoměry může být při správné volbě umístění velmi přesné. Toho se v současnosti využívá jakožto referenční indikátor srážek pro kalibraci radarů, nebo k určování baseline při odhadu srážek MV spoji (\ref{subsec:chyby},Baseline).
+
+\paragraph*{Radary}
+jsou současnou nejvíce využívanou metodou pro plošné vyjádření srážek. Snímky jsou pořizovány v 5-15 minutových krocích a tento časový interval nelze s fyzikální podstaty radaru zmenšit. To poukazuje na možnou chybovost, jelikož srážky během 5 minut mohou nabývat jiných hodnot až o řád. Mezi kladné vlastnosti radaru bezesporu patří mimo klasické rozlišení v horizontálním směru(plošné) také i měření odrazivosti vertikálních profilů. Tuto vlastnost v rozlišení 1 km pro vertikální a 2 km pro horizontální ostatní metody neumožňují. Prostorové rozlišení je dále možno  pozorovat jen pomocí některých meteorologických družic, které skenují zemi pod sklonem jiným než nadir. Jejich rozlišení je ale v jednotkách horší. Obecně vzato výsledné plošné rozlišení radaru je pro městské odtokové modely nedostačující.  
+
+\paragraph*{Družice} se z výše zmíněnými metodami nedají zcela korektně porovnávat. Družice na oběžných drahách slouží k náhledu na chování klimatu. Snímky těchto družic jsou v rozlišení, které nesou spíše obecnou informativní podstatu, např. pohybu front, vývoje cyklónu a ke globálnímu přehledu o vývoji počasí, či dlouhodobě klimatu.
+Jednou z výhodou rekonstrukce srážek pomocí metody \acs{IR} pásem je poměrně vysoká frekvence záznamu snímků v intervalu 15 minut na jakémkoliv místě na Zemi. Při porovnání s pozemním meteo radarem je slabost této metody ve špatné u některých družic nulové detekování vertikálních profilů srážkových mraků, což vede k podceňování výsledných srážkových úhrnů.
+
+
+\subsubsection{Mikrovlnné spoje}
+Metoda odhadu srážek pomocí MV spojů byla předmětem výzkumu už v 80. letech 20. století. Prakticky byla využita až při využití komerčních telekomunikačních spojů v posledním desetiletí. Budoucnost této metody je především v pokrytí v osídlených oblastech, kde je právě přesnost odhadu srážek nejvíce vyžadována. Pokrytí z vývojem mobilních technologií se stále zlepšuje. Data jsou sbírána ve velmi malých intervalech běžně po 10[s]. Při využití rozsáhlých sítí, např v Praze až stovky spojů umožňuje tato metoda relevantní plošnou časoprostorovou informaci o srážce.
+ 
+\paragraph*{Potenciál MV v hydrometeorologii} zasahuje do všech oblastí těchto vědních oborů, kde se využívají srážky jakožto vstupní parametry pro další výpočty. Tato metoda je v současné době spíše vhodná pro mikro hledisko nežli globální. Vyplývá to z absence pokrytí těchto sítí mimo osídlené oblasti. 
+
+Jedním z velkých potenciálů této metody, je zlepšení získávání přesné prostorové informace o srážkách. To žádné současné metody odhadu srážek neumožňují. Výsledky stude\cite{mv2} poukazují na možnosti částečného nahrazení současných metod nebo  možnosti vzájemného se doplňování  jednotlivých metod  navzájem, což by vedlo zlepšení přesnosti odhadu srážek. 
+
+Jelikož tyto MV spoje operují těsně nad zemským povrchem, vypočtené intenzity by  mohli být pomocí nástrojů \acs{GIS} přiřazovány do jednotlivých subpovodí. To by značně zefektivnilo propojení povodí ze srážko-odtokovým modelem.
+
+Možnosti využití MV spojů v oblasti meteorologie nekončí u odhadu srážek. Pomocí MV lze také detekovat pevné částice, sníh či vodní páry. Tyto možnosti by mohli napomoct k lepšímu pochopení klimatu.\cite{mv2}
+
+Velkým potenciálem je takřka nulová finanční náročnost pro sběr dat. Telekomunikační sítě mobilních operátoru jsou v hustěji osídlených částech světa běžné. V rychle se rozvíjejících zemích třetího světa se v průběhu času stanou tyto telekomunikační sítě součástí a využití této metody odhadu srážek by se mohlo stát více dostupnou oproti budování radarů, pozemních stanic, či budování sítě srážkoměrů.
+ 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{./img/srazky/opensignalmap.png}
+    \caption[Porytí tel. sítí]{\centering Mapa celosvětového pokrytí signálu telekomunikačních mobilních operátorů. Pokrytí je vyjádřeno oranžovou a žlutou barvou.  \footnotemark }
+ \end{figure}   
+\footnotetext{Obrázek byl sejmut z webové aplikace OpenSignal. URL: \url{http://opensignal.com/}}
 
 
 \section{Interpolace srážek}
 
-\section{GRASS GIS modul}
-\subsection{Funkcionalita}
-\subsection{Implementační nástroje}
-\subsubsection{GRASS API}
-\subsubsection{PostgreSQL}
+\section{Modul r.mwprecip}
+\subsection{GRASS GIS}
+\subsection{Použité technologie}
+\subsubsection{GRASS Python API}
+\subsubsection{PostgreSQL/Postgis}
 \subsubsection{Psycopg?}
-\subsection{Vstup}   
-\subsubsection{Data}
+\subsection{Funkcionalita modulu}
+\subsubsection{Vstup-data}   
 \subsection{Výstup}
+Hlavní výhodou techniky na bázi IR je vysoká časová četnost obrazů, například, až 15 minut po EPOS a Meteosat Second Generation (MSG) geostacionárních satelitů. IR-jen techniky jsou v nevýhodě ve srovnání s radarem, protože satelit IR nižší rozlišení nelze rozpoznat strukturu konvektivní měřítku a déšť z teplých mraky. Navíc, silná cirrus a konvektivní srážky se objeví podobná. To znamená, že satelit IR pouze pro techniky mají tendenci podceňovat srážky na začátku životního cyklu konvekčních systémů, kdy teplý déšť procesy dominují, a přeceňovat srážky v chátrající stádií, kdy studená cirrus je běžné. GPI má velkou zaujatost přes rovníkové Africe a Indonésii, 33 , kde může být virga interpretovány jako povrchové dešťové srážky, a přes vysoké hory, kde mohou být interpretovány jako sníh srážek (obr. 2.28).
 
+Počínaje DMSP SSM / I v roce 1987, mikrovlnné satelitní senzory podstatně změnily, jak rozeznat cloud vlastnosti a měřit srážky ze satelitů, protože přímo detekovat srážky v oblacích-výhodu oproti IR-technik, které mají potíže s rozlišováním mezi urychlovat a non- urychlovat mraky. Senzory SSM / I měření mikrovlnná trouba rozptylu a emisní podpisy kapalných částic vody nebo ledu.
 
 \section{Časoprostorové analýzy}
 \subsection{Využitelnost}
@@ -416,16 +469,23 @@ Cílem této práce bylo
 
 \newpage
 \necislovana{Seznam použitých zkratek}
+\begin{acronym}[USA-CERL]
+ 	\acro{ANSI}{American National Standards Institute}
+  	\acro{API}{Application Programming Interface}
+  	\acro{DSD}{Drop size distribution}
+  	\acro{DPZ}{Dálkový průzkum země}
+  	\acro{GIS}{Geographic Information System (Geografický informační systém)}
+	\acro{GRASS}{Geographical Resources Analysis Support System}
+	\acro{GUI}{Graphical User Interface (Grafické uživatelské rozhraní)}
+	\acro{XML}{Extensible Markup Language}
+	\acro{ITU}{International Telecommunication Union}
+  	\acro{RSL}{Received Signal Level}
+  	\acro{HMM}{Hidden Markov Model} 
+  	\acro{IR}{Infra red (infrčervené spektrum)} 	
+\end{acronym}
 
-\begin{tabular}{ll}
-\textbf{GIS}& Geographic Information System (Geografický informační systém)\\
-\textbf{GRASS}& Geographical Resources Analysis Support System\\
-\textbf{GUI}& Graphical User Interface (Grafické uživatelské rozhraní)\\
-\textbf{XML}& Extensible Markup Language\\
-\textbf{ITU}& International Telecommunication Union\\
 
 
-\end{tabular}
 
 
 \newpage
@@ -488,6 +548,28 @@ KRÁČMAR, Jan. Český hydrometeorologický ústav. \textit{Meteorologické rad
 RECOMMENDATION ITU-R P.838-3. \textit{Specific attenuation model for rain for use in prediction methods}. 
 ITU-R, (1992-1999-2003-2005). URL:\textless\url {https://www.itu.int/dms_pubrec/itu-r/rec/p/R-REC-P.838-3-200503-I!!PDF-E.pdf}
 
+\bibitem{dsd}
+CARLTON,W. Ulrich.\textit {Natural Variations in the Analytical Form of the Raindrop Size Distribution}. 
+Department of Physics and Astronomy, Clemson University: Journal of Climate and Applied Meteorology, 1983, roč. 1983, č. 22. URL:\textless\url {http://radarmet.atmos.colostate.edu/AT741/papers/Ulbrich_DSD.pdf}
+
+\bibitem{mv1}
+ZINEVICH, A., H. MESSER a P. ALPERT. \textit {Prediction of rainfall intensity measurement errors using commercial microwave communication links}. Atmospheric Measurement Techniques [online]. 2010, vol. 3, issue 5, s. 1385-1402 [cit. 2014-04-13]. DOI: 10.5194/amt-3-1385-2010. URL:\textless\url { http://www.atmos-meas-tech.net/3/1385/2010/}
+
+\bibitem{mv2}
+MESSER, H. \textit {Environmental Monitoring by Wireless Communication Networks.}, Science [online]. 2006-05-05, vol. 312, issue 5774, s. 713-713 [cit. 2014-04-14]. DOI: 10.1126/science.1120034. URL:\textless\url {http://www.sciencemag.org/cgi/doi/10.1126/science.1120034}
+
+\bibitem{wetat}
+M, Schleiss, Rieckermann J. a Berne A.  \textit{Quantification and Modeling of Wet-Antenna Attenuation for Commercial Microwave Links}[online]. 06 únor 2013. Geoscience and Remote Sensing Letters, IEEE, 2013[cit. 2014-04-13]. Volume:10. 
+
+\bibitem{countryw}
+OVEREEM, Aart, Hidde LEIJNSE a Remko UIJLENHOET.  \textit{Country-wide rainfall maps from cellular communication networks} [online]. 2012 [cit. 2014-04-13]. 110: 8. DOI: 10.1073/pnas.121796111. URL:\textless\url {http://www.pnas.org/content/110/8/2741.full}
+
+\bibitem{radiolinks}
+LEIJNSE, H., R. UIJLENHOET a J. N. M. STRICKER. \textit{Rainfall measurement using radio links from cellular communication networks.} Water Resources Research [online]. 2007, vol. 43, issue 3, n/a-n/a [cit. 2014-04-13]. DOI: 10.1029/2006WR005631. URL:\textless\url {http://doi.wiley.com/10.1029/2006WR005631}
+
+\bibitem{comparsinmv}
+Asaf Rayitsfeld, Rana Samuels, Artem Zinevich, Uri Hadar, Pinhas Alpert, \textit{Comparison of two methodologies for long term rainfall monitoring using a commercial microwave communication system}. Atmospheric Research, Volumes 104–105, February 2012, Pages 119-127, ISSN 0169-8095, http://dx.doi.org/10.1016/j.atmosres.2011.08.011.
+URL:\textless\url {http://www.sciencedirect.com/science/article/pii/S0169809511002626}
 
 
 

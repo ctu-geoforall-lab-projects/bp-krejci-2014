@@ -48,6 +48,13 @@ except ImportError:
 
 
 
+#%flag
+#% key:m
+#% description: Set bseline from (statistical) mode of dataset
+#% guisection: Baseline
+#%end
+
+
 #%option 
 #% key: quantile
 #% label: Quantile in % for set baseline
@@ -55,6 +62,8 @@ except ImportError:
 #% guisection: Baseline
 #% answer: 96
 #%end
+
+
 
 #%option 
 #% key: aw
@@ -88,6 +97,8 @@ except ImportError:
 #% guisection: Baseline
 #% required: no
 #%end
+
+
 
 ##########################################################
 ################# guisection: Timewindows ##############
@@ -452,7 +463,7 @@ def firstRun(db):
         sql="alter table record add column a real; "
         db.executeSql(sql,False,True)
         print_message("9/16")
-        sql="update record set a= rxpower-txpower;  "
+        sql="update record set a= round((rxpower-txpower)::numeric,1);  "
         db.executeSql(sql,False,True)
         print_message("10/16")
         sql="update record  set polarization=link.polarization from link where record.linkid=link.linkid;"
@@ -473,7 +484,16 @@ def firstRun(db):
         sql="CREATE INDEX timeindex ON record USING btree (time); "
         db.executeSql(sql,False,True)
         print_message("16/16")
-
+        sql="CREATE OR REPLACE FUNCTION _final_mode(anyarray) RETURNS anyelement AS $BODY$ SELECT a FROM unnest($1)\
+        a GROUP BY 1  ORDER BY COUNT(1) DESC, 1 LIMIT 1; $BODY$ LANGUAGE 'sql' IMMUTABLE;"
+        db.executeSql(sql,False,True)
+        sql="CREATE AGGREGATE mode(anyelement) (\
+            SFUNC=array_append, \
+            STYPE=anyarray,\
+            FINALFUNC=_final_mode, \
+            INITCOND='{}');"
+        db.executeSql(sql,False,True)
+        
 def dbConnGrass(database,user,password):
     print_message("Connecting to db-GRASS...")
     # Unfortunately we cannot test untill user/password is set
@@ -536,13 +556,9 @@ def isTableExist(db,schema,table):
 ###########################
 ##   baseline compute
 
-def getBaselSet(db,is_changed,method):
-    if is_changed and method:
-        print_message("error getBaselSet")
-        sys.exit()
-
-##return f or t depends on "Is a new user configuration or not?"        
-    if is_changed==True:
+def isCurrSet():
+##  chceck if current settings is same like settings from computing before. return True or False
+ ##return false or tru depends on "Is a new user configuration or not?"        
         curr_precip_conf=''
         new_precip_conf=''
         try:
@@ -567,22 +583,27 @@ def getBaselSet(db,is_changed,method):
 
         elif options['baselfile']:
             new_precip_conf='fromfile|'+options['aw']
+            
+        elif flags['m']:
+            new_precip_conf='mode|'+options['aw']
         else:
             new_precip_conf='quantile'+ options['quantile']+'|'+options['aw']
             
         if curr_precip_conf !=new_precip_conf:
-            return True
-        else:
             return False
-##Return dictionary of key:linkid value: baseline        
-    if method== True:
-        if not options['baselfile'] and not options['baseltime']:
-            print_message('Computing baselines...')
-            computeBaselineFromQuentile(db)
-            links_dict=readBaselineFromText(os.path.join(path,'baseline'))
+        else:
+            return True
+           
+def getBaselDict(db):
+## choose baseline compute method that set user and call that function, return distionary key:linkid, 
+  
         
+        if  flags['m']:
+            print_message('Computing baselines "mode"...')
+            computeBaselinFromMode(db)
+            links_dict=readBaselineFromText(os.path.join(path,'baseline'))
         elif options['baselfile']:
-            print_message('Computing baseline from file...')
+            print_message('Computing baseline "text file"...')
             links_dict=readBaselineFromText(options['baselfile'])
             
             try:
@@ -592,12 +613,44 @@ def getBaselSet(db,is_changed,method):
             except IOError as (errno,strerror):
                 print "I/O error({0}): {1}".format(errno, strerror)
         
-        else:
-            print_message('Computing baseline from selected time...')
+        elif options['baseltime']:
+            print_message('Computing baseline "selected time interval"...')
             computeBaselineFromTime(db)
             links_dict=readBaselineFromText(os.path.join(path,'baseline'))
-   
+    
+        else:
+            print_message('Computing baselines "quantile"...')
+            computeBaselineFromQuentile(db)
+            links_dict=readBaselineFromText(os.path.join(path,'baseline'))
+        
         return  links_dict  
+
+def computeBaselinFromMode(db):
+        quantile=flags['m']
+        link_num=db.count("link")               
+        sql="SELECT linkid from link"
+        linksid=db.executeSql(sql,True,True)
+        tmp=[]
+         #for each link  compute baseline
+        for linkid in linksid:         
+            linkid=linkid[0]
+            sql="SELECT mode(a) AS modal_value FROM record where linkid=%s;"%(linkid)
+            resu=db.executeSql(sql,True,True)[0][0]
+            tmp.append(str(linkid)+','+ str(resu)+'\n')
+
+        try:
+            io0=open(os.path.join(path,"baseline"),"wr")
+            io0.writelines(tmp)
+            io0.close()
+        except IOError as (errno,strerror):
+            print "I/O error({0}): {1}".format(errno, strerror)
+
+        try:
+            io1=open(os.path.join(path,"compute_precip_info"),"wr")
+            io1.write('mode|'+options['aw'])
+            io1.close
+        except IOError as (errno,strerror):
+            print "I/O error({0}): {1}".format(errno, strerror)
 
 def computeBaselineFromTime(db):
     ##@function for reading file of intervals or just one moments when dont raining.
@@ -927,7 +980,7 @@ def computePrecip(db):
     temp= []
     print_message("Computing precipitation...")
 ##choose baseline source (quantile, user values, )
-    links_dict=getBaselSet(db,False,True)
+    links_dict=getBaselDict(db)
 
 
 ##check if baseline from text is correct
@@ -989,7 +1042,7 @@ def makeTimeWin(db):
     view_db="sum_"+randomWord(3)
     sql="CREATE %s %s.%s as select\
         linkid,round(avg(precipitation)::numeric,3) as precip_mm_%s, date_trunc('%s',time)\
-        as time FROM %s.%s GROUP BY linkid, date_trunc('%s',time)\
+        as time  FROM %s.%s GROUP BY linkid, date_trunc('%s',time)\
         ORDER BY time"%(view_statement, schema_name, view_db  ,sum_precip ,sum_precip,schema_name,comp_precip ,sum_precip)    
     data=db.executeSql(sql,False,True)
     stamp=""
@@ -1206,7 +1259,7 @@ def main():
 
 ##compute precipitation
 
-        if getBaselSet(db,True,False): 
+        if not isCurrSet(): 
             sql="drop schema IF EXISTS %s CASCADE" % schema_name
             shutil.rmtree(path)
             os.makedirs(path)
