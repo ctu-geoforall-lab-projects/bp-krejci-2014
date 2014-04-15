@@ -47,17 +47,9 @@ except ImportError:
 ##########################################################
 
 
-
-#%flag
-#% key:m
-#% description: Set bseline from (statistical) mode of dataset
-#% guisection: Baseline
-#%end
-
-
 #%option 
 #% key: quantile
-#% label: Quantile in % for set baseline
+#% label: Quantile in % for set all baseline
 #% type: integer
 #% guisection: Baseline
 #% answer: 96
@@ -75,14 +67,20 @@ except ImportError:
 #%end
 
 
-
 #%option G_OPT_F_INPUT 
 #% key: baselfile
-#% label: Baseline values in format "linkid;baseline"
+#% label: Baseline values in format "linkid,baseline"
 #% guisection: Baseline
 #% required: no
 #%end
 
+#%option
+#% key: statfce
+#% label: Choose method for compute bs from time intervals
+#% options: quantile, mode, sum
+#% multiple: yes
+#% guisection: Baseline
+#%end
 
 #%option G_OPT_F_INPUT
 #% key: baseltime
@@ -463,7 +461,7 @@ def firstRun(db):
         sql="alter table record add column a real; "
         db.executeSql(sql,False,True)
         print_message("9/16")
-        sql="update record set a= round((rxpower-txpower)::numeric,1);  "
+        sql="update record set a= round((txpower-rxpower)::numeric,1);  "
         db.executeSql(sql,False,True)
         print_message("10/16")
         sql="update record  set polarization=link.polarization from link where record.linkid=link.linkid;"
@@ -565,10 +563,8 @@ def isCurrSet():
                 io0=open(os.path.join(path,"compute_precip_info"),"r")
                 curr_precip_conf=io0.readline()
                 io0.close()
-                io0.close()
         except IOError:
                 pass 
-        compute=False
         
         if options['baseltime']:
             bpath=options['baseltime']
@@ -600,7 +596,8 @@ def getBaselDict(db):
         
         if  flags['m']:
             print_message('Computing baselines "mode"...')
-            computeBaselinFromMode(db)
+
+            computeBaselinFromMode(db,'link','record')
             links_dict=readBaselineFromText(os.path.join(path,'baseline'))
         elif options['baselfile']:
             print_message('Computing baseline "text file"...')
@@ -625,16 +622,14 @@ def getBaselDict(db):
         
         return  links_dict  
 
-def computeBaselinFromMode(db):
-        quantile=flags['m']
-        link_num=db.count("link")               
-        sql="SELECT linkid from link"
+def computeBaselinFromMode(db,linktb,recordtb):
+        sql="SELECT linkid from %"%linktb
         linksid=db.executeSql(sql,True,True)
         tmp=[]
          #for each link  compute baseline
         for linkid in linksid:         
             linkid=linkid[0]
-            sql="SELECT mode(a) AS modal_value FROM record where linkid=%s;"%(linkid)
+            sql="SELECT mode(a) AS modal_value FROM %s where linkid=%s;"%(recordtb,linkid)
             resu=db.executeSql(sql,True,True)[0][0]
             tmp.append(str(linkid)+','+ str(resu)+'\n')
 
@@ -652,8 +647,9 @@ def computeBaselinFromMode(db):
         except IOError as (errno,strerror):
             print "I/O error({0}): {1}".format(errno, strerror)
 
-def computeBaselineFromTime(db):
-    ##@function for reading file of intervals or just one moments when dont raining.
+def computeBaselineFromTime(db,typestr=''):
+    #################################################################
+    ##@function for reading file of intervals or just one moments when dont raining.##
     ##@format of input file(with key interval):
     ##  interval
     ##  2013-09-10 04:00:00
@@ -662,95 +658,161 @@ def computeBaselineFromTime(db):
     ##@just one moment or moments
     ##  2013-09-11 04:00:00
     ##  2013-09-11 04:00:00
-
+    ################################################################
+    ##@typestr choose statistical method for baseline computing.
+    ## typestr='' empty is average
+    ## typestr='mode'
+    ## typestr='quantile'
+    ################################################################
     bpath=options['baseltime']
     interval=False
     tmp=[]
     mark=[]
     st=''
-    try:
-            f=open(bpath,'r')
-##parse input file
-            for line in f:
-                #print_message(line)
-                st=st+line.replace("\n","")
-                if 'i' in line.split("\n")[0]:          #get baseline form interval
-                    
-                    fromt = f.next()
-                    #print_message(fromt)
-                    st+=fromt.replace("\n","")
-                    tot = f.next()
-                    #print_message(tot)
-                    st+=tot.replace("\n","")
-                    sql="select linkid, avg(a) from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
-                    resu=db.executeSql(sql,True,True)
-                    tmp.append(resu)
-                    
-                else:                       ##get baseline one moment
-                    time=datetime.strptime(line.split("\n")[0], "%Y-%m-%d %H:%M:%S")
-                    st+=str(time).replace("\n","")
-                    fromt = time + timedelta(seconds=-60)
-                    tot = time + timedelta(seconds=+60)
-                    sql="select linkid, avg(a) from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
-                    resu=db.executeSql(sql,True,True)
-                    #print_message(resu)
-                    tmp.append(resu)
-                    
-                    continue
-                '''
-                try:
-                    f.next()
-                except:
-                    pass
-                '''
-    except IOError as (errno,strerror):
-                    print "I/O error({0}): {1}".format(errno, strerror)
+    
+############### AVG ####################            
+    if typestr=='':
+        try:
+                f=open(bpath,'r')
+    ##parse input file
+                for line in f:
+                    #print_message(line)
+                    st=st+line.replace("\n","")
+                    if 'i' in line.split("\n")[0]:          #get baseline form interval
+                        
+                        fromt = f.next()
+                        #print_message(fromt)
+                        st+=fromt.replace("\n","")
+                        tot = f.next()
+                        #print_message(tot)
+                        st+=tot.replace("\n","")
+                        sql="select linkid, avg(a) from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
+                        resu=db.executeSql(sql,True,True)
+                        tmp.append(resu)
+                        
+                    else:                       ##get baseline one moment
+                        time=datetime.strptime(line.split("\n")[0], "%Y-%m-%d %H:%M:%S")
+                        st+=str(time).replace("\n","")
+                        fromt = time + timedelta(seconds=-60)
+                        tot = time + timedelta(seconds=+60)
+                        sql="select linkid, avg(a) from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
+                        resu=db.executeSql(sql,True,True)
+                        #print_message(resu)
+                        tmp.append(resu)
+                        
+                        continue
+        except IOError as (errno,strerror):
+                        print "I/O error({0}): {1}".format(errno, strerror)
+                
+        mydict={}
+        mydict1={}
+        i=True
+    ## sum all baseline per every linkid from get baseline dataset(next step avg)
+        for dataset in tmp:
+            mydict = {int(rows[0]):float(rows[1]) for rows in dataset}
+            if i == True:
+                mydict1=mydict
+                i=False
+                continue
+            for link,a in dataset:
+                mydict1[link]+=mydict[link]
+                
+        length=len(tmp)
+        links=len(tmp[0])
+        i=0
+    ##compute avq(divide sum by num of datasets)
+        for dataset in tmp:
+            for link,a in dataset:
+                i+=1
+                mydict1[link]=mydict1[link]/length
+                if i==links:
+                    break
+            break
+        
+    ##write  unique mark to file
+        try:
+                io1=open(os.path.join(path,"compute_precip_info"),"wr")
+                st=st+'|'+options['aw']
+                io1.write(st)
+                io1.close
+        except IOError as (errno,strerror):
+                print "I/O error({0}): {1}".format(errno, strerror)    
+
+    ##write values to baseline file
+        writer = csv.writer(open(os.path.join(path,'baseline'), 'wr'))
+        for key, value in mydict1.items():
+            writer.writerow([key, value])
+              
+############### MODE or QUANTILE ####################            
+    elif typestr=='mode' or typestr=='quantile':
+        try:
+                f=open(bpath,'r')
+    ##parse input file
+                for line in f:
+                    #print_message(line)
+                    st=st+line.replace("\n","")
+                    if 'i' in line.split("\n")[0]:          #get baseline form interval
+                        
+                        fromt = f.next()
+                        #print_message(fromt)
+                        st+=fromt.replace("\n","")
+                        tot = f.next()
+                        #print_message(tot)
+                        st+=tot.replace("\n","")
+                        sql="select linkid, a from record where time >='%s' and time<='%s'"%(fromt,tot)
+                        resu=db.executeSql(sql,True,True)
+                        resu+=resu
+                        
+                    else:                       ##get baseline one moment
+                        time=datetime.strptime(line.split("\n")[0], "%Y-%m-%d %H:%M:%S")
+                        st+=str(time).replace("\n","")
+                        fromt = time + timedelta(seconds=-60)
+                        tot = time + timedelta(seconds=+60)
+                        sql="select linkid, a from record where time >='%s' and time<='%s'"%(fromt,tot)
+                        resu=db.executeSql(sql,True,True)
+                        #print_message(resu)
+                        resu+=resu                        
+                        
+                        continue
+        except IOError as (errno,strerror):
+                        print "I/O error({0}): {1}".format(errno, strerror)
+         
+        tmp.append(resu) 
+        table_mode_tmp="mode_tmp"
+        sql="create table %s.%s ( linkid integer,a real);"%(schema_name,table_mode_tmp)
+        db.executeSql(sql,False,True)
+        
+    ##write values to flat file
+        try: 
+            io= open(os.path.join(path,"mode_tmp"),"wr")
+            io.writelines(tmp)
+            io.close()
+        except IOError as (errno,strerror):
+            print "I/O error({0}): {1}".format(errno, strerror)
+    
+    ##update table    
+        try:    
+            io1=open(os.path.join(path,"mode_tmp"),"r")
+            db.copyfrom(io1,"%s.%s"%(schema_name,table_mode_tmp))
+            io1.close()
+            os.remove(os.path.join(path,"mode_tmp"))    
+        except IOError as (errno,strerror):
+            print "I/O error({0}): {1}".format(errno, strerror)
+         
+        recname=schema_name+'.'+ table_mode_tmp
+        if typestr=='mode':
+            computeBaselinFromMode(db,recname,recname)
             
-    mydict={}
-    mydict1={}
-    i=True
-## sum all baseline per every linkid from get baseline dataset(next step avg)
-    for dataset in tmp:
-        mydict = {int(rows[0]):float(rows[1]) for rows in dataset}
-        if i == True:
-            mydict1=mydict
-            i=False
-            continue
-        for link,a in dataset:
-            mydict1[link]+=mydict[link]
+        if typestr=='quantile':
+            computeBaselineFromQuentile(db,recname,recname)
             
-    length=len(tmp)
-    links=len(tmp[0])
-    i=0
-##compute avq(divide sum by num of datasets)
-    for dataset in tmp:
-        for link,a in dataset:
-            i+=1
-            mydict1[link]=mydict1[link]/length
-            if i==links:
-                break
-        break
-    
-##write  unique mark to file
-    try:
-            io1=open(os.path.join(path,"compute_precip_info"),"wr")
-            st=st+'|'+options['aw']
-            io1.write(st)
-            io1.close
-    except IOError as (errno,strerror):
-            print "I/O error({0}): {1}".format(errno, strerror)    
-    
-    
-    
-##write values to baseline file
-    writer = csv.writer(open(os.path.join(path,'baseline'), 'wr'))
-    for key, value in mydict1.items():
-        writer.writerow([key, value])
-       
-def computeBaselineFromQuentile(db):
+        sql="drop table %s.%s"%(schema_name,table_mode_tmp)
+        db.executeSql(sql,False,True)
+        
+def computeBaselineFromQuentile(db,linktb,recordtb):
         quantile=options['quantile']
         link_num=db.count("link")               
-        sql="SELECT linkid from link"
+        sql="SELECT linkid from %"%linktb
         linksid=db.executeSql(sql,True,True)
         tmp=[]
          #for each link  compute baseline
@@ -761,10 +823,11 @@ def computeBaselineFromQuentile(db):
             , avg(a) as avgAmount\
             ,quartile\
             FROM (SELECT a, ntile(%s) over (order by a) as quartile\
-            FROM record where linkid=%s ) x\
+            FROM %s where linkid=%s ) x\
             GROUP BY quartile\
             ORDER BY quartile\
-            limit 1"%(quantile,linkid)
+            limit 1"%(quantile,recordtb,linkid)
+            
             resu=db.executeSql(sql,True,True)[0][0]
             tmp.append(str(linkid)+','+ str(resu)+'\n')
 
@@ -994,14 +1057,15 @@ def computePrecip(db):
         #read value from dictionary
         baseline_decibel=(links_dict[record[5]])
         #final precipiatation is R1    
-        Ar=fabs(record[1]- baseline_decibel - Aw)
-        if Ar > 0.0001:
+        Ar=record[1]- baseline_decibel - Aw
+        if Ar > 0:
             #print_message(Ar)
             #print_message(record[2])
             
             yr=Ar/(record[2]/1000  )
             R1=(yr/coef_a_k[1])**(1/coef_a_k[0])
-        else: R1=0
+        else:
+            R1=0
         #string for output flatfile
         out=str(record[5])+"|"+str(record[0])+"|"+str(R1)+"\n"
         temp.append(out)
@@ -1226,11 +1290,13 @@ def main():
 ##connect to database by python lib psycopg
         db=dbConnPy()
         
+        computeBaselineFromTime(db,"mode")
+        sys.exit()
 #check database if is prepare
         if not isAttributExist(db,'public','link','geom'):
             firstRun(db)
             
-
+        
 ##print first and last timestamp
         if flags['p']:
             sql="create view tt as select time from %s order by time"%record_tb_name
