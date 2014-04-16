@@ -46,15 +46,27 @@ except ImportError:
 ############## guisection: Baseline #################
 ##########################################################
 
+#%flag
+#% key:m
+#% description: Baseline by stat. mode from dataset 
+#% guisection: Baseline
+#%end
+
+#%option 
+#% key: roundm
+#% label: Round to "n" decimal places for computing mode
+#% type: integer
+#% guisection: Baseline
+#% answer: 3
+#%end
 
 #%option 
 #% key: quantile
-#% label: Quantile in % for set all baseline
+#% label: Baseline by quantile from dataset 
 #% type: integer
 #% guisection: Baseline
 #% answer: 96
 #%end
-
 
 
 #%option 
@@ -66,7 +78,6 @@ except ImportError:
 #% answer: 1.5
 #%end
 
-
 #%option G_OPT_F_INPUT 
 #% key: baselfile
 #% label: Baseline values in format "linkid,baseline"
@@ -77,8 +88,9 @@ except ImportError:
 #%option
 #% key: statfce
 #% label: Choose method for compute bs from time intervals
-#% options: quantile, mode, sum
+#% options: quantile, mode, avg
 #% multiple: yes
+#% answer: mode
 #% guisection: Baseline
 #%end
 
@@ -133,7 +145,6 @@ except ImportError:
 #% type: double
 #% guisection: Time-windows
 #%end
-
 
 
 #%option G_OPT_F_INPUT
@@ -426,6 +437,23 @@ def st(mes=True):
         restime=time.time() - mesuretime
         print "time is: ", restime
 
+def readRaingaugesCsv():
+    rgpath=options['rgauges']
+    print_message(rgpath)
+    try:
+        with open(rgpath, 'rb') as f:
+            csv.register_dialect('mydial', delimiter=',',skipinitialspace=True)
+            reader = csv.reader(f, 'mydial')
+            try: 
+                for row in reader:
+                    print row
+                    #for val in row:        
+            except csv.Error as e:
+                sys.exit('file %s, line %d: %s' % (rgpath, reader.line_num, e))   
+                
+        f.close()
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)
 
 ###########################
 ##   database work
@@ -461,7 +489,7 @@ def firstRun(db):
         sql="alter table record add column a real; "
         db.executeSql(sql,False,True)
         print_message("9/16")
-        sql="update record set a= round((txpower-rxpower)::numeric,1);  "
+        sql="update record set a= txpower-rxpower,1);  "
         db.executeSql(sql,False,True)
         print_message("10/16")
         sql="update record  set polarization=link.polarization from link where record.linkid=link.linkid;"
@@ -490,6 +518,8 @@ def firstRun(db):
             STYPE=anyarray,\
             FINALFUNC=_final_mode, \
             INITCOND='{}');"
+        db.executeSql(sql,False,True)
+        sql="DELETE from record where rxpower<-99.9 "%(schema_name,view_db,link)
         db.executeSql(sql,False,True)
         
 def dbConnGrass(database,user,password):
@@ -589,7 +619,7 @@ def isCurrSet():
             return False
         else:
             return True
-           
+
 def getBaselDict(db):
 ## choose baseline compute method that set user and call that function, return distionary key:linkid, 
   
@@ -599,10 +629,10 @@ def getBaselDict(db):
 
             computeBaselinFromMode(db,'link','record')
             links_dict=readBaselineFromText(os.path.join(path,'baseline'))
+            
         elif options['baselfile']:
             print_message('Computing baseline "text file"...')
             links_dict=readBaselineFromText(options['baselfile'])
-            
             try:
                 io1=open(os.path.join(path,"compute_precip_info"),"wr")
                 io1.write('fromfile|'+options['aw'])
@@ -611,10 +641,10 @@ def getBaselDict(db):
                 print "I/O error({0}): {1}".format(errno, strerror)
         
         elif options['baseltime']:
-            print_message('Computing baseline "selected time interval"...')
-            computeBaselineFromTime(db)
+            print_message('Computing baselines "time" "%s"...'%options['statfce'])
+            computeBaselineFromTime(db,options['statfce'])
             links_dict=readBaselineFromText(os.path.join(path,'baseline'))
-    
+                
         else:
             print_message('Computing baselines "quantile"...')
             computeBaselineFromQuentile(db)
@@ -623,16 +653,23 @@ def getBaselDict(db):
         return  links_dict  
 
 def computeBaselinFromMode(db,linktb,recordtb):
-        sql="SELECT linkid from %"%linktb
+        sql="SELECT linkid from %s group by 1"%linktb
         linksid=db.executeSql(sql,True,True)
         tmp=[]
-         #for each link  compute baseline
-        for linkid in linksid:         
+        schema_name=options['schema']
+        #round value
+        sql="create table %s.tempround as select round(a::numeric,%s) as a, linkid from %s"%(schema_name,options['roundm'],recordtb)
+        db.executeSql(sql,False,True)
+        #compute mode for current link
+        for linkid in linksid:
             linkid=linkid[0]
-            sql="SELECT mode(a) AS modal_value FROM %s where linkid=%s;"%(recordtb,linkid)
+
+            sql="SELECT mode(a) AS modal_value FROM %s.tempround where linkid=%s;"%(schema_name,linkid)
             resu=db.executeSql(sql,True,True)[0][0]
             tmp.append(str(linkid)+','+ str(resu)+'\n')
-
+            
+        sql="drop table %s.tempround"%(schema_name)
+        db.executeSql(sql,False,True)
         try:
             io0=open(os.path.join(path,"baseline"),"wr")
             io0.writelines(tmp)
@@ -647,7 +684,7 @@ def computeBaselinFromMode(db,linktb,recordtb):
         except IOError as (errno,strerror):
             print "I/O error({0}): {1}".format(errno, strerror)
 
-def computeBaselineFromTime(db,typestr=''):
+def computeBaselineFromTime(db,typestr):
     #################################################################
     ##@function for reading file of intervals or just one moments when dont raining.##
     ##@format of input file(with key interval):
@@ -660,7 +697,7 @@ def computeBaselineFromTime(db,typestr=''):
     ##  2013-09-11 04:00:00
     ################################################################
     ##@typestr choose statistical method for baseline computing.
-    ## typestr='' empty is average
+    ## typestr='avg' empty is average
     ## typestr='mode'
     ## typestr='quantile'
     ################################################################
@@ -669,9 +706,9 @@ def computeBaselineFromTime(db,typestr=''):
     tmp=[]
     mark=[]
     st=''
-    
+    schema_name = options['schema']
 ############### AVG ####################            
-    if typestr=='':
+    if typestr=='avg':
         try:
                 f=open(bpath,'r')
     ##parse input file
@@ -728,26 +765,19 @@ def computeBaselineFromTime(db,typestr=''):
                 if i==links:
                     break
             break
-        
-    ##write  unique mark to file
-        try:
-                io1=open(os.path.join(path,"compute_precip_info"),"wr")
-                st=st+'|'+options['aw']
-                io1.write(st)
-                io1.close
-        except IOError as (errno,strerror):
-                print "I/O error({0}): {1}".format(errno, strerror)    
 
     ##write values to baseline file
         writer = csv.writer(open(os.path.join(path,'baseline'), 'wr'))
         for key, value in mydict1.items():
             writer.writerow([key, value])
-              
+            
+            
 ############### MODE or QUANTILE ####################            
     elif typestr=='mode' or typestr=='quantile':
         try:
                 f=open(bpath,'r')
     ##parse input file
+                
                 for line in f:
                     #print_message(line)
                     st=st+line.replace("\n","")
@@ -770,22 +800,27 @@ def computeBaselineFromTime(db,typestr=''):
                         tot = time + timedelta(seconds=+60)
                         sql="select linkid, a from record where time >='%s' and time<='%s'"%(fromt,tot)
                         resu=db.executeSql(sql,True,True)
-                        #print_message(resu)
-                        resu+=resu                        
                         
+                        resu+=resu                        
+                         
                         continue
         except IOError as (errno,strerror):
                         print "I/O error({0}): {1}".format(errno, strerror)
-         
+ 
         tmp.append(resu) 
         table_mode_tmp="mode_tmp"
         sql="create table %s.%s ( linkid integer,a real);"%(schema_name,table_mode_tmp)
         db.executeSql(sql,False,True)
-        
+        c=0
     ##write values to flat file
         try: 
             io= open(os.path.join(path,"mode_tmp"),"wr")
-            io.writelines(tmp)
+            c=0
+            for it in tmp:
+                for i in it:
+                    a=str(i[0])+"|"+str(i[1])+"\n"
+                    io.write(a)
+                    c+=1 
             io.close()
         except IOError as (errno,strerror):
             print "I/O error({0}): {1}".format(errno, strerror)
@@ -809,6 +844,17 @@ def computeBaselineFromTime(db,typestr=''):
         sql="drop table %s.%s"%(schema_name,table_mode_tmp)
         db.executeSql(sql,False,True)
         
+        
+        
+    ##write  unique mark to file
+    try:
+        io1=open(os.path.join(path,"compute_precip_info"),"wr")
+        st=st+'|'+options['aw']
+        io1.write(st)
+        io1.close
+    except IOError as (errno,strerror):
+                print "I/O error({0}): {1}".format(errno, strerror)  
+    
 def computeBaselineFromQuentile(db,linktb,recordtb):
         quantile=options['quantile']
         link_num=db.count("link")               
@@ -851,23 +897,6 @@ def readBaselineFromText(pathh):
         mydict = {float(rows[0]):float(rows[1]) for rows in reader}
     return mydict
     
-def readRaingaugesCsv():
-    rgpath=options['rgauges']
-    print_message(rgpath)
-    try:
-        with open(rgpath, 'rb') as f:
-            csv.register_dialect('mydial', delimiter=',',skipinitialspace=True)
-            reader = csv.reader(f, 'mydial')
-            try: 
-                for row in reader:
-                    print row
-                    #for val in row:        
-            except csv.Error as e:
-                sys.exit('file %s, line %d: %s' % (rgpath, reader.line_num, e))   
-                
-        f.close()
-    except IOError as (errno,strerror):
-        print "I/O error({0}): {1}".format(errno, strerror)
 
 
 ###########################
@@ -966,23 +995,21 @@ def grassWork():
               
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
-        
+ 
 def precipInterpolationCustom(points_nat,win):
-    
+      #grass.run_command('v.surf.rst',input=points_nat,zcolumn = attribute_col,elevation=out, overwrite=True)
     itype=options['interpolation']
-    attribute_col='precip_mm_' + options['interval']
+    attribute_col='precip_mm_h_' + options['interval']
     out=win + '_' + itype+'_custom'
     istring=options['isettings']
     eval(istring)
     grass.run_command('r.colors',
                         map=out,
                         rules=options['color'])
-                        
-    #grass.run_command('v.surf.rst',input=points_nat,zcolumn = attribute_col,elevation=out, overwrite=True)
     
 def precipInterpolationDefault(points_nat,win):
     itype=options['interpolation']
-    attribute_col='precip_mm_' + options['interval']
+    attribute_col='precip_mm_h_' + options['interval']
     out=win + '_' + itype
     
     if itype == 'rst':
@@ -1042,34 +1069,44 @@ def computePrecip(db):
     recordid = 1
     temp= []
     print_message("Computing precipitation...")
-##choose baseline source (quantile, user values, )
+##choose baseline source (quantile, user values, ) get dict linkid, baseline
     links_dict=getBaselDict(db)
-
-
 ##check if baseline from text is correct
     if len(links_dict)<link_num:
-        print_message("Missing baseline or linkid in text file")
-        sys.exit()
+        
+        sql="select linkid from link"
+        links=db.executeSql(sql,True,True)
+        for link in links:
+            #print_message(type(link))
+            if not link[0] in links_dict:
+                print_message("Linkid= %s is missing in txtfile"%str(link[0]))
+                print_message("Link not included in computation")
+        print_message('HINT-> Missing "baseline,linkid" in text file. Link probably getting ERROR "-99.9" in selected time interval or you omitted values in input \n text. You can add value manualy into the file and than use method "read baseline from file"' )
         
     for record in resu:
-        #coef_a_k[alpha, k]
-        coef_a_k= computeAlphaK(record[4],record[3])
-        #read value from dictionary
-        baseline_decibel=(links_dict[record[5]])
-        #final precipiatation is R1    
-        Ar=record[1]- baseline_decibel - Aw
-        if Ar > 0:
-            #print_message(Ar)
-            #print_message(record[2])
+        #if missing baseline. Link will be skip
+        if record[5] in links_dict and (record[4]/1000000)>10 :
+            #coef_a_k[alpha, k]
+            coef_a_k= computeAlphaK(record[4],record[3])
             
-            yr=Ar/(record[2]/1000  )
-            R1=(yr/coef_a_k[1])**(1/coef_a_k[0])
-        else:
-            R1=0
-        #string for output flatfile
-        out=str(record[5])+"|"+str(record[0])+"|"+str(R1)+"\n"
-        temp.append(out)
-        recordid += 1
+            #print_message(coef_a_k)
+            #print_message(record)
+            #read value from dictionary
+            baseline_decibel=(links_dict[record[5]])
+            #final precipiatation is R1    
+            Ar=record[1]- baseline_decibel - Aw
+            if Ar > 0:
+                #print_message(Ar)
+                #print_message(record[2])
+                
+                yr=Ar/(record[2]/1000  )
+                R1=(yr/coef_a_k[1])**(1/coef_a_k[0])
+            else:
+                R1=0
+            #string for output flatfile
+            out=str(record[5])+"|"+str(record[0])+"|"+str(R1)+"\n"
+            temp.append(out)
+            recordid += 1
         
 ##write values to flat file
     try:
@@ -1083,7 +1120,7 @@ def computePrecip(db):
     db.copyfrom(io1,"%s.%s"%(schema_name,comp_precip))
     io1.close()
     os.remove(os.path.join(path,"precip"))
-       
+
 def makeTimeWin(db):
     
     print_message("Creating time windows...")
@@ -1105,9 +1142,9 @@ def makeTimeWin(db):
 ##summing values per (->user)timestep interval
     view_db="sum_"+randomWord(3)
     sql="CREATE %s %s.%s as select\
-        linkid,round(avg(precipitation)::numeric,3) as precip_mm_%s, date_trunc('%s',time)\
+        linkid,round(avg(precipitation)::numeric,3) as precip_mm_h_%s, date_trunc('%s',time)\
         as time  FROM %s.%s GROUP BY linkid, date_trunc('%s',time)\
-        ORDER BY time"%(view_statement, schema_name, view_db  ,sum_precip ,sum_precip,schema_name,comp_precip ,sum_precip)    
+        ORDER BY time"%(view_statement, schema_name, view_db,sum_precip,sum_precip,schema_name,comp_precip ,sum_precip)    
     data=db.executeSql(sql,False,True)
     stamp=""
     stamp1=""
@@ -1129,7 +1166,7 @@ def makeTimeWin(db):
 ##remove records whit greater value then user set                
     if options['maxp']:
         stamp1=options['maxp']
-        sql="DELETE from %s.%s where precip_mm_%s>%s "%(schema_name,view_db,sum_precip,options['maxp'])
+        sql="DELETE from %s.%s where precip_mm_h_%s>%s "%(schema_name,view_db,sum_precip,options['maxp'])
         db.executeSql(sql,False,True)
  
 ##num of rows 
@@ -1209,20 +1246,26 @@ def computeAlphaK(freq,polarization):
     return kv and αv (vertical polarization)
     return kh and αh (horizontal polarization)   
     """
+    freq/=1000000
+    if freq<10 or freq>100:
+        print_message(freq)
+        print_message(polarization)
+        
     if polarization =="h":
     #Coefficients for kH    1
+        
         aj_kh=(-5.33980,-0.35351,-0.23789,-0.94158)
         bj_kh=(-0.10008,1.26970,0.86036,0.64552)
         cj_kh=(1.13098,0.45400,0.15354,0.16817)
-        mk_kh=-0.18961
-        ck_kh=0.71147
+        mk_kh= -0.18961
+        ck_kh= 0.71147
     
     #Coefficients for αH    3
         aj_ah=(-0.14318, 0.29591, 0.32177,-5.37610,16.1721)
         bj_ah=(1.82442, 0.77564, 0.63773,-0.96230,-3.29980)
         cj_ah=(-0.55187, 0.19822, 0.13164,1.47828,3.43990)
-        ma_ah=0.67849
-        ca_ah=-1.95537
+        ma_ah= 0.67849
+        ca_ah= -1.95537
         kh=0
         ah=0
     #kh.. coefficient k of horizontal polarization
@@ -1277,6 +1320,10 @@ def computeAlphaK(freq,polarization):
 ##   main
 
 def main():
+        '''
+        for i in range(1,1000,1):
+            print_message(str(i)+str(computeAlphaK(i,'v')))
+        '''
         print_message("Module is running...")
         schema_name = options['schema']
         global path
@@ -1290,8 +1337,6 @@ def main():
 ##connect to database by python lib psycopg
         db=dbConnPy()
         
-        computeBaselineFromTime(db,"mode")
-        sys.exit()
 #check database if is prepare
         if not isAttributExist(db,'public','link','geom'):
             firstRun(db)
