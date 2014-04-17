@@ -38,9 +38,9 @@ class pgwrapper:
                         self.connection.set_session(readonly=True, autocommit=False)
         
         
-        def copyfrom(self,afile,table):
+        def copyfrom(self,afile,table,sep='|'):
                  try:
-                        self.cursor.copy_from(afile,table,sep='|')
+                        self.cursor.copy_from(afile,table,sep=sep)
                         self.connection.commit()
 
                  except Exception,err:
