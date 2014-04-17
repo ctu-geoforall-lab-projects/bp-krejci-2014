@@ -1077,7 +1077,7 @@ def grassWork():
 def precipInterpolationCustom(points_nat,win):
       #grass.run_command('v.surf.rst',input=points_nat,zcolumn = attribute_col,elevation=out, overwrite=True)
     itype=options['interpolation']
-    attribute_col='precip_mm_h_' + options['interval']
+    attribute_col='precip_mm_h'
     out=win + '_' + itype+'_custom'
     istring=options['isettings']
     eval(istring)
@@ -1087,7 +1087,7 @@ def precipInterpolationCustom(points_nat,win):
     
 def precipInterpolationDefault(points_nat,win):
     itype=options['interpolation']
-    attribute_col='precip_mm_h_' + options['interval']
+    attribute_col='precip_mm_h'
     out=win + '_' + itype
     
     if itype == 'rst':
@@ -1219,9 +1219,9 @@ def makeTimeWin(db,typeid,table):
 ##summing values per (->user)timestep interval
     view_db=typeid+"_"+randomWord(3)
     sql="CREATE %s %s.%s as select\
-        %s ,round(avg(precip)::numeric,3) as precip_mm_h_%s, date_trunc('%s',time)\
+        %s ,round(avg(precip)::numeric,3) as precip_mm_h, date_trunc('%s',time)\
         as time  FROM %s.%s GROUP BY %s, date_trunc('%s',time)\
-        ORDER BY time"%(view_statement, schema_name,view_db, typeid,sum_precip,sum_precip,schema_name,table ,typeid,sum_precip)    
+        ORDER BY time"%(view_statement, schema_name,view_db, typeid,sum_precip,schema_name,table ,typeid,sum_precip)    
     data=db.executeSql(sql,False,True)
     stamp=""
     stamp1=""
