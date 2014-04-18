@@ -13,10 +13,14 @@
 \usepackage[final,pdftex, colorlinks=false]{hyperref}
 \usepackage{pdfpages}
 \usepackage{perpage} %the perpage package
-\MakePerPage{footnote} %the perpage package command
+%\MakePerPage{footnote} %the perpage package command
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{acronym}
+\usepackage[font={small}]{caption}
+
+
+\usepackage{footmisc}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % pro podmineny preklad
 % false je defaultně
@@ -115,8 +119,8 @@ morecomment=[l]{\#},
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 \pagestyle{empty}
-
-
+%nastaveni velikosti footnote
+\renewcommand\footnotelayout{\footnotesize}
 \input{titulbp}
 \newpage
 \input{listsezadanim} % resi si zalomeni sam
@@ -155,7 +159,7 @@ TODO
 
 Enviromentální modelování se v poslední době rozšířilo ve značném rozsahu. Velkou částí k tomu přispěla dostupnost informačních technologií a s ní spojený zájem vědeckých pracovišť o tento obor. Již ze samotného názvu vyplývá, že enviromentální modelování se zabývá životním prostředím a jeho modelováním. Pod tento obor spadá nespočetné množství podoborů, které se především liší hledáním odpovědí na rozdílné otázky. Specifikovat jednotnou definici pro enviromentálního modelování je pro jeho multidisciplinární charakter velmi obtížné. Modelování přírodních procesů vzniklo v důsledku zájmu člověka o pochopení přírody. Studium a simulace přírodních jevů a jejich zákonitostí z oborů fyzikálních, matematických, biologických, chemických v dnešní době velmi usnadňuje člověku život a v některých regionech je člověk i přímo závislý na zprostředkovaných výsledcích, které jsou produktem enviromentálních modelů. 
 
-Modelování dešťových srážek je jednou z dů disciplín z oboru enviromentálního modelování. Když se poohlédneme do první poloviny 19. století, tak právě meteorologie byla jednou z prvních disciplín, která definovala pojem enviromentální modelování, tak jak ho chápeme nyní. Modelování srážek na zemském povrchu se s vývojem klimatu stává v poslední době důležitým úkolem. Oproti rozvoji fyzikálně numerických modelů a to především díky stále se zvyšujícím výpočetním výkonům počítače, nebyl technologický pokrok ve sběru srážkových dat v posledních desetiletích takřka zaznamenán. Pracovníky meteorologických a hydrologických ústavů ve vývoji brzdí nedostatečně přesná a neaktuální srážková data, která jsou jedním z hlavních vstupů pro další modely. Studie z posledních let poukazují na možnost využití mikrovlnných(MV) spojů vysílačů telekomunikačních operátorů ke sběru srážkových dat. Tento zdroj je levnější a přesnější než sběr pomocí radaru.\cite{radar_meterology} Největší potenciál sběru přesných srážkových dat v reálném čase spočívá ve vylepšení městských odtokových modelů. Pro efektivitu těchto modelů je sběr dat v dostatečném rozlišení a v reálném čase nutností.
+Modelování dešťových srážek je jednou z disciplín z oboru enviromentálního modelování. Když se poohlédneme do první poloviny 19. století, tak právě meteorologie byla jednou z prvních disciplín, která definovala pojem enviromentální modelování, tak jak ho chápeme nyní. Modelování srážek na zemském povrchu se s vývojem klimatu stává v poslední době důležitým úkolem. Oproti rozvoji fyzikálně numerických modelů a to především díky stále se zvyšujícím výpočetním výkonům počítače, nebyl technologický pokrok ve sběru srážkových dat v posledních desetiletích takřka zaznamenán. Pracovníky meteorologických a hydrologických ústavů ve vývoji brzdí nedostatečně přesná a neaktuální srážková data, která jsou jedním z hlavních vstupů pro další modely. Studie z posledních let poukazují na možnost využití mikrovlnných(MV) spojů vysílačů telekomunikačních operátorů ke sběru srážkových dat. Tento zdroj je levnější a přesnější než sběr pomocí radaru.\cite{radar_meterology} Největší potenciál sběru přesných srážkových dat v reálném čase spočívá ve vylepšení městských odtokových modelů. Pro efektivitu těchto modelů je sběr dat v dostatečném rozlišení a v reálném čase nutností.
 
 Hlavním cílem této práce je vyvinutí nástroje pro zpracování hrubých dat z MV vysílačů v prostředí GIS, čímž se zpřístupní nespočet dalších analýz pro vývoj tohoto výzkumu. Téma práce bylo založeno na požadavcích zpracovatele projektu, který se zabývá problematikou odhadu srážek z MV zdrojů v rámci projektu TeleMAS v souvislosti s modelováním srážko-odtokových procesů v městských povodích. Tento projekt je řešen v úzké vědecké spolupráci s ETH-Eawag a odborné spolupráci se společnostmi T-Mobile a Veolia ČR a nyní nově s Ericsson Research (Sweden).  !!!!!Tady by měl být uveden odkaz na projekt a ten uveden v citacích!!!!
 
@@ -261,8 +265,6 @@ Nejlepší odhad srážek pomocí radiolokátoru by byl získán v případě m�
    %\label{fig:Srazky}
 \end{figure}
 
-
-
 \footnotetext{\url{http://www.meteoradar.cz/obr/0706181530.gif}}
 \end{description}
 
@@ -321,7 +323,7 @@ Vysílané hodnoty intenzit signálu \emph{tx} jednotlivých MV spojů jsou kons
 \end{itemize}
 Přijaté hodnoty intenzit \emph{rx} jsou nositelem informace o útlumu signálu. Rozdílem vyslané \emph{tx} a přijaté \emph{tx} intenzity dostaneme výsledný útlum \emph{$A_{r}$} v jednotkách decibel[dB].
 \begin{equation}
- A_{r}=rx-tx
+ A_{r}=tx-rx
 \end{equation}
 Dalším krokem je určení \emph{baseline}, tedy hodnoty \emph{ $A_{0}$ }  ,která představuje konstantní útlum intenzity signálu MV spoje bez vlivu útlumu signálu dešťovými kapkami. Tato konstanta je v jednotkách decibel[dB]. Parametrická konstanta  \emph{$A_{w}$ } je hodnota nadměrného útlumu způsobená mokrou anténou. Z toho plyne výsledný útlum \emph{$A_{m}$ }[dB].
 \begin{equation}\label{eq:Ar}
@@ -415,29 +417,124 @@ Velkým potenciálem je takřka nulová finanční náročnost pro sběr dat. Te
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\textwidth]{./img/srazky/opensignalmap.png}
-    \caption[Porytí tel. sítí]{\centering Mapa celosvětového pokrytí signálu telekomunikačních mobilních operátorů. Pokrytí je vyjádřeno oranžovou a žlutou barvou.  \footnotemark }
+    \caption[Porytí tel. sítí]{\centering Mapa celosvětového pokrytí signálu telekomunikačních mobilních operátorů. Pokrytí je vyjádřeno oranžovou a žlutou barvou. \footnotemark }
  \end{figure}   
-\footnotetext{Obrázek byl sejmut z webové aplikace OpenSignal. URL: \url{http://opensignal.com/}}
+\footnotetext{Obrázek byl sejmut z webové aplikace OpenSignal. \url{http://opensignal.com/}}
+
+
+\setcounter{footnote}{1}
 
 
 
 
-\section{Modul r.mwprecip}
-\subsection{GRASS GIS}
+
+
+
+
+
+
+\section{Rekonstrukce MV srážek v GRASS GIS}
+\subsection{Úvod do systému GRASS GIS}
+\textbf{GRASS} (Geographic Resources Analysis Support System) GIS \footnotetext{\url{http://grass.osgeo.org/}} je multiplatformní geografický systém, šiřitelný pod všeobecně veřejnou licencí \acs{GNU GPL}. Systém je primárně určený pro správu 2D/3D rastrových a vektorových geodat, jejich zpracování, analýzu a vizualizaci. K těmto účelům knihovna GRASS GIS disponuje několika stovkami modulů, které jsou současní stabilních verzí. Mimo to je volně dostupných mnoho jiných modulů, které jsou vyvíjeny uživateli v rámci GRASS \textit{AddOns} a mohou se stát součástí stabilních vývojových verzí GRASS. 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.3\textwidth]{./img/grass/grasslogo.png}
+    \caption[Logo GRASS]{\centering Logo GRASS GIS vydané symbolicky k 30. výročí od založení projektu. \footnotemark }
+ \end{figure}   
+\footnotetext{\url{http://grass.osgeo.org/uploads/images/30-years-grass-gis-logo-black-300px.png}}
+
+
+\subsubsection*{Historie}
+Vývojová linie GRASS GIS je sálá od poloviny osmdesátých let minulého století, kde byl vyvinut primárně pro americkou armádu, která jej využívala pro územní správu a plánování. Během 90. let se postupně na vývoji projektu podíleli americké federální agentury, univerzity a soukromé společnosti. Hlavní vývoj projektu byl řízen z výzkumných laboratoří (USA-CERL\footnotetext{\url{http://www.cecer.army.mil/}}) Champaign, Illinois.\cite{grasshist}.
+Mezníkem historie GRASSu byl rok 1995, ve kterém se laboratoře CERL zřekli tohoto projektu, čehož  následek byl přesun vývoje na akademickou půdu. Rok před začátkem nového tisíciletí byla vydána první verze pod licencí GNU GPL, pod kterou je vyvíjen dodnes. V letech 2008 se GRASS GIS zařadil do nadace \acs{OSGeo}, pod kterou spadá mnoho významných volně šiřitelných geografických projektů.\footnotetext{\url{http://www.osgeo.org/}}. Letošním rokem oslavil GRASS dlouhých 30 let vývoje, které zaštítil vydáním verze \textit{GRASS GIS 7.0.0 beta1}.\footnotetext{url{http://grass.osgeo.org/news/32/56/GRASS-GIS-7-0-0-beta1/}}
+
+\subsubsection*{Základní terminologické pojmy}
+Hlavním cílem této sekce je představit čtenáři základní filosofii uživatelského rozhraní systému GRASS GIS.
+\paragraph*{Data} ke kterým GRASS přistupuje, jsou definována  pevně stanovenou  adresářovou  strukturou. Pro práci v tomto systému, je prvně zapotřebí definovat trojici nastavení. V grafickém rozhraní GRASS \acs{wxGUI} je implementován průvodce nastaveni pro jednotlivými kroky 
+
+\begin{enumerate}
+\item \textbf{Database} v prostředí GRASS je stanovena proměnou \texttt{\$GISBASE}. Jedná se o standardní adresář umístěny na disku, který je pojmenován (\textit{grassdata}). V tomto adresáři jsou uloženy veškerá uživatelská data mimo externě připojené databáze (\textit{např. PostgreSQL, MySQL }).
+
+\item \textbf{Lokace} je adresář umístěný v souborové databance. Lokace je definována proměnou   \texttt{\$LOCATION\_NAME}
+a obsahuje data, která nesou informace o souřadnicovém systému a velikosti zájmového území. Pro nastavení lokace je v grafickém rozhraní průvodce nastavením lokace (\textit{Location wizard}), kde je možné zvolit souřadnicový systém pomocí možností.
+\begin{itemize}
+\item seznam jednotlivých obecně známých projekcí 
+\item zadáním unikátního kódu z databáze \acs{EPSG}. \footnote{\url{http://www.epsg-registry.org/}}
+\item načtením externích georeferencovaných dat
+\item definováním parametrů projekce s využitím pravidel PROJ.4\footnote{\url{http://trac.osgeo.org/proj/}}
+\item pomocí \ac{WTK} souboru .prj, který je součástí shapefile jako doplňkový.
+\end{itemize}
+
+\item \textbf{Mapset} definovaný proměnou \texttt{\$MAPSET} představují jakýsi profil uživatele, či profil ucelených analýz  v dané lokaci. Každá lokace musí obsahovat mapset, který má unikátní název \texttt{PERMANENT}. Do tohoto mapsetu se z pravidla ukládají vstupní data, ke kterým se z ostatních pracovních mapsetů přistupuje.
+\end{enumerate}
+
+\paragraph*{Modul} je nedílnou součástí software architektury tohoto geoinformačního systému. Volba implementace pomocí jednotlivých modulů pochází z doby, kdy vypočtení technika byla v počátcích a šetrné využití operační paměti a procesorového výkonu bylo nezbytností. Jádro systému je napsáno procedurálně v jazyce C k němuž jsou  jednotlivé funkcionality integrovány pomoci \acs{API}, které je v jazyce C a Python. Jednotlivé moduly jsou logicky rozděleny do kategorií, podle účelu jejich využití.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{cccccccc}
+\hline
+db. & d. & g. & i. & ps. & r3. & r. & v. \\ \hline
+database & display & general & imagery & poststript & 3D raster & raster & vector
+\end{tabular}
+\caption{Přehled jednotlivých skupin modulů a jejich prefixů v GRASS GIS}
+\label{tab:module}
+\end{table}
+
+
+A nyní také nově také \textit{*t.} pro Temporal GRASS.Jednotlivé moduly se spouštějí pomocí příkazové řádky a nebo v grafickém rozhraní \textit{wxGUI} . Rozhraní modulů umožňuje uživatelský vstup pomocí přepínačů a parametrů např. \texttt{mv.precip -p database=letnany}. Parametry se dělí na povinné(\texttt{required}) a volitelné (\texttt{optional}). V modulech jsou také globální přepínače, které jsou pro všechny moduly definovány jednotně. Mezi nejčastěji využívané patří \texttt{--help}, který do terminálu vypíše veškeré informace o vstupních parametrech včetně jejich  popisu.
+
+\subsection{Modul r.mwprecip} 
 \subsection{Použité technologie}
+
 \subsubsection{GRASS Python API}
 \subsubsection{PostgreSQL/Postgis}
 \subsubsection{Psycopg?}
+
 \subsection{Funkcionalita modulu}
 \subsubsection{Vstup-data}   
 \subsection{Výstup}
 
-\subsection{Interpolace srážek}
 
+\setcounter{footnote}{1}
+\section{Interpolace srážek}
+
+
+\setcounter{footnote}{1}
 \section{Časoprostorové analýzy}
+Hlavní účelem GIS systému je  vytvoření informačního systému, který umožňuje získávání, ukládání, analýzu a vizualizaci dat, která mají prostorový rozsah povrchu Země. Všeobecně je hlavním cílem vytvoření operačních modelů založených na reálném světě. Pro modelování některých reálných jevů je nedílnou součástí časová složka. Z náhledu na historický vývoj většiny GIS software vyplývá, že primární zaměření vývoje bylo nejvíce zaměřeno na práci s prostorovými daty, nikoli však časoprostorovými. Software pro zpracování  časoprostorových dat byl z pravidla vyvíjen samostatně, mimo systémy GIS. Nicméně v poslední dekádě přestal být z velké části tento fakt pravdivý. .\cite{geospatialanal} Systém GRASS nyní v nové verzi \textit{GRASS GIS 7 } obsahuje kompletně nově navržený balíček modulů TGRASS \footnote{\url{http://grass.osgeo.org/grass70/manuals/temporalintro.html}}, který integruje do tohoto GIS systému časový rozměr.
+Tato kapitola obsahuje část teoretickou a praktickou. V první části, tedy teoretické je úvod do problematiky časoprostorové reprezentace a představení modelu a funkcionality nového TGRASS. Hlavním cílem teoretické části je představení časoprostorových datových modelu s primárním zaměřením na model, který je využit v modulech TGRASS. V části praktické budou definovány časoprostorové funkce s využitím modulů TGRASS, vhodné  pro analýzy zrekonstruovaných srážek pomocí vlastního modulu \textit{r.mwprecip}. K teoretické části byla jako primární zdroj využita kniha Geographical information system vol.2\cite{gistemporal}
+
+\subsection{Časoprostorové modely}
+
+Časoprostorové modely se liší v jednotlivém pojedí vztahů, které propojují časovou složku s prostorovými daty. Níže jsou přiblíženy principy jednotlivých modul s zaměřením na základní model (Snapshot model), který je také datovým modelem TGRASS.
+\subsubsection{Snapshot approach model}
+Jedná se o jeden z nejrozšířenějších a nejednodušších modelů. U tohoto modelu je začlenění časových složek aplikováno pomocí relačního modelu, který je charakteristický relačními tabulkami, tedy členění daných vektorových či rastrových rámců do jednotlivých časových vrstev. Názorným principem modelu je obrázek \ref{fig:snapshot}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.4\textwidth]{./img/temporal/snapshot.png}
+    \caption[Snapshot model]{Jednotlivé snímky \emph{S} reprezentují dané stavy v čase \emph{t} . V daném případě obrázek znázorňuje vývoj dešťových srážek.  \centering \footnotemark }
+        \label{fig:snapshot}
+ \end{figure}   
+\footnotetext{Podkladem pro obrázek byly využity výstupy z modulu r.mwprecip}
+
+Tento model je specifický především pro rastrové interpretace. Jak již bylo zmíněno, model uchovává jednotlivé vrstvy pro dané časové okamžiky odděleně. Jsou tedy jednotlivé tématické informace zájmové oblasti ukládány do separovaných vrstev. Model tedy není kontinuálním systémem, ale diskrétním. Jednotlivé proměnné, tedy geodata se mění v průběhu času skokově(nespojitě). Diskrétní modely jsou obecně vzato využívány v situacích, kdy je přesné exaktní vyjádření velice obtížné a je výhodné problém reprezentovat zjednodušeně. Z toho mimo jiné v GIS plyne, že jednotlivé snímky nemají informace o stavech  předchozího či následujícího časového okamžiku.
+Nevýhodou tohoto modelu je datová redundance, která je způsobena ukládáním informací pro daný okamžik vždy v plném rozsahu. Tedy jednotlivé geodata jsou uchovávány pro časový nenávazně na předchozích. Vezmeme-li pro názornost extrémní případ, kdy časový dataset obsahuje vrstvy znázorňující jev, který byl v průběhu času neměnný, tento model do úložiště počítače uloží několikanásobně stejné geoinformace. Tato charakteristika je v GIS praxi poměrně nevýhodná, jelikož ve většině případů jsou změny mezi jednotlivými okamžiky malé.
+Mezi nevýhody diskrétního modelování patří skoková interpretace problematiky. V GIS to má za důsledek to, že může nastat situace, kdy dojde mezi časovým krokem k velké změně, ta ovšem nebude zaznamenána.
+Pro srovnávání změn jednotlivých prostorových rámců v čase je díky architektuře modulu nutnost procházení a porovnávání buňky po buňce, či nastaveným kernelem, což vede k veliké operační náročnosti.
+
+ 
+
+\subsubsection{Datový model}
+
+\subsubsection{Temporal GRASS GIS framework}
+\subsubsection{Temporal GRASS GIS framework}
+
 
 \subsection{Využitelnost}
-
+\setcounter{footnote}{1}
 \section{Závěr}
 \section{Příloha}
 \subsection{Dokumentace}
@@ -473,11 +570,15 @@ Cílem této práce bylo
   	\acro{GIS}{Geographic Information System (Geografický informační systém)}
 	\acro{GRASS}{Geographical Resources Analysis Support System}
 	\acro{GUI}{Graphical User Interface (Grafické uživatelské rozhraní)}
-	\acro{XML}{Extensible Markup Language}
 	\acro{ITU}{International Telecommunication Union}
   	\acro{RSL}{Received Signal Level}
   	\acro{HMM}{Hidden Markov Model} 
-  	\acro{IR}{Infra red (infrčervené spektrum)} 	
+  	\acro{IR}{Infra red (infračervené spektrum)} 
+  	\acro{GNU GPL}{Všeobecná veřejná licence GNU (GNU General Public License)} 		
+	\acro{OSGeo}{Open Source Geospatial Foundation} 
+	\acro{wxGUI}{WxPython-based GUI for GRASS}	
+	\acro{EPSG}{Geodetic Parameter Set}	
+	\acro{WTK}{Well-known text}
 \end{acronym}
 
 
@@ -567,6 +668,14 @@ LEIJNSE, H., R. UIJLENHOET a J. N. M. STRICKER. \textit{Rainfall measurement usi
 Asaf Rayitsfeld, Rana Samuels, Artem Zinevich, Uri Hadar, Pinhas Alpert, \textit{Comparison of two methodologies for long term rainfall monitoring using a commercial microwave communication system}. Atmospheric Research, Volumes 104–105, February 2012, Pages 119-127, ISSN 0169-8095, http://dx.doi.org/10.1016/j.atmosres.2011.08.011.
 URL:\textless\url {http://www.sciencedirect.com/science/article/pii/S0169809511002626}
 
+\bibitem{grasshist}
+Historical Notes. \textit{GRASS GIS} [online]. 1998-2014 [cit. 2014-04-17]. URL:\textless\url {http://grass.osgeo.org/home/history/}
+
+\bibitem{geospatialanal}
+SMITH, Michael J, Michael F GOODCHILD a Paul LONGLEY. \textit{Geospatial analysis: a comprehensive guide to principles, techniques and software tools} [online]. 4th ed. Winchelsea, UK: The Winchelsea Press, c2013, s. 130-135 [cit. 2014-04-18]. ISBN 9781906221980.
+
+\bibitem{gistemporal}
+LONGLEY, Paul.\textit{Geographical information systems: principles, techniques, management, and applications}[online]. 2nd ed., abridged. Hoboken, N.J.: John Wiley, c2005 [cit. 2014-04-18]. ISBN 0471735450.
 
 
 \end{thebibliography}

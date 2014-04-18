@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8
 
-import sys, os, numpy, argparse
+import sys, os,  argparse
 import psycopg2 as ppg
 import psycopg2.extensions
 

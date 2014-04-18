@@ -67,7 +67,6 @@ except ImportError:
 #% answer: 96
 #%end
 
-
 #%option 
 #% key: aw
 #% label: aw value
@@ -100,10 +99,6 @@ except ImportError:
 #% required: no
 #%end
 
-
-
-
-
 ##########################################################
 ################# guisection: Timewindows ##############
 ##########################################################
@@ -119,7 +114,7 @@ except ImportError:
 #%option 
 #% key: fromtime
 #% label: First timestamp "YYYY-MM-DD H:M:S"
-#% description: Set first timestamp for create timewindows
+#% description: Set first timestamp to create timewindows
 #% type: string
 #% guisection: Time-windows
 #%end
@@ -127,7 +122,7 @@ except ImportError:
 #%option 
 #% key: totime
 #% label: Last timestamp "YYYY-MM-DD H:M:S"
-#% description: Set last timestamp in format for create timewindows
+#% description: Set last timestamp to create timewindows
 #% type: string
 #% guisection: Time-windows
 #%end
@@ -264,7 +259,7 @@ temp_windows_names=[]
 schema_name=''
 
 ###########################
-##   Miscellaneous
+##   Point-link interpolation
 
 def intrpolatePoints(db):
     
@@ -305,11 +300,7 @@ def intrpolatePoints(db):
     temp=[]
     for record in resu:
         tmp=record[0]
-        tmp = tmp.replace("LINESTRING(", "") ### ???
-        tmp = tmp.replace(" ", ",")
-        tmp = tmp.replace(")", "")
-        tmp = tmp.split(",")
-        
+        tmp = tmp.replace("LINESTRING(", "").replace(" ", ",").replace(")", "").tmp.split(",")
         latlong.append(tmp)# add [lon1 lat1 lon2 lat2] to list latlong
         
         lon1=latlong[a][0]
@@ -322,14 +313,16 @@ def intrpolatePoints(db):
     
         az=bearing(lat1,lon1,lat2,lon2) #compute approx. azimut on sphere
         a+=1
+        
+        
         while abs(dist) > step:         #compute points per step while is not achieve second node on link
             lat1 ,lon1, az, backBrg=destinationPointWGS(lat1,lon1,az,step)  #return interpol. point and set current point as starting point(for next loop), also return azimut for next point
             dist-=step  #reduce distance
 
-            out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+'|'+str(x)+"\n" # set string for one row in table wit interpol points
+            out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+'|'+str(x)+"\n" # set string for one row in table with interpol points
             temp.append(out)
             x+=1
-
+    
     io.writelines(temp)            #write interpolated points to flat file
     io.flush()
     io.close()
@@ -417,6 +410,9 @@ def bearing(lat1,lon1,lat2,lon2):
           
     return (brng+360) % 360
 
+
+###########################
+## Miscellaneous
 def print_message(msg):
     grass.message(msg)
     grass.message('-' * 60)
@@ -969,7 +965,6 @@ def readBaselineFromText(pathh):
         mydict = {float(rows[0]):float(rows[1]) for rows in reader}
     return mydict
     
-
 ###########################
 ##   GRASS work
 
@@ -1108,7 +1103,8 @@ def precipInterpolationDefault(points_nat,win):
                            input=points_nat,
                            column = attribute_col,
                            output=out,
-                           overwrite=True)        
+                           overwrite=True,
+                           power=1)        
 
     grass.run_command('r.colors',
                         map=out,
@@ -1292,7 +1288,8 @@ def makeTimeWin(db,typeid,table):
         prefix='g'
     
     cur_timestamp=timestamp_min
-##making timewindows from time interval
+    
+##make timewindows from time interval
 ###############################################
     while cur_timestamp<timestamp_max:
         #print_message(cur_timestamp)
@@ -1405,13 +1402,13 @@ def computeAlphaK(freq,polarization):
 ##   main
 
 def main():
-
         print_message("Module is running...")
-        global schema_name
+        
+        global schema_name,path
         schema_name = options['schema']
-        global path
         path= os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmp_%s"%schema_name)
         print_message(path)
+        
         try: 
             os.makedirs(path)
         except OSError:

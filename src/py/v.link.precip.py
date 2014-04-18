@@ -230,13 +230,11 @@ def run():
     if flags['p']:
         view=schema+'.%sview'%prefix+time.replace('-','_').replace(':','_').replace(' ','_')
         view=view[:-3]
-        sql='select %s, precip_mm_h_minute from %s '%(key,view)
-        try:
-            grass.run_command('db.select',
+        sql='select %s, precip_mm_h from %s '%(key,view)
+        grass.run_command('db.select',
                     sql=sql,
                     separator='  ')
-        except:
-            pass
+        
         
         
 def main():
