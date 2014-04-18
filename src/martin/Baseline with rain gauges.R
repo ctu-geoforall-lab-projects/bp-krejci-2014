@@ -1,0 +1,81 @@
+################################################
+######  Baseline separation based on RGs  ######
+######    by Martin Fencl (21.02.2014)    ######
+######      last updtate:  14.03.2014     ######
+################################################
+
+###################
+## load data
+###################
+#load(".\\Data\\MWL RSL\\ASCII\\RSL_IV_XII.RData") #list of data.frames(time,rxpower,txpower), i.e 26 data.frames 
+setwd("/home/matt/Dropbox/BC/bp-krejci/src/martin/")
+w.tab <- read.table("./event_info_all.csv", sep=";", header=T)  # table with information about rainfall events based on rain gauges
+
+
+###################
+## baseline indentification
+###################
+
+w.tab [,1] <- as.POSIXct(w.tab [,1], tz="UTC")
+w.tab [,2] <- as.POSIXct(w.tab [,2], tz="UTC")
+
+#create safety window 1 h before and 6 hours after rainfall
+w.tab[ ,1] <- w.tab[ ,1]-3600*1
+w.tab[ ,2] <- w.tab[ ,2]+3600*6
+
+w.tab2 <- w.tab[1, 1:2]
+k <- 1
+for(i in 2:length(w.tab[,2])){
+  if(w.tab[i ,1] > w.tab2[k ,2]){
+    w.tab2 <- rbind(w.tab2, w.tab[i, 1:2])
+    k <- k + 1
+  }else{
+    w.tab2[k ,2] <- w.tab[i ,2]
+  }
+}  
+
+
+#mwl.pars <- convert.ITU.pars(ITU, mwl.info)
+
+# baseline separation
+A <- list()
+for(i in 2:26){
+  RSL[[i]][which(RSL[[i]][,2] == -99.9),2] <- NA  
+  RSL.i <- data.frame("time" = RSL[[i]][,1], "A" = RSL[[i]][,3]-RSL[[i]][,2])
+  bas <- RSL.i
+  
+  ##constant baseline for beggining and end of RG periods
+  
+  #1) baseline for periods before RG measurements
+  id.bef <- which(bas[,1] < w.tab2[1,1])
+  bas[id.bef, 2] <- bas[length(id.bef), 2]
+  
+  #2) baseline for periods after RG measurements
+  id.aft <- which(bas[,1] > w.tab2[length(w.tab2[,1]),2])
+  bas[id.aft, 2] <- bas[id.aft[1], 2]
+  
+  #3) linear interpolation between dry periods identified using RGs
+  for(j in 1:length(w.tab2[,1])){
+    id.bas.j <- which(bas[,1] >= w.tab2[j, 1] & bas[,1] <= w.tab2[j, 2])
+    bas1 <- bas[id.bas.j[1]-1, ]
+    bas2 <- bas[id.bas.j[length(id.bas.j)]+1, ]
+    per.i <- as.POSIXct(c(bas1[1,1], bas2[1,1]), tz="UTC")
+    if(is.na(bas1[1,2]*bas2[1,2])==F){
+      bas[id.bas.j, 2] <- approx(per.i, c(bas1[,2], bas2[,2]), bas[id.bas.j,1])$y     
+    }else(bas[id.bas.j, 2] <- NA)
+    
+    #if(sum(j == c(5, 10, 20, 50, 100)) > 0){print(j)}
+  }
+  
+  #plot(bas, type="l")
+  #plot(RSL.i[ ,1], RSL.i[ ,2]-bas[ ,2], type="l", ylim=c(-2,5))
+  print(i)
+  
+  A[[i]] <- RSL.i
+  A[[i]][ ,2] <- RSL.i[ ,2]-bas[ ,2]
+
+  
+}  
+
+#A is a list of 26 data.frames. Each data.frame contains rainfall induced attenuations calculated for 1 channel of 1 MWL. The data are corrected for time shift. There are 11 MWLs with two cahnnels and 3 MWLs with one channel in the data set. THe MWLs are located in Prague, Letanany. The attenuation is claculated using as a baseline dry weather attenuation. To set the wet weather baseline the linear interpolation between two dry weather periods is performed. Dryweather is clasified based on tipping bucket RG data."
+

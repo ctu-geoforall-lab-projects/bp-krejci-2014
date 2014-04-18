@@ -44,11 +44,22 @@ except ImportError:
 ##########################################################
 ############## guisection: Baseline #################
 ##########################################################
+#%option
+#% key: statfce
+#% label: Choose method for compute bs from time intervals
+#% options: quantile, mode, avg
+#% multiple: yes
+#% answer: mode
 
-#%flag
-#% key:m
-#% description: Baseline by stat. mode from dataset 
 #% guisection: Baseline
+#%end
+
+#%option 
+#% key: quantile
+#% label: Set quantile
+#% type: integer
+#% guisection: Baseline
+#% answer: 96
 #%end
 
 #%option 
@@ -60,20 +71,18 @@ except ImportError:
 #%end
 
 #%option 
-#% key: quantile
-#% label: Baseline by quantile from dataset 
-#% type: integer
-#% guisection: Baseline
-#% answer: 96
-#%end
-
-#%option 
 #% key: aw
 #% label: aw value
 #% description: Wetting antena value Aw[dB] 
 #% type: double
 #% guisection: Baseline
 #% answer: 1.5
+#%end
+#%option G_OPT_F_INPUT
+#% key: baseltime
+#% description: Set interval or just time when not raining (see the manual)
+#% guisection: Baseline
+#% required: no
 #%end
 
 #%option G_OPT_F_INPUT 
@@ -83,21 +92,7 @@ except ImportError:
 #% required: no
 #%end
 
-#%option
-#% key: statfce
-#% label: Choose method for compute bs from time intervals
-#% options: quantile, mode, avg
-#% multiple: yes
-#% answer: mode
-#% guisection: Baseline
-#%end
 
-#%option G_OPT_F_INPUT
-#% key: baseltime
-#% description: Set interval or just time when not raining (see the manual)
-#% guisection: Baseline
-#% required: no
-#%end
 
 ##########################################################
 ################# guisection: Timewindows ##############
@@ -680,11 +675,7 @@ def isCurrSet():
 
         elif options['baselfile']:
             new_precip_conf='fromfile|'+options['aw']
-            
-        elif flags['m']:
-            new_precip_conf='mode|'+options['aw']
-        else:
-            new_precip_conf='quantile'+ options['quantile']+'|'+options['aw']
+
             
         if curr_precip_conf !=new_precip_conf:
             return False
@@ -695,13 +686,7 @@ def getBaselDict(db):
 ## choose baseline compute method that set user and call that function, return distionary key:linkid, 
   
         
-        if  flags['m']:
-            print_message('Computing baselines "mode"...')
-
-            computeBaselinFromMode(db,'link','record')
-            links_dict=readBaselineFromText(os.path.join(path,'baseline'))
-            
-        elif options['baselfile']:
+        if options['baselfile']:
             print_message('Computing baseline "text file"...')
             links_dict=readBaselineFromText(options['baselfile'])
             try:
@@ -716,10 +701,6 @@ def getBaselDict(db):
             computeBaselineFromTime(db,options['statfce'])
             links_dict=readBaselineFromText(os.path.join(path,'baseline'))
                 
-        else:
-            print_message('Computing baselines "quantile"...')
-            computeBaselineFromQuentile(db,"link","record")
-            links_dict=readBaselineFromText(os.path.join(path,'baseline'))
         
         return  links_dict  
 
@@ -1452,14 +1433,17 @@ def main():
         
 
 ##compute precipitation
-        if not isCurrSet(): 
-            sql="drop schema IF EXISTS %s CASCADE" % schema_name
-            shutil.rmtree(path)
-            os.makedirs(path)
-            db.executeSql(sql,False,True)
-            sql="CREATE SCHEMA %s"% schema_name
-            db.executeSql(sql,False,True)
-            computePrecip(db)
+        if not isCurrSet():
+            if not options['baseltime'] or options['baselfile']:
+                grass.fatal("For compute precipitation is necessity to set parametr 'baseltime' or 'baselfile'")
+            else:
+                sql="drop schema IF EXISTS %s CASCADE" % schema_name
+                shutil.rmtree(path)
+                os.makedirs(path)
+                db.executeSql(sql,False,True)
+                sql="CREATE SCHEMA %s"% schema_name
+                db.executeSql(sql,False,True)
+                computePrecip(db)
 
             
 ##make time windows
