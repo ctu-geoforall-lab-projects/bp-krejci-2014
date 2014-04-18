@@ -300,7 +300,10 @@ def intrpolatePoints(db):
     temp=[]
     for record in resu:
         tmp=record[0]
-        tmp = tmp.replace("LINESTRING(", "").replace(" ", ",").replace(")", "").tmp.split(",")
+        tmp = tmp.replace("LINESTRING(", "")
+        tmp=tmp.replace(" ", ",")
+        tmp=tmp.replace(")", "")
+        tmp=tmp.split(",")
         latlong.append(tmp)# add [lon1 lat1 lon2 lat2] to list latlong
         
         lon1=latlong[a][0]
@@ -715,7 +718,7 @@ def getBaselDict(db):
                 
         else:
             print_message('Computing baselines "quantile"...')
-            computeBaselineFromQuentile(db)
+            computeBaselineFromQuentile(db,"link","record")
             links_dict=readBaselineFromText(os.path.join(path,'baseline'))
         
         return  links_dict  
