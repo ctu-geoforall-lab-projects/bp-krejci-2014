@@ -515,15 +515,15 @@ Jedná se o jeden z nejrozšířenějších a nejednodušších modelů. U tohot
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth]{./img/temporal/snapshot.png}
-    \caption[Snapshot model]{Jednotlivé snímky \emph{S} reprezentují dané stavy v čase \emph{t} . V daném případě obrázek znázorňuje vývoj dešťových srážek.  \centering \footnotemark }
+    \caption[Snapshot model]{Jednotlivé snímky \emph{S} reprezentují  geodata v čase \emph{t}. Obrázek schématicky znázorňuje vývoj dešťových srážek.  \centering \footnotemark }
         \label{fig:snapshot}
  \end{figure}   
 \footnotetext{Podkladem pro obrázek byly využity výstupy z modulu r.mwprecip}
 
-Tento model je specifický především pro rastrové interpretace. Jak již bylo zmíněno, model uchovává jednotlivé vrstvy pro dané časové okamžiky odděleně. Jsou tedy jednotlivé tématické informace zájmové oblasti ukládány do separovaných vrstev. Model tedy není kontinuálním systémem, ale diskrétním. Jednotlivé proměnné, tedy geodata se mění v průběhu času skokově(nespojitě). Diskrétní modely jsou obecně vzato využívány v situacích, kdy je přesné exaktní vyjádření velice obtížné a je výhodné problém reprezentovat zjednodušeně. Z toho mimo jiné v GIS plyne, že jednotlivé snímky nemají informace o stavech  předchozího či následujícího časového okamžiku.
-Nevýhodou tohoto modelu je datová redundance, která je způsobena ukládáním informací pro daný okamžik vždy v plném rozsahu. Tedy jednotlivé geodata jsou uchovávány pro časový nenávazně na předchozích. Vezmeme-li pro názornost extrémní případ, kdy časový dataset obsahuje vrstvy znázorňující jev, který byl v průběhu času neměnný, tento model do úložiště počítače uloží několikanásobně stejné geoinformace. Tato charakteristika je v GIS praxi poměrně nevýhodná, jelikož ve většině případů jsou změny mezi jednotlivými okamžiky malé.
-Mezi nevýhody diskrétního modelování patří skoková interpretace problematiky. V GIS to má za důsledek to, že může nastat situace, kdy dojde mezi časovým krokem k velké změně, ta ovšem nebude zaznamenána.
-Pro srovnávání změn jednotlivých prostorových rámců v čase je díky architektuře modulu nutnost procházení a porovnávání buňky po buňce, či nastaveným kernelem, což vede k veliké operační náročnosti.
+Tento model je specifický především pro rastrové interpretace. Jak již bylo zmíněno, model uchovává jednotlivé vrstvy pro dané časové okamžiky odděleně, tedy jednotlivé tématické geoinformace zájmových oblastí jsou ukládány do separovaných vrstev.  Model  charakteristikou svého navržení odpovídá diskrétním systémům nikoli kontinuálním, tedy jednotlivé proměnné-geodata se mění v průběhu času skokově(nespojitě). Diskrétní modely jsou obecně vzato využívány v situacích, kdy je exaktní vyjádření velice obtížné a je výhodné problém reprezentovat zjednodušeně. Z toho mimo jiné pro GIS plyne, že jednotlivé snímky nemají informace o stavech  předchozího či následujícího časového okamžiku.
+Nevýhodou tohoto modelu je datová redundance, která je způsobena ukládáním informací pro daný okamžik vždy v plném rozsahu.  Jednotlivá geodata jsou uchovávány pro časové okamžiky nenávazně na předchozích. Vezmeme-li pro názornost extrémní případ, kdy časový dataset obsahuje vrstvy znázorňující jev, který byl v průběhu času neměnný, tento model do úložiště počítače zapíše několikanásobně stejné geoinformace. Tato charakteristika je v GIS praxi poměrně nevýhodná, jelikož ve většině případů jsou změny mezi jednotlivými okamžiky malé.
+Mezi nevýhody diskrétního modelování patří skoková interpretace problematiky. V GIS to má za důsledek to, že může nastat situace, kdy dojde mezi časovým krokem k velké změně, ta ovšem nebude zcela zaznamenána.
+Pro srovnávání změn jednotlivých prostorových rámců v čase je díky architektuře modelu nutnost procházení a porovnávání buňky po buňce, či nastaveným kernelem, což vede k veliké operační náročnosti.
 
  
 
