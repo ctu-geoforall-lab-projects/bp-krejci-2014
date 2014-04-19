@@ -12,6 +12,7 @@ import atexit
 import shutil
 import csv
 import glob
+import re
 from collections import defaultdict
 from datetime import datetime ,timedelta
 from pgwrapper import pgwrapper as pg
@@ -47,8 +48,8 @@ except ImportError:
 #%option
 #% key: statfce
 #% label: Choose method for compute bs from time intervals
-#% options: quantile, mode, avg
-#% multiple: yes
+#% options: avg,mode, quantile 
+
 #% answer: mode
 
 #% guisection: Baseline
@@ -64,7 +65,7 @@ except ImportError:
 
 #%option 
 #% key: roundm
-#% label: Round to "n" decimal places for computing mode
+#% label: Round to "m" decimal places for computing mode
 #% type: integer
 #% guisection: Baseline
 #% answer: 3
@@ -101,7 +102,6 @@ except ImportError:
 #% key: interval
 #% label: Summing precipitation per
 #% options: minute, hour, day
-#% multiple: yes
 #% guisection: Time-windows
 #% answer: minute
 #%end
@@ -174,9 +174,18 @@ except ImportError:
 #% guisection: Interpolation
 #%end
 
+
+#%option 
+#% key: pmethod
+#% label: Type of interpolation
+#% options: permeter, number
+#% guisection: Interpolation
+#% answer: permeter
+#%end
+
 #%option 
 #% key: step
-#% label: Interpolate points along links per meter.
+#% label: Setting for parameter pmethod
 #% type: integer
 #% guisection: Interpolation
 #% answer: 500
@@ -230,7 +239,7 @@ except ImportError:
 #% key: schema
 #% type: string
 #% label: Name of db schema for results
-#% answer: temp5
+#% answer: temp4
 #%end
 
 
@@ -312,15 +321,23 @@ def intrpolatePoints(db):
         az=bearing(lat1,lon1,lat2,lon2) #compute approx. azimut on sphere
         a+=1
         
-        
-        while abs(dist) > step:         #compute points per step while is not achieve second node on link
-            lat1 ,lon1, az, backBrg=destinationPointWGS(lat1,lon1,az,step)  #return interpol. point and set current point as starting point(for next loop), also return azimut for next point
-            dist-=step  #reduce distance
-
-            out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+'|'+str(x)+"\n" # set string for one row in table with interpol points
-            temp.append(out)
-            x+=1
+        if options['pmethod'].find('p')!=-1:##compute per distance interval
+            while abs(dist) > step:         #compute points per step while is not achieve second node on link
+                lat1 ,lon1, az, backBrg=destinationPointWGS(lat1,lon1,az,step)  #return interpol. point and set current point as starting point(for next loop), also return azimut for next point
+                dist-=step  #reduce distance
     
+                out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+'|'+str(x)+"\n" # set string for one row in table with interpol points
+                temp.append(out)
+                x+=1
+        else:## compute by dividing distance to sub-distances
+            step1=dist/(step+1)
+            for i in range(0,int(step)):         #compute points per step while is not achieve second node on link
+                lat1 ,lon1, az, backBrg=destinationPointWGS(lat1,lon1,az,step1)  #return interpol. point and set current point as starting point(for next loop), also return azimut for next point
+
+                out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+'|'+str(x)+"\n" # set string for one row in table with interpol points
+                temp.append(out)
+                x+=1
+                
     io.writelines(temp)            #write interpolated points to flat file
     io.flush()
     io.close()
@@ -341,6 +358,7 @@ def intrpolatePoints(db):
     db.executeSql(sql,False,True)
     sql="alter table %s.%s drop column long"%(schema_name,nametable) #remove longtitude column from table
     db.executeSql(sql,False,True)
+   
     
 def destinationPointWGS(lat1,lon1,brng,s):
     a = 6378137
@@ -411,6 +429,13 @@ def bearing(lat1,lon1,lat2,lon2):
 
 ###########################
 ## Miscellaneous
+def isTimeValid(time):
+
+        RE = re.compile(r'^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}$')
+        return bool(RE.search(time))
+
+ 
+ 
 def print_message(msg):
     grass.message(msg)
     grass.message('-' * 60)
@@ -437,62 +462,99 @@ def getFilesInFoldr(fpath):
 
     return tmp
     
-    
+
+###########################
+##   optional
+
+def removeTemp(db):
+            sql="drop schema IF EXISTS %s CASCADE" % schema_name
+            db.executeSql(sql,False,True)
+            shutil.rmtree(path)
+            print_message("Folder and schema removed")
+            sys.exit()
+
+def printTime(db):
+            sql="create view tt as select time from %s order by time"%record_tb_name
+            db.executeSql(sql,False,True)
+            #get first timestamp
+            sql="select time from tt limit 1"
+            timestamp_min=db.executeSql(sql,True,True)[0][0]
+            print_message('First timestamp is %s'%timestamp_min)
+            record_num=db.count(record_tb_name)
+            
+            #get last timestep
+            sql="select time from  tt offset %s"%(record_num-1)
+            timestamp_max=db.executeSql(sql,True,True)[0][0]
+            print_message('Last timestamp is %s'%timestamp_max)
+            sql="drop view tt"
+            db.executeSql(sql,False,True)
+            sys.exit()
+ 
+
 ###########################
 ##   database work
 
 def firstRun(db):
         print_message("Preparing database...")
         
+        print_message("1/16 Create extension")
         sql="CREATE EXTENSION postgis;"
         db.executeSql(sql,False,True)
-        print_message("1/16")
+        
+        print_message("2/16 Add geometry column to node")
         sql="SELECT AddGeometryColumn   ('public','node','geom',4326,'POINT',2); "
         db.executeSql(sql,False,True)
-        print_message("2/16")
+        
+        print_message("3/16 Add geometry column to link")
         sql="SELECT AddGeometryColumn  ('public','link','geom',4326,'LINESTRING',2); "
         db.executeSql(sql,False,True)
-        print_message("3/16")
+        
+        print_message("4/16 Make geometry for points")
         sql="UPDATE node SET geom = ST_SetSRID(ST_MakePoint(long, lat), 4326); "
         db.executeSql(sql,False,True)
-        print_message("4/16")
+        
+        print_message("5/16 Make geometry for links")
         sql="UPDATE link SET geom = st_makeline(n1.geom,n2.geom) \
         FROM node AS n1 JOIN link AS l ON n1.nodeid = fromnodeid JOIN node AS n2 ON n2.nodeid = tonodeid WHERE link.linkid = l.linkid; "
         db.executeSql(sql,False,True)
-        print_message("5/16")
+        
+        print_message("6/16 Add column polarization")
         sql="alter table record add column polarization char(1); "
         db.executeSql(sql,False,True)
+        
+        print_message("7/16 Add colum lenght")
         sql="alter table record add column lenght real; "
         db.executeSql(sql,False,True)
+        
+        print_message("8/16 Add column precip")
         sql="alter table record add column precip real; "
         db.executeSql(sql,False,True)
-        print_message("6/16")
-        print_message("7/16")
-        print_message("8/16")
-        print_message("9/16")
         
-        
-        print_message("10/16")
+        print_message("9/16 Connect table polarization to record")
         sql="update record  set polarization=link.polarization from link where record.linkid=link.linkid;"
         db.executeSql(sql,False,True)
-        print_message("11/16")
+        
+        print_message("10/16 Update record lenght")
         sql="update record  set lenght=ST_Length(link.geom,false) from link where record.linkid=link.linkid;"
         db.executeSql(sql,False,True)
         
-        
-        print_message("12/16")
+        print_message("11/16 Create sequence")
         sql="CREATE SEQUENCE serial START 1; "
         db.executeSql(sql,False,True)
-        print_message("13/16")
+        
+        print_message("12/16 Add column record")
         sql="alter table record add column recordid integer default nextval('serial'); "
         db.executeSql(sql,False,True)
-        print_message("14/16")
+        
+        print_message("13/16 Create index on recordid")
         sql="CREATE INDEX idindex ON record USING btree(recordid); "
         db.executeSql(sql,False,True)
-        print_message("15/16")
+        
+        print_message("14/16 Create index on time")
         sql="CREATE INDEX timeindex ON record USING btree (time); "
         db.executeSql(sql,False,True)
-        print_message("16/16")
+        
+        print_message("15/16 Add plsql function for compute mode")
         sql="CREATE OR REPLACE FUNCTION _final_mode(anyarray) RETURNS anyelement AS $BODY$ SELECT a FROM unnest($1)\
         a GROUP BY 1  ORDER BY COUNT(1) DESC, 1 LIMIT 1; $BODY$ LANGUAGE 'sql' IMMUTABLE;"
         db.executeSql(sql,False,True)
@@ -502,6 +564,8 @@ def firstRun(db):
             FINALFUNC=_final_mode, \
             INITCOND='{}');"
         db.executeSql(sql,False,True)
+
+        print_message("16/16 Remove links where data is missing '-99.9'")        
         sql="DELETE from record where rxpower<-99.9 "
         db.executeSql(sql,False,True)
         
@@ -646,13 +710,27 @@ def readRaingauge(db,path_file):
     db.executeSql(sql,False,True)     
     os.remove(os.path.join(path,"gauge_tmp"))
 
-
 ###########################
-##   baseline compute
+##  status
 
-def isCurrSet():
-##  chceck if current settings is same like settings from computing before. return True or False
- ##return false or tru depends on "Is a new user configuration or not?"        
+def isCurrSetT():
+        curr_timewindow_config="null"
+        try:
+            io1=open(os.path.join(path,"time_window_info"),"r")
+            curr_timewindow_config=io1.readline()
+            io1.close
+        except:
+            pass
+
+        #compare current and new settings   
+        new_timewindow_config=options['interval']+'|'+options['fromtime']+'|'+options['totime']+options['lignore']
+        if curr_timewindow_config!=new_timewindow_config or not (options['interval'] or options['fromtime'] or options['totime'] or options['lignore'] ) or options['rgauges']:
+            return False
+        else:
+            return True
+        
+def isCurrSetP():
+##  chceck if current settings is same like settings from computing before. return True or False       
         curr_precip_conf=''
         new_precip_conf=''
         try:
@@ -682,6 +760,9 @@ def isCurrSet():
         else:
             return True
 
+###########################
+##   baseline compute
+
 def getBaselDict(db):
 ## choose baseline compute method that set user and call that function, return distionary key:linkid, 
   
@@ -698,7 +779,7 @@ def getBaselDict(db):
         
         elif options['baseltime']:
             print_message('Computing baselines "time interval" "%s"...'%options['statfce'])
-            computeBaselineFromTime(db,options['statfce'])
+            computeBaselineFromTime(db)
             links_dict=readBaselineFromText(os.path.join(path,'baseline'))
                 
         
@@ -736,7 +817,7 @@ def computeBaselinFromMode(db,linktb,recordtb):
         except IOError as (errno,strerror):
             print "I/O error({0}): {1}".format(errno, strerror)
 
-def computeBaselineFromTime(db,typestr):
+def computeBaselineFromTime(db):
     #################################################################
     ##@function for reading file of intervals or just one moments when dont raining.##
     ##@format of input file(with key interval):
@@ -749,7 +830,7 @@ def computeBaselineFromTime(db,typestr):
     ##  2013-09-11 04:00:00
     ################################################################
     ##@typestr choose statistical method for baseline computing.
-    ## typestr='avg' empty is average
+    ## typestr='avg'
     ## typestr='mode'
     ## typestr='quantile'
     ################################################################
@@ -760,7 +841,7 @@ def computeBaselineFromTime(db,typestr):
     st=''
     
 ############### AVG ####################            
-    if typestr=='avg':
+    if options['statfce']=='avg':
         try:
                 f=open(bpath,'r')
     ##parse input file
@@ -770,21 +851,26 @@ def computeBaselineFromTime(db,typestr):
                     if 'i' in line.split("\n")[0]:          #get baseline form interval
                         
                         fromt = f.next()
-                        #print_message(fromt)
                         st+=fromt.replace("\n","")
                         tot = f.next()
-                        #print_message(tot)
+                    ##validate input data    
+                        if not isTimeValid(fromt) or not isTimeValid(tot):
+                            grass.fatal("Input data is not valid. Parameter 'baselitime'")
                         st+=tot.replace("\n","")
-                        sql="select linkid, avg(a) from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
+                        sql="select linkid, avg(txpower-rxpower)as a from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
                         resu=db.executeSql(sql,True,True)
                         tmp.append(resu)
                         
                     else:                       ##get baseline one moment
-                        time=datetime.strptime(line.split("\n")[0], "%Y-%m-%d %H:%M:%S")
+                        time=line.split("\n")[0]
+                    ##validate input data
+                        if not isTimeValid(time):
+                            grass.fatal("Input data is not valid. Parameter 'baselitime'")
+                        time=datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
                         st+=str(time).replace("\n","")
                         fromt = time + timedelta(seconds=-60)
                         tot = time + timedelta(seconds=+60)
-                        sql="select linkid, avg(a) from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
+                        sql="select linkid, avg(txpower-rxpower)as a from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
                         resu=db.executeSql(sql,True,True)
                         #print_message(resu)
                         tmp.append(resu)
@@ -825,7 +911,7 @@ def computeBaselineFromTime(db,typestr):
             
             
 ############### MODE or QUANTILE ####################            
-    elif typestr=='mode' or typestr=='quantile':
+    elif  options['statfce']== 'mode' or options['statfce']=='quantile':
         try:
                 f=open(bpath,'r')
     ##parse input file
@@ -839,6 +925,9 @@ def computeBaselineFromTime(db,typestr):
                         #print_message(fromt)
                         st+=fromt.replace("\n","")
                         tot = f.next()
+                    ##validate input data
+                        if not isTimeValid(fromt) or not isTimeValid(tot):
+                            grass.fatal("Input data is not valid. Parameter 'baselitime'")
                         #print_message(tot)
                         st+=tot.replace("\n","")
                         sql="select linkid, txpower-rxpower as a from record where time >='%s' and time<='%s'"%(fromt,tot)
@@ -846,10 +935,14 @@ def computeBaselineFromTime(db,typestr):
                         resu+=resu
                         
                     else:                       ##get baseline one moment
-                        time=datetime.strptime(line.split("\n")[0], "%Y-%m-%d %H:%M:%S")
+                        time=line.split("\n")[0]
+                        if not isTimeValid(time):
+                            grass.fatal("Input data is not valid. Parameter 'baselitime'")
+                        time=datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
                         st+=str(time).replace("\n","")
                         fromt = time + timedelta(seconds=-60)
                         tot = time + timedelta(seconds=+60)
+
                         sql="select linkid, txpower-rxpower as a from record where time >='%s' and time<='%s'"%(fromt,tot)
                         resu=db.executeSql(sql,True,True)
                         
@@ -887,10 +980,12 @@ def computeBaselineFromTime(db,typestr):
             print "I/O error({0}): {1}".format(errno, strerror)
          
         recname=schema_name+'.'+ table_mode_tmp
-        if typestr=='mode':
+        
+        
+        if options['statfce']=='mode':
             computeBaselinFromMode(db,recname,recname)
             
-        if typestr=='quantile':
+        if options['statfce']=='quantile':
             computeBaselineFromQuentile(db,recname,recname)
             
         sql="drop table %s.%s"%(schema_name,table_mode_tmp)
@@ -1024,7 +1119,11 @@ def grassWork():
         
         grass.run_command('g.region',
                           vect='link',
-                          res='00:00:01')
+                          res='00:00:01',
+                          n='n+ 00:00:20',
+                          w='w-00:00:20',
+                          e='e+00:00:20',
+                          s='s-00:00:20')
     #00:00:1
     try:
         with open(os.path.join(path,"timewindow"),'r') as f:            
@@ -1088,7 +1187,7 @@ def precipInterpolationDefault(points_nat,win):
                            column = attribute_col,
                            output=out,
                            overwrite=True,
-                           power=1)        
+                          )        
 
     grass.run_command('r.colors',
                         map=out,
@@ -1135,9 +1234,10 @@ def computePrecip(db):
             if not link[0] in links_dict:
                 print_message("Linkid= %s is missing in txtfile"%str(link[0]))
                 print_message("Link not included in computation")
-        print_message('HINT-> Missing "baseline,linkid" in text file. Link probably getting ERROR "-99.9" in selected time interval\n or you omitted values in input  text. You can add value manualy into the file and than use method "read baseline from file"' )
+        print_message('HINT-> Missing values "linkid,baseline," in text file. Link probably getting ERROR "-99.9" in selected time interval\n or you omitted values in input  text. You can add value manualy into the file and than use method "read baseline from file"' )
     
     print_message("Computing precipitation...")
+    
     recordid = 1
     temp= []
     for record in resu:
@@ -1247,8 +1347,8 @@ def makeTimeWin(db,typeid,table):
         else:    
             timestamp_max=to_time
             
-    print_message("first timestamp "+str(timestamp_min))
-    print_message("last timestamp "+str(timestamp_max))
+
+
 ##save first and last timewindow to file. On first line file include time step "minute","hour"etc
     if typeid=='linkid':
         try:
@@ -1272,7 +1372,7 @@ def makeTimeWin(db,typeid,table):
         prefix='g'
     
     cur_timestamp=timestamp_min
-    
+    print_message( "from "+str(timestamp_min)+" to "+ str(timestamp_max)+ " per " + options['interval']+ ". It can take a time...")
 ##make timewindows from time interval
 ###############################################
     while cur_timestamp<timestamp_max:
@@ -1392,12 +1492,29 @@ def main():
         schema_name = options['schema']
         path= os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmp_%s"%schema_name)
         print_message(path)
-        
+
         try: 
             os.makedirs(path)
         except OSError:
             if not os.path.isdir(path):
                 raise
+
+##check if timestamp is in valid format
+        if options['fromtime']:
+            if not isTimeValid (options['fromtime']):
+                grass.fatal("Timestamp 'fromtime' is not valid. Use format'YYYY-MM-DD H:M:S' ")
+
+        if options['totime']:
+           if not isTimeValid (options['totime']):
+                grass.fatal("Timestamp 'fromtime' is not valid. Use format'YYYY-MM-DD H:M:S' ")
+        
+            
+##check settings of baseline is valid
+        if not options['baseltime'] or options['baselfile']:
+            grass.fatal("For compute precipitation is necessity to set parametr 'baseltime' or 'baselfile'")
+            
+            
+            
 ##connect to database by python lib psycopg
         db=dbConnPy()
             
@@ -1407,36 +1524,14 @@ def main():
             
 ##drop working schema and remove temp folder
         if flags['r']:
-            sql="drop schema IF EXISTS %s CASCADE" % schema_name
-            db.executeSql(sql,False,True)
-            shutil.rmtree(path)
-            print_message("Folder and schema removed")
-            sys.exit()
-   
+            removeTemp(db)
+            
 ##print first and last timestamp
         if flags['p']:
-            sql="create view tt as select time from %s order by time"%record_tb_name
-            db.executeSql(sql,False,True)
-            #get first timestamp
-            sql="select time from tt limit 1"
-            timestamp_min=db.executeSql(sql,True,True)[0][0]
-            print_message('First timestamp is %s'%timestamp_min)
-            record_num=db.count(record_tb_name)
-            
-            #get last timestep
-            sql="select time from  tt offset %s"%(record_num-1)
-            timestamp_max=db.executeSql(sql,True,True)[0][0]
-            print_message('Last timestamp is %s'%timestamp_max)
-            sql="drop view tt"
-            db.executeSql(sql,False,True)
-            sys.exit()
-        
+            printTime(db)
 
 ##compute precipitation
-        if not isCurrSet():
-            if not options['baseltime'] or options['baselfile']:
-                grass.fatal("For compute precipitation is necessity to set parametr 'baseltime' or 'baselfile'")
-            else:
+        if not isCurrSetP():
                 sql="drop schema IF EXISTS %s CASCADE" % schema_name
                 shutil.rmtree(path)
                 os.makedirs(path)
@@ -1444,25 +1539,11 @@ def main():
                 sql="CREATE SCHEMA %s"% schema_name
                 db.executeSql(sql,False,True)
                 computePrecip(db)
-
-            
+                
+                
 ##make time windows
-        curr_timewindow_config="null"
-        try:
-            io1=open(os.path.join(path,"time_window_info"),"r")
-            curr_timewindow_config=io1.readline()
-            io1.close
-        except:
-            pass
 
-        #compare current and new settings   
-        new_timewindow_config=options['interval']+'|'+options['fromtime']+'|'+options['totime']+options['lignore']
-        
-        if curr_timewindow_config!=new_timewindow_config or not (options['interval'] or options['fromtime'] or options['totime'] or options['lignore'] ) or options['rgauges']:
-            intervals = options['interval'].split(',')
-            if ',' in str(options['interval']):
-                grass.fatal('You can choose only one method (minute, hour, day)')
-            
+        if not isCurrSetT():
             ##import raingauges
             if options['rgauges']:
                 print_message("Reading rain gauges files")

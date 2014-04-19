@@ -4,7 +4,7 @@ import os
 import sys
 import argparse
 import string, random
-
+import re
 
 try:
     from grass.script import core as grass  
@@ -81,6 +81,7 @@ key=''
 prefix=''
 typ=''
 firstrun=''
+view=''
 
 def print_message(msg):
     grass.message(msg)
@@ -134,8 +135,7 @@ def firstConnect():
                     quiet=True)
     
 def nextConnect():
-    view=schema+'.%sview'%prefix+time.replace('-','_').replace(':','_').replace(' ','_')
-    view=view[:-3]
+
     grass.run_command('v.db.connect',
                     map=nat,
                     layer='2',
@@ -235,25 +235,43 @@ def run():
                     sql=sql,
                     separator='  ')
         
-        
-        
+def isTimeValid(time):
+
+        RE = re.compile(r'^\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2}$')
+        return bool(RE.search(time))
+
 def main():
     
     
-    global schema,time,path,ogr,nat,layer,key,prefix,typ,firstrun
+    global schema,time,path,ogr,nat,layer,key,prefix,typ,firstrun,view
+    
+    view=schema+'.%sview'%prefix+time.replace('-','_').replace(':','_').replace(' ','_')
+    view=view[:-3]
     schema=options['schema']
     time=options['time']
     path= os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmp_%s"%schema)
     
     
+##chcek if table exist
+    if not isTableExist(
+    
+    
+##validate time    
+
+
+##remove schema and tempfile    
     if flags['r']:
         try:
             os.remove(os.path.join(path,'firstrunlink'))
             os.remove(os.path.join(path,'firstrungauge'))
         except:
             print_message("Temp file not exists")
+           
+           
+           
             
     if options['type'].find('l')!=-1:
+        
         ogr='link_ogr'
         nat="link_nat"
         layer='link'
