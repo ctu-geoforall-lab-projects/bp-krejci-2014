@@ -251,11 +251,7 @@ def main():
     time=options['time']
     path= os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmp_%s"%schema)
     
-    
-##chcek if table exist
-    if not isTableExist(
-    
-    
+
 ##validate time    
 
 

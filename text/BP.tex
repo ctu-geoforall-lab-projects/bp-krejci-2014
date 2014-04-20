@@ -179,7 +179,7 @@ Práce je systematicky rozdělena na část teoretickou a praktickou. V teoretic
 
 
 
-
+\newpage
 \chapter{Teoretická část}
 \section{Úvod do měření dešťových srážek}
 První část této kapitoly má za cíl přiblížit čtenáři současné metody měření dešťových srážek. Liší se především v přesnostech, časové variabilitě a vhodností výstupu pro další využití. Tento úvod do problematiky měření srážek by měl napomoci k lepšímu pochopení výhod či nevýhod metody odhadu srážek pomocí MV, která bude v druhé části kapitoly představena a s těmito metodami porovnána. Nejdříve se ale podíváme do historie.
@@ -194,7 +194,7 @@ Nástup satelitních družic se datuje do šedesátých let 19. století. Logick
 
 
 \subsection{Současné nástroje a metody }
-
+\label{subsec:11}
 \paragraph*{Dešťové srážky}jsou definovány jako produkt vodní páry v kapalném nebo pevném stavu a které padají z oblohy či kondenzují přímo na zemském povrchu. Srážky mohou mít formu sněhových vloček- pevné skupenství, nebo formu dešťových kapek- kapalné skupenství. Množství srážek bývá udáváno v milimetrech kapalné vody spadlé na zemský povrch za časový interval.\cite{wmo} 
 
 \subsubsection{Srážkoměry}
@@ -385,7 +385,7 @@ Metoda odhadu srážek je založena na předpokladu, že dešťové kapky tlumí
 Pro určování baseline se využívá různých metod, například \acs{HMM} \cite{comparsinmv}, Retrieval Alghorithms \cite{countryw}. Metody Určení baseline se dají klasifikovat na automatizované a uživatelské. Automatizovaným určováním baseline se myslí především algoritmy, které jsou schopny detekovat, mokré a suché období. Některé tyto algoritmy využívají statistických prostředků a jiné například určují období dešťů pomocí dat ze srážkoměrů \cite{countryw} či radaru. 
 
 
-\subsection{Zhodnocení}
+\subsection{Srovnání}
 Tato podkapitola je zaměřena na shrnutí vlastností jednotlivých metod a jejich porovnání s metodou MV spojů. Hodnocení jednotlivých metod je založeno na kritériích, která jsou pro měření srážek typická.
 \begin{itemize}
 \item\textbf{Časová spojitost}
@@ -435,7 +435,7 @@ Velkým potenciálem je takřka nulová finanční náročnost pro sběr dat. Te
 
 
 
-
+\newpage
 \section{Použité technologie}
 Tato kapitola je úvodem k praktické části práce a je zaměřena na nástroje využité k implementaci Python modulu do GRASS GIS. Jsou zde popsány základní principy a charakteristiky jednotlivých nástrojů, kde je kladen především důraz na návaznost k praktické části práce.
 
@@ -470,7 +470,7 @@ a obsahuje data, která nesou informace o souřadnicovém systému a velikosti z
 \item zadáním unikátního kódu z databáze \acs{EPSG}. \footnote{\url{http://www.epsg-registry.org/}}
 \item načtením externích georeferencovaných dat
 \item definováním parametrů projekce s využitím pravidel PROJ.4\footnote{\url{http://trac.osgeo.org/proj/}}
-\item pomocí \ac{WTK} souboru .prj, který je součástí shapefile jako doplňkový.
+\item pomocí \ac{WKT} souboru .prj, který je součástí shapefile jako doplňkový.
 \end{itemize}
 
 \item \textbf{Mapset} definovaný proměnou \texttt{\$MAPSET} představují jakýsi profil uživatele, či profil ucelených analýz  v dané lokaci. Každá lokace musí obsahovat mapset, který má unikátní název \texttt{PERMANENT}. Do tohoto mapsetu se z pravidla ukládají vstupní data, ke kterým se z ostatních pracovních mapsetů přistupuje.
@@ -573,7 +573,7 @@ PostgreSQL je \ac{ORDBMS} je systém relační databáze doplněný o objektově
 \paragraph*{Datové typy} definují druh nebo význam hodnot. V PostgreSQL je široká škála datových formátu. Specifickými pro tuto práci jsou: numerické, časové, logické, řadící(enumerate) a geometrické typy.
 
 \subsection{Extenze PostGIS}
-PostGIS\footnote{\url{http://postgis.net/}} je open-source rozšířením \texttt{EXTENSION} databáze PostgeSQL o podporu geografických objektů. Jde tedy o velice vhodný   nástroj pro využití v GIS. PostGIS implementuje specifikaci \textit{Simple Features for SQL}\footnote{\url{http://portal.opengeospatial.org/files/?artifact_id=829} } konsorcia \acs{OGC}, která v současné době plní funkci standardizační organizace pro geoprosotrová data. PostGIS je vektorovou databázovou nadstavbou, vedle které je i extenze PostGIS Raster. 
+PostGIS\footnote{\url{http://postgis.net/}} je open-source rozšířením \texttt{EXTENSION} databáze PostgeSQL o podporu geografických objektů. Jde tedy o velice vhodný   nástroj pro využití v GIS. PostGIS implementuje specifikaci \textit{Simple Features for SQL}\footnote{\url{http://www.opengeospatial.org/standards/sfs} } konsorcia \acs{OGC}, která v současné době plní funkci standardizační organizace pro geoprostorová data. PostGIS 2D/3D je vektorovou databázovou nadstavbou, vedle které je i extenze PostGIS Raster. 
 
   
 \begin{figure}[h!]
@@ -582,6 +582,16 @@ PostGIS\footnote{\url{http://postgis.net/}} je open-source rozšířením \textt
     \caption[Logo PostGIS]{\centering  Logo PostGIS \footnotemark}
  \end{figure}   
 \footnotetext{\url{http://postgis.net/docs/manual-2.1/}}
+
+\paragraph*{Geometrický model} 
+Prostorový model je založen na specifikaci \acs{OGC} \textit{Simple Feature}, z toho plyne že model nepodporuje geometrickou topologii. OGC definuje jednotlivé operace mezi standardem SQL a prostorovými daty. Souřadnice jednotlivých objektů jsou ukládány v tabulkách, kde každá tabulka je specifická jedním typem geometrie(bod, linie, polygon atd.) a referenčním prostorovým systémem. Souřadnice jsou ukládány ve standardu \acs{WKT}. Spolu s  metadaty o geometrickém prvku jsou ukládány ve sloupci \texttt{geometry}, který je  nositelem informací o geometrickém typu a referenčním systému.\cite{postgis}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{./img/implementace/ogc1.jpg}
+    \caption[Model PostGIS]{\centering Jednotlivé základní geometrické objekty jsou agregovány do složitějších tzv. Multi Obejct.     \footnotemark}
+ \end{figure}   
+\footnotetext{\url{http://www.opengeospatial.org/standards/sfs}}
 
 \paragraph*{Souřadnicový systém} \texttt{SPATIAL\_REF\_SYS} je v PostGIS  definován v samostatných tabulkách. Obecně známé referenční systémy jsou již předdefinované, ostatní se dají dodatečně definovat a upravovat.
 
@@ -598,14 +608,14 @@ CREATE TABLE spatial_ref_sys (
 Souřadnicové systémy a projekce jsou charakterizovány unikátním kódem \texttt{\acs{SRID}}, který je všeobecným standardem v GIS. Pro konverze mezi jednotlivými systémy slouží funkce \texttt{ST\_Transform}.\footnote{\url{http://postgis.org/docs/ST_Transform.html}}
 
 
-\paragraph*{Geometrie} \texttt{geometry} je datovým typem, který představuje geometrickou složku objektu.  Charakteristika tohoto datového typu je dána standardem \textit{Simple Features} ve formátu \acs{WTK}.
+\paragraph*{Geometrie} \texttt{geometry} je datovým typem, který představuje geometrickou složku objektu.  Charakteristika tohoto datového typu je dána standardem \textit{Simple Features} ve formátu \acs{WKT}.
 Sloupec s geometrií je definován pomocí parametrů, které nastavují obecné a geometrické  specifika: název, \textbf{typ}, souřadnicový systém a další.
-Pro definování \textbf{typu} objektu jsou k dispozici funkce \texttt{ST\_Make* }, kde \texttt{*} jsou níže uvedené typy Simple Fetures. 
+Pro definování \textbf{typu} objektu jsou k vytvořeny funkce \texttt{ST\_Make* }, kde \texttt{*} jsou níže uvedené typy standardu \textit{Simple Fetures}. 
 
 
 \begin{verbatim}
-POINT(0 0)                                                     
-LINESTRING(0 0,1 1,1 2)                                            
+POINT(0 0)                                               
+LINESTRING(0 0,1 1,1 2)                                       
 POLYGON((0 0,4 0,4 4,0 4,0 0),(1 1, 2 1, 2 2, 1 2,1 1))          
 MULTIPOINT(0 0,1 2)                                              
 MULTILINESTRING((0 0,1 1,1 2),(2 3,3 2,5 4))                       
@@ -613,17 +623,68 @@ MULTIPOLYGON(((0 0,4 0,4 4),(1 1,2 1,2 2)), ((-1 -1,-1 -2,-2 -2,)))
 GEOMETRYCOLLECTIONM(POINTM(2 3),LINESTRINGM(2 3,3 4))                
 \end{verbatim}
 
-\paragraph*{Funkce} v této nadstavbě jsou velice rozsáhlého. Veškeré funkce mají prefix \texttt{ST\_} (\textit{spatial type}).  Svým účelem analogicky čerpají z nástrojů GIS. Funkce jsou podle svého účelu roztříděny do kategorii. Níže jsou demonstrovány nejzákladnější kategorie a funkce.
+\paragraph*{Funkce} v této jsou nadstavbě zaměřeny na operace s geometrii. Veškeré funkce mají prefix \texttt{ST\_} (\textit{spatial type}). Část z nich je funkcionalitou analogicky odvozena z nástrojů GIS. Funkce jsou podle svého účelu roztříděny do kategorii. Níže jsou demonstrovány nejzákladnější kategorie a funkce.
 \begin{description}
 \item[Měřičské] funkce jsou typické prostorovými výpočty; plocha \texttt{ST\_Area}, vzdálenost \texttt{ST\_distance}, vzdálenost na elipsoidu \texttt{ST\_length\_spheroid} a další. 
 \item[Geometrické konstruktory] slouží k vytváření geometrie podle \textit{Simple Featura}; vytvoření bodu \texttt{ST\_MakePoint}, linie \texttt{ST\_MakeLine}, polygonu \texttt{ST\_MakePolygon} a dalších.
+\item[Analytické] funkce jsou v PostGIS implementovány dle standartu SQL-MM  vyplývající z ISO99, standard o multimédiích. \cite{sqlmm}. V této kategorii jsou funkce typické prostředí GIS. Mezi ně například patří: buffer \texttt{ST\_Buffer}, validita geometrie \texttt{ST\_IsValid}, sjednocení \texttt{ST\_Union}.
+\item[Konverze] umožňují transformace mezi referenčními system. Dále pak umožňují oboustrannou konverzi mezi binárními a textovými formáty. Například do \acs{WKT} 
 
+\begin{verbatim}
+SELECT  ST_AsEWKT (geom) FROM link
+.......
+.......
+"SRID=4326;LINESTRING(14.4533605575562 50.0689735412598,
+                      14.4754581451416 50.0387687683105)"
+\end{verbatim}
+
+\item[Agregační] funkce PostGIS jsou principiálně stejné jako standardní SQL(průměr, max, min) s rozdílem, že jsou zaměřeny na geometrická data. Příkladem je funkce pro sjednocení \texttt{ST\_Union}.
 \end{description}
 
-\subsection{Psycopg?}
+
+
+
+
+
+
+
+
+
+
+
+\newpage
 
 \setcounter{footnote}{1}
-\section{Plošné interpolace srážek}
+\section{Plošné interpolace }
+Plošné interpolace slouží k odhadu hodnot v prostoru, jež jsou pomyslně ohraničeny výchozími daty, které se uvažují jako referenční. Nutnost odhadovat hodnoty má logickou návaznost na problematiku sběru dat.  Podobně tomu je i v oblasti hydrometeorologie\ref{subsec:11}. Charakteristickým rysem interpolací v GIS systémech je datový vstup reprezentovaný bodovým polem (vektor) a výstup v podobě rastru (grid). Interpolace se také využívají k převzorkování rastrů do jiného rozlišení.
+
+Dalším pojmem který si je interpolaci blízky, je extrapolace. Extrapolací je myšlen postup, kdy jsou odhadovány data mimo prostorovou doménu referenčních bodů. Extrapolace oproti interpolaci je  typicky méně přesná.
+
+Pochopení teoretický  principů, na  kterých jsou interpolace založené, je  nezbytným krokem  k dosažení kvalitních výsledků v analytické části. Důležité je především znát charakteristiky, ze kterých vyplývají meze jednotlivých metod. Tato kapitola je specifická teoretickým pohledem do problematiky plošných interpolací, s primárním zaměřením na ty, kterými disponuje systém GRASS GIS pro vektorová bodová data. 
+
+
+
+\subsection{Metody}
+Jednotlivé interpolační metody se obecně mohou kategorizovat do dvou hlavních skupina, a to na deterministické a geostatistické. 
+Deterministické metody jsou charakteristické tím že pro odhad neznámých využívají neměnnou matematickou funkci. Jinak řečeno oproti geostaticické metodě, nevyužívají statistických metod a čerpají pouze s daných referenčních hodnot.
+
+V systému GRASS GIS je nativně implementována  čtveřice typů interpolací, pro které jsou vstupem  bodová data. Všechny tři se řadí do skupiny deterministických metod. Do geostatistických metod bychom mohli zařadit metodu kriging, která je v GRASS GIS podporována externě ze statistického systému \textit{R Project } \footnote{\url{http://www.r-project.org/}}.
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|ll|}
+\hline
+
+interpolace & GRASS modul \\ \hline\hline
+Bilineární & \multirow{2}{*}{v.surf.bspline} \\
+Bikubická &  \\
+Regularized spline tension & v.surf.rst \\
+IDW & v.surf.idw \\ \hline
+\end{tabular}
+\caption{Přehled vhodných metod v GRASS GIS}
+\label{my-label}
+\end{table}
 
 
 
@@ -632,17 +693,12 @@ GEOMETRYCOLLECTIONM(POINTM(2 3),LINESTRINGM(2 3,3 4))
 
 
 
-
-
-
-
-
-
+\newpage
 \setcounter{footnote}{1}
 \section{Časoprostorové analýzy}
 Hlavní účelem GIS systému je  vytvoření informačního systému, který umožňuje získávání, ukládání, analýzu a vizualizaci dat, která mají prostorový rozsah povrchu Země. Všeobecně je hlavním cílem vytvoření operačních modelů založených na reálném světě. Pro modelování některých reálných jevů je nedílnou součástí časová složka. Z náhledu na historický vývoj většiny GIS software vyplývá, že primární zaměření vývoje bylo nejvíce zaměřeno na práci s prostorovými daty, nikoli však časoprostorovými. Software pro zpracování  časoprostorových dat byl z pravidla vyvíjen samostatně, mimo systémy GIS. Nicméně v poslední dekádě přestal být z velké části tento fakt pravdivý.\cite{geospatialanal} Systém GRASS nyní v nové verzi \textit{GRASS GIS 7 } obsahuje kompletně nově navržený balíček modulů TGRASS \footnote{\url{http://grass.osgeo.org/grass70/manuals/temporalintro.html}}, který integruje do tohoto GIS systému časový rozměr.
 
-Tato kapitola obsahuje část teoretickou a praktickou. V první části, tedy teoretické je úvod do problematiky časoprostorové reprezentace a představení modelu a funkcionality nového TGRASS. Hlavním cílem teoretické části je představení časoprostorových datových modelu s primárním zaměřením na model, který je využit v modulech TGRASS. V části praktické budou definovány časoprostorové funkce s využitím modulů TGRASS, vhodné  pro analýzy zrekonstruovaných srážek pomocí vlastního modulu \textit{r.mwprecip}. K teoretické části byla jako primární zdroj využita kniha (\textit{Geographical information system vol.2})\cite{gistemporal}
+Hlavním cílem teoretické části je představení časoprostorových datových modelů s primárním zaměřením na model, který je implementován v  modulech TGRASS. S využitím TGRASS budou v praktické části definovány vhodné funkce pro analýzu zrekonstruovaných srážek pomocí vlastního modulu \textit{r.mwprecip}. K teoretické části byla jako primární zdroj využita kniha (\textit{Geographical information system vol.2})\cite{gistemporal}
 
 
 \subsection{Terminologie}
@@ -659,7 +715,7 @@ V rámci této podkapitoly jsou čtenáři přiblíženy terminologické výrazy
 
 Časoprostorové modely se liší v jednotlivém pojetí vztahů, které propojují časovou složku s prostorovými daty. Současný vývoj a specifické nároky vědních oborů vytvořil poměrně velikou škálu časoprostorových modelů \cite{pelekis}, které jsou často sjednoceny  základní myšlenkou a liší se pouze specificky. Typicky jsou jednotlivé modely upravovány podle požadavků jejich  a  Níže jsou přiblíženy principy základních modelů se zaměřením na (Snapshot model), který je také časoprostorovým modelem  v TGRASS.
 
-\subsubsection*{Snapshot approach model}
+\subsubsection*{Snapshot model}
 Jedná se o jeden z nejrozšířenějších a nejednodušších časoprostorových modelů. U tohoto modelu je začlenění časových složek aplikováno pomocí relačního modelu, který je charakteristický relačními tabulkami, tedy členění daných vektorových či rastrových rámců do jednotlivých časových vrstev/tabulek. Princip modelu je schématicky znázorněn na obrázku \ref{fig:snapshot}.
 
 \begin{figure}[h!]
@@ -707,7 +763,7 @@ jako jediný z výše zmíněných se tento model zaměřuje na vztahy a popis j
 
 
 
-\chapter*{Výsledky}
+\chapter*{Praktická část}
 \section{Modul r.mw.precip}
 
 \subsection{Funkce}
@@ -724,7 +780,7 @@ jako jediný z výše zmíněných se tento model zaměřuje na vztahy a popis j
 
 \section{Rekonstrukce MV srážek v GRASS GIS}
 
-\section{Interpolace}
+section{Plošné interpolace srážek}
 
 
 \section{Časoprostorové analýzy}
@@ -792,7 +848,7 @@ Cílem této práce bylo
     \acro{SRID}{Spatial Reference System Identifier}
 	\acro{wxGUI}{WxPython-based GUI for GRASS}	
 	
-	\acro{WTK}{Well-known text}
+	\acro{WKT}{Well-known text}
 \end{acronym}
 
 
@@ -911,6 +967,72 @@ CHEN, Hao, Heechul HEECHUL a Jin XIAO. \textit{Concept Architecture of PostgreSQ
 
 \bibitem{bares}
 BARĚŠ, Pavel. \textit{Implementace materializovaných pohled; v PostgreSQL}. Praha, 2010. Bakalářská práce. ČVUT FIT. Vedoucí práce Ing. Zdeněk Kotala.
+
+\bibitem{sqlmm}
+STOLZE, Knut. \textit{SQL/MM Spatial: The Standard to Manage Spatial Data in Relational Database Systems. 2003.}\textless\url {http://doesen0.informatik.uni-leipzig.de/proceedings/paper/68.pdf}
+
+
+
+\bibitem{postgis}
+CHRISTL, Arnulf.\textit{Introduction to Spatial Data Management with Postgis }
+[online]. [cit. 2014-04-20].\textless\url { http://www.mapbender.org/presentations/Spatial_Data_Management_Arnulf_Christl/Spatial_Data_Management_Arnulf_Christl.pdf}
+
+\bibitem{ }
+\textit{ }
+\textless\url {  }
+
+\bibitem{ }
+\textit{ }
+\textless\url {  }
+
+\bibitem{ }
+\textit{ }
+\textless\url {  }
+
+\bibitem{ }
+\textit{ }
+\textless\url {  }
+
+\bibitem{ }
+\textit{ }
+\textless\url {  }
+
+\bibitem{ }
+\textit{ }
+\textless\url {  }
+
+\bibitem{ }
+\textit{ }
+\textless\url {  }
+
+\bibitem{ }
+\textit{ }
+\textless\url {  }
+
+\bibitem{ }
+\textit{ }
+\textless\url {  }
+
+\bibitem{ }
+\textit{ }
+\textless\url {  }
+
+\bibitem{ }
+\textit{ }
+\textless\url {  }
+
+\bibitem{ }
+\textit{ }
+\textless\url {  }
+
+
+\bibitem{ }
+\textit{ }
+\textless\url {  }
+
+
+
+
 
 \end{thebibliography}
 \end{document}
