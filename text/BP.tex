@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,12pt]{report}
 \usepackage{a4wide}
 \usepackage{ucs}
 \usepackage[utf8x]{inputenc}
@@ -18,9 +18,14 @@
 \usepackage{hyperref}
 \usepackage{acronym}
 \usepackage[font={small}]{caption}
+\usepackage{multirow}
 
 
 \usepackage{footmisc}
+
+\makeatletter
+\def\verbatim@font{\linespread{1}\normalfont\ttfamily}
+\makeatother
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % pro podmineny preklad
 % false je defaultně
@@ -149,26 +154,33 @@ TODO
 \newpage
 \input{prohlaseniapodekovani}
 \newpage
+
 \tableofcontents
 
 
 \newpage
-\pagestyle{fancy}
-
 \necislovana{Úvod}
 
+\pagestyle{fancy}
+\setcounter{page}{1}
+
+
+\subsection*{Předmluva}
 Enviromentální modelování se v poslední době rozšířilo ve značném rozsahu. Velkou částí k tomu přispěla dostupnost informačních technologií a s ní spojený zájem vědeckých pracovišť o tento obor. Již ze samotného názvu vyplývá, že enviromentální modelování se zabývá životním prostředím a jeho modelováním. Pod tento obor spadá nespočetné množství podoborů, které se především liší hledáním odpovědí na rozdílné otázky. Specifikovat jednotnou definici pro enviromentálního modelování je pro jeho multidisciplinární charakter velmi obtížné. Modelování přírodních procesů vzniklo v důsledku zájmu člověka o pochopení přírody. Studium a simulace přírodních jevů a jejich zákonitostí z oborů fyzikálních, matematických, biologických, chemických v dnešní době velmi usnadňuje člověku život a v některých regionech je člověk i přímo závislý na zprostředkovaných výsledcích, které jsou produktem enviromentálních modelů. 
 
+\subsection*{Motivace}
 Modelování dešťových srážek je jednou z disciplín z oboru enviromentálního modelování. Když se poohlédneme do první poloviny 19. století, tak právě meteorologie byla jednou z prvních disciplín, která definovala pojem enviromentální modelování, tak jak ho chápeme nyní. Modelování srážek na zemském povrchu se s vývojem klimatu stává v poslední době důležitým úkolem. Oproti rozvoji fyzikálně numerických modelů a to především díky stále se zvyšujícím výpočetním výkonům počítače, nebyl technologický pokrok ve sběru srážkových dat v posledních desetiletích takřka zaznamenán. Pracovníky meteorologických a hydrologických ústavů ve vývoji brzdí nedostatečně přesná a neaktuální srážková data, která jsou jedním z hlavních vstupů pro další modely. Studie z posledních let poukazují na možnost využití mikrovlnných (MV) spojů vysílačů telekomunikačních operátorů ke sběru srážkových dat. Tento zdroj je levnější a přesnější než sběr pomocí radaru.\cite{radar_meterology} Největší potenciál sběru přesných srážkových dat v reálném čase spočívá ve vylepšení městských odtokových modelů. Pro efektivitu těchto modelů je sběr dat v dostatečném rozlišení a v reálném čase nutností.
+\subsection*{Cíl}
+Hlavním cílem této práce je vyvinutí nástroje pro zpracování hrubých dat z MV vysílačů v prostředí GIS, čímž se zpřístupní nespočet dalších analýz pro vývoj tohoto výzkumu. Sekundárně je práce zaměřena na využití výstupů vlastního GIS nástroje k grafické interpretaci plošných srážek. Přímo na to navazující je definování vhodných časoprostorových funkcí nástroje GIS. Téma práce bylo založeno na požadavcích zpracovatele projektu, který se zabývá problematikou odhadu srážek z MV zdrojů v rámci projektu TeleMAS v souvislosti s modelováním srážko-odtokových procesů v městských povodích. Tento projekt je řešen v úzké vědecké spolupráci s ETH-Eawag a odborné spolupráci se společnostmi T-Mobile a Veolia ČR a nyní nově s Ericsson Research (Sweden).  !!!!!Tady by měl být uveden odkaz na projekt a ten uveden v citacích!!!! 
 
-Hlavním cílem této práce je vyvinutí nástroje pro zpracování hrubých dat z MV vysílačů v prostředí GIS, čímž se zpřístupní nespočet dalších analýz pro vývoj tohoto výzkumu. Téma práce bylo založeno na požadavcích zpracovatele projektu, který se zabývá problematikou odhadu srážek z MV zdrojů v rámci projektu TeleMAS v souvislosti s modelováním srážko-odtokových procesů v městských povodích. Tento projekt je řešen v úzké vědecké spolupráci s ETH-Eawag a odborné spolupráci se společnostmi T-Mobile a Veolia ČR a nyní nově s Ericsson Research (Sweden).  !!!!!Tady by měl být uveden odkaz na projekt a ten uveden v citacích!!!!
+Práce je systematicky rozdělena na část teoretickou a praktickou. V teoretické části je kladen důraz na představení základních pojmů a principů, důležitých pro část praktickou. Praktická část je charakterizována částí implementační, do které spadá vývoj vlastních GIS modulů a na část ve které je využita jejich funkcionalita společně se stávájícími nástroji GIS.
 
  
 
 
 
 
-
+\chapter{Teoretická část}
 \section{Úvod do měření dešťových srážek}
 První část této kapitoly má za cíl přiblížit čtenáři současné metody měření dešťových srážek. Liší se především v přesnostech, časové variabilitě a vhodností výstupu pro další využití. Tento úvod do problematiky měření srážek by měl napomoci k lepšímu pochopení výhod či nevýhod metody odhadu srážek pomocí MV, která bude v druhé části kapitoly představena a s těmito metodami porovnána. Nejdříve se ale podíváme do historie.
 \subsection{Historie stručně}
@@ -280,16 +292,9 @@ Meteorologické satelitní družice disponují různými druhy senzorů, které 
 \begin{description}
 \item[IR odhady srážek] Odrazivost infračerveného spektra je velmi vhodná pro odhad srážek z mraků, které jsou chladnější a vyskytují se ve vyšších výškách. Tento fakt je výhodný, jelikož vrcholky mraků korelují s vyšším výskytem srážek. Pro přesnější odhad srážek se prostorově v různých časových okamžicích průměrují \acs{IR} teploty [k], které se poté porovnávají s měřením srážek, čímž se docílí vyšší korelace se skutečnými srážkami.
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.6\textwidth]{./img/srazky/electrom.png}
-    \caption[Rušení radaru]{\centering Schématické znázornění útlumu MV dešťovými srážkami  \footnotemark }
-    \label{fig:spektr}
- \end{figure}   
-\footnotetext{\url{http://www.goes-r.gov/users/comet/tropical/textbook_2nd_edition/media/graphics/emspect.gif}} 
 
 
-\item[Mikrovlnné kanály] využívané pro odhad srážek se pohybují ve vlnových délkách v jednotkách [GHz]. Některé kanály jsou umístěny v oknech vlnových délek, kde atmosférické plyny absorbují velmi málo záření. Tato okna vlnových délek umožňují prohlédnutí přes mraky až na zemský povrch. Jejich doplňkem jsou naopak okna~\ref{fig:spektr}, jejichž vlnové délky silně absorbují srážky. Ta jsou výhodná k odhadu srážkových úhrnů. Odhad srážek pomocí mikrovln je nejpřesnější nad oceány, kde odrazivost pozadí srážek je rovnoměrná. Nad pevninami je odrazivost variabilní a tím se zhoršuje přesnost odhadu srážek. Rozlišení satelitních snímků pořízených na frekvencích mikrovln se typicky pohybuje okolo 5x6 [km] .
+\item[Mikrovlnné kanály] využívané pro odhad srážek se pohybují ve vlnových délkách v jednotkách [GHz]. Některé kanály jsou umístěny v oknech vlnových délek, kde atmosférické plyny absorbují velmi málo záření. Tato okna vlnových délek umožňují prohlédnutí přes mraky až na zemský povrch. Jejich doplňkem jsou naopak okna, jejichž vlnové délky silně absorbují srážky. Ta jsou výhodná k odhadu srážkových úhrnů. Odhad srážek pomocí mikrovln je nejpřesnější nad oceány, kde odrazivost pozadí srážek je rovnoměrná. Nad pevninami je odrazivost variabilní a tím se zhoršuje přesnost odhadu srážek. Rozlišení satelitních snímků pořízených na frekvencích mikrovln se typicky pohybuje okolo 5x6 [km].
 \end{description}
 
 
@@ -306,7 +311,7 @@ převod útlumu signálu MV spojů na srážkové intenzity i pro další využi
  
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.9\textwidth]{./img/srazky/microwave_link.png}
+    \includegraphics[width=0.7\textwidth]{./img/srazky/microwave_link.png}
     \caption[Rušení radaru]{\centering Absorbce elektromagnetického spektra atmosférickými plyny  \footnotemark }
  \end{figure}   
 \footnotetext{\url{http://www.goes-r.gov/users/comet/tropical/textbook_2nd_edition/media/graphics/emspect.gif}}
@@ -411,15 +416,15 @@ Jedním z velkých potenciálů této metody je zlepšení přesnosti prostorov�
 Jelikož tyto MV spoje operují těsně nad zemským povrchem, vypočtené intenzity by mohly být pomocí nástrojů \acs{GIS} přiřazovány do jednotlivých subpovodí. To by zpřesnilo vstupy do srážko odtokového modelu a umožnilo lépe modelovat členitá povodí na místě velkých aglomerací.
 
 Možnosti využití MV spojů v oblasti meteorologie nekončí u odhadu srážek. Pomocí MV lze také detekovat pevné částice, sníh, či vodní páry. Tyto možnosti by mohly napomoci k lepšímu pochopení jevů spojených s přívalovými srážkami.\cite{mv2}
-
-Velkým potenciálem je takřka nulová finanční náročnost pro sběr dat. Telekomunikační sítě mobilních operátorů jsou v hustěji osídlených částech světa běžné. V rychle se rozvíjejících zemích třetího světa se v průběhu času stanou telekomunikační sítě samozřejmostí a využití metody odhadu srážek by se mohlo stát více dostupnou oproti budování radarů, pozemních stanic, či sítě srážkoměrů.
- 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\textwidth]{./img/srazky/opensignalmap.png}
     \caption[Porytí tel. sítí]{\centering Mapa celosvětového pokrytí signálu telekomunikačních mobilních operátorů. Pokrytí je vyjádřeno oranžovou a žlutou barvou. \footnotemark }
  \end{figure}   
 \footnotetext{Obrázek byl sejmut z webové aplikace OpenSignal. \url{http://opensignal.com/}}
+
+Velkým potenciálem je takřka nulová finanční náročnost pro sběr dat. Telekomunikační sítě mobilních operátorů jsou v hustěji osídlených částech světa běžné. V rychle se rozvíjejících zemích třetího světa se v průběhu času stanou telekomunikační sítě samozřejmostí a využití metody odhadu srážek by se mohlo stát více dostupnou oproti budování radarů, pozemních stanic, či sítě srážkoměrů.
+ 
 
 
 \setcounter{footnote}{1}
@@ -431,11 +436,13 @@ Velkým potenciálem je takřka nulová finanční náročnost pro sběr dat. Te
 
 
 
+\section{Použité technologie}
+Tato kapitola je úvodem k praktické části práce a je zaměřena na nástroje využité k implementaci Python modulu do GRASS GIS. Jsou zde popsány základní principy a charakteristiky jednotlivých nástrojů, kde je kladen především důraz na návaznost k praktické části práce.
 
-
-\section{Rekonstrukce MV srážek v GRASS GIS}
-\subsection{Úvod do systému GRASS GIS}
+\subsection{Systém GRASS GIS}
 \textbf{GRASS} (Geographic Resources Analysis Support System) GIS \footnotetext{\url{http://grass.osgeo.org/}} je multiplatformní geografický systém, šiřitelný pod všeobecně veřejnou licencí \acs{GNU GPL}. Systém je primárně určený pro správu 2D/3D rastrových a vektorových geodat, jejich zpracování, analýzu a vizualizaci. K těmto účelům knihovna GRASS GIS disponuje několika stovkami modulů, které jsou současní stabilních verzí. Mimo to je volně dostupných mnoho jiných modulů, které jsou vyvíjeny uživateli v rámci GRASS \textit{AddOns} a mohou se stát součástí stabilních vývojových verzí GRASS. 
+
+GRASS GIS je na poli GIS software zcela unikátní a to především díky svému rozsahu, čemuž vděčí především dobrovolným vývojářům z komunity GRASS po celém světě, kteří tento dlouholetý projekt vyvíjí. Za jeho kvalitu jsou důkazem uživatelé mezinárodního charakteru jako \textit{NOAA}\footnote{\url{http://www.noaa.gov/}} či \textit{NASA}\footnote{\url{http://www.nasa.gov/}}. 
 
 \begin{figure}[h!]
     \centering
@@ -446,7 +453,7 @@ Velkým potenciálem je takřka nulová finanční náročnost pro sběr dat. Te
 
 
 \subsubsection*{Historie}
-Vývojová linie GRASS GIS je sálá od poloviny osmdesátých let minulého století, kde byl vyvinut primárně pro americkou armádu, která jej využívala pro územní správu a plánování. Během 90. let se postupně na vývoji projektu podíleli americké federální agentury, univerzity a soukromé společnosti. Hlavní vývoj projektu byl řízen z výzkumných laboratoří (USA-CERL\footnotetext{\url{http://www.cecer.army.mil/}}) Champaign, Illinois.\cite{grasshist}.
+Vývojová linie GRASS GIS je stálá od poloviny osmdesátých let minulého století, kde byl vyvinut primárně pro americkou armádu, která jej využívala pro územní správu a plánování. Během 90. let se postupně na vývoji projektu podíleli americké federální agentury, univerzity a soukromé společnosti. Hlavní vývoj projektu byl řízen z výzkumných laboratoří (USA-CERL\footnotetext{\url{http://www.cecer.army.mil/}}) Champaign, Illinois.\cite{grasshist}.
 Mezníkem historie GRASSu byl rok 1995, ve kterém se laboratoře CERL zřekli tohoto projektu, čehož  následek byl přesun vývoje na akademickou půdu. Rok před začátkem nového tisíciletí byla vydána první verze pod licencí GNU GPL, pod kterou je vyvíjen dodnes. V letech 2008 se GRASS GIS zařadil do nadace \acs{OSGeo}, pod kterou spadá mnoho významných volně šiřitelných geografických projektů.\footnotetext{\url{http://www.osgeo.org/}}. Letošním rokem oslavil GRASS dlouhých 30 let vývoje, které zaštítil vydáním verze \textit{GRASS GIS 7.0.0 beta1}.\footnotetext{url{http://grass.osgeo.org/news/32/56/GRASS-GIS-7-0-0-beta1/}}
 
 \subsubsection*{Základní terminologické pojmy}
@@ -469,36 +476,166 @@ a obsahuje data, která nesou informace o souřadnicovém systému a velikosti z
 \item \textbf{Mapset} definovaný proměnou \texttt{\$MAPSET} představují jakýsi profil uživatele, či profil ucelených analýz  v dané lokaci. Každá lokace musí obsahovat mapset, který má unikátní název \texttt{PERMANENT}. Do tohoto mapsetu se z pravidla ukládají vstupní data, ke kterým se z ostatních pracovních mapsetů přistupuje.
 \end{enumerate}
 
-\paragraph*{Modul} je nedílnou součástí software architektury tohoto geoinformačního systému. Volba implementace pomocí jednotlivých modulů pochází z doby, kdy vypočtení technika byla v počátcích a šetrné využití operační paměti a procesorového výkonu bylo nezbytností. Jádro systému je napsáno procedurálně v jazyce C k němuž jsou  jednotlivé funkcionality integrovány pomoci \acs{API}, které je v jazyce C a Python. Jednotlivé moduly jsou logicky rozděleny do kategorií, podle účelu jejich využití.
+
+
+\paragraph*{Modul} je nedílnou součástí software architektury tohoto geoinformačního systému. Volba implementace pomocí jednotlivých modulů pochází z doby, kdy vypočtení technika byla v počátcích a šetrné využití operační paměti a procesorového výkonu bylo nezbytností. Jádro systému je napsáno procedurálně v jazyce C k němuž jsou  jednotlivé funkcionality integrovány pomoci \acs{API}, které je v jazyce C a Python. Funkcionality-moduly jsou logicky rozděleny do kategorií, podle účelu jejich využití.
 
 \begin{table}[h]
 \centering
-\begin{tabular}{cccccccc}
+\begin{tabular}{|cccccccc|}
 \hline
-db. & d. & g. & i. & ps. & r3. & r. & v. \\ \hline
-database & display & general & imagery & poststript & 3D raster & raster & vector
+db. & d. & g. & i. & ps. & r3. & r. & v. \\
+\hline \hline
+database & display & general & imagery & postscript & 3D raster & raster & vector \\ \hline
 \end{tabular}
 \caption{Přehled jednotlivých skupin modulů a jejich prefixů v GRASS GIS}
 \label{tab:module}
 \end{table}
 
 
-A nyní také nově také \textit{*t.} pro Temporal GRASS.Jednotlivé moduly se spouštějí pomocí příkazové řádky a nebo v grafickém rozhraní \textit{wxGUI} . Rozhraní modulů umožňuje uživatelský vstup pomocí přepínačů a parametrů např. \texttt{mv.precip -p database=letnany}. Parametry se dělí na povinné (\texttt{required}) a volitelné (\texttt{optional}). V modulech jsou také globální přepínače, které jsou pro všechny moduly definovány jednotně. Mezi nejčastěji využívané patří \texttt{--help}, který do terminálu vypíše veškeré informace o vstupních parametrech včetně jejich  popisu.
+Nyní také nově v \textit{GRASS 7} moduly \textit{Temporal GRASS} s prefixem \texttt{*t}. Jednotlivé moduly se spouštějí pomocí příkazové řádky a nebo v grafickém rozhraní \textit{wxGUI} . Rozhraní modulů umožňuje uživatelský vstup pomocí přepínačů a parametrů např. \texttt{mv.precip -p database=letnany}. Parametry se dělí na povinné (\texttt{required}) a volitelné (\texttt{optional}). V modulech jsou také globální přepínače, které jsou pro všechny moduly definovány jednotně. Mezi nejčastěji využívané patří \texttt{--help}, který do terminálu vypíše veškeré informace o vstupních parametrech včetně jejich  popisu.
 
-\subsection{Modul r.mwprecip} 
-\subsection{Použité technologie}
 
-\subsubsection{GRASS Python API}
-\subsubsection{PostgreSQL/Postgis}
-\subsubsection{Psycopg?}
+\subsection{GRASS Python API}
+\subsection{PostgreSQL}
+PostgreSQL\footnote{\url{http://www.postgresql.org/}} je open-source projekt, který vznikl v roce 1986. Tento projekt je dnes celosvětově uznávaný, čehož důkazem je využití systému ve světových projektech jako \textit{SourceForge}\footnote{\url{http://sourceforge.net/}}, \textit{Debian}\footnote{\url{http://www.debian.org/}} či \textit{Open Street Map}\footnote{\url{http://www.openstreetmap.org\#map=15/49.9503/14.5322}}. Kvalita systému a rozsáhlá dokumentace je především dílem komunity dobrovolníků, díky kterým je PostgreSQL schopno konkurovat i proprietárním databázovým systémům. Tomu také mimo jiné přispívá fakt, že se řadí mezi multiplatformní systémy.\cite{postgre}
 
-\subsection{Funkcionalita modulu}
-\subsubsection{Vstup-data}   
-\subsection{Výstup}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.2\textwidth]{./img/implementace/postgresql.png}
+    \caption[Logo PostgreSQL]{\centering Logo PostgreSQL }
+ \end{figure}   
 
+
+\subsubsection{Princip databáze PostgreSQL}
+\paragraph*{Architektura}
+PostgreSQL je \ac{ORDBMS} tedy systém relační databáze doplněný o objektově orientovaný model. Funguje na principu klient-server, kde každý klient je obsluhován samostatným procesem, který se stará o zpracování dotazu. Tedy \textit{host} server se skládá ze dvou částí: \textit{postmaster} a \textit{postgres}.  Když klient odešle požadavek k přístupu k databazi na server, \textit{postmaster} na serveru založí nový procese, \textit{postgres} a ten přímo komunikuje s klientem. Z toho plyne že proces \textit{postmaster} musí nepřetržitě běžet, oproti tomu  proces \textit{postgres} začne a skončí na příkaz klienta. 
+
+
+\paragraph*{Zpracování dotazu}
+Dotazy se dělí na dělí podle jejích typu na optimalizované a neoptimalizované. Do skupiny optimalizovaných spadají příkazy z \ac{DML}. Ty jsou charakteristický právě s pohybem/manipulací s daty. Patří mezi ně \texttt{SELECT}, \texttt{INSERT}, \texttt{UPDATE}, \texttt{DELETE} a další méně využívané. \ac{DDL}  představuje skupinu neoptimalizovaných dotazů, což plyne z jejich funkčnosti. Patří mezi ně především \texttt{CREATE}, \texttt{ALTER}, \texttt{DROP} a další. \cite{bares}
+
+
+\begin{table}[h]
+   \centering
+\begin{tabular}{|ccll|}
+\hline
+definice & optm* & příkaz & popis \\ \hline \hline
+\multirow{4}{*}{DML} & \multirow{4}{*}{$+$} & SELECT & vybírá data z databáze \\
+ &  & INSERT & vkládá do databáze nová data. \\
+ &  & UPDATE & editace data v databáz \\
+ &  & DELETE & odstraňuje data \\ \hline
+\multirow{4}{*}{DDL} & \multirow{4}{*}{$-$} & CREATE & vytváření nových objektů \\
+ &  & ALETER & změny existujících objektů \\
+ &  & DROP & odstraňování objektů \\
+ &  & TRUNCATE & mazání všech záznamů z tabulky \\ \hline
+\end{tabular}
+
+\caption{Zařazení a popis SQL příkazu do kategorii.
+*( ne/optimalizovaných )}
+\label{tab:prikazy}
+\end{table}
+
+
+\begin{description}
+\item[Parser]zastupuje funkci validátoru syntaxe. Zkontroluje správnou syntaxi vstupu a pokud je platná, transformuje příkaz na stromovou strukturu (\textit{query tree}). Součástí kontroly syntaxe spočívá i testováním existence jednotlivých výrazů, tabulek, schémat, atributů a dalších.
+
+\item[Traffic Cop] identifikuje dotaz do výše zmíněných kategorií, tedy optimalizované\-/neoptimalizované.
+
+\item[Utility Commands] je proces, který zpracovává jednoduché dotazy ze skupiny neoptimalizovaných. Z podstaty věci tyto příkazy nelze  optimalizovat.
+
+\item[Planner/rewriter] také optimalizátor má za úkol vygenerovat optimální exekuční řešení. Pro vyhledání optimální cesty se využívá síťových analýz, kde jednotlivé cesty jsou  ohodnoceny a algoritmus vybere obecně tu nevýhodnější.
+
+\item[Exekutor] pracuje pouze s \acs{DML}. Obdrží od výše zmíněného \textit{planneru} plán nejvýhodnější cesty a začne daný strom procesů zpracovávat od horního uzle. Mechanismus je  nastaven tak, že při procházení stromu pro každý uzel je exekutor spouštěn jednou a vrací se mu jeden záznam/řádek. V praxi tak exekutor prochází větve podle definovaných podmínek střídavě(dle podmínek). Tedy k jednomu řádku hledá odpovídající podle podmínky. 
+\end{description}
+
+
+  
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{./img/implementace/postgremodel1.jpg}
+    \caption[Dotaz PostgreSQL]{\centering  Zpracování dotazu \footnotemark}
+ \end{figure}   
+\footnotetext{\url{http://reshmaparveen.blogspot.cz/2009/12/normal-0-false-false-false.html}}
+
+
+
+
+\subsubsection{Vlastnosti}
+PostgreSQL je \ac{ORDBMS} je systém relační databáze doplněný o objektově orientovaný model. Ten je specifikován v rozšíření standardu SQL3 z roku 1999\cite{sql1999}. Objektový model podporuje objekty, třídy a dědičnost v databázových schématech. Objektově-relační systém pro zprávu databáze  poskytuje střední cestu mezi relační a plně objektově orientovanou databází. To je vhodné v možnosti vytváření vlastních datových typů a metod, které umožňují vyšší míry abstrakce. Nechybí podpora implementace vlastních procedur bud s využitím vlastního jazyka PL/pgSQL nebo využít externí podpory C/C$++$ (knihovny libpq a libpq$++$), Python (PyGreSQL), Perl (pgsql\_perl5).
+
+
+\paragraph{Objekty} umožňují vytvoření nových datových typů. Konverze, přetypováním, indexy, funkce, agregační funkce, operátory a další.  
+\paragraph*{Funkce} umožňují spouštění bloků kódu, které mohou být jak v nativním jazyce PL/pgSQL, tak i v ostatních výše zmíněných podporách. Funkce po spuštění vracejí výsledek v řádcích, tedy tabulkou, kterou je možné využít k dalším příkazům. Možnost je vytvoření vlastních funkcí, či využití funkci z nativní knihovny PostgreSQL nebo také funkce externě funkce z přidaných extenzí (\texttt{EXTENSION}).
+\paragraph*{Indexy} PostgreSQL umožňuje vytvářet pomocí algoritmu \textit{B-tree}, \textit{hash}, \textit{GiSTm} a \textit{GIN} \footnote{\url{http://www.postgresql.org/docs/9.1/static/sql-createindex.html}}, nebo lze vytvářet i vlastní. Princip indexu spočívá ve vytvoření specifického sloupce v tabulce, jehož jediný úkol je optimalizovat prohledávání daného sloupce. 
+\paragraph*{Pravidla} umožňují nad jednotlivými tabulkami nebo pomocí \texttt{SELECT} vytvářet náhledy (\texttt{VIEW}). Principiálně jde o virtuální tabulky, které jsou logicky odkazují na vyprané sloupce v jiných tabulkách. V \textit{PostgreSQL 9.3 } jsou nově implementované materializované pohledy (\texttt{MATERIALIZED VIEW}), které představují část jak charakteristiky tabulky a tak pohledu pohledu. Data materializovaných pohledů jsou fyzicky uloženy na disku. Jejich hlavní výhoda spočívá v možnosti obnovení (\texttt{REFRESH}), čímž doje k obnovení tabulky na základě logických vazeb z vytvoření.
+\paragraph*{Triggery} nebyli spouštěče mají funkcionalitu v podobě kontroly událostí, na které reagují podle své definice. Například při vytvoření nového záznamu provedou definovanou operaci v databázi. 
+\paragraph*{Datové typy} definují druh nebo význam hodnot. V PostgreSQL je široká škála datových formátu. Specifickými pro tuto práci jsou: numerické, časové, logické, řadící(enumerate) a geometrické typy.
+
+\subsection{Extenze PostGIS}
+PostGIS\footnote{\url{http://postgis.net/}} je open-source rozšířením \texttt{EXTENSION} databáze PostgeSQL o podporu geografických objektů. Jde tedy o velice vhodný   nástroj pro využití v GIS. PostGIS implementuje specifikaci \textit{Simple Features for SQL}\footnote{\url{http://portal.opengeospatial.org/files/?artifact_id=829} } konsorcia \acs{OGC}, která v současné době plní funkci standardizační organizace pro geoprosotrová data. PostGIS je vektorovou databázovou nadstavbou, vedle které je i extenze PostGIS Raster. 
+
+  
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.2\textwidth]{./img/implementace/postgis.png}
+    \caption[Logo PostGIS]{\centering  Logo PostGIS \footnotemark}
+ \end{figure}   
+\footnotetext{\url{http://postgis.net/docs/manual-2.1/}}
+
+\paragraph*{Souřadnicový systém} \texttt{SPATIAL\_REF\_SYS} je v PostGIS  definován v samostatných tabulkách. Obecně známé referenční systémy jsou již předdefinované, ostatní se dají dodatečně definovat a upravovat.
+
+\begin{verbatim}
+CREATE TABLE spatial_ref_sys (
+  srid       INTEGER NOT NULL PRIMARY KEY,
+  auth_name  VARCHAR(256),
+  auth_srid  INTEGER,
+  srtext     VARCHAR(2048),
+  proj4text  VARCHAR(2048)
+)
+\end{verbatim}
+
+Souřadnicové systémy a projekce jsou charakterizovány unikátním kódem \texttt{\acs{SRID}}, který je všeobecným standardem v GIS. Pro konverze mezi jednotlivými systémy slouží funkce \texttt{ST\_Transform}.\footnote{\url{http://postgis.org/docs/ST_Transform.html}}
+
+
+\paragraph*{Geometrie} \texttt{geometry} je datovým typem, který představuje geometrickou složku objektu.  Charakteristika tohoto datového typu je dána standardem \textit{Simple Features} ve formátu \acs{WTK}.
+Sloupec s geometrií je definován pomocí parametrů, které nastavují obecné a geometrické  specifika: název, \textbf{typ}, souřadnicový systém a další.
+Pro definování \textbf{typu} objektu jsou k dispozici funkce \texttt{ST\_Make* }, kde \texttt{*} jsou níže uvedené typy Simple Fetures. 
+
+
+\begin{verbatim}
+POINT(0 0)                                                     
+LINESTRING(0 0,1 1,1 2)                                            
+POLYGON((0 0,4 0,4 4,0 4,0 0),(1 1, 2 1, 2 2, 1 2,1 1))          
+MULTIPOINT(0 0,1 2)                                              
+MULTILINESTRING((0 0,1 1,1 2),(2 3,3 2,5 4))                       
+MULTIPOLYGON(((0 0,4 0,4 4),(1 1,2 1,2 2)), ((-1 -1,-1 -2,-2 -2,))) 
+GEOMETRYCOLLECTIONM(POINTM(2 3),LINESTRINGM(2 3,3 4))                
+\end{verbatim}
+
+\paragraph*{Funkce} v této nadstavbě jsou velice rozsáhlého. Veškeré funkce mají prefix \texttt{ST\_} (\textit{spatial type}).  Svým účelem analogicky čerpají z nástrojů GIS. Funkce jsou podle svého účelu roztříděny do kategorii. Níže jsou demonstrovány nejzákladnější kategorie a funkce.
+\begin{description}
+\item[Měřičské] funkce jsou typické prostorovými výpočty; plocha \texttt{ST\_Area}, vzdálenost \texttt{ST\_distance}, vzdálenost na elipsoidu \texttt{ST\_length\_spheroid} a další. 
+\item[Geometrické konstruktory] slouží k vytváření geometrie podle \textit{Simple Featura}; vytvoření bodu \texttt{ST\_MakePoint}, linie \texttt{ST\_MakeLine}, polygonu \texttt{ST\_MakePolygon} a dalších.
+
+\end{description}
+
+\subsection{Psycopg?}
 
 \setcounter{footnote}{1}
-\section{Interpolace srážek}
+\section{Plošné interpolace srážek}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \setcounter{footnote}{1}
@@ -511,8 +648,8 @@ Tato kapitola obsahuje část teoretickou a praktickou. V první části, tedy t
 \subsection{Terminologie}
 V rámci této podkapitoly jsou čtenáři přiblíženy terminologické výrazy ohledně problematiky časoprostorových GIS. Hlavním zdrojem pro definice byla publikace \cite{pelekis}
 \begin{description}
-\item[Reprezentace času] Jednotlivé stavy geodat jsou odkazovány k  časovým okamžikům dvěma způsoby a to relativně  (\textit{dny,roky, minuty})  či absolutně (\textit{1990-30-06 1:35:59}). Možností relativní reprezentace je vyjádření času záporně (\textit{-rok}). Další reprezentace je vyjádřena pomocí klasického dělení časů (\textit{\textbf{před}- minulý, \textbf{teď}- současný, \textbf{potom}- budoucí}).
-\item[Diskrétně časový model] je takový model, kde se proměnné, tedy geodata  mění v skokově. Geodata jednotlivých okamžiků na sebe navazují podle časového rozlišení dostupných geodat. Vhodným příkladem je sčítání lidu v daném intervalu
+\item[Reprezentace času] Jednotlivé stavy geodat jsou odkazovány k  časovým okamžikům dvěma způsoby a to relativně  (\textit{dny,roky, minuty})  či absolutně (\textit{1990-30-06 1:35:59}). Možností relativní reprezentace je vyjádření času záporně (\textit{-rok}). Další reprezentace je vyjádřena pomocí klasického dělení časů (\textit {před- minulý, teď- současný, po- budoucí}).
+\item[Diskrétně časový model] je takový model, kde se proměnné, tedy geodata  mění skokově. Geodata jednotlivých okamžiků na sebe navazují podle dostupného či zvoleného časového rozlišení. Vhodným příkladem je sčítání lidu v daném intervalu
 \item[Kontinuální/spojitý časový model] je charakteristický jemným časovým rozlišením. Příkladem jsou geodata získaná ze seismografu, či kontinuálního měření průtoku řek.
 \item[Časová topologie] je termín, který podstatou definice odpovídá  termínu prostorová topologie, s rozdílem že se jedná mimo prostorový rozměr i o časový. Časová topologie geodat definuje vztahy mezi jednotlivými okamžiky daných objektů v datasetu.
 \item[Granularita] je ve spojení s časoprostorovými daty definován jako bod na dělené časové ose. Tento bod definuje počátek časové osy, která je dělena v daném rozlišení (zrnitosti). 
@@ -520,9 +657,9 @@ V rámci této podkapitoly jsou čtenáři přiblíženy terminologické výrazy
 
 \subsection{Časoprostorové modely}
 
-Časoprostorové modely se liší v jednotlivém pojetí vztahů, které propojují časovou složku s prostorovými daty. Současný vývoj a specifické nároky vědních oborů vytvořil poměrně velikou škálu časoprostorových modelů \cite{pelekis}, které jsou často sjednoceny  základní myšlenkou a liší se pouze specificky. Níže jsou přiblíženy principy základních modelů se zaměřením na (Snapshot model), který je také časoprostorovým modelem  v TGRASS.
+Časoprostorové modely se liší v jednotlivém pojetí vztahů, které propojují časovou složku s prostorovými daty. Současný vývoj a specifické nároky vědních oborů vytvořil poměrně velikou škálu časoprostorových modelů \cite{pelekis}, které jsou často sjednoceny  základní myšlenkou a liší se pouze specificky. Typicky jsou jednotlivé modely upravovány podle požadavků jejich  a  Níže jsou přiblíženy principy základních modelů se zaměřením na (Snapshot model), který je také časoprostorovým modelem  v TGRASS.
 
-\subsubsection{Snapshot approach model}
+\subsubsection*{Snapshot approach model}
 Jedná se o jeden z nejrozšířenějších a nejednodušších časoprostorových modelů. U tohoto modelu je začlenění časových složek aplikováno pomocí relačního modelu, který je charakteristický relačními tabulkami, tedy členění daných vektorových či rastrových rámců do jednotlivých časových vrstev/tabulek. Princip modelu je schématicky znázorněn na obrázku \ref{fig:snapshot}.
 
 \begin{figure}[h!]
@@ -538,23 +675,60 @@ Nevýhodou tohoto modelu je datová redundance, která je způsobena ukládání
 Mezi nevýhody diskrétního modelování patří skoková interpretace problematiky. V GIS to má za důsledek to, že může nastat situace, kdy dojde mezi časovým krokem k velké změně, ta ovšem nebude zcela zaznamenána.
 Pro srovnávání změn jednotlivých prostorových rámců v čase je díky architektuře modelu nutnost procházení a porovnávání buňky po buňce, či nastaveným kernelem, což vede k velké operační náročnosti.
 
-\subsubsection{Kompozitně-časový model}
+\paragraph*{Time Composit}
 Neboli \textit{\ac{STC}} byl navrhnut Lagran\cite{lagran} v letech 1988. Model \acs{STC} pracuje s vektorovou interpretací geodat.   Princip tohoto modelu spočívá v projekci linií do roviny, čímž se v průběhu času jednotlivé prostory v projekční rovině sjednotí a tím z nich vznikají polygony, síť. V databázi jsou pak pro jednotlivé polygony uchovávány atributy, které odpovídají jejich historii.
 Model je charakteristický diskrétním systémem, kde jednotlivé časové skoky jsou relativní.
 
-\subsubsection{Time-stamping model} 
+\paragraph*{Time-stamping model} 
 Princip modelu je založen na dvojici časových razítek, které charakterizují čas vzniku a zániku, či současného stavu objektu. Časové razítko zániku objektu je definováno třemi stavy \texttt{now}, \texttt{currnetm}  a \texttt{null}. 
 Síla tohoto modelu je při aplikacích, kde se jednotlivé objekty v průběhu dlouhé doby mění sporadicky. Model byl navržen a otestován na katastru nemovitostí, kde požadavky přesně odpovídají funkcím tohoto modelu.\cite{hunter}
 
-\subsubsection{Event model}
+\paragraph*{Event model}
 Také \textit{Event-Oriented Model }, je blízký principu předchozího modelu. Model time-stamping nedokáže identifikovat jednotlivé změny v rámci datasetu. Oproti tomu je tento model rozšířený  o legovací soubor, do kterého jsou zaznamenávány jednotlivé časové instance objektů. Tento soubor představuje časovou topologii, která reprezentuje celou historii změn objektů, který je možné procházet a analyzovat.
 
+\paragraph*{Object-Relationship}
+jako jediný z výše zmíněných se tento model zaměřuje na vztahy a popis jednotlivých změn. O-R model je tedy čistě specifický dle zaměření dané problematiky. Specifikem  modelu je větší náročnost na definování jednotlivých vztahu mezi objekty než návrhem datové reprezentace. 
 
-\subsubsection{Objektově orientovaný model}
+\paragraph*{Objektově orientovaný model}
+\textit{Object-Oriented} model je principiálně podobný objektově orientovaným programovacím jazykům. Tato koncepce umožňuje vytvářet  objekty, třídy, metody, instance, dědičnost, operátory a dynamické vazby, tedy vše podstatné pro objektově orientovaný návrh. Díky tomu je možné poměrně uceleně simulovat reálné vztahy.  Jednotlivé objekty v průběhu času ukládají své entity, které tak tvoří historii instancí. Výhoda objektově orientovaného návrhu je v jednoduchém a intuitivním přístupu k jednotlivým informacím. 
 
- 
 
-\subsubsection{Datový model}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\chapter*{Výsledky}
+\section{Modul r.mw.precip}
+
+\subsection{Funkce}
+
+\subsection{Použitelnost}
+\subsection{Implementace}
+\subsubsection{}
+\section{Modul v.link.precip}
+
+\subsubsection{Vstup-data}   
+\subsection{Výstup}
+
+
+
+\section{Rekonstrukce MV srážek v GRASS GIS}
+
+\section{Interpolace}
+
+
+\section{Časoprostorové analýzy}
+
 
 \subsubsection{Temporal GRASS GIS framework}
 \subsubsection{Temporal GRASS GIS framework}
@@ -592,10 +766,10 @@ Cílem této práce bylo
 \begin{acronym}[USA-CERL]
  	\acro{ANSI}{American National Standards Institute}
   	\acro{API}{Application Programming Interface}
-  	
+  	\acro{DML}{Data Manipulate on Language}
   	\acro{DSD}{Drop size distribution}
   	\acro{DPZ}{Dálkový průzkum země}
-  	
+  	\acro{DDL}{Data Definition Language}
   	\acro{EPSG}{Geodetic Parameter Set}	
   	
   	\acro{GIS}{Geographic Information System (Geografický informační systém)}
@@ -608,12 +782,14 @@ Cílem této práce bylo
 	\acro{IR}{Infra red (infračervené spektrum)} 
 	
 	\acro{ITU}{International Telecommunication Union}
-
+	
+	\acro{OGC}{Open Geospatial Consortium}
 	\acro{OSGeo}{Open Source Geospatial Foundation} 
-
+	\acro{ORDBMS}{objektově-relační atabázový systém}
+	
   	\acro{RSL}{Received Signal Level}
   	\acro{STC}{The Space-Time Coposite Data Model}
-  
+    \acro{SRID}{Spatial Reference System Identifier}
 	\acro{wxGUI}{WxPython-based GUI for GRASS}	
 	
 	\acro{WTK}{Well-known text}
@@ -726,6 +902,15 @@ J. HUNTER, Gary a Ian P. WILLIAMSON. \textit{Journal of Geographic Information S
 
 \bibitem{pelekis}
 PELEKIS, Nikos, Babis THEODOULIDIS, Ioannis KOPANAKIS a Yannis THEODORIDIS. Literature Review of Spatio-Temporal Database Models. \textit{The Knowledge Engineering Review}. 2004, September 2004, č. 19, s. 235-274. 
+
+\bibitem{sql1999}
+ISO/IEC 9075-2:1999. \textit{Information technology: Database languages SQL}. Part 2: Foundation. SQL/Foundation, 2011. 
+
+\bibitem{postgre}
+CHEN, Hao, Heechul HEECHUL a Jin XIAO. \textit{Concept Architecture of PostgreSQL}. 2009. \textit{http://www.inf.fu-berlin.de/lehre/WS09/DBS-Tech/Material/ConceptArchPostres.pdf}
+
+\bibitem{bares}
+BARĚŠ, Pavel. \textit{Implementace materializovaných pohled; v PostgreSQL}. Praha, 2010. Bakalářská práce. ČVUT FIT. Vedoucí práce Ing. Zdeněk Kotala.
 
 \end{thebibliography}
 \end{document}

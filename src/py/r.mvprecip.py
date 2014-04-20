@@ -1308,7 +1308,8 @@ def makeTimeWin(db,typeid,table):
 
 ##remove ignored linkid
 
-    if options['lignore'] and not isTableExist(db,schema_name,'rgauge'):
+#    if options['lignore'] and not isTableExist(db,schema_name,'rgauge'):
+    if options['lignore']:
         lipath=options['lignore']
         stamp=lipath
         try:
@@ -1316,6 +1317,7 @@ def makeTimeWin(db,typeid,table):
                 for link in f.read().splitlines():
                     sql="DELETE from %s.%s where %s=%s "%(schema_name,view_db,typeid,link)
                     db.executeSql(sql,False,True)
+                    print_message("lignore")
                     
         except IOError as (errno,strerror):
                 print "I/O error({0}): {1}".format(errno, strerror)
