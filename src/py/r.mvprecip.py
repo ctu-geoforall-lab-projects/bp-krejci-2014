@@ -1077,7 +1077,7 @@ def grassWork():
                     output = points_ogr,
                     overwrite=True,
                     flags='t',
-                    type='point')
+                    type='point', key='linkid')
     
     points_nat=points + "_nat"
    
