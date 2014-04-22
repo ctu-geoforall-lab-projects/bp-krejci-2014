@@ -1136,13 +1136,13 @@ def grassWork():
                                 key='linkid',
                                 layer='1',
                                 quiet=True)
-
+                sys.exit()
                 if options['isettings']:
                     precipInterpolationCustom(points_nat,win)
                 else:
                     precipInterpolationDefault(points_nat,win)
                 
-
+               
                 #remove connection to 2. layer
                 grass.run_command('v.db.connect',
                                 map=points_nat,
