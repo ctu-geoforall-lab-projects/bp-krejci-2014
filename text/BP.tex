@@ -668,23 +668,72 @@ Pochopení teoretický  principů, na  kterých jsou interpolace založené, je 
 Jednotlivé interpolační metody se obecně mohou kategorizovat do dvou hlavních skupina, a to na deterministické a geostatistické. 
 Deterministické metody jsou charakteristické tím že pro odhad neznámých využívají neměnnou matematickou funkci. Jinak řečeno oproti geostaticické metodě, nevyužívají statistických metod a čerpají pouze s daných referenčních hodnot.
 
-V systému GRASS GIS je nativně implementována  čtveřice typů interpolací, pro které jsou vstupem  bodová data. Všechny tři se řadí do skupiny deterministických metod. Do geostatistických metod bychom mohli zařadit metodu kriging, která je v GRASS GIS podporována externě ze statistického systému \textit{R Project } \footnote{\url{http://www.r-project.org/}}.
-
+V systému GRASS GIS je nativně implementována  čtveřice typů interpolací, pro které jsou vstupem  bodová data. Všechny tři se řadí do skupiny deterministických metod.
+!!!!!
+ Do geostatistických metod bychom mohli zařadit metodu kriging, která je v GRASS GIS podporována externě ze statistického systému \textit{R Project} \footnote{\url{http://www.r-project.org/}}.
 
 \begin{table}[h]
 \centering
 \begin{tabular}{|ll|}
 \hline
-
 interpolace & GRASS modul \\ \hline\hline
-Bilineární & \multirow{2}{*}{v.surf.bspline} \\
-Bikubická &  \\
+Bilinear spline & \multirow{2}{*}{v.surf.bspline} \\
+Bicubic spline &  \\
 Regularized spline tension & v.surf.rst \\
 IDW & v.surf.idw \\ \hline
 \end{tabular}
 \caption{Přehled vhodných metod v GRASS GIS}
 \label{my-label}
 \end{table}
+
+
+\paragraph{Bilineární interpolace} Princip \textbf{bilineární interpolace} je  rozšíření lineární interpolace na funkci dvou proměnných. Každá buňka rastru je definována pomocí bilineární funkce. Interpolace je výpočetně triviální a využívá se často k převzorkování.
+
+Název této interpolace je poněkud zavádějící. Odhad hledaného bodu \emph{P} je definován kvadratickou funkcí $f(x,y)$. 
+
+Postup je takový, že  se nejdříve nad danou množinou bodů provede lineární interpolace z jedné strany rastru na druhou(osa-\emph{x}), tím získáme bod \emph{A} a \emph{B}. Z těchto bodů se  pak ve směru kolmém (osa \emph{y}) interpoluje bod P. Volba pořadí jednotlivých směru je volná. Nejprve tedy dostaneme lineární koeficienty pro $f(x)$ ze kterých  následně vypočteme lineární interpolací koeficienty  pro $f(y)$. Tím dostaneme požadovaný odhad $f(x,y)$  pro bod \emph{P}
+
+
+
+  
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.65\textwidth]{./img/interpolace/bilinear.png}
+    \caption[Bilinear interpol.]{\centering  Ilustrování principu bilineární interpoalce \footnotemark}
+ \end{figure}   
+\footnotetext{\url{http://postgis.net/docs/manual-2.1/}}
+
+
+
+\paragraph{Bikubická spline} iterpolace je rozšíření kubické interpolace o druhý rozměr.; Principem je podobná bilineární interpolaci, s rozdílem, že k výpočtům odhadovaných bodu využívá kubické spline interpolace.  Využití \textit{spline} metody zajišťuje to, že první a druhá parciální derivace polynomu pro odhad koeficientů je spojitá. Oproti bilineární interpolaci je tak výsledný rastr vyhlazenější a celkový výsledek je přesnější. 
+
+
+
+\paragraph*{Inverse Distance Weighting}
+\acs{IDW} využívá k odhadu bodu \emph{P} základního statistického prvku. Určovaný bod \emph{P}  je počítán jako vážený průměr hodnot  bodů známých bodů $Q_{i}$.  Myšlenka je založena na předpokladu, že sobě bližší body jsou si hodnotou více podobné, než ty co jsou od sebe vzdálenější. Váhy se tedy počítají inverzně ze vzdáleností $d_{0,i}$. Pro nastavení citlivosti interpolace slouží parametr \emph{p}, který exponentem  vzdálenosti $d_{0,i}$. \cite{spatialinter}
+
+\begin{equation}
+P_{i}=\frac{\frac{1}{d_{0,i}^{p}}}{\sum_{i=1}^{n}\frac{1}{d_{0,i}^{p}}}
+\end{equation}
+
+Z tohoto vztahu plyne, že s rostoucím koeficientem \emph{p} mají jednotlivé  body $Q_{i}$ rozdílnější váhy. Při volbě $p=0$ se výsledný bod \emph{P} vypočte jako aritmetický průměr z všech bodů $Q_{i}$.
+
+\paragraph*{Regularized spline with tension}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -764,23 +813,33 @@ jako jediný z výše zmíněných se tento model zaměřuje na vztahy a popis j
 
 
 \chapter*{Praktická část}
+\section{Rekonstrukce MV srážek v GRASS GIS}
 \section{Modul r.mw.precip}
 
 \subsection{Funkce}
 
-\subsection{Použitelnost}
+\subsection{Použití}
 \subsection{Implementace}
+
 \subsubsection{}
+
 \section{Modul v.link.precip}
 
+
+
+\subsection{Modul r.mwprecip}
+Nejdůležitější částí celé práce je navržení a implementace modulu, na jehož vstupu jsou hrubá data z MV vysílačů uložená v databázi PostgreSQL a výstupem jsou intenzity srážek pro jednotlivé MV spoje uložené v databázi. Systém GRASS GIS nativně podporuje databázi PostgreSQL s extenzí PostGIS. Funkcionalita modulu mimo spočtené intenzity srážek uložené v databázi, podporuje dvě základní reprezentace datových výstupů v GIS.  Výstupem modulu jsou jak plošně interpolované intenzity srážek v rastrové reprezentaci, tak i vektorová reprezentace srážkových intenzit pro jednotlivé MV spoje.
+Mezi další podporu vstupních dat patří  načítání  dat ze srážkoměrů, které jsou výhodná k analýzám rekonstruovaných srážek z MV spojů.
+
 \subsubsection{Vstup-data}   
+
 \subsection{Výstup}
 
 
 
-\section{Rekonstrukce MV srážek v GRASS GIS}
 
-section{Plošné interpolace srážek}
+
+\section{Plošné interpolace srážek}
 
 
 \section{Časoprostorové analýzy}
@@ -835,6 +894,7 @@ Cílem této práce bylo
 		
 	
 	\acro{HMM}{Hidden Markov Model} 
+	\acro{IDW}{Inverse Distace Weighting} 
 	\acro{IR}{Infra red (infračervené spektrum)} 
 	
 	\acro{ITU}{International Telecommunication Union}
@@ -977,9 +1037,10 @@ STOLZE, Knut. \textit{SQL/MM Spatial: The Standard to Manage Spatial Data in Rel
 CHRISTL, Arnulf.\textit{Introduction to Spatial Data Management with Postgis }
 [online]. [cit. 2014-04-20].\textless\url { http://www.mapbender.org/presentations/Spatial_Data_Management_Arnulf_Christl/Spatial_Data_Management_Arnulf_Christl.pdf}
 
-\bibitem{ }
-\textit{ }
-\textless\url {  }
+
+\bibitem{spatialinter}
+Mitas, L., Mitasova, H.,\textit{Geographical Information Systems}
+2002; Burrough and McDonnell; Bonham-Carter, 1996 \textless\url {http://csiss.org/learning_resources/content/good_sa/#Interpolation}
 
 \bibitem{ }
 \textit{ }
