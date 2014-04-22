@@ -1136,7 +1136,7 @@ def grassWork():
                                 key='linkid',
                                 layer='1',
                                 quiet=True)
-                sys.exit()
+              
                 if options['isettings']:
                     precipInterpolationCustom(points_nat,win)
                 else:
