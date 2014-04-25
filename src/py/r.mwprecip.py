@@ -130,13 +130,11 @@ except ImportError:
 #% required: no
 #%end
 
-##########################################################
-################# guisection: Rain gauges ##############
-##########################################################
+
 #%option G_OPT_M_DIR 
 #% key: rgauges
 #% label: Path to folder with rain rauge files
-#% guisection: Rain gauges
+#% guisection:Time-windows
 #% required: no
 #%end
 
@@ -178,7 +176,7 @@ except ImportError:
 #%option 
 #% key: pmethod
 #% label: Type of interpolation
-#% options: permeter, number
+#% options: permeter, count
 #% guisection: Interpolation
 #% answer: permeter
 #%end
@@ -494,7 +492,7 @@ def printTime(db):
 ###########################
 ##   database work
 
-def firstRun(db):
+Vydef firstRun(db):
         print_message("Preparing database...")
         
         print_message("1/16 Create extension")
@@ -554,7 +552,7 @@ def firstRun(db):
         sql="CREATE INDEX timeindex ON record USING btree (time); "
         db.executeSql(sql,False,True)
         
-        print_message("15/16 Add plsql function for compute mode")
+        print_message("15/16 Add function for compute mode")
         sql="CREATE OR REPLACE FUNCTION _final_mode(anyarray) RETURNS anyelement AS $BODY$ SELECT a FROM unnest($1)\
         a GROUP BY 1  ORDER BY COUNT(1) DESC, 1 LIMIT 1; $BODY$ LANGUAGE 'sql' IMMUTABLE;"
         db.executeSql(sql,False,True)
