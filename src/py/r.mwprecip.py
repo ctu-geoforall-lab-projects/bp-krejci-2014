@@ -492,7 +492,7 @@ def printTime(db):
 ###########################
 ##   database work
 
-Vydef firstRun(db):
+def firstRun(db):
         print_message("Preparing database...")
         
         print_message("1/16 Create extension")
@@ -1066,7 +1066,7 @@ def grassWork():
     points_schema=schema_name+'.'+points
     points_ogr=points+"_ogr"
     
-    dsn1="PG:dbname="+database+" user="+user
+
     
     print_message('v.in.ogr')
     grass.run_command('v.in.ogr',
@@ -1499,22 +1499,6 @@ def main():
             if not os.path.isdir(path):
                 raise
 
-##check if timestamp is in valid format
-        if options['fromtime']:
-            if not isTimeValid (options['fromtime']):
-                grass.fatal("Timestamp 'fromtime' is not valid. Use format'YYYY-MM-DD H:M:S' ")
-
-        if options['totime']:
-           if not isTimeValid (options['totime']):
-                grass.fatal("Timestamp 'fromtime' is not valid. Use format'YYYY-MM-DD H:M:S' ")
-        
-            
-##check settings of baseline is valid
-        if not options['baseltime'] or options['baselfile']:
-            grass.fatal("For compute precipitation is necessity to set parametr 'baseltime' or 'baselfile'")
-            
-            
-            
 ##connect to database by python lib psycopg
         db=dbConnPy()
             
@@ -1529,7 +1513,21 @@ def main():
 ##print first and last timestamp
         if flags['p']:
             printTime(db)
+            
+##check if timestamp is in valid format
+        if options['fromtime']:
+            if not isTimeValid (options['fromtime']):
+                grass.fatal("Timestamp 'fromtime' is not valid. Use format'YYYY-MM-DD H:M:S' ")
 
+        if options['totime']:
+           if not isTimeValid (options['totime']):
+                grass.fatal("Timestamp 'fromtime' is not valid. Use format'YYYY-MM-DD H:M:S' ")
+        
+            
+##check settings of baseline is valid
+        if not options['baseltime'] and not options['baselfile'] and not (flags['p'] or flags['r']):
+            grass.fatal("For compute precipitation is necessity to set parametr 'baseltime' or 'baselfile'")
+            
 ##compute precipitation
         if not isCurrSetP():
                 sql="drop schema IF EXISTS %s CASCADE" % schema_name
@@ -1539,8 +1537,7 @@ def main():
                 sql="CREATE SCHEMA %s"% schema_name
                 db.executeSql(sql,False,True)
                 computePrecip(db)
-                
-                
+                             
 ##make time windows
 
         if not isCurrSetT():
@@ -1565,9 +1562,7 @@ def main():
             if isTableExist(db,schema_name,'rgauge'):
                 makeTimeWin(db,'gaugeid',comp_precip_gauge)
         
-            
-        
-        
+
 ##interpol. points          
         step=options['step'] #interpolation step per meters
         step=float(step)

@@ -616,8 +616,7 @@ Plošné interpolace slouží k odhadu hodnot v prostoru, jež jsou pomyslně oh
 
 Dalším pojmem který si je interpolaci blízky, je extrapolace. Extrapolací je myšlen postup, kdy jsou odhadovány data mimo prostorovou doménu referenčních bodů. Extrapolace oproti interpolaci je  typicky méně přesná.
 
-Pochopení základních  principů, na  kterých jsou interpolace založené, může přispět k dosažení kvalitních výsledků v analytické části. Důležité je především znát volitelné parametry metod, které je potřebné v nástrojích GIS nastavit. Následující text je zaměřen na interpolační metody, kterými disponuje systém GRASS GIS pro vektorová bodová data. 
-
+Pochopení základních  principů, na  kterých jsou interpolace založené, může přispět k dosažení kvalitních výsledků v analytické části. Důležité je především znát funkcionalitu volitelných parametrů u jednotlivých metod, které je potřebné v nástrojích GIS nastavit. Následující text je zaměřen na nativně implementované interpolační metody, kterými disponuje systém GRASS GIS pro vektorová bodová data. 
 
 
 \subsection{Metody}
@@ -686,7 +685,7 @@ Funkce spline je definována vztahem:
 S(x)=T(x)+\sum_{j=1}^{n}\lambda_{i}R(r,r_{j})
 \end{equation}
 
-kde $T(x)$ je trend funkce, $lambda_{j}$ jsou neznámé koeficienty daných bodů, které se řeší soustavou lineárních rovnic. Funkce $R(r,r_{j})$ je radiální funkcí explicitně závislé na koeficientu vyhlazení.
+kde $T(x)$ je trend funkce, $lambda_{j}$ jsou neznámé koeficienty daných bodů, které se řeší soustavou lineárních rovnic. Funkce $R(r,r_{j})$ je radiální funkcí explicitně závislé na koeficientu vyhlazení. \cite{rst}
 
 
 \begin{figure}[h!]
@@ -705,6 +704,8 @@ Výhody RST interpolace jsou v možnosti kontroly parametrů:
 \item vyhlazení
 \item anisotropie - rotace
 \end{itemize}
+
+které 
 
 
 
@@ -1419,9 +1420,10 @@ Mitas, L., Mitasova, H.,\textit{Geographical Information Systems}
 GRASS Development Team.\textit{ GRASS 7 Programmer’s Manual}
 [online]. c2000-2011, generated on Sat Apr 16 2011 [cit. 2011-03-19]. URL:\textless\url {http://grass.osgeo.org/programming7  }
 
-\bibitem{ }
-\textit{ }
-\textless\url {  }
+\bibitem{rst }
+HOFIERKA, Jaroslav, Hofierka MITASOVA, Lubos MITAS a Juraj PARAJKA.\textit{Multivariate Interpolation of Precipitation Using Regularized Spline with Tension }. Blackwell Publishers Ltd, 108 Cowley Road, Oxford 2002. 
+
+
 
 \bibitem{ }
 \textit{ }

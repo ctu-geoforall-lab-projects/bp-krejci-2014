@@ -151,9 +151,8 @@ def nextConnect():
 #def setColor():
     #TODO
 
-def createVect():
+def createVect(prefix):
     print_message('v.in.ogr')
-    view=schema+'.view'+time.replace('-','_').replace(':','_').replace(' ','_')
     view_nat='view'+time.replace('-','_').replace(':','_').replace(' ','_')
     
     grass.run_command('v.in.ogr',
@@ -212,7 +211,11 @@ def run():
             raise
         
     #dbConnGrass(options['database'],options['user'],options['password'])
-    
+    global view
+    view=schema+'.%sview'%prefix+time.replace('-','_').replace(':','_').replace(' ','_')
+    print_message(view)
+    view=view[:-3]
+    print_message(view)
     if not flags['c']:
         if not os.path.exists(os.path.join(path,firstrun)):
             setFirstRun()
@@ -228,8 +231,7 @@ def run():
         
         
     if flags['p']:
-        view=schema+'.%sview'%prefix+time.replace('-','_').replace(':','_').replace(' ','_')
-        view=view[:-3]
+
         sql='select %s, precip_mm_h from %s '%(key,view)
         grass.run_command('db.select',
                     sql=sql,
@@ -243,11 +245,10 @@ def isTimeValid(time):
 def main():
     
     
-    global schema,time,path,ogr,nat,layer,key,prefix,typ,firstrun,view
-    
-    view=schema+'.%sview'%prefix+time.replace('-','_').replace(':','_').replace(' ','_')
-    view=view[:-3]
+    global schema,time,path,ogr,nat,layer,key,prefix,typ,firstrun
     schema=options['schema']
+
+    
     time=options['time']
     path= os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmp_%s"%schema)
     
@@ -275,6 +276,7 @@ def main():
         prefix='l'
         typ='line'
         firstrun='firstrunlink'
+        
         run()
         
     if options['type'].find('r')!=-1:  
