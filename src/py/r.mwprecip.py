@@ -1315,7 +1315,6 @@ def makeTimeWin(db,typeid,table):
                 for link in f.read().splitlines():
                     sql="DELETE from %s.%s where %s=%s "%(schema_name,view_db,typeid,link)
                     db.executeSql(sql,False,True)
-                    print_message("lignore")
                     
         except IOError as (errno,strerror):
                 print "I/O error({0}): {1}".format(errno, strerror)
@@ -1357,15 +1356,12 @@ def makeTimeWin(db,typeid,table):
             print "I/O error({0}): {1}".format(errno, strerror)
         io1.write(sum_precip+'|'+str(timestamp_min)+'|'+str(timestamp_max)+stamp+stamp1)
         io1.close    
-##save names of timewindows 
-        try:
-            io2=open(os.path.join(path,"timewindow"),"wr")
-        except IOError as (errno,strerror):
-            print "I/O error({0}): {1}".format(errno, strerror)
+
+
     time_const=0    
     i=0
     temp=[]
-    
+    tgrass_format=[]
     #set prefix
     prefix='l'
     if typeid=='gaugeid':
@@ -1375,7 +1371,7 @@ def makeTimeWin(db,typeid,table):
     print_message( "from "+str(timestamp_min)+" to "+ str(timestamp_max)+ " per " + options['interval']+ ". It can take a time...")
 ##make timewindows from time interval
 ###############################################
-    while cur_timestamp<timestamp_max:
+    while cur_timestamp<=timestamp_max:
         #print_message(cur_timestamp)
         #print_message(timestamp_max)        
     #crate name of view
@@ -1383,6 +1379,12 @@ def makeTimeWin(db,typeid,table):
         view_name="%s%s%s"%(prefix,view,a)
         vw=view_name+"\n"
         temp.append(vw)
+        
+        #format for t.register ( temporal grass)
+        tgrass=schema_name + '.' + view_name+"_"+options['interpolation'] +'|'+str(cur_timestamp)+"\n"
+        tgrass_format.append(tgrass)
+        
+        
     #create view
         sql="CREATE table %s.%s as select * from %s.%s where time=(timestamp'%s'+ %s * interval '1 second')"%(schema_name,view_name,schema_name,view_db,timestamp_min,time_const)
         data=db.executeSql(sql,False,True)
@@ -1397,10 +1399,22 @@ def makeTimeWin(db,typeid,table):
 ##write values to flat file
     if typeid=='linkid':
         try:
+            io2=open(os.path.join(path,"timewindow"),"wr")
             io2.writelines(temp)
             io2.close()
         except IOError as (errno,strerror):
             print "I/O error({0}): {1}".format(errno, strerror)
+      
+    #make textfile for t.register input
+    filename="timewin_%s"%prefix + "_" + str(timestamp_min).replace(' ','_') + "|" +  str(timestamp_max).replace(' ','_')
+    
+    try: 
+            io3=open(os.path.join(path,filename),"wr")
+            io3.writelines(tgrass_format)
+            io3.close()
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror)        
+        
 ##drop temp table
 
     sql="drop table %s.%s"%(schema_name,view_db)
