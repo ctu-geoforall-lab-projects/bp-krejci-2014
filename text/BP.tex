@@ -1218,10 +1218,10 @@ Tabulka barev pro vektorovou vrstvu je možná nastavit parametrem \texttt{color
 
 
 \subsection{Časoprostorové analýzy}
-Kapitola Časoprostorové analýzy poukazuje na možné využití Teporal GRASS framework (TGASS), který je nově ve verzi GRASS GIS 7. Hlavním cílem následujícího textu je definovat vhodné analytické úlohy pro výstupy modulu \textit{r.mwprecip}. Protože je TGRASS poměrně nový a v současné době je jen několik nastínění jeho možné aplikace, bude následující text částečně psán stylem inklinujícím k formě návodu.
+Kapitola \textit{Časoprostorové analýzy} poukazuje na možné využití Teporal GRASS framework (TGASS), který je nově ve verzi GRASS GIS 7. Hlavním cílem následujícího textu je definovat vhodné analytické úlohy pro výstupy modulu \textit{r.mwprecip}. Protože je TGRASS poměrně nový a v současné době je jen několik nastínění jeho možné aplikace, bude následující text částečně psán stylem inklinujícím k formě návodu, který bude sloužit jako úvod pro experimentální využití modulu v GRASS GIS v rámci problematiky MV spojů. Tento směr má logickou návaznost na zadání projektu.
 
 
-
+analýzy
 
 Pro názornost bylo využito výstupů z modulu \textit{r.mwprecip} ve zvoleném časovém intervalu cca tří dnů. Jednotlivá časová okna byla vygenerována v časovém kroku 1 minuta. Jednotlivé rastrové mapy byly interpolovány metodou RST vždy pomocí jednoho bodu uprostřed linie (\texttt{pmethod=count, step=1}).
 \begin{figure}[h!]
@@ -1286,7 +1286,7 @@ t.info input=temporalLetnany
 \end{figure}
 Po spuštění se vypíše tabulka s obecnými informacemi o časovém datasetu. Jednou s užitečných funkcí je vypsání celé historie příkazů v daném datasetu. Vypíše se přepínačem \emph{-h}.
 
-\subsubsection*{Časoprostorové analýzy}
+\subsubsection*{Analýzy}
 \label{subsubsec:casoprostoranal} 
 Níže napsaný text popisuje základní možnosti využití GRASS GIS Temporal framework pro výstupní data z modulu \textit{r.mwprecip}.
 
@@ -1358,13 +1358,26 @@ r.watershed  elevation=dem_srtm threshold=5000\
 \end{figure}
 Parametr \texttt{treshold} určuje jemnost segmentace jednotlivých povodí. Menší hodnota vede k většímu počtu povodí.
 
-\item Posledním krokem je spočtení objemu srážek, které spadly do daných povodí. K tomu je vhodný modul \textit{r.volume}, 
+\item Posledním krokem je spočtení objemu srážek, které spadly do daných povodí. K tomu je vhodné využit  modul \textit{r.volume}, pro který jsou vstupními parametry rastr s hodnotami a rastr s klasifikovanými územími. Pro vstup rastru s hodnotami je použit výstup  rastr z \textit{t.rast.aggregate}. Z názvu \textit{max15minute_148} není poznat o jaký časový interval se jedná, pro získání této informace je určen modul \textit{t.rast.list}, kde je možné konfigurovat parametry pro vypsání do výstupní řádky. Při zavolání bez volitelných parametrů vypadá výpis následovně.
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
-r.volume input=max15minute_148 clump=basin@test3 \
+...
+max15minute_103	test3  2013-09-10 01:44:00 2013-09-10 01:59:00
+...
+\end{lstlisting}
+\end{footnotesize} 
+\end{figure}
+
+Odtud lze vybrat mapu z požadovaného intervalu která je vstupem 
+\begin{figure}[h!]
+\begin{footnotesize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+r.volume input=max15minute_103 clump=basin@test3 \
         centroids=volume output=/adresar/r.volumeinfo
 \end{lstlisting}
 \end{footnotesize} 
