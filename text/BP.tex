@@ -1358,7 +1358,7 @@ r.watershed  elevation=dem_srtm threshold=5000\
 \end{figure}
 Parametr \texttt{treshold} určuje jemnost segmentace jednotlivých povodí. Menší hodnota vede k většímu počtu povodí.
 
-\item Posledním krokem je spočtení objemu srážek, které spadly do daných povodí. K tomu je vhodné využit  modul \textit{r.volume}, pro který jsou vstupními parametry rastr s hodnotami a rastr s klasifikovanými územími. Pro vstup rastru s hodnotami je použit výstup  rastr z \textit{t.rast.aggregate}. Z názvu \textit{max15minute_148} není poznat o jaký časový interval se jedná, pro získání této informace je určen modul \textit{t.rast.list}, kde je možné konfigurovat parametry pro vypsání do výstupní řádky. Při zavolání bez volitelných parametrů vypadá výpis následovně.
+\item Posledním krokem je spočtení objemu srážek, které spadly do daných povodí. K tomu je vhodné využit  modul \textit{r.volume}, pro který jsou vstupními parametry rastr s hodnotami a rastr s klasifikovanými územími. Pro vstup rastru s hodnotami je použit výstup  rastr z \textit{t.rast.aggregate}. Z názvu \textit{max15minute\_148} není poznat o jaký časový interval se jedná, pro získání této informace je určen modul \textit{t.rast.list}, kde je možné konfigurovat parametry pro vypsání do výstupní řádky. Při zavolání bez volitelných parametrů vypadá výpis následovně.
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
@@ -1372,6 +1372,7 @@ max15minute_103	test3  2013-09-10 01:44:00 2013-09-10 01:59:00
 \end{figure}
 
 Odtud lze vybrat mapu z požadovaného intervalu která je vstupem 
+
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
@@ -1384,8 +1385,13 @@ r.volume input=max15minute_103 clump=basin@test3 \
 \end{figure}
 
 
-
 \end{enumerate} 
+
+
+
+
+
+
 \subsection{Využitelnost}
 
 
