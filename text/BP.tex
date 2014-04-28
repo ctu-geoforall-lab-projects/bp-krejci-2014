@@ -3,7 +3,7 @@
 \usepackage{ucs}
 \usepackage[utf8x]{inputenc}
 \usepackage{xcolor}
-\usepackage[ czech,english]{babel}
+\usepackage[czech,english]{babel}
 \usepackage[pdftex, final]{graphicx}
 % \usepackage[pdftex, final, colorlinks=true]{hyperref}
 \usepackage{alltt}
@@ -87,24 +87,7 @@ rotatecolumn, },
 morekeywords=[2]{y, n, none},
 morecomment=[l]{\#},
 }
-\lstdefinestyle{psmap}{
-   language=psmap,
-   basicstyle={\sffamily},
-   keywordstyle=[1]{\bfseries},
-   keywordstyle=[2]{\color{black}},
-   commentstyle={\itshape},
-   frame=lines,
-   backgroundcolor=\color{lightGrey},
-}
-\lstdefinestyle{psmapInline}{
-   language=psmap,
-   basicstyle={\sffamily},
-   keywordstyle=[1]{},
-   keywordstyle=[2]{\bfseries\color{darkGrey}},
-   commentstyle={\itshape},
-   frame=lines,
-   backgroundcolor=\color{lightGrey},
-}
+
 
 
 \lstdefinestyle{script}{
@@ -216,11 +199,11 @@ TODO
 Enviromentální modelování se v poslední době rozšířilo ve značném rozsahu. Velkou částí k tomu přispěla dostupnost informačních technologií a s ní spojený zájem vědeckých pracovišť o tento obor. Již ze samotného názvu vyplývá, že enviromentální modelování se zabývá životním prostředím a jeho modelováním. Pod tento obor spadá nespočetné množství podoborů, které se především liší hledáním odpovědí na rozdílné otázky. Specifikovat jednotnou definici pro enviromentálního modelování je pro jeho multidisciplinární charakter velmi obtížné. Modelování přírodních procesů vzniklo v důsledku zájmu člověka o pochopení přírody. Studium a simulace přírodních jevů a jejich zákonitostí z oborů fyzikálních, matematických, biologických, chemických v dnešní době velmi usnadňuje člověku život a v některých regionech je člověk i přímo závislý na zprostředkovaných výsledcích, které jsou produktem enviromentálních modelů. 
 
 \subsection*{Motivace}
-Modelování dešťových srážek je jednou z disciplín z oboru enviromentálního modelování. Když se poohlédneme do první poloviny 19. století, tak právě meteorologie byla jednou z prvních disciplín, která definovala pojem enviromentální modelování, tak jak ho chápeme nyní. Modelování srážek na zemském povrchu se s vývojem klimatu stává v poslední době důležitým úkolem. Oproti rozvoji fyzikálně numerických modelů a to především díky stále se zvyšujícím výpočetním výkonům počítače, nebyl technologický pokrok ve sběru srážkových dat v posledních desetiletích takřka zaznamenán. Pracovníky meteorologických a hydrologických ústavů ve vývoji brzdí nedostatečně přesná a neaktuální srážková data, která jsou jedním z hlavních vstupů pro další modely. Studie z posledních let poukazují na možnost využití mikrovlnných (MV) spojů vysílačů telekomunikačních operátorů ke sběru srážkových dat. Tento zdroj je levnější a přesnější než sběr pomocí radaru.\cite{radar_meterology} Největší potenciál sběru přesných srážkových dat v reálném čase spočívá ve vylepšení městských odtokových modelů. Pro efektivitu těchto modelů je sběr dat v dostatečném rozlišení a v reálném čase nutností.
+Modelování dešťových srážek je jednou z disciplín z oboru enviromentálního modelování. Když se poohlédneme do první poloviny 19. století, tak právě meteorologie byla jednou z prvních disciplín, která definovala pojem enviromentální modelování, tak jak ho chápeme nyní. Modelování srážek na zemském povrchu se s vývojem klimatu stává v poslední době důležitým úkolem. Oproti rozvoji fyzikálně numerických modelů a to především díky stále se zvyšujícím výpočetním výkonům počítače, nebyl technologický pokrok ve sběru srážkových dat v posledních desetiletích takřka zaznamenán. Pracovníky meteorologických a hydrologických ústavů ve vývoji brzdí nedostatečně přesná a neaktuální srážková data, která jsou jedním z hlavních vstupů pro další modely. Studie z posledních let poukazují na možnost využití mikrovlnných (MV) spojů vysílačů telekomunikačních operátorů ke sběru srážkových dat. Jedním z velkých  potenciálů sběru přesných srážkových dat v reálném čase spočívá v umožnění zlepšit výsledky městských odtokových modelů. Pro efektivitu těchto modelů je sběr dat v dostatečném rozlišení a v reálném čase nutností.
 \subsection*{Cíl}
 Hlavním cílem této práce je vyvinutí nástroje pro zpracování hrubých dat z MV vysílačů v prostředí GIS, čímž se zpřístupní nespočet dalších analýz pro vývoj tohoto výzkumu. Sekundárně je práce zaměřena na využití výstupů vlastního GIS nástroje k grafické interpretaci plošných srážek. Přímo na to navazující je definování vhodných časoprostorových funkcí nástroje GIS. Téma práce bylo založeno na požadavcích zpracovatele projektu, který se zabývá problematikou odhadu srážek z MV zdrojů v rámci projektu TeleMAS v souvislosti s modelováním srážko-odtokových procesů v městských povodích. Tento projekt je řešen v úzké vědecké spolupráci s ETH-Eawag a odborné spolupráci se společnostmi T-Mobile a Veolia ČR a nyní nově s Ericsson Research (Sweden).  !!!!!Tady by měl být uveden odkaz na projekt a ten uveden v citacích!!!! 
 
-Práce je systematicky rozdělena na část teoretickou a praktickou. V teoretické části je kladen důraz na představení základních pojmů a principů, důležitých pro část praktickou. Praktická část je charakterizována částí implementační, do které spadá vývoj vlastních GIS modulů a na část ve které je využita jejich funkcionalita společně se stávájícími nástroji GIS.
+Práce je systematicky rozdělena na část teoretickou a praktickou. V teoretické části je kladen důraz na představení základních pojmů a principů, důležitých pro část praktickou. Praktická část je charakterizována představením funkcionality vlastních GIS modulů a na část ve které je využita jejich funkcionalita společně se stávájícími nástroji GIS.
 
  
 
@@ -253,6 +236,8 @@ Radarová měření díky plošnému pokrytí a dobrému prostorovému i časov�
 \subsubsection{Dálkový průzkum země}
 Je důležité zmínit možnost získávání informací o srážkách pomocí \acs{DPZ}. Tento obor z hlediska meteorologie zaujímá zcela jiný náhled na měření srážek oproti předchozím metodám. \acs{DPZ} v meteorologii umožňuje globální pohled na meteorologické jevy. Makro náhled na enviromentální jevy, např. cyklóny, tropické bouře, tornáda či pohyb mraků, je podstatný pro sledování a pochopení globálního vývoje klimatu. Do této kategorie spadá pozorování pomocí družic na oběžných drahách a leteckých prostředků pohybujících se v zemské atmosféře. 
 
+\subsection{Využití GIS pro srážková data }
+
 
 \subsection{Mikrovlnné spoje}
 Mikrovlnné (MV) spoje jsou rádiové systémy široce využívané v oblasti telekomunikací (zejména 
@@ -270,6 +255,12 @@ převod útlumu signálu MV spojů na srážkové intenzity i pro další využi
     \includegraphics[width=0.7\textwidth]{./img/srazky/microwave_link.png}
     \caption[MV linky]{\centering  Princip odhadu srážek z mikrovlnných spojů }
  \end{figure}   
+
+\subsubsection{Data}
+Charakteristika dat z MV spojů je zcela unikátní v oblasti měření srážek. Specifická je především reprezentací hodnoty srážkové intenzity liniově. MV spoje (linie), umožňují odhadovat pouze průměrnou intenzitu srážky v celé délce s poje. Z toho plynou jisté meze této metody. V hustě osídlených lokalitách bývá pravidlem, že i hustota MV spojů je veliká a v takovém případě není tento faktor zcela limitující (Evropa). Oproti tomu při využití MV spojů mimo osídlené lokality je hustota poněkud menší a v případě využití informace o srážce pro transformaci do povodí je nutné provést úvahu o vhodnosti.  Příkladem může být spoj, který vede kolmo přes cílovou lokalitu. V případě že lokalita zasahuje do desetiny délky spoje, je pravděpodobnost toho, že srážka spadla právě do lokality značně nejistá, díky variabilitě srážek a jejich intenzit proměnných až o několik řádů už v rozsahu stovek metrů. 
+Oproti tomu pokud bude cílem transformace srážky do povodí, kde spoj bude ležet v celém území povodí, je tento stav ideální. 
+
+Obecně jsou data z MV spojů měřeny v časovém kroku \emph{dt=15} [s], ve výšce cca okolo 70 [m]. Topologie sítě představuje vždy jeden referenční vysílač pro spádové území podrobných vysílačů. Na jednom spoji jsou instalované z pravidla dvě antény. Jsou tedy k dispozici dvoje měření pro stejný prostorový úsek. V ideálním případě jsou dvě antény na stejném prostorovém úseku různých konfigurací (frekvence, polarizace) což umožňuje specifické analýzy.
 
     
 \subsubsection{Princip}
@@ -328,7 +319,9 @@ R=\left ( \frac{\gamma_{r}}{k} \right )^{\frac{1}{\alpha }}
 
 \subsubsection{Chyby}
 \label{subsec:chyby}
-Metoda odhadu srážek je založena na předpokladu, že dešťové kapky tlumí signál. Dešťové kapky nabývají mnoha variací velikosti a tvarů. Signál může být tlumen škálou objektů od vodní páry, jejímž zdrojem je povrch Země, přes mrholení až po velké dešťové kapky. Vztah mezi intenzitou srážek \emph{R} a útlumem \emph{$\gamma_{R} $} je funkcí frekvence, polarizace a rozložení dešťových kapek\acs{DSD} s parametry \emph{a} a \emph{b}. Pro tento vztah na frekvencích mezi 25 a 40 GHz platí takřka lineární závislost. V tomto frekvenčním rozmezí je model téměř nezávislý na teplotě, rozložení dešťových kapek a empiricky vykazuje chybovost méně než 10\emph{\%}. Na nízkých frekvencích okolo 10 GHz přesahuje chybovost 20\emph{\%}. Přesnost určování srážek výše zmíněným modelem dle ITU P.838 je při těchto nízkých frekvencích mnohem více náchylná na rozložení kapek\acs{DSD}.\cite{dsd} 
+Metoda odhadu srážek je založena na předpokladu, že dešťové kapky tlumí signál. Dešťové kapky nabývají mnoha variací velikosti a tvarů. Signál může být tlumen škálou objektů od vodní páry, jejímž zdrojem je povrch Země, přes mrholení až po velké dešťové kapky. Vztah mezi intenzitou srážek \emph{R} a útlumem \emph{$\gamma_{R} $} je funkcí frekvence, polarizace a rozložení dešťových kapek\acs{DSD} s parametry \emph{a} a \emph{b}. 
+
+Na frekvencích mezi 25 a 40 GHz platí takřka lineární závislost a model je téměř nezávislý na teplotě, rozložení dešťových kapek a empiricky vykazuje chybovost méně než 10\emph{\%}. Na nízkých frekvencích okolo 10 GHz přesahuje chybovost 20\emph{\%}. Přesnost určování srážek výše zmíněným modelem dle ITU P.838 je při těchto nízkých frekvencích mnohem více náchylná na rozložení kapek\acs{DSD}.\cite{dsd} 
 
 
 \paragraph*{Nejistoty modelu} založeného na vztahu \eqref{eq:Ar} jsou především v závislosti \emph{$\gamma_{A_{m}} $},\emph{$A_{w} $} na rozložení kapek \acs{DSD} podél MV spoje.
@@ -699,11 +692,12 @@ kde $T(x)$ je trend funkce, $\lambda_{j}$ jsou neznámé koeficienty daných bod
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.65\textwidth]{./img/interpolace/spline.png}
-    \caption[Bilinear interpol.]{\centering  Křivka spline prochází všemi body pod minimálním zakřivením \footnotemark}
+    \caption[Spline interpol.]{\centering  Křivka spline prochází všemi body pod minimálním zakřivením }
  \end{figure}   
-\footnotetext{\url{http://postgis.net/docs/manual-2.1/}}
 
 
+\subsubsection{RMS}
+Jednou z možných charakteristik přesnosti interpolačních metod je střední kvadratická chyba (RMS error). Tato chyba je ovlivněna jak samotnou vhodností zvolené interpolační metody, tak jejím nastavením. Chyba RMS se vypočte pomocí porovnání vstupních hodnot s interpolovanými hodnotami v místech vstupních bodů. Charakteristika RMS může mít veliký podíl při volbě konečné konfigurace dané interpolace a v literatuře bývá uváděna jako hlavní ukazatel přesnosti při porovnání jednotlivých metod.
 
 
 
@@ -1215,30 +1209,69 @@ Tabulka barev pro vektorovou vrstvu je možná nastavit parametrem \texttt{color
 \section{Analýzy}
 
 \subsection{Plošné interpolace srážek}
+Výsledek plošných interpolací  je ovlivněn mnoha faktory, které se podílejí na správnosti interpolovaných neznámých hodnot. Možnosti a přesnost interpolací  MV spojů jsou zcela novou charakteristikou interpolace plošných srážek. Interpolace z liniových  prvků je na úrovni GIS zcela nedostupná a jediným východiskem pro využití integrovaných interpolačních metod v GRASS je nahrazení liniové reprezentace body. 
+
+Tento postup otevírá zcela novou problematiku interpolačních metod. MV spoje jsou poměrně hustě rozloženy a  tudíž je možná poměrně velká variabilita ve stanovení rozložení a hustoty bodů. Optimální rozložení bodů je také závislé na zvolené interpolační metodě.
+
+V následujících ukázkách plošných interpolací jsou představeny použitelné  metody pro datový výstup z vlastního modulu. Jednoduché analýzy se jsou zaměřeny na charakteristiky interpolovaných rastrů při změnách parametrů
+\begin{description}
+\item počet známých bodů vstupujících do interpolace
+\item volba parametrů interpolačních metod
+\end{description}
 
 
-\subsection{Časoprostorové analýzy}
-Kapitola \textit{Časoprostorové analýzy} poukazuje na možné využití Teporal GRASS framework (TGASS), který je nově ve verzi GRASS GIS 7. Hlavním cílem následujícího textu je definovat vhodné analytické úlohy pro výstupy modulu \textit{r.mwprecip}. Protože je TGRASS poměrně nový a v současné době je jen několik nastínění jeho možné aplikace, bude následující text částečně psán stylem inklinujícím k formě návodu, který bude sloužit jako úvod pro experimentální využití modulu v GRASS GIS v rámci problematiky MV spojů. Tento směr má logickou návaznost na zadání projektu.
+\subsubsection*{v.surf.bspline}
+Modulu \textit{v.surf.bspline} má parametr \texttt{method}, který umožňuje volby bilineární a bikubické interpolace.
+
+Z analyzovaných metod jsou výsledky bikubické interpolace velice náchylné na správné nastavení. 
+
+\begin{description}
+\item Parametry \texttt{sie} a \texttt{sin}, určují vzdálenost spline křivky pro jednotlivé kroky ve směrech východ-západ (sie) a sever-jih (sin). Maximální hodnota pro oba směry je 150 \texttt{sie}. 
+\item Parametr \texttt{lambda_i} (Thykonov regularization parameter) ovlivňuje vyhlazení interpolace. Při volbě malé \texttt{lambda_i} jsou interpolováné hodnoty více závislé na vstupních hodnotách;vysoké \texttt{lambda_i} vytvoří výsledný povrch více jemný. Pro optimální zjištění parametru slouží přepínač \texttt{-c}, který pro nastavenou délku křivky spline vypočte 
+\end{description}
 
 
-analýzy
-
-Pro názornost bylo využito výstupů z modulu \textit{r.mwprecip} ve zvoleném časovém intervalu cca tří dnů. Jednotlivá časová okna byla vygenerována v časovém kroku 1 minuta. Jednotlivé rastrové mapy byly interpolovány metodou RST vždy pomocí jednoho bodu uprostřed linie (\texttt{pmethod=count, step=1}).
+Parametry byly zvoleny $sin=0.01, sie=0.01$ a následně přepínačem \texttt{-c} spočteny pro dané nastavění 
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
-2013-09-08 23:00:00
-2013-09-11 23:59:00                       
+Table of results:
+v.surf.bspline complete. Cross validation finished for sie = 0.010000 and sin = 0.010000
+    lambda |       mean |        rms |
+   0.00010 |    -1.8607 |     9.8921 |
+   0.00100 |    -1.8459 |     9.8002 |
+   0.00500 |    -1.6617 |     9.9367 |
+   0.01000 |    -1.5752 |    10.6573 |
+   0.02000 |    -0.5502 |    12.4635 |
+   0.05000 |    -0.4392 |    15.4770 |                       
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
 
 
 
-\subsubsection*{Vytvoření temporal datasetu}
-\paragraph*{Vytvoření temporal datasetu}  je první krokem pro následující časoprostorové (ČP) analýzy. K tomu slouží modul \textit{t.create} \footnote{\url{http://grass.osgeo.org/grass70/manuals/t.create.html}}.
+\subsection{Temporal GRASS framework}
+Kapitola \textit{Temporal GRASS framework} poukazuje na možné využití \textit{Teporal GRASS framework (TGASS)}, který je nově ve verzi GRASS GIS 7. Hlavním cílem následujícího textu je definovat vhodné analytické úlohy pro výstupy modulu \textit{r.mwprecip}. Protože je TGRASS poměrně nový a v současné době je jen několik nastínění jeho možné aplikace, bude následující text částečně psán stylem inklinujícím k formě návodu, který bude sloužit jako úvod pro experimentální využití modulu v GRASS GIS v rámci problematiky MV spojů. Tento směr má logickou návaznost na zadání projektu.
+
+
+
+Pro názornost bylo využito výstupů z modulu \textit{r.mwprecip} ve zvoleném časovém intervalu tří dnů. Jednotlivá časová okna byla vygenerována v časovém kroku 1 minuta. Jednotlivé rastrové mapy byly interpolovány metodou RST vždy pomocí jednoho bodu uprostřed linie (\texttt{pmethod=count, step=1}). Dále pak pro specifické analýzy byl přidán dataset s interpolacemi IDW ve stejném časovém kroku.
+\begin{figure}[h!]
+\begin{footnotesize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+2013-09-08 23:59:00
+2013-09-11 23:59:00                       
+\end{lstlisting}
+\end{footnotesize} 
+\end{figure}
+
+
+\subsubsection*{Vytvoření časového datasetu}
+\paragraph*{Vytvoření } časového  datasetu je prvním nezbytným krokem. K jeho vytvoření je modul \textit{t.create} \footnote{\url{http://grass.osgeo.org/grass70/manuals/t.create.html}}.
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
@@ -1274,7 +1307,7 @@ t.register input=temporalLetnany file=/adresar/tmp_temp14/\
 \end{figure}
 
 
-Pro kontrolu úspěšné registrace je vhodné provést kontrolu modulem \textit{t.info}
+Pro kontrolu úspěšné registrace je vhodné se ujistit pomocí modulu \textit{t.info} o současném stavu.
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
@@ -1286,9 +1319,43 @@ t.info input=temporalLetnany
 \end{figure}
 Po spuštění se vypíše tabulka s obecnými informacemi o časovém datasetu. Jednou s užitečných funkcí je vypsání celé historie příkazů v daném datasetu. Vypíše se přepínačem \emph{-h}.
 
+Další fází je kontrola topologie časového datasetu a provádí ji  modul \textit{t.topology}.
+
+\paragraph*{Odstranění a ostatní úpravy} patří mezi podstatné základní funkce pro práci s časovým datasetem.
+\begin{description}
+\item[t.remove] smaže celý časový dataset.  
+\item[t.rename] umožňuje pro přejmenování datasetu.
+\item[t.unregister] odstraní zvolené připojené mapy z datasetu
+\item[t.support] možnost úpravy metadat
+\item[t.remove]
+\end{description}
+
+
+
+
+
+\paragraph*{Vytvoření sub datasetu} je možné využít v případě, že již časový dataset existuje. Mohou nastat dva případy kdy je vhodné využít modul \textit{t.rast.extract}. 
+
+První je situace, kdy jsou z modulu \textit{r.mwprecip} vygenerovány časová okna z většího časového intervalu, než chceme využít k analýzám TGRASS. V takovém případě je možné při registraci interaktivně editovat registrační soubor, nebo využít \textit{t.rast.extract} a definovat v parametru \texttt{where} podmínku.
+
+Modul také podporuje mapový kalkulátor, kde parametr \texttt{expression} umožňuje pomocí mapové algebry definovat nahrazení jednotlivých buněk jinými 
+\begin{figure}[h!]
+\begin{footnotesize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+t.rast.extract input=temporalLetnany where="start_time > '2013-09-10 \
+                23:59:00'"output=selected_precip base=new_prec_map \
+               expression="if(precipitation < 0, null(), precipitation)" 
+\end{lstlisting}
+\end{footnotesize} 
+\end{figure}
+V této demonstraci jsme nahradili hodnoty menší než 0 (MV šum- chyby) hodnotou NULL. To je výhodné například pro vizualizaci srážek nad podkladovou mapou, kde je vodné aby nulové hodnoty byly průhledné.
+
+
 \subsubsection*{Analýzy}
 \label{subsubsec:casoprostoranal} 
-Níže napsaný text popisuje základní možnosti využití GRASS GIS Temporal framework pro výstupní data z modulu \textit{r.mwprecip}.
+
 
 \paragraph{Agregační funkce} slučují buňky o stejných rastrových souřadicích do jednoho rastru, na základě zvolené matematické funkce(průměr, suma, max, min atd.). Rastry jsou slučovány podle zvoleného časového kroku.
 
@@ -1307,17 +1374,67 @@ t.rast.aggregate input=temporalLetnany output=temporal_aggreg \
 \end{figure}
 
 
+Možností je \textit{r.rast.series} který využívá k agregaci jiných algoritmů a je určen pro analýzu celého datasetu bez zvolené granularity.
+Příkladem je vytvoření rastru s maximálními intenzitami srážek v celém časovém intervalu datasetu. Byly porovnány maximální intenzity datasetu s plošnými interpolacemi z 1 bodu nahrazujícího MV spoj s využitím metody RST a IDW
+
+
+\begin{figure}[h!]
+\begin{footnotesize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+t.rast.series input=idwt method=maximum output=idwt_seriesmax           
+t.rast.series input=rstt method=maximum output=rstt_seriesmax    
+\end{lstlisting}
+\end{footnotesize} 
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{./img/analys/maxserie.png}
+    \caption[Serie max]{Srážková maxima z celého časového datasetu; 1. metoda RST 2. metoda IDW  \centering  }
+        \label{fig:baseline}
+ \end{figure}
+
+\paragraph{Statistické informace } jednotlivých rastrů v časovém datasetu jde vypsat pomocí modulu \textit{t.rast.univar}. Modul jako vypíše po jednotlivých řádcích pro dané rastry jejich základní charakteristiky a základní statistické charakteristiky. Pro výpis ve formátu s hlavičkou charakterizující  dané hodnoty je možné využít přepínač \texttt{-h}.
+
+\begin{figure}[h!]
+\begin{footnotesize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|\
+sum|null_cells|cells|first_quartile|median|third_quartile|percentil
+
+alfa1.lview2013_09_09_00_01_rst@test4|2013-09-09 00:01:00\
+|None|0|0|0|0|0|0|-nan|0|0|242109|0|0|0|0
+    
+\end{lstlisting}
+\end{footnotesize} 
+\end{figure}
+
+
+
+
+
+\paragraph{Observace}
+
+
+
+
+
 \subsubsection*{Úlohy v GIS }
 Kapitola je demonstrativního charakteru, poukazující na možné směry využití výsledku z modul r.mwprecip, kterých je nespočetně mnoho, k čemž přispívá možnost skriptovacího Python API nebo objektového pyGRASS. 
 
-Vytvoření GIS modulu pro přenesení hrubých dat do formy vypočtených srážek v GIS prostředí bylo prvním a potřebným krokem k dalšímu možnému vývoji jiných GIS modulů. Jedním z možných směrů je automatická klasifikace a transformace srážek do definovaných subpovodí a které by byli vstupem pro srážko-odtokový hydrologický model.
+
+\paragraph*{Transformace srážek do povodí}
+Vytvoření GIS modulu pro přenesení hrubých dat do formy vypočtených srážek v GIS prostředí bylo prvním a potřebným krokem k dalšímu možnému vývoji jiných GIS modulů. Jedním z možných směrů je automatická klasifikace a transformace srážek do definovaných subpovodí, které by byly vstupem pro srážko-odtokový hydrologický model.
 
 Zjednodušená varianta úlohy demonstruje využití funkcí GRASS a TGRASS pro transformaci srážek do subpovodí. Postup je následující:
 
 \begin{enumerate}
 \item r.mwprecip- vytvoření plošných interpolací
-\item TGRASS základní operace- t.create, t.register
-\item t.rast.aggregate
+\item TGRASS- t.create, t.register a t.rast.aggregate
 \item r.in.ogr import \acs{DMT}
 \item r.watershed vytvoření subpovodí z DMT
 \item r.volume
@@ -1358,41 +1475,45 @@ r.watershed  elevation=dem_srtm threshold=5000\
 \end{figure}
 Parametr \texttt{treshold} určuje jemnost segmentace jednotlivých povodí. Menší hodnota vede k většímu počtu povodí.
 
-\item Posledním krokem je spočtení objemu srážek, které spadly do daných povodí. K tomu je vhodné využit  modul \textit{r.volume}, pro který jsou vstupními parametry rastr s hodnotami a rastr s klasifikovanými územími. Pro vstup rastru s hodnotami je použit výstup  rastr z \textit{t.rast.aggregate}. Z názvu \textit{max15minute\_148} není poznat o jaký časový interval se jedná, pro získání této informace je určen modul \textit{t.rast.list}, kde je možné konfigurovat parametry pro vypsání do výstupní řádky. Při zavolání bez volitelných parametrů vypadá výpis následovně.
+\item Posledním krokem je spočtení objemu srážek, které spadly do daných povodí. K tomu je vhodné využit  modul \textit{r.volume}, pro který jsou vstupními parametry rastr s hodnotami a rastr s klasifikovanými územími. Pro vstup rastru s hodnotami je použit výstup  rastr z \textit{t.rast.aggregate}. Z názvu \textit{max15minute\_148} není poznat o jaký časový interval se jedná, pro získání této informace je určen modul \textit{t.rast.list}, kde je možné konfigurovat parametry pro vypsání do výstupní řádky. Při spuštění bez volitelných parametrů vypadá výpis následovně.
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
-...
-max15minute_103	test3  2013-09-10 01:44:00 2013-09-10 01:59:00
-...
+sum15minute_103	test3  2013-09-10 01:44:00 2013-09-10 01:59:00
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
 
-Odtud lze vybrat mapu z požadovaného intervalu která je vstupem 
+Odtud lze vybrat mapu z požadovaného intervalu která je vstupem(\texttt{input}) pro \textit{r.volume}. 
 
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
-r.volume input=max15minute_103 clump=basin@test3 \
+r.volume input=sum15minute_103 clump=basin@test3 \
         centroids=volume output=/adresar/r.volumeinfo
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
 
+Výsledkem je vektorová bodová mapa, kde ke každému bodu je připojena tabulka s hodnotami výsledků (sum, avg). Parametr \texttt{output} umožňuje uložení tabulky ve formě textového souboru se statistikami celé plochy výpočetního regionu. Výsledné hodnoty pro jednotlivá povodí nejsou v jednotkách  [$mm \cdot h^{-1}$]. Pro převod na objem vody v [$mm \cdot h^{-1}$] je nutné výsledný objem vydělit počtem minut po kterých proběhla agregace.
 
 \end{enumerate} 
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{./img/analys/basin.png}
+    \caption[GUI modul]{1. Agregovaný rastr- suma za 15 minut; 2. povodí s bodovou vrstvou představující hodnoty jednotlivá povodí.  \centering  }
+        \label{fig:baseline}
+ \end{figure}
 
 
 
 
 
-\subsection{Využitelnost}
 
 
 

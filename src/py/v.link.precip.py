@@ -32,7 +32,7 @@ except ImportError:
 #% key: time
 #% type: string
 #% label: Set time "YYYY-MM-DD H:M:S"
-#% required : yes
+
 #%end
 
 #%option
@@ -49,6 +49,10 @@ except ImportError:
 #% description: Create vector map
 #%end
 
+#%flag
+#% key:a
+#% description: Create vector map for all timewin
+#%end
 
 ##########################################################
 ################## guisection: optional ##################
@@ -82,6 +86,7 @@ prefix=''
 typ=''
 firstrun=''
 view=''
+filetimewin=''
 
 def print_message(msg):
     grass.message(msg)
@@ -104,29 +109,34 @@ def firstConnect():
                     output = ogr,
                     overwrite=True,
                     flags='t',
-                    type=typ)
+                    type=typ,
+                    quiet=True)
    
     # if vector already exits, remove dblink (original table)
     if grass.find_file(nat, element='vector')['fullname']:
-        print_message('remove link to layer 1 and 2')
+
         grass.run_command('v.db.connect',
                           map=nat,
                           flags='d',
-                          layer='1')
-        grass.run_command('v.db.connect',
-                          map=nat,
-                          flags='d',
-                          layer='2')
+                          layer='1',
+                          quiet=True)
         
-    print_message('v.category')
+        grass.run_command('v.db.connect',
+                          map=nat,
+                          flags='d',
+                          layer='2',
+                          quiet=True)
+        
+
     grass.run_command('v.category',
                     input=ogr,
                     output=nat,
                     option="transfer",
                     overwrite=True,
-                    layer="1,2")
+                    layer="1,2",
+                    quiet=True)
     
-    print_message('v.db.connect')
+
     grass.run_command('v.db.connect',
                     map=nat,
                     table=layer,
@@ -139,7 +149,8 @@ def nextConnect():
     grass.run_command('v.db.connect',
                     map=nat,
                     layer='2',
-                    flags='d')
+                    flags='d',
+                    quiet=True)
     
     grass.run_command('v.db.connect',
                     map=nat,
@@ -151,9 +162,8 @@ def nextConnect():
 #def setColor():
     #TODO
 
-def createVect(prefix):
-    print_message('v.in.ogr')
-    view_nat='view'+time.replace('-','_').replace(':','_').replace(' ','_')
+def createVect(view_nat):
+    
     
     grass.run_command('v.in.ogr',
                     dsn="PG:",
@@ -161,40 +171,38 @@ def createVect(prefix):
                     output = ogr,
                     overwrite=True,
                     flags='t',
-                    type=typ)
+                    type=typ,
+                    quiet=True)
    
     # if vector already exits, remove dblink (original table)
     if grass.find_file(view_nat, element='vector')['fullname']:
-        print_message('remove link to layer 1 and 2')
         grass.run_command('v.db.connect',
                           map=view_nat,
                           flags='d',
-                          layer='1')
-        grass.run_command('v.db.connect',
-                          map=view_nat,
-                          flags='d',
-                          layer='2')
+                          layer='1',
+                          quiet=True)
         
-    print_message('v.category')
+        grass.run_command('v.db.connect',
+                          map=view_nat,
+                          flags='d',
+                          layer='2',
+                          quiet=True)
+        
+
     grass.run_command('v.category',
                     input=ogr,
                     output=view_nat,
                     option="transfer",
                     overwrite=True,
-                    layer="1,2")
+                    layer="1,2",
+                    quiet=True)
     
-    print_message('v.db.connect')
     grass.run_command('v.db.connect',
                     map=view_nat,
-                    table='link',
+                    table=layer,
                     key=key,
                     layer='1',
                     quiet=True)
-
-    grass.run_command('v.db.connect',
-                    map=view_nat,
-                    layer='2',
-                    flags='d')
     
     grass.run_command('v.db.connect',
                     map=view_nat,
@@ -212,11 +220,12 @@ def run():
         
     #dbConnGrass(options['database'],options['user'],options['password'])
     global view
-    view=schema+'.%sview'%prefix+time.replace('-','_').replace(':','_').replace(' ','_')
-    print_message(view)
-    view=view[:-3]
-    print_message(view)
-    if not flags['c']:
+
+
+    if not flags['c'] and not flags['a']:
+        view=schema+'.%sview'%prefix+time.replace('-','_').replace(':','_').replace(' ','_')
+        view=view[:-3]
+        
         if not os.path.exists(os.path.join(path,firstrun)):
             setFirstRun()
             #print_message("first")
@@ -225,11 +234,26 @@ def run():
         else:
             #print_message("next")
             nextConnect()
-            print_message("Layer connected")
-    else:
-        createVect()
+            
+    elif flags['c']:
         
-        
+        view=schema+'.%sview'%prefix+time.replace('-','_').replace(':','_').replace(' ','_')
+        view=view[:-3]
+        view_nat='view'+time.replace('-','_').replace(':','_').replace(' ','_')
+        createVect(view_nat)
+   
+    elif flags['a']:
+        try:
+                with open(os.path.join(path,filetimewin),'r') as f:            
+                    for win in f.read().splitlines():
+                        view=schema+'.%sview'%prefix+win[5:]
+
+                        createVect(win)
+
+        except IOError as (errno,strerror):
+            print "I/O error({0}): {1}".format(errno, strerror)
+         
+
     if flags['p']:
 
         sql='select %s, precip_mm_h from %s '%(key,view)
@@ -245,7 +269,7 @@ def isTimeValid(time):
 def main():
     
     
-    global schema,time,path,ogr,nat,layer,key,prefix,typ,firstrun
+    global schema,time,path,ogr,nat,layer,key,prefix,typ,firstrun,filetimewin
     schema=options['schema']
 
     
@@ -265,8 +289,7 @@ def main():
             print_message("Temp file not exists")
            
            
-           
-            
+
     if options['type'].find('l')!=-1:
         
         ogr='link_ogr'
@@ -276,7 +299,7 @@ def main():
         prefix='l'
         typ='line'
         firstrun='firstrunlink'
-        
+        filetimewin='l_timewindow'
         run()
         
     if options['type'].find('r')!=-1:  
@@ -287,13 +310,11 @@ def main():
         prefix='g'
         typ='point'            
         firstrun='firstrungauge'
+        filetimewin='g_timewindow'
         run()  
 
 
-        
-        
-
-        
+ 
     print_message("DONE")    
     
 if __name__ == "__main__":

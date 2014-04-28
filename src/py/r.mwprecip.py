@@ -178,7 +178,7 @@ except ImportError:
 #% label: Type of interpolation
 #% options: permeter, count
 #% guisection: Interpolation
-#% answer: permeter
+#% answer: count
 #%end
 
 #%option 
@@ -186,7 +186,7 @@ except ImportError:
 #% label: Setting for parameter pmethod
 #% type: integer
 #% guisection: Interpolation
-#% answer: 500
+#% answer: 1
 #%end
 
 #%option G_OPT_F_INPUT
@@ -340,7 +340,6 @@ def intrpolatePoints(db):
     io.flush()
     io.close()
     
-    print_message("Writing interpolated points to database...")
     io1=open(os.path.join(path,"linknode"),"r")         
     db.copyfrom(io1,"%s.%s"%(schema_name,nametable))        #write interpoalted points to database from temp flat file
     io1.close()
@@ -571,7 +570,6 @@ def dbConnGrass(database,user,password):
     print_message("Connecting to db-GRASS...")
     # Unfortunately we cannot test untill user/password is set
     if user or password:
-        #print_message("Setting login (db.login) ... ")
         if grass.run_command('db.login', driver = "pg", database = database, user = user, password = password) != 0:
             grass.fatal("Cannot login")
 
@@ -585,13 +583,11 @@ def dbConnGrass(database,user,password):
 
     if grass.run_command('db.connect', driver = "pg", database = database) != 0:
         grass.fatal("Cannot connect to database.")
-    else:
-        #print '-' * 80
-        #print_message("Connected to...")
-        grass.run_command('db.connect',flags='p')
+
+
 
 def dbConnPy():
-    print_message("Connecting to database by Psycopg driver...")
+    #print_message("Connecting to database by Psycopg driver...")
     db_name = options['database']
     db_user = options['user']
     db_password = options['password']
@@ -766,7 +762,6 @@ def getBaselDict(db):
   
         
         if options['baselfile']:
-            print_message('Computing baseline "text file"...')
             links_dict=readBaselineFromText(options['baselfile'])
             try:
                 io1=open(os.path.join(path,"compute_precip_info"),"wr")
@@ -844,7 +839,6 @@ def computeBaselineFromTime(db):
                 f=open(bpath,'r')
     ##parse input file
                 for line in f:
-                    #print_message(line)
                     st=st+line.replace("\n","")
                     if 'i' in line.split("\n")[0]:          #get baseline form interval
                         
@@ -870,7 +864,6 @@ def computeBaselineFromTime(db):
                         tot = time + timedelta(seconds=+60)
                         sql="select linkid, avg(txpower-rxpower)as a from record where time >='%s' and time<='%s' group by linkid order by 1"%(fromt,tot)
                         resu=db.executeSql(sql,True,True)
-                        #print_message(resu)
                         tmp.append(resu)
                         
                         continue
@@ -915,18 +908,18 @@ def computeBaselineFromTime(db):
     ##parse input file
                 
                 for line in f:
+                    
                     #print_message(line)
                     st=st+line.replace("\n","")
                     if 'i' in line.split("\n")[0]:          #get baseline form interval
                         
                         fromt = f.next()
-                        #print_message(fromt)
                         st+=fromt.replace("\n","")
                         tot = f.next()
+                        
                     ##validate input data
                         if not isTimeValid(fromt) or not isTimeValid(tot):
                             grass.fatal("Input data is not valid. Parameter 'baselitime'")
-                        #print_message(tot)
                         st+=tot.replace("\n","")
                         sql="select linkid, txpower-rxpower as a from record where time >='%s' and time<='%s'"%(fromt,tot)
                         resu=db.executeSql(sql,True,True)
@@ -1046,8 +1039,7 @@ def readBaselineFromText(pathh):
 ##   GRASS work
 
 def grassWork():
-    #TODO
-    print_message("GRASS analysis")
+
     database = options['database']
     user = options['user']
     password = options['password']
@@ -1068,38 +1060,38 @@ def grassWork():
     
 
     
-    print_message('v.in.ogr')
     grass.run_command('v.in.ogr',
                     dsn="PG:",
                     layer = points_schema,
                     output = points_ogr,
                     overwrite=True,
                     flags='t',
-                    type='point', key='linkid')
+                    type='point', key='linkid',
+                    quiet=True)
     
     points_nat=points + "_nat"
    
     # if vector already exits, remove dblink (original table)
     if grass.find_file(points_nat, element='vector')['fullname']:
-        print_message('remove link to layer 1 and 2')
         grass.run_command('v.db.connect',
                           map=points_nat,
                           flags='d',
-                          layer='1')
+                          layer='1',
+                          quiet=True)
         grass.run_command('v.db.connect',
                           map=points_nat,
                           flags='d',
-                          layer='2')
+                          layer='2',
+                          quiet=True)
         
-    print_message('v.category')
     grass.run_command('v.category',
                     input=points_ogr,
                     output=points_nat,
                     option="transfer",
                     overwrite=True,
-                    layer="1,2")
+                    layer="1,2",
+                    quiet=True)
     
-    print_message('v.db.connect')
     grass.run_command('v.db.connect',
                     map=points_nat,
                     table=points_schema,
@@ -1113,7 +1105,8 @@ def grassWork():
                     layer = "link",
                     output = "link",
                     flags='t',
-                    type='line')
+                    type='line',
+                    quiet=True)
         
         grass.run_command('g.region',
                           vect='link',
@@ -1121,10 +1114,11 @@ def grassWork():
                           n='n+ 00:00:20',
                           w='w-00:00:20',
                           e='e+00:00:20',
-                          s='s-00:00:20')
+                          s='s-00:00:20',
+                          quiet=True)
     #00:00:1
     try:
-        with open(os.path.join(path,"timewindow"),'r') as f:            
+        with open(os.path.join(path,"l_timewindow"),'r') as f:            
             for win in f.read().splitlines():
                 
                 win=schema_name + '.' + win
@@ -1134,7 +1128,7 @@ def grassWork():
                                 key='linkid',
                                 layer='1',
                                 quiet=True)
-              
+                #sys.exit()
                 if options['isettings']:
                     precipInterpolationCustom(points_nat,win)
                 else:
@@ -1145,11 +1139,18 @@ def grassWork():
                 grass.run_command('v.db.connect',
                                 map=points_nat,
                                 layer='1',
-                                flags='d')
+                                flags='d',
+                                quiet=True)
               
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
  
+ 
+
+
+              
+    except IOError as (errno,strerror):
+        print "I/O error({0}): {1}".format(errno, strerror) 
 def precipInterpolationCustom(points_nat,win):
       #grass.run_command('v.surf.rst',input=points_nat,zcolumn = attribute_col,elevation=out, overwrite=True)
     itype=options['interpolation']
@@ -1159,7 +1160,8 @@ def precipInterpolationCustom(points_nat,win):
     eval(istring)
     grass.run_command('r.colors',
                         map=out,
-                        rules=options['color'])
+                        rules=options['color'],
+                        quiet=True)
     
 def precipInterpolationDefault(points_nat,win):
     itype=options['interpolation']
@@ -1171,26 +1173,32 @@ def precipInterpolationDefault(points_nat,win):
                           input=points_nat,
                           zcolumn = attribute_col,
                           elevation=out,
-                          overwrite=True)
+                          overwrite=True,
+                          quiet=True)
         
     elif itype == 'bspline':
          grass.run_command('v.surf.bspline',
                            input=points_nat,
                            column = attribute_col,
                            raster_output=out,
-                           overwrite=True)
+                           overwrite=True,
+                           quiet=True)
     else:
          grass.run_command('v.surf.idw',
                            input=points_nat,
                            column = attribute_col,
                            output=out,
                            overwrite=True,
+                           quiet=True
                           )        
 
     grass.run_command('r.colors',
                         map=out,
-                        rules=options['color'])
+                        rules=options['color'],
+                        quiet=True)
     
+    #grass.mapcalc("$out1=if($out2<0,null(),$out3)",out1=out,out2=out,out3=out,
+     #                    overwrite=True)
 
 ###########################
 ##   Precipitation compute
@@ -1243,28 +1251,24 @@ def computePrecip(db):
         if record[5] in links_dict and (record[4]/1000000)>10 :
             #coef_a_k[alpha, k]
             coef_a_k= computeAlphaK(record[4],record[3])
-            
-            #print_message(coef_a_k)
-            #print_message(record)
+
             #read value from dictionary
             baseline_decibel=(links_dict[record[5]])
             #final precipiatation is R1    
             Ar=record[1]- baseline_decibel - Aw
             if Ar > 0:
-                #print_message(Ar)
-                #print_message(record[2])
+
                 
                 yr=Ar/(record[2]/1000  )
                 R1=(yr/coef_a_k[1])**(1/coef_a_k[0])
             else:
                 R1=0
             #string for output flatfile
+     
             out=str(record[5])+"|"+str(record[0])+"|"+str(R1)+"\n"
             temp.append(out)
             recordid += 1
-        #else:
-            #print_message("CAUNTION: Record skip:")
-            #print_message(record)
+
 ##write values to flat file
     try:
         io.writelines(temp)
@@ -1332,7 +1336,6 @@ def makeTimeWin(db,typeid,table):
 ##check if set time by user is in dataset time interval
     if options['fromtime']:
         from_time= datetime.strptime(options['fromtime'], "%Y-%m-%d %H:%M:%S")
-        #print_message(from_time)
         if timestamp_min >from_time:
             print_message("'Fromtime' value is not in dataset time interval")
         else:
@@ -1340,7 +1343,6 @@ def makeTimeWin(db,typeid,table):
   
     if options['totime']:    
         to_time=datetime.strptime(options['totime'], "%Y-%m-%d %H:%M:%S")
-        #print_message(to_time)
         if timestamp_max < to_time:
             print_message("'Totime' value is not in dataset time interval")
         else:    
@@ -1355,13 +1357,14 @@ def makeTimeWin(db,typeid,table):
         except IOError as (errno,strerror):
             print "I/O error({0}): {1}".format(errno, strerror)
         io1.write(sum_precip+'|'+str(timestamp_min)+'|'+str(timestamp_max)+stamp+stamp1)
-        io1.close    
+        io1.close
 
 
     time_const=0    
     i=0
     temp=[]
-    tgrass_format=[]
+    tgrass_interpol=[]
+    tgrass_vector=[]
     #set prefix
     prefix='l'
     if typeid=='gaugeid':
@@ -1369,51 +1372,93 @@ def makeTimeWin(db,typeid,table):
     
     cur_timestamp=timestamp_min
     print_message( "from "+str(timestamp_min)+" to "+ str(timestamp_max)+ " per " + options['interval']+ ". It can take a time...")
+    
+    
 ##make timewindows from time interval
 ###############################################
     while cur_timestamp<=timestamp_max:
-        #print_message(cur_timestamp)
-        #print_message(timestamp_max)        
-    #crate name of view
+ 
+    #create name of view
         a=time.strftime("%Y_%m_%d_%H_%M", time.strptime(str(cur_timestamp), "%Y-%m-%d %H:%M:%S"))
         view_name="%s%s%s"%(prefix,view,a)
         vw=view_name+"\n"
         temp.append(vw)
         
         #format for t.register ( temporal grass)
-        tgrass=schema_name + '.' + view_name+"_"+options['interpolation'] +'|'+str(cur_timestamp)+"\n"
-        tgrass_format.append(tgrass)
+        if typeid=='linkid':
+            tgrass=schema_name + '.' + view_name+"_"+options['interpolation'] +'|'+str(cur_timestamp)+"\n"
+            tgrass_interpol.append(tgrass)
+            
+            tgrass=schema_name + '.' + view_name+'|'+str(cur_timestamp)+"\n"
+            tgrass_vector.append(tgrass)
+            
+        else:
+            
+            tgrass=schema_name + '.' + view_name+'|'+str(cur_timestamp)+"\n"
+            tgrass_vector.append(tgrass)
+        
+        
         
         
     #create view
         sql="CREATE table %s.%s as select * from %s.%s where time=(timestamp'%s'+ %s * interval '1 second')"%(schema_name,view_name,schema_name,view_db,timestamp_min,time_const)
         data=db.executeSql(sql,False,True)
+        
     #compute cur_timestamp (need for loop)
         sql="select (timestamp'%s')+ %s* interval '1 second'"%(cur_timestamp,tcc)
         cur_timestamp=db.executeSql(sql)[0][0]
+        
     #go to next time interval
         time_const+=tcc
-        #print_message(cur_timestamp)
-        #print_message(timestamp_max)
+
 
 ##write values to flat file
     if typeid=='linkid':
         try:
-            io2=open(os.path.join(path,"timewindow"),"wr")
+            io2=open(os.path.join(path,"l_timewindow"),"wr")
             io2.writelines(temp)
             io2.close()
         except IOError as (errno,strerror):
             print "I/O error({0}): {1}".format(errno, strerror)
+    else:
+        try:
+            io2=open(os.path.join(path,"g_timewindow"),"wr")
+            io2.writelines(temp)
+            io2.close()
+        except IOError as (errno,strerror):
+            print "I/O error({0}): {1}".format(errno, strerror)
+    
       
     #make textfile for t.register input
-    filename="timewin_%s"%prefix + "_" + str(timestamp_min).replace(' ','_') + "|" +  str(timestamp_max).replace(' ','_')
-    
-    try: 
+    if typeid=='linkid':
+        filename="timewin_%s"%prefix + "_" + str(timestamp_min).replace(' ','_') + "|" +  str(timestamp_max).replace(' ','_')
+        try: 
             io3=open(os.path.join(path,filename),"wr")
-            io3.writelines(tgrass_format)
+            io3.writelines(tgrass_interpol)
             io3.close()
-    except IOError as (errno,strerror):
-        print "I/O error({0}): {1}".format(errno, strerror)        
+        except IOError as (errno,strerror):
+            print "I/O error({0}): {1}".format(errno, strerror)
+            
+        filename="timewin_%s"%prefix + "vec_" + str(timestamp_min).replace(' ','_') + "|" +  str(timestamp_max).replace(' ','_')
+        try: 
+            io3=open(os.path.join(path,filename),"wr")
+            io3.writelines(tgrass_vector)
+            io3.close()
+        except IOError as (errno,strerror):
+            print "I/O error({0}): {1}".format(errno, strerror)   
+        
+        
+    else:
+        filename="timewin_%s"%prefix + "vec_" + str(timestamp_min).replace(' ','_') + "|" +  str(timestamp_max).replace(' ','_')
+        try: 
+            io4=open(os.path.join(path,filename),"wr")
+            io4.writelines(tgrass_vector)
+            io4.close()
+        except IOError as (errno,strerror):
+            print "I/O error({0}): {1}".format(errno, strerror)
+        
+  
+        
         
 ##drop temp table
 
@@ -1500,12 +1545,10 @@ def computeAlphaK(freq,polarization):
 ##   main
 
 def main():
-        print_message("Module is running...")
         
         global schema_name,path
         schema_name = options['schema']
         path= os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmp_%s"%schema_name)
-        print_message(path)
 
         try: 
             os.makedirs(path)
@@ -1566,12 +1609,18 @@ def main():
                     print_message(path1)
                     readRaingauge(db,path1)
 
-            print_message('Removing time windows...')
-            if os.path.exists(os.path.join(path,"timewindow")):
-                with open(os.path.join(path,"timewindow"),'r') as f:
+            if os.path.exists(os.path.join(path,"l_timewindow")):
+                with open(os.path.join(path,"l_timewindow"),'r') as f:
                     for win in f.read().splitlines():
                         sql="drop table IF EXISTS %s.%s "%(schema_name,win)
                         db.executeSql(sql,False,True)
+                        
+            if os.path.exists(os.path.join(path,"l_timewindow")):
+                with open(os.path.join(path,"g_timewindow"),'r') as f:
+                    for win in f.read().splitlines():
+                        sql="drop table IF EXISTS %s.%s "%(schema_name,win)
+                        db.executeSql(sql,False,True)
+                        
             makeTimeWin(db,'linkid',comp_precip)
             if isTableExist(db,schema_name,'rgauge'):
                 makeTimeWin(db,'gaugeid',comp_precip_gauge)
