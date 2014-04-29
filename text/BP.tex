@@ -450,6 +450,33 @@ GRASS GIS v současné době podporuje dva přístupy k volání funkcionalit GR
 \paragraph*{Python Scripting Library} je variantou API, které tvoří Python podporu pro funkcionality GRASS. Princip této knihovny spočívá v zadávání příkazu v analogickém formátu, jako je formát pro spouštění jednotlivých modulů přímo v GRASS.
 \paragraph*{pyGRASS} je objektově orientovaná API knihovna. Výhoda tohoto API spočívá ve možnosti přiřazování výsledků z volaných GRASS funkcionalit v podobě objektů. Tento přístup je současným trendům více odpovídající.
 
+\subsubsection{Plošné interpolace v GRASS }
+\label{sec:plostneinterpolace}
+Plošné interpolace slouží k odhadu hodnot v prostoru, jež jsou pomyslně ohraničeny výchozími daty, které se uvažují jako referenční. Nutnost odhadovat hodnoty má logickou návaznost na problematiku sběru dat.  Podobně tomu je i v oblasti hydrometeorologie\ref{subsec:11}. Možnou variantou interpolací v GIS systémech je datový vstup reprezentovaný bodovým polem (vektor) a výstup v podobě rastru (grid). Interpolace se také využívají k převzorkování rastrů do jiného rozlišení.
+
+\subsection{Metody}
+Jednotlivé interpolační metody se obecně mohou kategorizovat do dvou hlavních skupina a to na deterministické a geostatistické. 
+Deterministické metody jsou charakteristické tím, že pro odhad neznámých využívají neměnnou matematickou funkci. Jinak řečeno oproti geostaticické metodě, nevyužívají pokročilejších statistických metod.
+
+V systému GRASS GIS je nativně implementována čtveřice typů interpolací, pro které jsou vstupem  bodová vektorová data. Všechny čtyři se řadí do skupiny deterministických metod.
+
+Do geostatistických metod bychom mohli zařadit metodu kriging, která je v GRASS GIS podporována externě ze statistického systému \textit{R Project} \footnote{\url{http://www.r-project.org/}}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|ll|}
+\hline
+interpolace & GRASS modul \\ \hline\hline
+Bilinear spline & \multirow{2}{*}{v.surf.bspline} \\
+Bicubic spline &  \\
+Regularized spline tension & v.surf.rst \\
+IDW & v.surf.idw \\ \hline
+\end{tabular}
+\caption{Přehled vhodných metod v GRASS GIS}
+\label{my-label}
+\end{table}
+
+
 \subsection{PostgreSQL}
 PostgreSQL\footnote{\url{http://www.postgresql.org/}} je open-source projekt, který vznikl v roce 1986. Tento projekt je dnes celosvětově uznávaný, čehož důkazem je využití systému ve světových projektech jako \textit{SourceForge}\footnote{\url{http://sourceforge.net/}}, \textit{Debian}\footnote{\url{http://www.debian.org/}} či \textit{Open Street Map}\footnote{\url{http://www.openstreetmap.org\#map=15/49.9503/14.5322}}. Kvalita systému a rozsáhlá dokumentace je především dílem komunity dobrovolníků, díky kterým je PostgreSQL schopno konkurovat i proprietárním databázovým systémům. Tomu také mimo jiné přispívá fakt, že se řadí mezi multiplatformní systémy.\cite{postgre}
 
@@ -596,124 +623,6 @@ SELECT  ST_AsEWKT (geom) FROM link
 
 \item[Agregační] funkce PostGIS jsou z principu  stejné jako ve standardu SQL (průměr, max, min) s rozdílem, že jsou zaměřeny na geometrická data. Příkladem je funkce pro sjednocení \texttt{ST\_Union}.
 \end{description}
-
-
-
-
-
-
-
-
-
-
-
-
-\setcounter{footnote}{1}
-\section{Plošné interpolace }
-\label{sec:plostneinterpolace}
-Plošné interpolace slouží k odhadu hodnot v prostoru, jež jsou pomyslně ohraničeny výchozími daty, které se uvažují jako referenční. Nutnost odhadovat hodnoty má logickou návaznost na problematiku sběru dat.  Podobně tomu je i v oblasti hydrometeorologie\ref{subsec:11}. Možnou variantou interpolací v GIS systémech je datový vstup reprezentovaný bodovým polem (vektor) a výstup v podobě rastru (grid). Interpolace se také využívají k převzorkování rastrů do jiného rozlišení.
-
-Další metodou, která si je interpolaci blízká, je extrapolace. Extrapolací je myšlen postup, kdy jsou odhadovány data mimo prostorovou doménu referenčních bodů. Extrapolace oproti interpolaci je typicky méně přesná.
-
-Pochopení základních  principů, na  kterých jsou interpolace založené, může přispět k dosažení kvalitních výsledků. Důležité je především znát funkcionalitu volitelných parametrů u jednotlivých metod, které je potřebné v nástrojích GIS nastavit. Následující text je zaměřen na nativně implementované interpolační metody, kterými disponuje systém GRASS GIS pro vektorová bodová data. 
-
-
-\subsection{Metody}
-Jednotlivé interpolační metody se obecně mohou kategorizovat do dvou hlavních skupina, a to na deterministické a geostatistické. 
-Deterministické metody jsou charakteristické tím, že pro odhad neznámých využívají neměnnou matematickou funkci. Jinak řečeno oproti geostaticické metodě, nevyužívají pokročilejších statistických metod.
-
-V systému GRASS GIS je nativně implementována čtveřice typů interpolací, pro které jsou vstupem  bodová vektorová data. Všechny čtyři se řadí do skupiny deterministických metod.
-
-Do geostatistických metod bychom mohli zařadit metodu kriging, která je v GRASS GIS podporována externě ze statistického systému \textit{R Project} \footnote{\url{http://www.r-project.org/}}.
-
-
-
-\begin{table}[h]
-\centering
-\begin{tabular}{|ll|}
-\hline
-interpolace & GRASS modul \\ \hline\hline
-Bilinear spline & \multirow{2}{*}{v.surf.bspline} \\
-Bicubic spline &  \\
-Regularized spline tension & v.surf.rst \\
-IDW & v.surf.idw \\ \hline
-\end{tabular}
-\caption{Přehled vhodných metod v GRASS GIS}
-\label{my-label}
-\end{table}
-
-
-\paragraph{Bilineární interpolace} Princip bilineární interpolace je v rozšíření lineární interpolace na funkci dvou proměnných. Každá buňka rastru je definována pomocí bilineární funkce. Interpolace je výpočetně triviální a využívá se často k převzorkování.
-
-Název této interpolace je poněkud zavádějící. Odhad hledaného bodu \emph{P} je definován kvadratickou funkcí $f(x,y)$. 
-
-Postup je takový, že  se nejdříve nad danou množinou bodů provede lineární interpolace z jedné strany rastru na druhou(osa-\emph{x}), tím získáme bod \emph{A} a \emph{B}. Z těchto bodů se  pak ve směru kolmém (osa \emph{y}) interpoluje bod P. Volba pořadí jednotlivých směru je volná. Nejprve tedy dostaneme lineární koeficienty pro $f(x)$ ze kterých  následně vypočteme lineární interpolací koeficienty  pro $f(y)$. Tím dostaneme požadovaný odhad $f(x,y)$  pro bod \emph{P}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.65\textwidth]{./img/interpolace/bilinear.png}
-    \caption[Bilinear interpol.]{\centering  Zobrazení principu bilineární interpolace \footnotemark}
- \end{figure}   
-\footnotetext{\url{http://postgis.net/docs/manual-2.1/}}
-
-
-
-\paragraph{Bikubická spline} iterpolace je rozšíření kubické interpolace o druhý rozměr. Principem je podobná bilineární interpolaci s rozdílem, že k výpočtům odhadovaných bodu využívá kubické spline interpolace.  Využití \textit{spline} metody zajišťuje to, že první a druhá parciální derivace polynomu pro odhad koeficientů je spojitá. Oproti bilineární interpolaci je tak výsledný rastr vyhlazenější a celkový výsledek je přesnější. \cite{bicubic}
-
-
-
-\paragraph*{Inverse Distance Weighting}
-\acs{IDW} využívá k odhadu bodu \emph{P} základního statistického prvku. Určovaný bod \emph{P}  je počítán jako vážený průměr hodnot  bodů známých bodů $Q_{i}$.  Myšlenka je založena na předpokladu, že sobě bližší body jsou si hodnotou více podobné, než ty co jsou od sebe vzdálené. Váhy se tedy počítají inverzně ze vzdáleností $d_{0,i}$. Pro nastavení citlivosti interpolace slouží parametr \emph{p}, který je exponentem  vzdálenosti $d_{0,i}$. \cite{spatialinter}
-
-\begin{equation}
-P_{i}=\frac{\frac{1}{d_{0,i}^{p}}}{\sum_{i=1}^{n}\frac{1}{d_{0,i}^{p}}}
-\end{equation}
-
-Z tohoto vztahu plyne, že s rostoucím koeficientem \emph{p} mají jednotlivé  body $Q_{i}$ rozdílnější váhy. Při volbě $p=0$ se výsledný bod \emph{P} vypočte jako aritmetický průměr z všech bodů $Q_{i}$.
-
-\paragraph*{Regularized spline with tension}
-
-Metoda Regularized spline with tension odhaduje neznámé hodnoty pomocí spline křivky, která je definována jako funkce, která prochází měřenými body a má minimální křivost. Pro názornost bývá ve výukových textech uveden příklad: Spline funkce si lze představit jakožto imitaci tenkého povrchu, který prochází všemi danými body a zároveň je tento povrch minimálně zakřiven. Tenzi, neboli napětí si lze představit jako prohýbaní, které by vzniklo při nahrazení povrchu různými materiály od elastické gumy po tlustý plech.
-
-Výhody RST interpolace jsou v možnosti kontroly parametrů:
-
-\begin{itemize}
-\item napětí
-\item vyhlazení
-\item anisotropie - rotace
-\end{itemize}
-Funkce spline je definována vztahem:
-
-\begin{equation}
-S(x)=T(x)+\sum_{j=1}^{n}\lambda_{i}R(r,r_{j})
-\end{equation}
-
-kde $T(x)$ je trend funkce, $\lambda_{j}$ jsou neznámé koeficienty daných bodů, které se řeší soustavou lineárních rovnic. Funkce $R(r,r_{j})$ je radiální funkcí explicitně závislé na koeficientu vyhlazení. \cite{RST}
-
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.65\textwidth]{./img/interpolace/spline.png}
-    \caption[Spline interpol.]{\centering  Křivka spline prochází všemi body pod minimálním zakřivením }
- \end{figure}   
-
-
-\subsubsection{RMS}
-Jednou z možných charakteristik přesnosti interpolačních metod je střední kvadratická chyba (RMS error). Tato chyba je ovlivněna jak vhodností zvolené interpolační metody, tak jejím nastavením. Chyba RMS se vypočte pomocí porovnání vstupních hodnot s interpolovanými hodnotami v místech vstupních bodů. Některé metody jsou charakteristické tím, že jejich interpolované hodnoty jsou ve známých bodech stejné jako vstupní (IDW). V takovém případě se využívá jiných metod. Charakteristika RMS může mít veliký podíl při volbě konečné konfigurace dané interpolace a v literatuře bývá uváděna jako hlavní ukazatel přesnosti při porovnání jednotlivých metod.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1266,11 +1175,7 @@ Modulu \textit{v.surf.bspline} má parametr \texttt{method}, který umožňuje v
 
 \begin{description}
 \item Parametry \texttt{sie} a \texttt{sin}, určují vzdálenost spline křivky pro jednotlivé kroky ve směrech východ-západ (sie) a sever-jih (sin). Maximální hodnota pro oba směry je 150 \texttt{sie}. 
-<<<<<<< HEAD
 \item Parametr \texttt{lambda\_i} (Thykonov regularization parameter) ovlivňuje vyhlazení interpolace. Při volbě malé \texttt{lambda\_i} jsou interpolované hodnoty více závislé na vstupních hodnotách; vysoké \texttt{lambda\_i} vytvoří výsledný rastr více jemný. Pro optimální zjištění parametru slouží přepínač \texttt{-c}, který pro nastavenou délku křivky spline vypočte RMS charakteristiky.
-=======
-\item Parametr \texttt{lambda\_i} (Thykonov regularization parameter) ovlivňuje vyhlazení interpolace. Při volbě malé \texttt{lambda\_i} jsou interpolováné hodnoty více závislé na vstupních hodnotách;vysoké \texttt{lambda\_i} vytvoří výsledný povrch více jemný. Pro optimální zjištění parametru slouží přepínač \texttt{-c}, který pro nastavenou délku křivky spline vypočte 
->>>>>>> 486fc15b9d842cf622696ed3a3e0f8ed427fe784
 \end{description}
 
 
