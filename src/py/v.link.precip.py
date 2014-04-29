@@ -44,6 +44,15 @@ except ImportError:
 #% answer: links
 #%end
 
+#%option
+#% key: vector
+#% label: Choose MV representation
+#% options: links, points
+#% multiple: yes
+#% required : yes
+#% answer: points
+#%end
+
 #%flag
 #% key:c
 #% description: Create vector map
@@ -52,6 +61,14 @@ except ImportError:
 #%flag
 #% key:a
 #% description: Create vector map for all timewin
+#%end
+
+
+
+#%option
+#% key: layername
+#% type: string
+#% label: Name of points layer to connect
 #%end
 
 ##########################################################
@@ -291,17 +308,31 @@ def main():
            
 
     if options['type'].find('l')!=-1:
-        
-        ogr='link_ogr'
-        nat="link_nat"
-        layer='link'
-        key='linkid'
-        prefix='l'
-        typ='line'
-        firstrun='firstrunlink'
-        filetimewin='l_timewindow'
-        run()
-        
+        if options['vector'].find('l')!=-1:
+  
+            ogr='link_ogr'
+            nat="link_nat"
+            layer='link'
+            key='linkid'
+            prefix='l'
+            typ='line'
+            firstrun='firstrunlink'
+            filetimewin='l_timewindow'
+            run()
+        else:
+            if not options['layername']:
+                grass.fatal("set up name of points layer")
+            else:               
+                ogr='point_ogr'
+                nat="points_nat"
+                layer='%s.%s'%(schema,options['layername'])
+                key='linkid'
+                prefix='l'
+                typ='point'
+                firstrun='firstrunlink'
+                filetimewin='l_timewindow'
+                run()
+                
     if options['type'].find('r')!=-1:  
         ogr='gauge_ogr'
         nat="gauge_nat"

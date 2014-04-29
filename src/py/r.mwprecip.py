@@ -81,7 +81,7 @@ except ImportError:
 #%end
 #%option G_OPT_F_INPUT
 #% key: baseltime
-#% description: Set interval or just time when not raining (see the manual)
+#% label: Set interval or just time when not raining (see the manual)
 #% guisection: Baseline
 #% required: no
 #%end
@@ -356,7 +356,7 @@ def intrpolatePoints(db):
     sql="alter table %s.%s drop column long"%(schema_name,nametable) #remove longtitude column from table
     db.executeSql(sql,False,True)
    
-    
+
 def destinationPointWGS(lat1,lon1,brng,s):
     a = 6378137
     b = 6356752.3142
@@ -583,8 +583,6 @@ def dbConnGrass(database,user,password):
 
     if grass.run_command('db.connect', driver = "pg", database = database) != 0:
         grass.fatal("Cannot connect to database.")
-
-
 
 def dbConnPy():
     #print_message("Connecting to database by Psycopg driver...")
@@ -1128,7 +1126,7 @@ def grassWork():
                                 key='linkid',
                                 layer='1',
                                 quiet=True)
-                #sys.exit()
+                 #sys.exit()
                 if options['isettings']:
                     precipInterpolationCustom(points_nat,win)
                 else:
@@ -1151,6 +1149,7 @@ def grassWork():
               
     except IOError as (errno,strerror):
         print "I/O error({0}): {1}".format(errno, strerror) 
+
 def precipInterpolationCustom(points_nat,win):
       #grass.run_command('v.surf.rst',input=points_nat,zcolumn = attribute_col,elevation=out, overwrite=True)
     itype=options['interpolation']
@@ -1389,12 +1388,12 @@ def makeTimeWin(db,typeid,table):
             tgrass=schema_name + '.' + view_name+"_"+options['interpolation'] +'|'+str(cur_timestamp)+"\n"
             tgrass_interpol.append(tgrass)
             
-            tgrass=schema_name + '.' + view_name+'|'+str(cur_timestamp)+"\n"
+            tgrass=view_name+'|'+str(cur_timestamp)+"\n"
             tgrass_vector.append(tgrass)
             
         else:
             
-            tgrass=schema_name + '.' + view_name+'|'+str(cur_timestamp)+"\n"
+            tgrass=view_name+'|'+str(cur_timestamp)+"\n"
             tgrass_vector.append(tgrass)
         
         
