@@ -454,7 +454,7 @@ GRASS GIS v současné době podporuje dva přístupy k volání funkcionalit GR
 \label{sec:plostneinterpolace}
 Plošné interpolace slouží k odhadu hodnot v prostoru, jež jsou pomyslně ohraničeny výchozími daty, které se uvažují jako referenční. Nutnost odhadovat hodnoty má logickou návaznost na problematiku sběru dat.  Podobně tomu je i v oblasti hydrometeorologie\ref{subsec:11}. Možnou variantou interpolací v GIS systémech je datový vstup reprezentovaný bodovým polem (vektor) a výstup v podobě rastru (grid). Interpolace se také využívají k převzorkování rastrů do jiného rozlišení.
 
-\subsection{Metody}
+\paragraph*{ Interpolační metody}
 Jednotlivé interpolační metody se obecně mohou kategorizovat do dvou hlavních skupina a to na deterministické a geostatistické. 
 Deterministické metody jsou charakteristické tím, že pro odhad neznámých využívají neměnnou matematickou funkci. Jinak řečeno oproti geostaticické metodě, nevyužívají pokročilejších statistických metod.
 
@@ -1142,6 +1142,10 @@ Vizualizovat je možné plošná srážková data, která jsou odhadem interpola
 
 Modul \textit{g.gui.animation} je interaktivní a uživatelsky přístupný wxGUI modul, který umožňuje vytvářet animace z jednotlivých po sobě jdoucích časových oken. Těžiště jeho výhod bude při vizualizaci srážkových map v čase. 
 
+
+r.color
+v.color
+
 \subsubsection{Plošná interpretace srážek}
 Výsledek plošných interpolací  je ovlivněn mnoha faktory, které se podílejí na správnosti interpolovaných  hodnot. Obecně interpolace z liniových vektorů je v GIS neobvyklá a jediným východiskem pro využití podporovaných interpolačních metod v GRASS je nahrazení liniové reprezentace body. 
 
@@ -1275,7 +1279,7 @@ escapeinside=''}
 \end{figure}
 
 
-\subsubsection*{Vytvoření časového datasetu}
+\subsubsection*{Základní operace}
 \paragraph*{Databáze} je možné využit nativní SQLite v GRASS která je nastavena jako výchozí, nebo modulem \textit{t.connect} definovat připojení k externí databázi PostgreSQL.
 
 \paragraph*{Vytvoření } časového  datasetu je prvním nezbytným krokem. K jeho vytvoření je modul \textit{t.create} \footnote{\url{http://grass.osgeo.org/grass70/manuals/t.create.html}}.
@@ -1363,6 +1367,27 @@ Ve tomto případě  jsou nahrazeny hodnoty menší než 0 (MV šum- chyby) hodn
     \includegraphics[width=0.6\textwidth]{./img/temporal/timeline.png}
     \caption[Timeline]{\centering  Modul g.gui.timeline pro grafický náhled časových datasetů}
  \end{figure}  
+
+
+
+
+\paragraph*{Vytvoření intervalů} Při registraci map jsou časové známky registrovány jako absolutní bod v čase. Pro některé analýzy bude zapotřebí pracovat s intervaly. Modul \textit{t.snap} vytvoří automaticky intervaly ve bodle granularity datasetu. Modul nemá kromě \texttt{input} a \texttt{type} žádné zvláštní parametry.
+
+
+
+\paragraph*{Posunutí časového datasetu} Možnost posunutí časového datasetu v čase může být využita například při změně času, nebo pracování z daty z různými časovými referencemi. Modul \textit{t.shift} umožňuje posunutí datasetu o absolutní hodnotu. Příkazem jsme posunuly časový dataset o 1 hodinu dopředu. 
+\begin{figure}[h!]
+\begin{footnotesize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+t.shift input=rastr@tletnany granularity=1 hours
+\end{lstlisting}
+\end{footnotesize} 
+\end{figure}
+
+
+\paragraph*{t.merge}
 
 
 \subsubsection*{Základní analýzy}
@@ -1476,6 +1501,18 @@ t.vect.observe.strds input=srazkomery strds=idw_gama\
 \end{figure}
 
 Ve zvolené výchozí databázi se vytvoří časová okna v časovém kroku granularity datasetu.
+Po observaci bude nejspíše následovat analýza výsledků. Je možné výsledky prohlížet v databázi nebo využít modul \textit{t.vect.select}, který vypíše tabulku do řádky s hlavičkami a oddělovačem podle nastavení parametru \texttt{separator}. Je tedy možné například vytvořit standardizovaný výstup formátu CSV.
+
+\paragraph*{t.vect.what.strds}
+
+
+\subsubsection*{Export}
+
+\paragraph*{t.rast.out.vtk} umožňuje exportovat rastry v textové formě \textit{vtk DataFile Version 3.0}
+
+
+
+
 
 \subsubsection*{Analýzy}
 Kapitola je demonstrativního charakteru, poukazující na možné směry využití výsledku z modul r.mwprecip, kterých je nespočetně mnoho, k čemž přispívá možnost skriptovacího Python API nebo objektového pyGRASS. 

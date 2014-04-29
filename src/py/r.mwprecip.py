@@ -292,7 +292,7 @@ def intrpolatePoints(db):
     linkid=[]   #linkid value
     
     a=0 #index of latlong row
-    x=0 #just id in table with interpol. points (currently not necessery)
+    x=0 # id in table with interpol. points 
      
     try:
         io= open(os.path.join(path, "linknode"), "wr")
@@ -323,18 +323,18 @@ def intrpolatePoints(db):
             while abs(dist) > step:         #compute points per step while is not achieve second node on link
                 lat1 ,lon1, az, backBrg=destinationPointWGS(lat1,lon1,az,step)  #return interpol. point and set current point as starting point(for next loop), also return azimut for next point
                 dist-=step  #reduce distance
-    
+                x+=1
                 out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+'|'+str(x)+"\n" # set string for one row in table with interpol points
                 temp.append(out)
-                x+=1
+                
         else:## compute by dividing distance to sub-distances
             step1=dist/(step+1)
             for i in range(0,int(step)):         #compute points per step while is not achieve second node on link
                 lat1 ,lon1, az, backBrg=destinationPointWGS(lat1,lon1,az,step1)  #return interpol. point and set current point as starting point(for next loop), also return azimut for next point
-
+                x+=1
                 out=str(linkid)+"|"+str(lon1)+"|"+str(lat1)+'|'+str(x)+"\n" # set string for one row in table with interpol points
                 temp.append(out)
-                x+=1
+                
                 
     io.writelines(temp)            #write interpolated points to flat file
     io.flush()
