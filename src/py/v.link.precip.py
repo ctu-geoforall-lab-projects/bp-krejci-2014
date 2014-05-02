@@ -188,6 +188,7 @@ def createVect(view_nat):
                     output = ogr,
                     overwrite=True,
                     flags='t',
+                    key=layer,
                     type=typ,
                     quiet=True)
    
@@ -306,10 +307,10 @@ def main():
             print_message("Temp file not exists")
            
            
-
+    #for links
     if options['type'].find('l')!=-1:
         if options['vector'].find('l')!=-1:
-  
+  #connect to line layer
             ogr='link_ogr'
             nat="link_nat"
             layer='link'
@@ -320,6 +321,7 @@ def main():
             filetimewin='l_timewindow'
             run()
         else:
+            #connect to points layer
             if not options['layername']:
                 grass.fatal("set up name of points layer")
             else:               
@@ -333,6 +335,7 @@ def main():
                 filetimewin='l_timewindow'
                 run()
                 
+    #for rain gaugues            
     if options['type'].find('r')!=-1:  
         ogr='gauge_ogr'
         nat="gauge_nat"

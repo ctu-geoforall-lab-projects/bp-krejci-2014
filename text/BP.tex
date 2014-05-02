@@ -1140,26 +1140,23 @@ V následujících ukázkách plošných map z jednotlivých interpolací bylo v
 
 
 \subsection{Vizualizace}
-Zobrazení srážkových intenzit byl jedním z nároku na funkčnost GIS aplikace. Primárně pro umožnění lepšího a rychlejšího vhledu do a pro lepší orientaci při rozborech naměřených dat.
+Zobrazení srážkových intenzit byl jedním z nároku na funkčnost GIS aplikace. Primárně pro umožnění  lepší orientace při rozborech naměřených dat.
 
 Vizualizovat je možné plošná srážková data, která jsou odhadem interpolačních metod. K vizualizaci je vytvořena tabulka barev odvozena od standardní  stupnic pro srážková data. Druhou možností je vizualizace liniová a bodová připojením jednotlivých časových oken k vektorové vrstvě (v.link.precip). Modul \textit{v.color} umožňuje definovat barvu vektorové vrstvy na základě přiřazené tabulky barev pro atributový sloupec v databázi.
 
-Modul \textit{g.gui.animation} je interaktivní a uživatelsky přístupný wxGUI modul, který umožňuje vytvářet animace z jednotlivých po sobě jdoucích časových oken. Těžiště jeho výhod bude při vizualizaci srážkových map v čase. 
+Další možností zobrazení dat umožňuje modul \textit{g.gui.animation}, který je interaktivní a uživatelsky přístupný a umožňuje vytvářet animace z jednotlivých po sobě jdoucích časových oken. Těžiště jeho výhod je při vizualizaci srážkových map v čase jak přímo z modulu \textit{r.mwprecip} tak i z časoprostorových analýz. 
 
+V případě potřeby změny tabulky barev po výpočtu vlastního modulu, je možné editovat barevné škály moduly r.color pro raserová data a v.color pro vektorová data. U těchto modulu je možné nadefinovat škálu barev ze předpřipravených tabulek, či vytvořením vlastní.
 
-r.color
-v.color
 
 \subsubsection{Plošná interpretace srážek}
-Výsledek plošných interpolací  je ovlivněn mnoha faktory, které se podílejí na správnosti interpolovaných  hodnot. Obecně interpolace z liniových vektorů je v GIS neobvyklá a jediným východiskem pro využití podporovaných interpolačních metod v GRASS je nahrazení liniové reprezentace body. 
+Výsledek plošných interpolací  je ovlivněn mnoha faktory, které se podílejí na správnosti interpolovaných  hodnot. Obecně interpolace z liniových vektorů je v GIS neobvyklá a jediným východiskem pro využití podporovaných interpolačních metod v GRASS je nahrazení liniové reprezentace body.
 
-Tento postup poukazuje na zcela novou problematiku interpolačních metod. MV spoje jsou poměrně hustě rozloženy a z toho plyne  velká variabilita v rozložení a volbě počtu bodů. Optimální rozložení bodů je patrně také závislé na zvolené interpolační metodě.
+Tento postup poukazuje na zcela novou problematiku interpolačních metod. MV spoje jsou poměrně hustě umístěny a z toho plyne velká variabilita v možném rozložení a volbě počtu bodů. Z ukázek interpolací je patrné, že počet bodů vstupujících do interpolací, má veliký vliv na jejich výsledky a to je patrně ovlivněno hustotou MV sítě dostupného vzorku. Ten se skládá se ze dvou referenčních vysílačů, které jsou od sebe při porovnáním s reálnou  hustotou rozložení vysílačů velmi vzdálené. Při využití disponibilních vysílačů např.  sítí T-mobile, by prostorovou mezeru doplnilo několik desítek až stovek dalších. Tím jsou výstupy následujících interpolací oproti možným výsledkům značně ovlivněny. Možným východiskem  problému nízké hustoty vzorku je zvolit výpočetní region jen pro jeden referenční vysílač, to by ale reálnou situaci také nedemonstrovalo.
 
-Dalším charakterem ne zcela typickým je hustota MV sítě dostupného vzorku. Skládá se ze dvou referenčních vysílačů, které jsou od sebe s porovnáním s reálnou  hustotou vysílačů velmi vzdálené. Při využití disponibilních vysílačů např. v sítí T-mobile, by prostorovou mezeru doplnilo několik desítek až stovek dalších. Tím jsou výstupy následujících interpolací oproti možným výsledkům zkresleny. Možným východiskem  problému nízké hustoty vzorku je zvolit výpočetní region jen pro jeden referenční vysílač. Této úvaze ale odporuje charakteristika topologie spojů, které jsou prostorově rozloženy do tvaru hvězdic a v mnoha případech by se jednalo o extrapolaci budu.
 
-V následujících ukázkách plošných interpolací jsou představeny použitelné  metody pro datový výstup z vytvořeného modulu.
 
-\paragraph*{Rozlišení a region} bylo nastaveno pomocí výchozí hodnoty modulu \textit{r.mwprecip}, tedy:
+\paragraph*{Rozlišení a region} v systému GRASS byly nastaveny pomocí výchozí hodnoty modulu \textit{r.mwprecip}. Výchozí nastaveníje možné ignorovat přepínačem \texttt{-g}.
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
@@ -1182,7 +1179,9 @@ escapeinside=''}
 Modulu \textit{v.surf.bspline} má parametr \texttt{method}, který umožňuje volby bilineární a bikubické interpolace.
 
 \begin{description}
-\item Parametry \texttt{sie} a \texttt{sin}, určují vzdálenost spline křivky pro jednotlivé kroky ve směrech východ-západ (sie) a sever-jih (sin). Maximální hodnota pro oba směry je 150 \texttt{sie}. 
+
+\item Parametry \texttt{sie} a \texttt{sin}, určují vzdálenost spline křivky pro jednotlivé kroky ve směrech východ-západ (sie) a sever-jih (sin). Maximální hodnota pro oba směry je 150.
+
 \item Parametr \texttt{lambda\_i} (Thykonov regularization parameter) ovlivňuje vyhlazení interpolace. Při volbě malé \texttt{lambda\_i} jsou interpolované hodnoty více závislé na vstupních hodnotách; vysoké \texttt{lambda\_i} vytvoří výsledný rastr více jemný. Pro optimální zjištění parametru slouží přepínač \texttt{-c}, který pro nastavenou délku křivky spline vypočte RMS charakteristiky.
 \end{description}
 
@@ -1217,20 +1216,6 @@ sie = 0.010000 and sin = 0.010000
     \label{fig:example}%
 \end{figure}
 
-
-
-\subsubsection*{v.surf.idw}
-Modul \texttt{v.surf.idw} umožňuje nastavení exponentu \texttt{power} a počet známých bodů\texttt{npoints}, ze kterého se odhadovaný bod určuje\ref{sec:plostneinterpolace}. 
-
-Metoda IDW v GRASS nedisponuje některými nastavením, které by bylo pro odhad plošných srážek pomocí MV vhodné. Jedním z nastavení je podpora rozdělení na sektory, která by byla v tomto případě výhodná pro rozdělení interpolované mapy na segmenty. Z daných segmentů by se do výpočtu neznámé buňky zahrnoval zvolený počet bodů. Dalším důležitým omezením u IDW je určení vzdálenostní bariéry, která ignoruje vzdálené body do výpočtu.
-
-Z volby možných dvou parametrů vyplynulo několik poznatků
-
-\begin{description}
-\item Volba počtu bodů, ze kterých se provádí interpolace má velký vliv na možné výsledky. IDW je vhodná interpolační metoda pro rovnoměrně rozmístěné známé body. V tomto případě je vhodné výpočetní region rozdělit do dvou částí, čim se  do jisté míry nahradí chybějící parametr pro maximální vzdálenost. Rozdělení regionu se dá do jisté míry suplovat parametrem \texttt{npoints}, ale v případě dvou ohnisek bodů s rozdílnou hustotou, což koresponduje s topologii dostupného vzorku dat, tento úsudek neplatí. Výsledná mapa obsahuje na pomyslném spoji dvou regionů jednotlivých ohnisek bodů neplynulí přechod způsobený limitem \texttt{npoints}.
-\item Volba exponentu ovlivňuje váhu (vzdálenost) jednotlivých bodu. Při volbě vysokého exponentu je odhadovaná buňka vypočtena s velikou váhou nejbližších známých bodu. S přímou návazností na volbu exponentu je  metoda IDW charakteristická tvořením interpolačních artefaktů v podobě koncentrických isolinií, které se často nazývají "\textit{bull eyes"}(býčí oči). 
-\end{description} 
-
 \begin{figure}[h!]%
     \centering
     \subfloat[IDW interpolace- 1 bod]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/idw1.png} }%
@@ -1240,12 +1225,24 @@ Z volby možných dvou parametrů vyplynulo několik poznatků
     \label{fig:example}%
 \end{figure}
 
+\subsubsection*{v.surf.idw}
+Modul \texttt{v.surf.idw} umožňuje nastavení exponentu \texttt{power} a počet známých bodů\texttt{npoints}, ze kterého se odhadovaný bod určuje\ref{sec:plostneinterpolace}. 
+
+Metoda IDW v GRASS nedisponuje některými nastavením, které by bylo pro odhad plošných srážek pomocí MV vhodné. Jedním z nastavení je podpora rozdělení na sektory, která by byla v tomto případě výhodná pro rozdělení interpolované mapy na segmenty ze kterých  by se do výpočtu neznámé buňky zahrnoval zvolený počet bodů. Dalším důležitým omezením u IDW je určení vzdálenostní bariéry, která ignoruje vzdálené body do výpočtu. Z volby možných dvou parametrů vyplynulo několik poznatků.
+
+\begin{description}
+\item \textbf{Volba počtu bodů}, ze kterých se provádí interpolace má velký vliv na možné výsledky. IDW je vhodná interpolační metoda pro rovnoměrně rozmístěné známé body. V tomto případě je vhodné výpočetní region rozdělit do dvou částí, čim se  do jisté míry nahradí chybějící parametr pro maximální vzdálenost. Rozdělení regionu se dá do jisté míry suplovat parametrem \texttt{npoints}, ale v případě dvou ohnisek bodů s rozdílnou hustotou, což koresponduje s topologii dostupného vzorku dat, tento úsudek neplatí. Výsledná mapa obsahuje na pomyslném spoji dvou regionů jednotlivých ohnisek bodů neplynulý přechod způsobený limitem \texttt{npoints}.
+\item \textbf{Volba exponentu} ovlivňuje váhu (vzdálenost) jednotlivých bodu. Při volbě vysokého exponentu je odhadovaná buňka vypočtena s velikou váhou nejbližších známých bodu. S přímou návazností na volbu exponentu je  metoda IDW charakteristická tvořením interpolačních artefaktů v podobě koncentrických isolinií, které se často nazývají "\textit{bull eyes"}(býčí oči). 
+\end{description} 
+
+
+
 Jednou z možných chyb interpolace IDW je přenesení hodnoty (srážek) přes mezilehlý známý bod. V praxi pak dochází k tomu, že vysoké srážkové intenzity ze známého bodu mohou přeskočit oblast  se známou nulovou srážkou a použít ji pro výpočet zcela špatně.
 
 
 
 \subsubsection*{v.surf.rst}
-Metodu RST představuje v GRASS modu \textit{v.surf.rst}, který je oproti modulu \textit{v.surf.idw} disponuje mnoha funkcemi a volbou parametrů.
+Metodu RST představuje v GRASS modul \textit{v.surf.rst}, který je oproti modulu \textit{v.surf.idw} disponuje mnoha funkcemi a volbou parametrů. Mimo jiné generuje rastry specifické vyplývající z generovaného povrchu. Například mapu sklonu, orientace, zakřivení a dalších. Mimo to umožňuje volbu maximální a minimální vzdálenosti bodů při segmentaci. Mezi charakteristické parametry této metody patří.
 
 \begin{description}
 \item Parametry \texttt{dmin} a \texttt{dmax} umožňují nastavit minimální a maximální vzdálenost mezi body.
@@ -1263,7 +1260,7 @@ Metodu RST představuje v GRASS modu \textit{v.surf.rst}, který je oproti modul
 \end{figure}
 
 
-\paragraph*{Zhodnocení}  Výše byly uvedeny tři možné metody s různou konfigurací bodů a interpolačních parametrů. Už z vizualizací je patrné, že jednotlivé výsledky nabývají rozdílných hodnot a to jak napříč metodami, tak při rozložení bodů. Tento fakt je  ovlivněn rozložením bodu, které není svým rozsahem v dostupném datovém vzorku podloženo na reálné hustotě bodů pro tuto oblast. Výše uvedený krátký přehled plošných interpolací naznačuje možnosti nových směrů bádání v oblasti MV spojů ve spojení s plošnou reprezentací srážek. 
+\paragraph*{Zhodnocení}  Výše byly uvedeny tři možné metody s různou konfigurací bodů a interpolačních parametrů. Už z vizualizací je patrné, že jednotlivé výsledky nabývají rozdílných hodnot a to jak napříč metodami, tak při rozložení bodů. Tento fakt je  ovlivněn rozložením bodu, které není svým rozsahem v dostupném datovém vzorku podloženo na reálné hustotě bodů pro tuto oblast. Výše uvedený krátký přehled plošných interpolací naznačuje možnosti nových směrů bádání v oblasti MV spojů ve spojení s plošnou reprezentací srážek, ke kterým by modul \textit{r.mwprecip} sloužil jako zdroj dat.
 
 
 \subsection{Temporal GRASS framework}
@@ -1363,6 +1360,9 @@ t.rast.extract input=temporalLetnany where="start_time > '2013-09-10 \
 \end{figure}
 Ve tomto případě  jsou nahrazeny hodnoty menší než 0 (MV šum- chyby) hodnotou NULL. To je výhodné například pro vizualizaci srážek nad podkladovou mapou, kde je vodné, aby nulové hodnoty byly průhledné.
 
+\paragraph*{Export} časových datasetů například pro zálohování či přenesení na jiné úložné médium je  možné využít modulu \textit{t.rast.export} pro rastrové datasety a \textit{t.vect.export} pro vektorové datasety.
+
+Modul {t.rast.out.vtk} umožňuje exportovat rastry do textové formy \textit{VTK DataFile Version 3.0}. 
 
 \paragraph*{Zobrazení časových datasetů } umožňuje modul \emph{g.gui.timeline}, ve kterém se na časové ose zobrazují zvolené časové datasety a jejich granularita. Modul umožňuje zobrazit jak časovou osu ve 2D, tak časovou krychli ve 3D.
 
@@ -1391,7 +1391,8 @@ t.shift input=rastr@tletnany granularity=1 hours
 \end{figure}
 
 
-\paragraph*{t.merge}
+
+\paragraph*{t.merge} je modul který má dva  parametry-\texttt{inputs}, do kterého vstupuje libovolné množství datasetů, které mají být spojeny v jeden \texttt{output}. Podmínkou je, spojované datasety musí být  stejného  časového typy (absolutní nebo relativní).
 
 
 \subsubsection*{Základní analýzy}
@@ -1510,19 +1511,15 @@ Po observaci bude nejspíše následovat analýza výsledků. Je možné výsled
 \paragraph*{t.vect.what.strds}
 
 
-\subsubsection*{Export}
-
-\paragraph*{t.rast.out.vtk} umožňuje exportovat rastry v textové formě \textit{vtk DataFile Version 3.0}
-
 
 
 
 
 \subsubsection*{Analýzy}
-Kapitola je demonstrativního charakteru, poukazující na možné směry využití výsledku z modul r.mwprecip, kterých je nespočetně mnoho, k čemž přispívá možnost skriptovacího Python API nebo objektového pyGRASS. 
+Níže jsou předvedeny jednotlivé možné směry využití výsledku z modul r.mwprecip, kterých je nespočetně mnoho, k čemž přispívá možnost skriptovacího Python API nebo objektového pyGRASS. 
 
 \paragraph*{Suma z plošných interpolací}
-Modulm \emph{r.mwprecip} jsou vygenerována minutová časová okna z jednoho dne. Z oken byly interpolovány plošné srážkové intenzity metodou RST a IDW. Cílem analýzy je vytvořit rastr, který bude charakterizovat sumu srážek z intervalu 3 hodin z obou interpolačních metod a tyto rastry od sebe odečteme a spočteme objem vody z rozdílu.
+Modulm \emph{r.mwprecip} jsou vygenerována minutová časová okna z jednoho dne. Z oken byly interpolovány plošné srážkové intenzity metodou RST a IDW. Cílem analýzy je vytvořit rastr, který bude charakterizovat sumu srážek z intervalu 3 hodin z obou interpolačních metod. Odečtením rastrů od sebe získáme objem vody který představuje objemovou odchylku za čas.
 
 
 \begin{figure}[h!]

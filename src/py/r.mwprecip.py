@@ -1288,14 +1288,11 @@ def makeTimeWin(db,typeid,table):
     
     sum_precip=options['interval']
     if sum_precip=="minute":
-        tc=60
         tcc=60
     elif sum_precip=="hour" :
-        tc=1
         tcc=3600
     else:
-        tc=1/24
-        tcc=216000
+        tcc=86400
        
 ##summing values per (->user)timestep interval
     view_db=typeid+"_"+randomWord(3)
