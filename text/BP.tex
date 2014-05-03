@@ -35,22 +35,13 @@
 
 
 
-%%%%%%%%%% fancy %%%%%%%%%%%
+%%%%%%%%%% zahlavi %%%%%%%%%%%
 
 \usepackage{fancyhdr}
 
-\pagestyle{fancy}
-\renewcommand{\sectionmark}[1]{\markboth{#1}{}} % set the \leftmark
 
-\fancyhf{}
 
-\fancyhead[L]{ČVUT v Praze}
-\fancyhead[R]{\leftmark} % 1. sectionname
 
-\fancypagestyle{plain}{%
-  \fancyhf{}%
-  \renewcommand{\headrulewidth}{0pt}%
-}
 
 
 
@@ -106,7 +97,6 @@ right=25mm
 \parskip=0.8ex plus 0.4ex minus 0.1 ex
 
 %%%%%%%%%%%%%% Listings %%%%%%%%%%%%%%%%%
-%%\usepackage[final]{listings}
 
 \definecolor{lightGrey}{RGB}{250,250,250}
 \definecolor{darkGrey}{RGB}{100,100,100}
@@ -156,11 +146,6 @@ morecomment=[l]{\#},
    showstringspaces=false,
    backgroundcolor=\color{lightGrey},
 }
-
-
-
-
-
 
 
 
@@ -226,6 +211,12 @@ Cílem bakalářské práce je modelování dešťových srážek z dat mikrovln
 \necislovana{Úvod}
 
 \pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}} % set the \leftmark
+\fancyhead[L]{ČVUT v Praze}
+\fancyhead[R]{\leftmark} % 1. sectionname
+\fancyfoot[C]{\thepage}
+
 
 \pagenumbering{arabic}
 \setcounter{page}{1}
@@ -991,9 +982,9 @@ Modul zapisuje konfiguraci nastavených výpočtu do textových souborů, které
 V sekci \textit{Optional} je přepínač \texttt{-r}, který odstraní uživatelské schéma a složku s konfiguračními soubory. Této funkce se může využít pro vrácení databáze do původního stavu, nebo například při nekorektním ukončení modulu či výpočtu.
 
 
-\paragraph*{Výpočet srážek} je při opominutí přípravy databáze první částí, která vychází z \acs{GUI} sekce \textit{Baseline}. Při konfiguraci volby výpočtu baseline se vypočtené srážky zapíší do pracovního schématu, které se vytvoří v databázi.
+\paragraph*{Výpočet srážek} je při kromě přípravy databáze první částí, která vychází z \acs{GUI} sekce \textit{Baseline}. Při konfiguraci volby výpočtu baseline se vypočtené srážky zapíší do pracovního schématu, které se vytvoří v databázi.
 
-Baseline jde určit jak ručně,  tak i výpočtem z období kdy neprší. 
+Baseline jde určit jak uživatelsky,  tak poloautomatizovaným výpočtem z období kdy neprší. 
 Pro ruční zadání hodnot slouží parametr \texttt{baselfile}, do kterého jsou vstupními hodnotami identifikátor spoje (\texttt{linkid}) a hodnota o baseline (typ real) ve formátu \acs{CSV}.
 
 \begin{table}[h!]
@@ -1489,12 +1480,16 @@ t.rast.series input=rstt method=maximum output=rstt_seriesmax
 \end{footnotesize} 
 \end{figure}
 
-\begin{figure}[h!]
+
+\begin{figure}[h!]%
     \centering
-    \includegraphics[width=0.6\textwidth]{./img/analys/maxserie.png}
-    \caption[Serie max]{Srážková maxima z celého časového datasetu; 1. metoda RST 2. metoda IDW  \centering  }
-        \label{fig:baseline}
- \end{figure}
+    \subfloat[RST]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/max1.png} }%
+    \qquad
+    \subfloat[IDW]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/max2.png} }%
+
+    \caption[Serie max]{ Srážková maxima z celého časového datasetu; 1. metoda RST 2. metoda IDW  \centering }
+\end{figure}
+
 
 
 
@@ -1528,9 +1523,9 @@ alfa1.lview2013_09_09_00_01_rst@test4|2013-09-09 00:01:00\
 
 
 \paragraph{Observace}
-Vytvoření vektorové vrstvy, která zaznamenává do atributových tabulek údaje z o hodnotách z daného místa napříč časovým datasetem umožňuje modul \textit{t.vect.observe.strds}.
+Modul \textit{t.vect.observe.strds} umožňuje definovat vektorovou bodovou vrstvu jako observační objekt. Jednotlivé body vrstvy pak zaznamenávají informaci o hodnotě rastru. Prakticky se v databázi vytváří pro každý rastr ze zvoleného datasetu jedna tabulka. Výsledkem z observace je nový časový vektorový dataset.
 
-Při volbě observačních bodů v místech dostupných referenčních srážkoměrů, umožní porovnání interpolovaných bodů s referencí.Vektorovou vrstvu je možné zvolit buď z tabulky srážkoměrů, nebo přidat jednotlivé body s využitím modulu \textit{v.in.ascii}
+Při volbě observačních bodů v místech dostupných referenčních srážkoměrů, umožní porovnání interpolovaných bodů s referencí. Vektorovou vrstvu je možné zvolit buď z tabulky srážkoměrů, nebo přidat jednotlivé body s využitím modulu \textit{v.in.ascii}
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
@@ -1566,12 +1561,9 @@ Po observaci bude nejspíše následovat analýza výsledků. Je možné výsled
 
 Modul \textit{t.vect.observe} v současné době nemá zcela vyladěnou správu \acs{RAM}. Při větších počtech vstupních rastrů se data ukládají do virtuální paměti a rychlost procesu se zpomalí\footnote{Při vstupu jednoho týdne o kroku 1 minuta (cca 10000 rastrů) trval výpočet 17 hodin a zabral 10 [GB] v swap paměti }. Řešením je rozdělit dataset na menší části (\textit{t.rast.extract}), při kterých bude dostačovat \acs{RAM} na daném počítači.
 
-
+\paragraph{}
 
 \paragraph*{t.vect.what.strds}
-
-
-
 
 
 
@@ -1627,27 +1619,21 @@ t.rast.mapcalc inputs=idw_gama_extract_agg@test,\
 
 \begin{figure}[h!]%
     \centering
-    \subfloat[RST]{ \includegraphics[width=0.27\textwidth]{./img/intanalys/sumrst.png} }%
+    \subfloat[RST]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumrst.png} }%
     \qquad
-    \subfloat[IDW]{ \includegraphics[width=0.27\textwidth]{./img/intanalys/sumidw.png} }%
+    \subfloat[IDW]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumidw.png} }%
     \qquad
-    \subfloat[Průměr]{ \includegraphics[width=0.27\textwidth]{./img/intanalys/sumavg.png} }%
-    \caption[Průměr metod]{ C) rastr vyjadřuje úhrn srážek za 3 hodiny zprůměrovaný z dvou interpolačních metod v [$mm$]\centering}
+    \subfloat[Průměr]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumavg.png} }%
+    \qquad
+    \subfloat[Odchylka metod]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/rozdil.png} }%
+    \caption[Průměr metod]{ Rastry charakterizující rozdílné výsledky z jednotlivých interpolačních metod\centering}
 
 \end{figure}
-Důležité je nezapomenout, v jakých jednotkách rastry byly před vstupem do agregace a v jakých jednotkách jsou poté.
-Okna z r.mwprecip  byly v [$mm \cdot h^{-1}$ po jedné minutě, abychom počítaly s reálnými úhrny převedeme na [$mm \cdot min^{-1}$].
+Důležité je korektně vyjádřit jednotky ve kterých je výsledný 
+Okna z \textit{r.mwprecip}  byly v [$mm \cdot h^{-1}$ po jedné minutě, abychom počítaly s reálnými úhrny převedeme na [$mm \cdot min^{-1}$].
 Pro porovnání obou interpolačních metod je možné v \textit{r.mapcalc} vytvořit rastr, jehož buňky představují absolutní hodnotou rozdílu dvou interpolačních metod. Modulem \textit{r.univar} spočteme základní statistické charakteristiky včetně sumy všech buněk rozdílného rastru. Ta charakterizuje objemovou odchylku dvou rastrů ze tří hodin v [$mm$] ze zvoleného regionu.
 
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.27\textwidth]{./img/intanalys/rozdil.png}
-    \caption[GUI modul]{Rozdíl dvou rastrů  \centering  }
-        \label{fig:baseline}
- \end{figure}
- 
-Analýza demonstruje agregaci pouze do jednoho časového okna (rastru). V případě, že bychom chtěli vytvořit  agregaci po třech hodinách z intervalu několika dní, k poslednímu kroku bychom využili t.rast.mapcalc namísto standardní r.mapcalc.
+Analýza demonstruje agregaci pouze do jednoho časového okna (rastru). V případě, že bychom chtěli vytvořit  agregaci po třech hodinách z intervalu několika dní, v poslednímu kroku bychom využili \textit{t.rast.mapcalc} místo \textit{r.mapcalc}.
 
 \paragraph*{Transformace srážek do povodí}
 Vytvoření GIS modulu pro přenesení hrubých dat do formy vypočtených srážek v GIS prostředí bylo prvním a potřebným krokem k dalšímu možnému vývoji jiných GIS modulů. Jedním z možných směrů je automatická klasifikace a transformace srážek do definovaných subpovodí, které by byly vstupem pro srážko-odtokový hydrologický model.
@@ -1708,7 +1694,7 @@ sum15minute_103	test3  2013-09-10 01:44:00 2013-09-10 01:59:00
 \end{footnotesize} 
 \end{figure}
 
-Odtud lze vybrat mapu z požadovaného intervalu která je vstupem(\texttt{input}) pro \textit{r.volume}. 
+Odtud lze vybrat mapu z požadovaného intervalu, která je vstupem(\texttt{input}) pro \textit{r.volume}. 
 
 \begin{figure}[h!]
 \begin{footnotesize}
@@ -1725,39 +1711,21 @@ Výsledkem je vektorová bodová mapa, kde ke každému bodu je připojena tabul
 
 \end{enumerate} 
 
-\begin{figure}[h!]
+
+\begin{figure}[h!]%
     \centering
-    \includegraphics[width=0.6\textwidth]{./img/analys/basin.png}
-    \caption[GUI modul]{1. Agregovaný rastr- suma za 15 minut; 2. povodí s bodovou vrstvou představující hodnoty jednotlivých povodí.  \centering  }
-        \label{fig:baseline}
- \end{figure}
+    \subfloat[RST]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/basin1.png} }%
+    \qquad
+    \subfloat[IDW]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/basin2.png} }%
 
-
-
-
+    \caption[GUI modul]{ a)Agregovaný rastr - suma za 15 minut; b) povodí s bodovou vrstvou představující hodnoty jednotlivých povodí.  \centering  }
+\end{figure}
 
 
 
 
 \newpage
 \setcounter{footnote}{1}
-\section{Závěr}
-\section{Příloha}
-\subsection{Dokumentace}
-\subsection{Uživatelská příručka}
-
-
-
-
-%\begin{enumerate*}
-   % \item nastavit region na zvolenou rastrovou či vektorovou mapu
-    %\item nastavit uložený region (\emph{named region})
-   % \item nastavit aktuální výpočetní region
-  %  \item zvolit souřadnice středu mapy a měřítko (nastavení regionu
- %   se automaticky vypočítá)
-%\end{enumerate*}
-
-
 
 
 
@@ -1856,7 +1824,6 @@ Zurich-Nitra: Eigenverlag ETH Zurich,  2004, 200 s, ISBN 80–969343–7–6.
 Česká republika, \textit{Návod pro pozorovatele meteorologických stanic.}
 In: Metodický předpis č. 13. Ostrava, 2013. URL:\textless\url {http://old.chmi.cz/OS/pdf/metodicky_navod/MP.pdf}
 
-
 \bibitem{doppler}
 DOVIAK, R. J.; D. S. Zrnic. \textit{Doppler Radar and Weather Observations (2nd ed.)}
 (1993), San Diego CA: Academic Press, ISBN 0-12-221420-X.
@@ -1929,12 +1896,9 @@ BARĚŠ, Pavel. \textit{Implementace materializovaných pohled; v PostgreSQL}. P
 \bibitem{sqlmm}
 STOLZE, Knut. \textit{SQL/MM Spatial: The Standard to Manage Spatial Data in Relational Database Systems. 2003.}\textless\url {http://doesen0.informatik.uni-leipzig.de/proceedings/paper/68.pdf}
 
-
-
 \bibitem{postgis}
 CHRISTL, Arnulf.\textit{Introduction to Spatial Data Management with Postgis }
 [online]. [cit. 2014-04-20]. URL:\textless\url { http://www.mapbender.org/presentations/Spatial_Data_Management_Arnulf_Christl/Spatial_Data_Management_Arnulf_Christl.pdf}
-
 
 \bibitem{spatialinter}
 Mitas, L., Mitasova, H.,\textit{Geographical Information Systems}
@@ -1951,50 +1915,6 @@ HOFIERKA, Jaroslav, Helena  MITASOVA, Lubos MITAS a Juraj PARAJKA.\textit{Multiv
 \bibitem{bicubic}
 KEYS, R. \textit{ IEEE Transactions on Acoustics, Speech, and Signal Processing}
 Cubic convolution interpolation for digital image processing. [online]. 1981, vol. 29, issue 6, s. 1153-1160 [cit. 2014-04-29]. DOI: 10.1109/TASSP.1981.1163711.URL:\textless\url {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=1163711"}
-
-
-
-
-\textless\url {  }
-
-\bibitem{ }
-\textit{ }
-\textless\url {  }
-
-\bibitem{ }
-\textit{ }
-\textless\url {  }
-
-\bibitem{ }
-\textit{ }
-\textless\url {  }
-
-\bibitem{ }
-\textit{ }
-\textless\url {  }
-
-\bibitem{ }
-\textit{ }
-\textless\url {  }
-
-\bibitem{ }
-\textit{ }
-\textless\url {  }
-
-\bibitem{ }
-\textit{ }
-\textless\url {  }
-
-\bibitem{ }
-\textit{ }
-\textless\url {  }
-
-
-\bibitem{ }
-\textit{ }
-\textless\url {  }
-
-
 
 
 
