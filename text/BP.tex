@@ -1540,6 +1540,11 @@ v.in.ascii input=
   output=srazkomery 
   columns=id text,y double precision,x double precision 
   x=3 y=2
+  
+#Nasavení observace  
+t.vect.observe.strds input=srazkomery strds=idw_gama\
+  output=observace vector_output=observace_vec columns=precip
+  
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
@@ -1550,8 +1555,7 @@ Dalším krokem je nastavení parametru modulu
 \lstset{extendedchars=false,
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
-t.vect.observe.strds input=srazkomery strds=idw_gama\
-  output=observace vector_output=observace_vec columns=precip
+
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
@@ -1561,14 +1565,8 @@ Po observaci bude nejspíše následovat analýza výsledků. Je možné výsled
 
 Modul \textit{t.vect.observe} v současné době nemá zcela vyladěnou správu \acs{RAM}. Při větších počtech vstupních rastrů se data ukládají do virtuální paměti a rychlost procesu se zpomalí\footnote{Při vstupu jednoho týdne o kroku 1 minuta (cca 10000 rastrů) trval výpočet 17 hodin a zabral 10 [GB] v swap paměti }. Řešením je rozdělit dataset na menší části (\textit{t.rast.extract}), při kterých bude dostačovat \acs{RAM} na daném počítači.
 
-\paragraph{}
 
-\paragraph*{t.vect.what.strds}
-
-
-
-\subsubsection*{Analýzy}
-Níže jsou předvedeny jednotlivé možné směry využití výsledku z modul r.mwprecip, kterých je nespočetně mnoho, k čemž přispívá možnost skriptovacího Python API nebo objektového pyGRASS. 
+\subsubsection*{Kombinace TGRASS a GRASS}
 
 \paragraph*{Suma z plošných interpolací}
 Modulm \emph{r.mwprecip} jsou vygenerována minutová časová okna z jednoho dne. Z oken byly interpolovány plošné srážkové intenzity metodou RST a IDW. Cílem analýzy je vytvořit rastr, který bude charakterizovat sumu srážek z intervalu 3 hodin z obou interpolačních metod. Odečtením rastrů od sebe získáme objem vody který představuje objemovou odchylku za čas.
@@ -1718,7 +1716,7 @@ Výsledkem je vektorová bodová mapa, kde ke každému bodu je připojena tabul
     \qquad
     \subfloat[IDW]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/basin2.png} }%
 
-    \caption[GUI modul]{ a)Agregovaný rastr - suma za 15 minut; b) povodí s bodovou vrstvou představující hodnoty jednotlivých povodí.  \centering  }
+    \caption[GUI modul]{ a) Agregovaný rastr - suma za 15 minut; b) povodí s bodovou vrstvou představující hodnoty jednotlivých povodí.  \centering  }
 \end{figure}
 
 
