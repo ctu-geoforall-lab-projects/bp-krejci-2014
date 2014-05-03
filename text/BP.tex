@@ -1373,6 +1373,7 @@ t.info input=temporalLetnany
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
+
 Po spuštění se vypíše tabulka s obecnými informacemi o časovém datasetu. Jednou s užitečných funkcí je vypsání celé historie příkazů v daném datasetu. Vypíše se přepínačem \emph{-h}.
 
 Další fází je kontrola topologie časového datasetu a provádí ji  modul \textit{t.topology}.
@@ -1402,6 +1403,7 @@ t.rast.extract input=temporalLetnany where="start_time > '2013-09-10 \
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
+
 Ve tomto případě  jsou nahrazeny hodnoty menší než 0 (MV šum - chyby) hodnotou NULL. To je výhodné například pro vizualizaci srážek nad podkladovou mapou, kde je vodné, aby nulové hodnoty byly průhledné.
 
 \paragraph*{Export} časových datasetů například pro zálohování či přenesení na jiné úložné médium je  možné využít modulu \textit{t.rast.export} pro rastrové datasety a \textit{t.vect.export} pro vektorové datasety.
@@ -1461,6 +1463,7 @@ t.rast.aggregate input=temporalLetnany output=temporal_aggreg \
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
+
 Jinou agregační funkcí je \textit{t.rast.aggregate.ds}, která má na vstupu dva datasety \emph{a} a \emph{b}. Funkci této agregační funkce je agregace  datasetu \emph{a} podle druhého\emph{ b}, tedy vytvoření časové topologie \emph{a} podle předlohy \emph{b}.
 
 
@@ -1657,6 +1660,7 @@ r.mwprecip.py -g database=letnany baseltime=/adresar/norain\
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
+
 Vstupem do parametru \texttt{baseltime} jsou dva  časové intervaly období sucha vyplývající z měření srážkoměrů. Sumy srážek jsou vytvořeny po 1 minutě. Do parametru \texttt{lignore} vstupuje soubor s definovanými spoji (linkid), které vykazují vysokou chybovost. Linie spojů byli nahrazeny jedním bodem v pulce, ze kterých se interpoluje explicitně nastavenou interpolací RST. Výpočetní region je nastaven automaticky.
 
 
@@ -1665,6 +1669,7 @@ Vstupem do parametru \texttt{baseltime} jsou dva  časové intervaly období suc
 \item Modul \texttt{r.in.gdal} umožňuje importovat rastrová data většiny obecně známých formátů.  Model terénu ze \ac{SRTM}\footnote{\url{http://edcftp.cr.usgs.gov/pub/data/}}, je využit k vytvoření akumulace vody a z té vyplývající jednotlivá povodí v následujícím kroku.
 
 \item Modul \textit{r.watershed } umožňuje vytvoření teoretické vodní sítě, která je odvozena ze sklonu terénu. Jednotlivé vodní sítě představují teoretickou akumulaci vody. Z ní je možné určit subpovodí. Tento krok nám umožňuje demonstrovat úlohu bez dostupných reálných vektorových vrstev o jednotlivých povodích.
+
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
@@ -1675,9 +1680,11 @@ r.watershed  elevation=dem_srtm threshold=5000\
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
+
 Parametr \texttt{treshold} určuje jemnost segmentace jednotlivých povodí. Menší hodnota vede k většímu počtu povodí.
 
 \item Posledním krokem je spočtení objemu srážek, které spadly do daných povodí. K tomu je vhodné využit  modul \textit{r.volume}, pro který jsou vstupními parametry rastr s hodnotami a rastr s klasifikovanými územími. Pro vstup rastru s hodnotami je použit výstup  rastr z \textit{t.rast.aggregate}. Z názvu \textit{max15minute\_148} není poznat o jaký časový interval se jedná, pro získání této informace je určen modul \textit{t.rast.list}, kde je možné konfigurovat parametry pro vypsání do výstupní řádky. Při spuštění bez volitelných parametrů vypadá výpis následovně.
+
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
