@@ -1364,6 +1364,9 @@ Ve tomto případě  jsou nahrazeny hodnoty menší než 0 (MV šum- chyby) hodn
 
 Modul {t.rast.out.vtk} umožňuje exportovat rastry do textové formy \textit{VTK DataFile Version 3.0}. 
 
+Atributovou tabulku časového datasetu vypisuje \textit{ t.vect.db.select }. Možností je volba oddělovače jednotlivých sloupců (\texttt{separator}). Je tedy možné formát výstupu uzpůsobit například často používanému  formátu CSV.
+
+
 \paragraph*{Zobrazení časových datasetů } umožňuje modul \emph{g.gui.timeline}, ve kterém se na časové ose zobrazují zvolené časové datasety a jejich granularita. Modul umožňuje zobrazit jak časovou osu ve 2D, tak časovou krychli ve 3D.
 
 \begin{figure}[h!]
@@ -1507,6 +1510,10 @@ t.vect.observe.strds input=srazkomery strds=idw_gama\
 
 Ve zvolené výchozí databázi se vytvoří časová okna v časovém kroku granularity datasetu.
 Po observaci bude nejspíše následovat analýza výsledků. Je možné výsledky prohlížet v databázi nebo využít modul \textit{t.vect.select}, který vypíše tabulku do řádky s hlavičkami a oddělovačem podle nastavení parametru \texttt{separator}. Je tedy možné například vytvořit standardizovaný výstup formátu CSV.
+
+Modul \textit{t.vect.observe} v současné době nemá zcela vyladěnou správu \acs{RAM}. Při větších počtech vstupních rastrů se data ukládají do virtuální paměti a rychlost procesu se zpomalí\footnote{Při vstupu jednoho týdne o kroku 1 minuta (cca 10000 rastrů) trval výpočet 17 hodin a zabral 10 [GB] v swap paměti }. Řešením je rozdělit dataset na menší části (\textit{t.rast.extract}), při kterých bude dostačovat \acs{RAM} na daném počítači.
+
+
 
 \paragraph*{t.vect.what.strds}
 
@@ -1708,7 +1715,9 @@ Cílem této práce bylo
 
 \newpage
 \necislovana{Seznam použitých zkratek}
-\begin{acronym}[USA-CERL]
+\begin{acronym}
+ \setlength{\parskip}{0ex}
+ \setlength{\itemsep}{1ex}
  	\acro{ANSI}{American National Standards Institute}
   	\acro{API}{Application Programming Interface}
   	\acro{CSV}{Comma Separated Values}
@@ -1721,7 +1730,7 @@ Cílem této práce bylo
   	\acro{EPSG}{Geodetic Parameter Set}	
   	
   	\acro{GIS}{Geographic Information System (Geografický informační systém)}
-  	\acro{GNU GPL}{Všeobecná veřejná licence GNU (GNU General Public License)} 
+  	\acro{GNU GPL}{GNU General Public License (Všeobecná veřejná licence GNU)} 
 	\acro{GRASS}{Geographical Resources Analysis Support System}
 	\acro{GUI}{Graphical User Interface (Grafické uživatelské rozhraní)}
 		
@@ -1735,7 +1744,9 @@ Cílem této práce bylo
 	\acro{OGC}{Open Geospatial Consortium}
 	\acro{OSGeo}{Open Source Geospatial Foundation} 
 	\acro{ORDBMS}{Object-Relational Database Management System}
+	\acro{RAM}{Random Access Memory (operační paměť)}
 	\acro{RGB}{Red Green Blue}
+	
   	\acro{RSL}{Received Signal Level}
   	\acro{STC}{The Space-Time Coposite Data Model}
   	\acro{SRTM}{Shuttle Radar Topography Mission}
