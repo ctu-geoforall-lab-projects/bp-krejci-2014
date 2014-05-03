@@ -1541,7 +1541,7 @@ v.in.ascii input=
   columns=id text,y double precision,x double precision 
   x=3 y=2
   
-#Nasavení observace  
+#Nasaven'í' observace  
 t.vect.observe.strds input=srazkomery strds=idw_gama\
   output=observace vector_output=observace_vec columns=precip
   
@@ -1549,16 +1549,7 @@ t.vect.observe.strds input=srazkomery strds=idw_gama\
 \end{footnotesize} 
 \end{figure}
 
-Dalším krokem je nastavení parametru modulu
-\begin{figure}[h!]
-\begin{footnotesize}
-\lstset{extendedchars=false,
-escapeinside=''}
-\begin{lstlisting}[style=mybash]
 
-\end{lstlisting}
-\end{footnotesize} 
-\end{figure}
 
 Ve zvolené výchozí databázi se vytvoří časová okna v časovém kroku granularity datasetu.
 Po observaci bude nejspíše následovat analýza výsledků. Je možné výsledky prohlížet v databázi nebo využít modul \textit{t.vect.select}, který vypíše tabulku do řádky s hlavičkami a oddělovačem podle nastavení parametru \texttt{separator}. Je tedy možné například vytvořit standardizovaný výstup formátu CSV.
@@ -1570,6 +1561,20 @@ Modul \textit{t.vect.observe} v současné době nemá zcela vyladěnou správu 
 
 \paragraph*{Suma z plošných interpolací}
 Modulm \emph{r.mwprecip} jsou vygenerována minutová časová okna z jednoho dne. Z oken byly interpolovány plošné srážkové intenzity metodou RST a IDW. Cílem analýzy je vytvořit rastr, který bude charakterizovat sumu srážek z intervalu 3 hodin z obou interpolačních metod. Odečtením rastrů od sebe získáme objem vody který představuje objemovou odchylku za čas.
+
+
+\begin{figure}[h!]%
+    \centering
+    \subfloat[RST]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumrst.png} }%
+    \qquad
+    \subfloat[IDW]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumidw.png} }%
+    \qquad
+    \subfloat[Průměr]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumavg.png} }%
+    \qquad
+    \subfloat[Odchylka metod]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/rozdil.png} }%
+    \caption[Průměr metod]{ Rastry charakterizující rozdílné výsledky z jednotlivých interpolačních metod\centering}
+
+\end{figure}
 
 
 \begin{figure}[h!]
@@ -1615,24 +1620,15 @@ t.rast.mapcalc inputs=idw_gama_extract_agg@test,\
 
 
 
-\begin{figure}[h!]%
-    \centering
-    \subfloat[RST]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumrst.png} }%
-    \qquad
-    \subfloat[IDW]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumidw.png} }%
-    \qquad
-    \subfloat[Průměr]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumavg.png} }%
-    \qquad
-    \subfloat[Odchylka metod]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/rozdil.png} }%
-    \caption[Průměr metod]{ Rastry charakterizující rozdílné výsledky z jednotlivých interpolačních metod\centering}
-
-\end{figure}
 Důležité je korektně vyjádřit jednotky ve kterých je výsledný 
 Okna z \textit{r.mwprecip}  byly v [$mm \cdot h^{-1}$ po jedné minutě, abychom počítaly s reálnými úhrny převedeme na [$mm \cdot min^{-1}$].
 Pro porovnání obou interpolačních metod je možné v \textit{r.mapcalc} vytvořit rastr, jehož buňky představují absolutní hodnotou rozdílu dvou interpolačních metod. Modulem \textit{r.univar} spočteme základní statistické charakteristiky včetně sumy všech buněk rozdílného rastru. Ta charakterizuje objemovou odchylku dvou rastrů ze tří hodin v [$mm$] ze zvoleného regionu.
 
 Analýza demonstruje agregaci pouze do jednoho časového okna (rastru). V případě, že bychom chtěli vytvořit  agregaci po třech hodinách z intervalu několika dní, v poslednímu kroku bychom využili \textit{t.rast.mapcalc} místo \textit{r.mapcalc}.
 
+
+\bigskip
+\newpage
 \paragraph*{Transformace srážek do povodí}
 Vytvoření GIS modulu pro přenesení hrubých dat do formy vypočtených srážek v GIS prostředí bylo prvním a potřebným krokem k dalšímu možnému vývoji jiných GIS modulů. Jedním z možných směrů je automatická klasifikace a transformace srážek do definovaných subpovodí, které by byly vstupem pro srážko-odtokový hydrologický model.
 
