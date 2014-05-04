@@ -47,7 +47,7 @@ except ImportError:
 #%option
 #% key: vector
 #% label: Choose MV representation
-#% options: links, points
+#% options: lines, points
 #% multiple: yes
 #% required : yes
 #% answer: points
