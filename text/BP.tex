@@ -1170,14 +1170,17 @@ Modul při prvním spuštění vytvoří vektorovou vrstvu v nativním prostřed
 
 První záložka \textit{Required} obsahuje jen povinné parametry.  Parametr \texttt{schema}  označuje pracovní schéma, ve kterém jsou uloženy výsledky pro  zobrazení. Druhým parametrem je časová známka (timestamp) časového okna, které chceme připojit k vektorovému podkladu (MV spoje). Výsledná vektorová mapa je vždy pojmenována \textit{"link\_nat"}. Další parametr  \texttt{type} je  explicitně nastaven na hodnoty \emph{links} a \emph{raingauge}. Při využití načítání srážkoměrných dat v modulu \textit{r.wmprecip}, je možné připojit k bodové vrstvě "gauge\_nat" tabulku s časovým oknem stejně jako v případě výsledku pro MV spoje.
 
-Druhá záložka \textit{Optional} obsahuje  tři přepínače a jeden parametr.  Přepínače jsou definovány:
+Druhá záložka \textit{Optional} obsahuje čtyři přepínače a tři parametry.  Přepínače  a parametry jsou definovány:
 \begin{description}
-\item[-c]   slouží pro případ, kdy bude nutno pracovat s více časovými okny najednou. Přepínač \texttt{-c} časová okna nepřipojuje k vektorové vrstvě \textit{"link\_nat"}, ale vytváří nové s názvem ("view" + <hodnota timestamp>). Při této volbě dochází k redundanci dat vektorových vrstev.
+\item[-c]  slouží pro případ, kdy bude nutno pracovat s více časovými okny najednou. Přepínač \texttt{-c} časová okna nepřipojuje k vektorové vrstvě \textit{"link\_nat"}, ale vytváří nové s názvem ("view" + <hodnota timestamp>). Při této volbě dochází k redundanci dat vektorových vrstev.
+\item[-a] umožňuje dávkově vytvořit pro všechna časová okna z modulu \textit{r.mwprecip} vektorové vrstvy s připojenými tabulkami. Tato funkce je vhodná k přípravě dat pro  časoprostorové analýzy.
 \item[-p] vypíše do výstupové řádky hodnoty připojené atributové tabulky.
 \item[-r] smaže dočasné  soubory z pracovního schéma.
 \end{description}
 
-Tabulka barev pro vektorovou vrstvu je možná nastavit parametrem \texttt{color}, jehož vstupní hodnota je textový soubor  analogický k formátu tabulky barev pro plošné interpolace. 
+
+Parametr \texttt{layername} nastavuje výchozí vektorovou vrstvu, ke které chceme připojit výsledky v podobě časových oken. Podmínkou je, že daná vektorová vrstva musí obsahovat identifikátory (linkid). V praxi zde budou nejčastěji připojovány vrstvy vytvořené v rámci výpočtu primárního modulu \texttt{r.mwprecip}. Ty jsou pojmenovány \textit{linkpoints} s postfixem hodnoty parametru \texttt{step}(počet bodů či krok). Pro připojení liniových vrstev MV spojů je výchozí název \textit{link}.
+Tabulka barev pro vektorovou vrstvu je možná nastavit parametrem \texttt{color}, kde vstupní hodnota je textový soubor analogický k formátu tabulky barev pro plošné interpolace. 
 
 
 
@@ -1186,7 +1189,7 @@ Tabulka barev pro vektorovou vrstvu je možná nastavit parametrem \texttt{color
 \setcounter{footnote}{1}
 \section{Výstupy modulu a využití}
 
-V následujících ukázkách plošných srážkových map z jednotlivých interpolací bylo využito vektorových vrstev  (linií a bodů) ke znázornění reálně spočtené srážky z MV spojů. Vektorové linie znázorňují spoje. Čtverce vyjadřují body, ze kterých se provedla interpolace interpolace. Barva čtverce vyjadřuje intenzitu srážek zvolené tabulky barev. 
+V následujících ukázkách plošných srážkových map z jednotlivých interpolací bylo využito vektorových vrstev (linií a bodů) ke znázornění reálně spočtené srážky z MV spojů. Vektorové linie znázorňují spoje. Čtverce vyjadřují body, ze kterých se provedla interpolace interpolace. Barva čtverce vyjadřuje intenzitu srážek zvolené tabulky barev. 
 
 
 \subsection{Vizualizace}
