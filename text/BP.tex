@@ -186,7 +186,7 @@ morecomment=[l]{\#},
 \begin{abstractpage}
 \begin{abstractx}{czech}
 
-Cílem bakalářské práce je modelování dešťových srážek z dat mikrovlnných spojů telekomunikačních operátorů. Data ke zpracování jsou uložena pomocí relační databáze PostgreSQL. K vývoji modulu byl použit systém \textit{GRASS Python Scripting Library}. Modul implementuje rekonstrukce dešťových srážek na základě uživatelské konfigurace. Další funkcionalitou je připravení srážkových dat plošné reprezentace pro časoprostorové analýzy v Temporal GRASS framework. Hlavní přínos modulu spočívá v procesu primárního zpracování dat pro následné analýzy v hydrologii a meteorologii s využitím nástroje GIS.
+Cílem bakalářské práce je modelování dešťových srážek z dat mikrovlnných spojů telekomunikačních operátorů. Data ke zpracování jsou uložena pomocí relační databáze PostgreSQL. K vývoji modulu byl použit systém \textit{GRASS Python Scripting Library}. Modul implementuje rekonstrukci dešťových srážek na základě uživatelské konfigurace. Další funkcionalitou je připravení srážkových dat plošné reprezentace pro časoprostorové analýzy v Temporal GRASS framework. Hlavní přínos modulu spočívá v procesu primárního zpracování dat pro následné analýzy v hydrologii a meteorologii s využitím nástroje GIS.
 
 
 \klicslova{Klíčová slova}{GIS, GRASS GIS, Python, PostgreSQL, dešťové srážky, časoprostorová analýza}
@@ -412,7 +412,7 @@ Možnosti využití MV spojů v oblasti meteorologie nekončí u odhadu srážek
     \includegraphics[width=0.8\textwidth]{./img/srazky/opensignalmap.png}
     \caption[Porytí tel. sítí]{\centering Mapa celosvětového pokrytí signálu telekomunikačních mobilních operátorů. Pokrytí je vyjádřeno oranžovou a žlutou barvou. \footnotemark }
  \end{figure}   
-\footnote{Obrázek byl sejmut z webové aplikace OpenSignal. \url{http://opensignal.com/}}
+\footnotetext{Obrázek byl sejmut z webové aplikace OpenSignal. \url{http://opensignal.com/}}
 
 Velkým potenciálem je takřka nulová finanční náročnost pro sběr dat. Telekomunikační sítě mobilních operátorů jsou v hustěji osídlených částech světa běžné. V rychle se rozvíjejících zemích třetího světa se v průběhu času stanou telekomunikační sítě samozřejmostí a využití metody odhadu srážek by se mohlo stát více dostupnou oproti budování radarů, pozemních stanic, či sítě srážkoměrů.
  
@@ -434,7 +434,7 @@ GRASS GIS je na poli GIS software zcela unikátní a to především díky svém
     \includegraphics[width=0.3\textwidth]{./img/grass/grasslogo.png}
     \caption[Logo GRASS]{\centering Logo GRASS GIS vydané symbolicky k 30. výročí od založení projektu. \footnotemark }
  \end{figure}   
-\footnote{\url{http://grass.osgeo.org/uploads/images/30-years-grass-gis-logo-black-300px.png}}
+\footnotetext{\url{http://grass.osgeo.org/uploads/images/30-years-grass-gis-logo-black-300px.png}}
 
 
 \subsubsection*{Historie}
@@ -571,8 +571,9 @@ definice & optm* & příkaz & popis \\ \hline \hline
     \centering
     \includegraphics[width=0.6\textwidth]{./img/implementace/postgremodel1.jpg}
     \caption[Dotaz PostgreSQL]{\centering  Zpracování dotazu \footnotemark}
- \end{figure}   
-\footnote{\url{http://reshmaparveen.blogspot.cz/2009/12/normal-0-false-false-false.html}}
+ \end{figure} 
+   
+\footnotetext{\url{http://reshmaparveen.blogspot.cz/2009/12/normal-0-false-false-false.html}}
 
 
 
@@ -607,7 +608,7 @@ je založen na specifikaci \acs{OGC} \textit{Simple Feature}, z toho plyne že m
     \includegraphics[width=1\textwidth]{./img/implementace/ogc1.jpg}
     \caption[Model PostGIS]{\centering Jednotlivé základní geometrické objekty jsou agregovány do složitějších tzv. Multi Obejct.     \footnotemark}
  \end{figure}   
-\footnote{\url{http://www.opengeospatial.org/standards/sfs}}
+\footnotetext{\url{http://www.opengeospatial.org/standards/sfs}}
 
 \paragraph*{Souřadnicový systém} \texttt{SPATIAL\_REF\_SYS} je v PostGIS  definován v samostatných tabulkách. Obecně známé referenční systémy jsou již předdefinované, ostatní se dají dodatečně definovat a upravovat.
 
@@ -700,7 +701,7 @@ Jedná se o jeden z nejrozšířenějších a nejednodušších časoprostorový
     \caption[Snapshot model]{Jednotlivé snímky \emph{S} reprezentují  geodata v čase \emph{t}. Obrázek schématicky znázorňuje vývoj dešťových srážek.  \centering \footnotemark }
         \label{fig:snapshot}
  \end{figure}   
-\footnote{Podkladem pro obrázek byly využity výstupy z modulu r.mwprecip}
+\footnotetext{Podkladem pro obrázek byly využity výstupy z modulu r.mwprecip}
 
 Hlavní výhoda  \textit{snapshot} modelu je v jednoduchosti a především vhodné struktury pro implementaci do GIS. Jak již bylo zmíněno, model uchovává jednotlivé vrstvy pro dané časové okamžiky odděleně, tedy jednotlivé tématické geoinformace zájmových oblastí jsou ukládány do separovaných vrstev.  Model  charakteristikou svého navržení odpovídá diskrétním systémům, tedy jednotlivé proměnné - geodata se mění v průběhu času skokově. Diskrétní modely jsou obecně vzato využívány v situacích, kdy je exaktní vyjádření velice obtížné a je výhodné problém reprezentovat zjednodušeně. Z toho mimo jiné pro GIS plyne, že jednotlivé snímky nemají informace o stavech  předchozího či následujícího časového okamžiku.
 Nevýhodou tohoto modelu je datová redundance, která je způsobena ukládáním informací pro daný okamžik vždy v plném rozsahu.  Jednotlivá geodata jsou uchovávány pro časové okamžiky nenávazně na předchozích. Uvážíme-li pro názornost extrémní případ, kdy časový dataset obsahuje vrstvy znázorňující jev, který byl v průběhu času neměnný, tento model do úložiště počítače zapíše několikanásobně stejné geoinformace. Tato charakteristika je v GIS praxi poměrně nevýhodná, jelikož často jsou změny mezi jednotlivými okamžiky malé.
@@ -1152,7 +1153,7 @@ grass.run_command( "v.surf.idw", input=points_nat,
 \paragraph*{Vstup} hlavní datový vstup do modulu představuje konektivita s externí databází PostgreSQL. V ní byl uložen zmíněný vzorek dat.
 Modul dále podporuje dávkové načítání časových řad ze srážkoměru.
 \paragraph*{Výstup}
-Jedním ze základních výstupů jsou vypočtené srážkové intenzity uložené v \textbf{databázi}. Ty jsou uloženy jak v časovém kroku sběru dat, tak ve zvoleném kroku. Pro zvolený časový krok se vytvářejí tabulky představující jednotlivá "časová okna", která jsou vhodná pro následné analýzy v GIS.
+Jedním ze základních výstupů jsou vypočtené srážkové intenzity uložené v databázi. Ty jsou uloženy jak v časovém kroku sběru dat, tak ve zvoleném kroku. Pro zvolený časový krok se vytvářejí tabulky představující jednotlivá "časová okna", která jsou vhodná pro následné analýzy v GIS.
 
 \textbf{Rastrová data}  reprezentují výsledek zvolené plošné interpolace vypočtených srážek.
 
@@ -1193,7 +1194,7 @@ V následujících ukázkách plošných srážkových map z jednotlivých inter
 
 
 \subsection{Vizualizace}
-Zobrazení srážkových intenzit byl jedním z nároku na funkčnost GIS aplikace. Primárně pro zlepšení orientace při rozborech naměřených dat.
+Zobrazení srážkových intenzit byl jedním z požadavků na funkčnosti GIS aplikace. Primárně pro zlepšení orientace při rozborech naměřených dat.
 
 Vizualizovat je možné plošná srážková data, která jsou odhadem interpolačních metod. K vizualizaci je vytvořena tabulka barev odvozena od stupnice používané k radarové odrazivosti srážkových intenzit. Druhou možností je vizualizace liniová a bodová připojením jednotlivých časových oken k vektorové vrstvě (\textit{v.link.precip}). Modul \textit{v.color} umožňuje definovat barvu vektorové vrstvy na základě přiřazené tabulky barev pro atributový sloupec v databázi.
 
@@ -1324,7 +1325,8 @@ escapeinside=''}
 \end{figure}
 
 
-\subsubsection*{Základní operace}
+\subsubsection{Základní operace}
+
 \paragraph*{Databáze} je možné využít nativní SQLite v GRASS, která je nastavena jako výchozí, nebo modulem \textit{t.connect} definovat připojení k externí databázi PostgreSQL.
 
 \paragraph*{Vytvoření } časového  datasetu je prvním nezbytným krokem. K jeho vytvoření slouží modul \textit{t.create} \footnote{\url{http://grass.osgeo.org/grass70/manuals/t.create.html}}.
@@ -1339,7 +1341,8 @@ t.create  output=temporalLetnany semantictype=mean title="MV letnany"
 \end{footnotesize} 
 \end{figure}
 
-\paragraph*{Registrace} jednotlivých map do datasetu je druhým nutným krokem. Modul \textit{r.mwprecip} do pracovní složky automaticky generuje soubor vhodný pro tuto registraci (ve formátu $"<název mapy><separátor><časová známka>"$).
+\paragraph*{Registrace} jednotlivých map do datasetu je druhým nutným krokem. Modul \textit{r.mwprecip} do pracovní složky automaticky generuje soubor vhodný pro tuto registraci (ve formátu "$<$název mapy$>$ $<$separátor$>$ $<$časová známka$>$").
+
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
@@ -1444,7 +1447,7 @@ t.shift input=rastr@tletnany granularity=1 hours
 \paragraph*{t.merge} je modul, který má dva  parametry - \texttt{inputs}, do něhož vstupuje libovolné množství datasetů, které mají být spojeny v jeden \texttt{output}. Podmínkou je, že spojované datasety musí být  stejného  časového typu (absolutní nebo relativní).
 
 
-\subsubsection*{Základní analýzy}
+\subsubsection{Základní analýzy}
 \label{subsubsec:casoprostoranal} 
 
 
@@ -1465,8 +1468,6 @@ t.rast.aggregate input=temporalLetnany output=temporal_aggreg \
 \end{figure}
 
 Jinou agregační funkcí je \textit{t.rast.aggregate.ds}, která má na vstupu dva datasety \emph{a} a \emph{b}. Funkci této agregační funkce je agregace  datasetu \emph{a} podle datasetu \emph{ b}, tedy vytvoření časové topologie \emph{a} podle předlohy \emph{b}.
-
-
 
 Možností je \textit{r.rast.series}, který využívá k agregaci jiných algoritmů a je určen pro analýzu celého datasetu bez zvolené granularity.
 Příkladem je vytvoření rastru s maximálními intenzitami srážek v celém časovém intervalu datasetu. Byly vytvořeny maximální intenzity časového datasetu z plošných interpolací  metod RST a IDW.
@@ -1566,24 +1567,12 @@ Po observaci bude nejspíše následovat analýza výsledků. Je možné výsled
 Modul \textit{t.vect.observe} v současné době nemá zcela vyladěnou správu \acs{RAM}. Při větších počtech vstupních rastrů se data ukládají do virtuální paměti a rychlost procesu se zpomalí\footnote{Při observaci rastru rozsahu jednoho týdne o časovém kroku 1 minuta (cca 10000 rastrů) trval výpočet 17 hodin a zabral 10 [GB] virtuální paměti (Ubuntu 13, AMD X3)}. Řešením je rozdělit dataset na menší části (\textit{t.rast.extract}), při kterých bude dostačovat \acs{RAM} na daném počítači.
 
 
-\subsubsection*{Kombinace TGRASS a GRASS}
+\subsubsection{Kombinace TGRASS a GRASS}
 
 \paragraph*{Suma z plošných interpolací}
 Modulem \emph{r.mwprecip} jsou vygenerována minutová časová okna z jednoho dne. Z oken byly interpolovány plošné srážkové intenzity metodou RST a IDW. Cílem analýzy je vytvořit rastr, který bude charakterizovat sumu srážek z intervalu 3 hodin z obou interpolačních metod. Odečtením rastrů od sebe získáme objem vody, který představuje objemovou odchylku za čas.
 
 
-\begin{figure}[h!]%
-    \centering
-    \subfloat[RST]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumrst.png} }%
-    \qquad
-    \subfloat[IDW]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumidw.png} }%
-    \qquad
-    \subfloat[Průměr]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumavg.png} }%
-    \qquad
-    \subfloat[Odchylka metod]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/rozdil.png} }%
-    \caption[Průměr metod]{ Rastry charakterizující rozdílné výsledky z jednotlivých interpolačních metod\centering}
-
-\end{figure}
 
 
 \begin{figure}[h!]
@@ -1623,10 +1612,24 @@ t.rast.aggregate input=rst_gama_extract@test output=\
 t.rast.mapcalc inputs=idw_gama_extract_agg@test,\
    rst_gama_extract_agg@test expression=(idw_gama_extract_agg@test+\
    rst_gama_extract_agg@test)/2 output=gamaSUM basename=gama_sum
+   
+   
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
 
+\begin{figure}[h!]%
+    \centering
+    \subfloat[RST]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumrst.png} }%
+    \qquad
+    \subfloat[IDW]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumidw.png} }%
+    \qquad
+    \subfloat[Průměr]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/sumavg.png} }%
+    \qquad
+    \subfloat[Odchylka metod]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/rozdil.png} }%
+    \caption[Průměr metod]{ Rastry charakterizující rozdílné výsledky z jednotlivých interpolačních metod\centering}
+
+\end{figure}
 
 
 Okna z \textit{r.mwprecip}  byla v [$mm \cdot h^{-1}$] po jedné minutě, abychom počítali s reálnými úhrny, převedeme na [$mm \cdot min^{-1}$].
@@ -1713,7 +1716,7 @@ r.volume input=sum15minute_103 clump=basin@test3 \
 \end{footnotesize} 
 \end{figure}
 
-Výsledkem je vektorová bodová mapa, kde ke každému bodu je připojena tabulka s hodnotami výsledků (sum, avg). Parametr \texttt{output} umožňuje uložení tabulky ve formě textového souboru se statistikami celé plochy výpočetního regionu. Výsledné hodnoty pro jednotlivá povodí nejsou v jednotkách  [$mm \cdot h^{-1}$]. Pro převod na objem vody v [$mm \cdot h^{-1}$] je nutné výsledný objem vydělit počtem minut, po kterých proběhla agregace.
+
 
 \end{enumerate} 
 
@@ -1727,14 +1730,15 @@ Výsledkem je vektorová bodová mapa, kde ke každému bodu je připojena tabul
     \caption[GUI modul]{ a) Agregovaný rastr - suma za 15 minut; b) povodí s bodovou vrstvou představující hodnoty jednotlivých povodí.  \centering  }
 \end{figure}
 
-
+Výsledkem je vektorová bodová mapa, kde ke každému bodu je připojena tabulka s hodnotami výsledků (sum, avg). Parametr \texttt{output} umožňuje uložení tabulky ve formě textového souboru se statistikami celé plochy výpočetního regionu. Výsledné hodnoty pro jednotlivá povodí nejsou v jednotkách  [$mm \cdot h^{-1}$]. Pro převod na objem vody v [$mm \cdot h^{-1}$] je nutné výsledný objem vydělit počtem minut, po kterých proběhla agregace.
 
 
 
 \setcounter{footnote}{1}
+
+
+
 \newpage
-
-
 \necislovana{Závěr}
 
 Téma práce "Analýza a vizualizace srážkových dat z mikrovlnných telekomunikačních spojů pomocí GIS", vycházelo z přímých požadavků zadavatele této práce, který spolupracuje na projektu mezinárodního charakteru. Mezi hlavní požadavky patřilo zpracování naměřených dat do vhodné formy v prostředí GIS. Tento krok je první a potřebný k dalším  požadavkům vývoje GIS aplikací v rámci  problematiky MV spojů. Sekundárním cílem práce bylo demonstrovat možné využití výsledků z vlastních modulů v rámci balíčku časoprostorových funkcí systému GRASS. 
