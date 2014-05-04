@@ -245,7 +245,7 @@ Tato kapitola je základním teoretickým východiskem k praktické části prá
 
 
 
-\paragraph*{Geografické informační systémy} umožňují poměrně efektivně managment srážk-\\ových dat. Jejich funkce jsou vhodné jak pro správu dat, tak pro jejich analýzu a vizualizaci. Jednotlivé metody měření srážek jsou specifické svojí datovou charakteristikou z prostorového a časového pohledu.
+\paragraph*{Geografické informační systémy} umožňují poměrně efektivně managment sráž\-kových dat. Jejich funkce jsou vhodné jak pro správu dat, tak pro jejich analýzu a vizualizaci. Jednotlivé metody měření srážek jsou specifické svojí datovou charakteristikou z prostorového a časového pohledu.
 
 Metody měření srážek ze své podstaty využití směřují ke kombinaci plošné a bodové informace, které jsou svoji charakteristikou rozdílné. Srážkoměry produkují bodová data v různých časových intervalech, výstupem z radaru jsou snímky představující plošnou intenzitu radarových srážek a satelitní družice produkují kromě odhadů srážek i dalších specifických druhů dat. Společné mají tyto metody společné, že je třeba jejich výstupy  co nejjednodušeji  spravovat a analyzovat v rámci primárního a sekundárního zpracování. GIS nástroje splňují tyto požadavky v dostatečném rozsahu a částečně eliminují potřebu vývoje specifických solitérních systémů, které by  vycházely ze stejných základů.
 
@@ -1408,7 +1408,7 @@ Ve tomto případě  jsou nahrazeny hodnoty menší než 0 (MV šum - chyby) hod
 
 \paragraph*{Export} časových datasetů například pro zálohování či přenesení na jiné úložné médium je  možné využít modulu \textit{t.rast.export} pro rastrové datasety a \textit{t.vect.export} pro vektorové datasety.
 
-Modul {t.rast.out.vtk} umožňuje exportovat rastry do textové formy \textit{VTK DataFile Version 3.0}. 
+Modul {t.rast.out.vtk} umožňuje exportovat rastry do textové formy \textit{VTK DataFile Version 3.0}. Export tímto modulem je možnost, jak dávkově exportovat data z modulu \textit{r.mwprecip}.
 
 Atributovou tabulku časového datasetu vypisuje \textit{ t.vect.db.select }. Možností je volba oddělovače jednotlivých sloupců (\texttt{separator}). Je tedy možné formát výstupu uzpůsobit například často používanému  formátu CSV.
 
@@ -1490,7 +1490,7 @@ t.rast.series input=rstt method=maximum output=rstt_seriesmax
     \qquad
     \subfloat[IDW]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/max2.png} }%
 
-    \caption[Serie max]{ Srážková maxima z celého časového datasetu; 1. metoda RST 2. metoda IDW  \centering }
+    \caption[Serie max]{ Srážková maxima z celého časového datasetu  \centering }
 \end{figure}
 
 
@@ -1557,7 +1557,7 @@ t.vect.observe.strds input=srazkomery strds=idw_gama\
 Ve zvolené výchozí databázi se vytvoří časová okna v časovém kroku granularity datasetu.
 Po observaci bude nejspíše následovat analýza výsledků. Je možné výsledky prohlížet v databázi nebo využít modul \textit{t.vect.select}, který vypíše tabulku do řádky s hlavičkami a oddělovačem podle nastavení parametru \texttt{separator}. Je tedy možné například vytvořit standardizovaný výstup formátu CSV.
 
-Modul \textit{t.vect.observe} v současné době nemá zcela vyladěnou správu \acs{RAM}. Při větších počtech vstupních rastrů se data ukládají do virtuální paměti a rychlost procesu se zpomalí\footnote{Při vstupu jednoho týdne o kroku 1 minuta (cca 10000 rastrů) trval výpočet 17 hodin a zabral 10 [GB] v swap paměti }. Řešením je rozdělit dataset na menší části (\textit{t.rast.extract}), při kterých bude dostačovat \acs{RAM} na daném počítači.
+Modul \textit{t.vect.observe} v současné době nemá zcela vyladěnou správu \acs{RAM}. Při větších počtech vstupních rastrů se data ukládají do virtuální paměti a rychlost procesu se zpomalí\footnote{Při observaci rastru rozsahu jednoho týdne o časovém kroku 1 minuta (cca 10000 rastrů) trval výpočet 17 hodin a zabral 10 [GB] virtuální paměti (Ubuntu 13, AMD X3}. Řešením je rozdělit dataset na menší části (\textit{t.rast.extract}), při kterých bude dostačovat \acs{RAM} na daném počítači.
 
 
 \subsubsection*{Kombinace TGRASS a GRASS}
@@ -1732,7 +1732,13 @@ Výsledkem je vektorová bodová mapa, kde ke každému bodu je připojena tabul
 
 \necislovana{Závěr}
 
-Cílem této práce bylo 
+dodelani funkci do grass core
+
+odladenost TGRASS
+
+vzorek dat
+
+nove tema plosne interpolace
 
 
 \newpage
