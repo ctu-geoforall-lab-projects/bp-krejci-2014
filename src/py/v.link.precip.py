@@ -60,7 +60,7 @@ except ImportError:
 
 #%flag
 #% key:a
-#% description: Create vector map for all timewin
+#% description: Create vector maps for all timewin
 #%end
 
 
@@ -104,6 +104,8 @@ typ=''
 firstrun=''
 view=''
 filetimewin=''
+
+
 
 def print_message(msg):
     grass.message(msg)
@@ -174,10 +176,19 @@ def nextConnect():
                     table=view,
                     key=key,
                     layer='2',
-                    quiet=True)    
-
-#def setColor():
-    #TODO
+                    quiet=True)
+    
+    if options['color']:
+        setColor(nat)
+   
+def setColor(mapa):
+    grass.run_command('v.colors',
+                      map=mapa,
+                      use='attr',
+                      layer=2,
+                      column='precip_mm_h',
+                      rules=options['color']
+                      )
 
 def createVect(view_nat):
     
@@ -188,7 +199,7 @@ def createVect(view_nat):
                     output = ogr,
                     overwrite=True,
                     flags='t',
-                    key=layer,
+                    key=key,
                     type=typ,
                     quiet=True)
    
@@ -228,6 +239,9 @@ def createVect(view_nat):
                     key=key,
                     layer='2',
                     quiet=True)    
+    
+    if options['color']:
+        setColor(view_nat)    
 
 def run():
     try: 
@@ -285,8 +299,7 @@ def isTimeValid(time):
         return bool(RE.search(time))
 
 def main():
-    
-    
+
     global schema,time,path,ogr,nat,layer,key,prefix,typ,firstrun,filetimewin
     schema=options['schema']
 
@@ -294,8 +307,6 @@ def main():
     time=options['time']
     path= os.path.join(os.path.dirname(os.path.realpath(__file__)), "tmp_%s"%schema)
     
-
-##validate time    
 
 
 ##remove schema and tempfile    

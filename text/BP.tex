@@ -11,6 +11,7 @@
 \usepackage{subfig}
 \usepackage[final]{pdfpages}
 \usepackage[final,pdftex, colorlinks=false]{hyperref}
+\usepackage{fancyhdr}
 
 %\usepackage{pdfpages}
 \usepackage{perpage} %the perpage package
@@ -37,15 +38,6 @@
 
 %%%%%%%%%% zahlavi %%%%%%%%%%%
 
-\usepackage{fancyhdr}
-
-
-
-
-
-
-
-
 
 
 
@@ -54,7 +46,7 @@
 %cislovani kapitol
 \renewcommand*\thesection{\arabic{section}}
 \renewcommand{\chaptername}{}
-\renewcommand{\thechapter}{}
+
 %\titleformat{\chapter}{\normalfont\huge}{}{20pt}{\huge\textbf}
 
 \renewcommand{\partname}{}
@@ -169,6 +161,18 @@ morecomment=[l]{\#},
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 \pagestyle{empty}
+
+
+
+
+
+\renewcommand{\contentsname}{Obsah}
+\renewcommand{\figurename}{Obr.}
+\renewcommand{\tablename}{Tab.}
+
+
+
+
 %nastaveni velikosti footnote
 \renewcommand\footnotelayout{\footnotesize}
 \pagenumbering{gobble}
@@ -290,12 +294,13 @@ převod útlumu signálu MV spojů na srážkové intenzity i pro další využi
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.7\textwidth]{./img/srazky/microwave_link.png}
-    \caption[MV linky]{\centering  Princip odhadu srážek z mikrovlnných spojů }
+    \caption[Rušení radaru]{\centering Absorbce elektromagnetického spektra atmosférickými plyny  \footnotemark }
  \end{figure}   
+\footnotetext{\url{http://www.goes-r.gov/users/comet/tropical/textbook_2nd_edition/media/graphics/emspect.gif}}  
 
 \subsubsection{Data}
-Charakteristika dat z MV spojů je zcela unikátní v oblasti měření srážek. Specifická je především reprezentací hodnoty srážkové intenzity v liniové podobě. MV spoje (linie), umožňují odhadovat pouze průměrnou intenzitu srážky v celé délce s poje a z toho plynou jisté meze této metody. Na hustě osídlených územích  bývá pravidlem, že i hustota MV spojů je veliká a v takovém případě ke tento zápor částečně potlačen (Evropa). Oproti tomu při využití MV spojů mimo osídlené lokality je hustota poněkud menší a to má dopad na možnost využití. Příkladem může být transformace srážek do povodí: Uvažme spoj, který vede kolmo přes cílovou lokalitu. V případě že lokalita zasahuje do desetiny délky spoje, je pravděpodobnost toho, že srážka spadla právě do lokality značně nejistá a to především díky variabilitě intenzit srážek  až o několik řádů už v rozsahu stovek metrů. 
-Oproti tomu transformace srážek do povodí, kde spoj bude ležet v celém území povodí, je tento stav ideální. 
+Charakteristika dat z MV spojů je zcela unikátní v oblasti měření srážek. Specifická je především reprezentací hodnoty srážkové intenzity v liniové podobě. MV spoje (linie), umožňují odhadovat pouze průměrnou intenzitu srážky v celé délce s poje a z toho plynou jisté meze této metody. Na hustě osídlených územích  bývá pravidlem, že i hustota MV spojů je veliká a v takovém případě tento zápor částečně potlačen (Evropa). Oproti tomu, při využití MV spojů mimo osídlené lokality, je hustota poněkud menší a to limituje možnosti využití. Příkladem může být transformace srážek do povodí: Uvažme spoj, který vede kolmo přes cílovou lokalitu. V případě že lokalita zasahuje do desetiny délky spoje, je pravděpodobnost toho, že srážka spadla právě do lokality značně nejistá a to především díky variabilitě intenzit srážek  až o několik řádů už v rozsahu stovek metrů. 
+Oproti tomu transformace srážek do povodí, kde spoj bude ležet v celém území povodí je ideální. 
 
 Obecně jsou data z MV spojů měřeny v časovém kroku \emph{dt=15} [s], ve výšce cca okolo 70 [m]. Topologie sítě představuje vždy jeden referenční vysílač na které jsou napojený dílčí vysílače. Na jednom spoji jsou instalované z pravidla dvě antény. Je tedy k dispozici dvoje měření pro stejný prostorový úsek. V ideálním případě jsou dvě antény na stejném prostorovém úseku různých konfigurací (frekvence, polarizace) což umožňuje specifické analýzy.
 
@@ -407,7 +412,7 @@ Možnosti využití MV spojů v oblasti meteorologie nekončí u odhadu srážek
     \includegraphics[width=0.8\textwidth]{./img/srazky/opensignalmap.png}
     \caption[Porytí tel. sítí]{\centering Mapa celosvětového pokrytí signálu telekomunikačních mobilních operátorů. Pokrytí je vyjádřeno oranžovou a žlutou barvou. \footnotemark }
  \end{figure}   
-\footnotetext{Obrázek byl sejmut z webové aplikace OpenSignal. \url{http://opensignal.com/}}
+\footnote{Obrázek byl sejmut z webové aplikace OpenSignal. \url{http://opensignal.com/}}
 
 Velkým potenciálem je takřka nulová finanční náročnost pro sběr dat. Telekomunikační sítě mobilních operátorů jsou v hustěji osídlených částech světa běžné. V rychle se rozvíjejících zemích třetího světa se v průběhu času stanou telekomunikační sítě samozřejmostí a využití metody odhadu srážek by se mohlo stát více dostupnou oproti budování radarů, pozemních stanic, či sítě srážkoměrů.
  
@@ -420,7 +425,7 @@ Velkým potenciálem je takřka nulová finanční náročnost pro sběr dat. Te
 \section{Použité technologie}
 
 \subsection{Systém GRASS GIS}
-\textbf{GRASS} (Geographic Resources Analysis Support System) GIS \footnotetext{\url{http://grass.osgeo.org/}} je multiplatformní geografický systém, šiřitelný pod všeobecně veřejnou licencí \acs{GNU GPL}. Systém je primárně určený pro správu 2D/3D rastrových a vektorových geodat, jejich zpracování, analýzu a vizualizaci. K těmto účelům knihovna GRASS GIS disponuje několika stovkami modulů, které jsou současní stabilních verzí. Mimo to je volně dostupných mnoho jiných modulů, které jsou vyvíjeny uživateli v rámci GRASS \textit{AddOns} a mohou se stát součástí stabilních vývojových verzí GRASS. 
+\textbf{GRASS} (Geographic Resources Analysis Support System) GIS \footnote{\url{http://grass.osgeo.org/}} je multiplatformní geografický systém, šiřitelný pod všeobecně veřejnou licencí \acs{GNU GPL}. Systém je primárně určený pro správu 2D/3D rastrových a vektorových geodat, jejich zpracování, analýzu a vizualizaci. K těmto účelům knihovna GRASS GIS disponuje několika stovkami modulů, které jsou současní stabilních verzí. Mimo to je volně dostupných mnoho jiných modulů, které jsou vyvíjeny uživateli v rámci GRASS \textit{AddOns} a mohou se stát součástí stabilních vývojových verzí GRASS. 
 
 GRASS GIS je na poli GIS software zcela unikátní a to především díky svému rozsahu, čemuž vděčí především dobrovolným vývojářům z komunity GRASS po celém světě, kteří tento dlouholetý projekt vyvíjí. Za jeho kvalitu jsou důkazem uživatelé mezinárodního charakteru jako \textit{NOAA}\footnote{\url{http://www.noaa.gov/}} či \textit{NASA}\footnote{\url{http://www.nasa.gov/}}. 
 
@@ -429,12 +434,12 @@ GRASS GIS je na poli GIS software zcela unikátní a to především díky svém
     \includegraphics[width=0.3\textwidth]{./img/grass/grasslogo.png}
     \caption[Logo GRASS]{\centering Logo GRASS GIS vydané symbolicky k 30. výročí od založení projektu. \footnotemark }
  \end{figure}   
-\footnotetext{\url{http://grass.osgeo.org/uploads/images/30-years-grass-gis-logo-black-300px.png}}
+\footnote{\url{http://grass.osgeo.org/uploads/images/30-years-grass-gis-logo-black-300px.png}}
 
 
 \subsubsection*{Historie}
-Vývojová linie GRASS GIS je stálá od poloviny osmdesátých let minulého století, kde byl vyvinut primárně pro americkou armádu, která jej využívala pro územní správu a plánování. Během 90. let se postupně na vývoji projektu podíleli americké federální agentury, univerzity a soukromé společnosti. Hlavní vývoj projektu byl řízen z výzkumných laboratoří (USA-CERL\footnotetext{\url{http://www.cecer.army.mil/}}) Champaign, Illinois.\cite{grasshist}.
-Mezníkem historie GRASSu byl rok 1995, ve kterém se laboratoře CERL zřekli tohoto projektu, čehož   následkem bylo přesun vývoje na akademickou půdu. Rok před začátkem nového tisíciletí byla vydána první verze pod licencí GNU GPL, pod kterou je vyvíjen dodnes. V letech 2008 se GRASS GIS zařadil do nadace \acs{OSGeo}, pod kterou spadá mnoho významných volně šiřitelných geografických projektů.\footnotetext{\url{http://www.osgeo.org/}}. Letošním rokem oslavil GRASS dlouhých 30 let vývoje, které zaštítil vydáním verze \textit{GRASS GIS 7.0.0 beta1}.\footnotetext{url{http://grass.osgeo.org/news/32/56/GRASS-GIS-7-0-0-beta1/}}
+Vývojová linie GRASS GIS je stálá od poloviny osmdesátých let minulého století, kde byl vyvinut primárně pro americkou armádu, která jej využívala pro územní správu a plánování. Během 90. let se postupně na vývoji projektu podíleli americké federální agentury, univerzity a soukromé společnosti. Hlavní vývoj projektu byl řízen z výzkumných laboratoří (USA-CERL\footnote{\url{http://www.cecer.army.mil/}}) Champaign, Illinois.\cite{grasshist}.
+Mezníkem historie GRASSu byl rok 1995, ve kterém se laboratoře CERL zřekli tohoto projektu, čehož   následkem bylo přesun vývoje na akademickou půdu. Rok před začátkem nového tisíciletí byla vydána první verze pod licencí GNU GPL, pod kterou je vyvíjen dodnes. V letech 2008 se GRASS GIS zařadil do nadace \acs{OSGeo}, pod kterou spadá mnoho významných volně šiřitelných geografických projektů.\footnote{\url{http://www.osgeo.org/}}. Letošním rokem oslavil GRASS dlouhých 30 let vývoje, které zaštítil vydáním verze \textit{GRASS GIS 7.0.0 beta1}.\footnote{\url{http://grass.osgeo.org/news/32/56/GRASS-GIS-7-0-0-beta1/}}
 
 \subsubsection*{Základní terminologické pojmy}
 \label{subsubsec:grassterminologie}
@@ -567,7 +572,7 @@ definice & optm* & příkaz & popis \\ \hline \hline
     \includegraphics[width=0.6\textwidth]{./img/implementace/postgremodel1.jpg}
     \caption[Dotaz PostgreSQL]{\centering  Zpracování dotazu \footnotemark}
  \end{figure}   
-\footnotetext{\url{http://reshmaparveen.blogspot.cz/2009/12/normal-0-false-false-false.html}}
+\footnote{\url{http://reshmaparveen.blogspot.cz/2009/12/normal-0-false-false-false.html}}
 
 
 
@@ -584,7 +589,7 @@ PostgreSQL je systém relační databáze doplněný o objektově orientovaný m
 \paragraph*{Datové typy} definují druh nebo význam hodnot. V PostgreSQL je široká škála datových formátu. Specifickými pro tuto práci jsou: numerické, časové, logické, řadící (enumerate) a geometrické typy.
 
 \subsection{Extenze PostGIS}
-PostGIS\footnote{\url{http://postgis.net/}} je open-source rozšířením \texttt{EXTENSION} databáze PostgeSQL o podporu geografických objektů. Jde tedy o velice vhodný   nástroj pro využití v GIS. PostGIS implementuje specifikaci \textit{Simple Features for SQL}\footnote{\url{http://www.opengeospatial.org/standards/sfs} } konsorcia \acs{OGC}, která v současné době plní funkci standardizační organizace pro geoprostorová data. PostGIS je 2D/3D  vektorovou databázovou nadstavbou, vedle které je i extenze PostGIS Raster. 
+PostGIS\footnote{\url{http://postgis.net/}} je open-source rozšířením (\texttt{EXTENSION}) databáze PostgeSQL o podporu geografických objektů. Jde tedy o velice vhodný   nástroj pro využití v GIS. PostGIS implementuje specifikaci \textit{Simple Features for SQL}\footnote{\url{http://www.opengeospatial.org/standards/sfs} } konsorcia \acs{OGC}, která v současné době plní funkci standardizační organizace pro geoprostorová data. PostGIS je 2D/3D  vektorovou databázovou nadstavbou, vedle které je i extenze PostGIS Raster. 
 
   
 \begin{figure}[h!]
@@ -602,7 +607,7 @@ je založen na specifikaci \acs{OGC} \textit{Simple Feature}, z toho plyne že m
     \includegraphics[width=1\textwidth]{./img/implementace/ogc1.jpg}
     \caption[Model PostGIS]{\centering Jednotlivé základní geometrické objekty jsou agregovány do složitějších tzv. Multi Obejct.     \footnotemark}
  \end{figure}   
-\footnotetext{\url{http://www.opengeospatial.org/standards/sfs}}
+\footnote{\url{http://www.opengeospatial.org/standards/sfs}}
 
 \paragraph*{Souřadnicový systém} \texttt{SPATIAL\_REF\_SYS} je v PostGIS  definován v samostatných tabulkách. Obecně známé referenční systémy jsou již předdefinované, ostatní se dají dodatečně definovat a upravovat.
 
@@ -691,11 +696,11 @@ Jedná se o jeden z nejrozšířenějších a nejednodušších časoprostorový
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.4\textwidth]{./img/temporal/snapshot.png}
+    \includegraphics[width=0.3\textwidth]{./img/temporal/snapshot.png}
     \caption[Snapshot model]{Jednotlivé snímky \emph{S} reprezentují  geodata v čase \emph{t}. Obrázek schématicky znázorňuje vývoj dešťových srážek.  \centering \footnotemark }
         \label{fig:snapshot}
  \end{figure}   
-\footnotetext{Podkladem pro obrázek byly využity výstupy z modulu r.mwprecip}
+\footnote{Podkladem pro obrázek byly využity výstupy z modulu r.mwprecip}
 
 Hlavní výhoda  \textit{snapshot} modelu je v jednoduchosti a především vhodné struktury pro implementaci do GIS. Jak již bylo zmíněno, model uchovává jednotlivé vrstvy pro dané časové okamžiky odděleně, tedy jednotlivé tématické geoinformace zájmových oblastí jsou ukládány do separovaných vrstev.  Model  charakteristikou svého navržení odpovídá diskrétním systémům, tedy jednotlivé proměnné - geodata se mění v průběhu času skokově. Diskrétní modely jsou obecně vzato využívány v situacích, kdy je exaktní vyjádření velice obtížné a je výhodné problém reprezentovat zjednodušeně. Z toho mimo jiné pro GIS plyne, že jednotlivé snímky nemají informace o stavech  předchozího či následujícího časového okamžiku.
 Nevýhodou tohoto modelu je datová redundance, která je způsobena ukládáním informací pro daný okamžik vždy v plném rozsahu.  Jednotlivá geodata jsou uchovávány pro časové okamžiky nenávazně na předchozích. Uvážíme-li pro názornost extrémní případ, kdy časový dataset obsahuje vrstvy znázorňující jev, který byl v průběhu času neměnný, tento model do úložiště počítače zapíše několikanásobně stejné geoinformace. Tato charakteristika je v GIS praxi poměrně nevýhodná, jelikož často jsou změny mezi jednotlivými okamžiky malé.
@@ -748,9 +753,8 @@ Pomocí těchto výroků jede definovat výběr časových oken z datasetu X na 
 \setcounter{footnote}{1}
 \chapter*{Praktická část}\stepcounter{chapter}\addcontentsline{toc}{chapter}{Praktická část}
 
-V praktické části práce bylo využito poznatků z části teoretické, které napomohla k lepšímu vhledu do daných problematik a osvojení si jejich základních principů. 
 
-Praktická část práce je dělena do dvou částí.
+Praktická část práce je dělena do dvou hlavních kapitol.
 
 \begin{itemize}
 \item Rekonstrukce MV srážek v GRASS GIS
@@ -758,17 +762,17 @@ Praktická část práce je dělena do dvou částí.
 \end{itemize}
 
 
-V části \textit{Rekonstrukce MV srážek v GRASS GIS} jsou popsáný moduly které vznikly v rámci této práce a jsou představeny jejich funkcionality, uživatelské rozhraní a  možné vstupy/výstupy.
+V části \textit{Rekonstrukce MV srážek v GRASS GIS} jsou popsány moduly, které vznikly v rámci této práce a jsou zde představeny jejich funkční vlastnosti, uživatelské rozhraní a  možné vstupy/výstupy.
 
 V části druhé jsou definovány základní časoprostorové úlohy, vyplývající z \textit{Temporal GRASS framework} s kombinací standardních GRASS nástrojů. K demonstraci je využito výstupů z vytvořených modulů.
 
 \setcounter{footnote}{1}
 \section{Data a databáze}
+V současné době v rámci projektu pracovního názvu TeleMAS  je v České Republice  využíváno naměřených dat z MV spojů od telekomunikačního operátora T-Mobile, které jsou ukládány do databáze PostgreSQL.
 
-\subsection{Data}  
-V současné době v rámci projektu pracovního názvu TeleMAS  je v České Republice  využíváno naměřených data z MV spojů od telekomunikačního operátora T-Mobile. 
-
-Od dubna 2013 jsou sbírána data z 14 MV spojů na pilotním povodí projektu v Praze Letňanech a dále 7 spojů na území Praha Michle a okolí. Zároveň jsou k dispozici 3 referenční srážkoměry v okolí MV spojů v Letňanech.
+\subsection*{Data}  
+ 
+Od dubna 2013 jsou sbírána data z 14 MV spojů na pilotním povodí projektu v Praze Letňanech a 7 spojů na území Praha Michle a okolí. Zároveň jsou k dispozici 3 referenční srážkoměry v okolí MV spojů v Letňanech.
 V současné době se pracuje na dohodě o poskytování dat většího pokrytí území Prahy.
 
 \subsubsection*{ Charakteristika dat} Data jsou v současné době sbírána ze dvou referenčních vysílačů, které komunikují se spádovými vysílači příslušných oblastí. 
@@ -776,7 +780,7 @@ V současné době se pracuje na dohodě o poskytování dat většího pokrytí
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth]{./img/letnany.png}
-    \caption[Snapshot model]{Současný stav k projektu dostupných MV spojů v Praze  \centering  }
+    \caption[Snapshot model]{Současný stav MV spojů dostupných v rámci projektu v lokalitě Praha  \centering  }
         \label{fig:snapshot}
  \end{figure} 
 Časový krok sběru dat není konstantní. Jednotlivé hodnoty jsou zaznamenávány do databáze v rámci malých intervalů nahodile. To je způsobeno přenosovými rychlostmi výpočetní techniky.  Referenční věž zaznamenává hodnoty v řádech sekund a ty jsou následně ukládány do databáze. Prakticky jsou data ukládána pro jednotlivé MV spoje přibližně po 15 sekundách. 
@@ -784,10 +788,10 @@ V současné době se pracuje na dohodě o poskytování dat většího pokrytí
 
 
 
-\subsection{Databáze}  
-K záznamu naměřených dat využívá společnost T-Mobile databázi PostgreSQL. Záznam dat  pro zmíněné lokality běží nepřetržitě od dubna 2013. Dostupná data pro potřeby vývoje GIS modulu jsou ve formě zálohy databáze (\textit{database dump}) časového rozsahu jednoho týdne sběru. Databáze obsahuje tabulky \texttt{link}, \texttt{node} a \texttt{record}.
+\subsection*{Databáze}  
+K záznamu naměřených dat využívá společnost T-Mobile databázi PostgreSQL. Záznam dat  pro zmíněné lokality probíhá nepřetržitě od dubna 2013. Dostupná data pro potřeby vývoje GIS modulu jsou ve formě zálohy databáze (\textit{database dump}) časového rozsahu jednoho týdne sběru. Databáze obsahuje tabulky \texttt{link}, \texttt{node} a \texttt{record}.
  
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \begin{tabular}{|lll|}
 \hline
@@ -801,7 +805,7 @@ record & \begin{tabular}[c]{@{}l@{}}linkid, time, frequency\\ rxpower, txpower\e
 \end{table}
 
 
-\paragraph*{Tabulka link} obsahuje informace, ze kterých vysílačů (\texttt{fromnodeid, tonodeid}) jsou jednotlivé spoje \texttt{linkid} definovány. Ostatní atributy nejsou pro danou problematiku významné.
+\paragraph*{Tabulka link} obsahuje informace, ze kterých vysílačů (\texttt{fromnodeid, tonodeid}) jsou jednotlivé spoje (\texttt{linkid}) definovány. Ostatní atributy nejsou pro danou problematiku významné.
 
 \begin{figure}[h!]
 \centering
@@ -834,7 +838,7 @@ record & \begin{tabular}[c]{@{}l@{}}linkid, time, frequency\\ rxpower, txpower\e
 \caption{Výpis dat z tabulky  \texttt{node} (limit 4)}
 \end{figure}
 
-\paragraph*{Tabulka record} má atributy time datového typu \texttt{timestamp}, dále \texttt{rxpower} a \texttt{txpower} jsou údaje o přijatém a odeslaném 
+\paragraph*{Tabulka record} má atributy \texttt{time} datového typu \texttt{timestamp}, \texttt{rxpower} a \texttt{txpower} jsou údaje o přijatém a odeslaném. 
 
 \begin{figure}[h!]
 \centering
@@ -853,7 +857,7 @@ record & \begin{tabular}[c]{@{}l@{}}linkid, time, frequency\\ rxpower, txpower\e
 
 \subsubsection*{Úprava databáze}
 \label{subsubsec:upravadatabaze}  
- V databázové dávce chybí atribut s informací o vertikální či horizontální polarizaci signálu \texttt{polarization}, proto byl do tabulky \texttt{link} přidán ručně a následně i známé hodnoto pro jednotlivé spoje. V současné době probíhá jednání se správcem databáze v T-Mobile o přidání tohoto atributu.
+ V databázové dávce chybí atribut s informací o vertikální či horizontální polarizaci signálu (\texttt{polarization}), proto byl do tabulky \texttt{link} přidán ručně a následně i známé hodnoty pro jednotlivé spoje. V současné době probíhá jednání se správcem databáze  T-Mobile o přidání tohoto atributu.
  
 Úprava databáze se provádí z prostředí modulu a je charakteristická následujícím postupem:
 \begin{enumerate}
@@ -863,7 +867,7 @@ record & \begin{tabular}[c]{@{}l@{}}linkid, time, frequency\\ rxpower, txpower\e
 \item \textbf{Konfigurace} - dílčí úpravy databáze pro výpočty
 \end{enumerate}
 
-\paragraph*{Geometrie} Do databáze byla přidána extenze PostGIS (\texttt{CREATE EXTENSION postgis}), která umožnila vytvořit geometrický atribut (geom) u tabulky node a link. Souřadnicový systém byl definován pro WGS-84 (SRID 4326).
+\paragraph*{Geometrie} Do databáze byla přidána extenze PostGIS (\texttt{CREATE EXTENSION postgis}), která umožnila vytvořit geometrický atribut (\texttt{geom}) u tabulky node a link. Souřadnicový systém byl definován pro WGS-84 (SRID 4326).
 
 Definování geometrického atributu (geom) datového typu POINT pro vysílače. 
 
@@ -889,7 +893,7 @@ UPDATE node SET geom = ST_SetSRID(ST_MakePoint(long, lat), 4326)
 \end{lstlisting}
 \end{footnotesize}
 
-Pomocí funkce \texttt{ST\_MakeLine} byla rekonstruována geometrie spojů (\texttt{link}) z vysílačů (\texttt{node}). Z geometrie spojů (\texttt{link}) byla vypočtena jejich délka \texttt{ST\_Length}.
+Pomocí funkce \texttt{ST\_MakeLine} byla rekonstruována geometrie spojů (\texttt{link}) z vysílačů (\texttt{node}). Z geometrie spojů (\texttt{link}) byla vypočtena jejich délka funkcí \texttt{ST\_Length}.
 
 \paragraph*{Indexy} byly vytvořeny v tabulce \texttt{record} nad atributy time a recordid, pro optimalizaci dotazů nad tabulkou record. K vytvoření indexů bylo využito algoritmu B-tree. \footnote{\url{http://www.postgresql.org/docs/9.2/static/indexes-types.html}}
 
@@ -902,7 +906,7 @@ CREATE INDEX idindex ON record USING btree(recordid);
 
 \paragraph*{Funkce} v nativním jazyku PL/pgSQL byla využita pro agregaci hodnot pro daný sloupec ve zvolené tabulce k výpočtu statistické funkce modus.
 
-\paragraph*{Konfigurace tabulek} databáze spočívá především v doplnění atributů vytvořením sekvencí a vymazáním záznamů rxpower=-99.9, které charakterizují výpadek spoje. 
+\paragraph*{Konfigurace tabulek} databáze spočívá především v doplnění atributů vytvořením sekvencí a vymazáním záznamů $rxpower= -99.9$, které charakterizují výpadek spoje. 
 
 \bigskip
 
@@ -923,12 +927,12 @@ Jedním z hlavních výsledků této práce je navržení a implementace modulu 
 \paragraph*{v.link.precip} je sekundárním  k modulu  \textit{r.mwprecip}, jehož funkcionalita spočívá v nativním přístupu k výsledkům   v GRASS GIS.  
 
 \subsubsection{Použité knihovny}
-Při psaní programu bylo využito jazyku Python, který je podporován knihovnou  \textit{GRASS Python Scripting Library}\cite{spygrass}. Ta umožňuje  volání GRASS modulů. Mimo to bylo využito dílčích částí standardní knihovny \textit{The Python Standard Library}\footnote{\url{https://docs.python.org/3.4/library/}} verze 3.4
+Při psaní programu bylo využito jazyku Python, který je podporován knihovnou  \textit{GRASS Python Scripting Library}\cite{spygrass}. Ta umožňuje  volání GRASS modulů. Mimo to bylo využito dílčích částí standardní knihovny \textit{The Python Standard Library}\footnote{\url{https://docs.python.org/3.4/library/}} verze 3.4.
 
-Knihovna psycopg\footnote{\url{http://initd.org/psycopg/docs/}} umožňuje v jazyce Python přístup do databáze PostgreSQL. Této knihovny bylo využito pro veškerý přístup do databáze, mimo přístupu z GRASS modulů s využitím \textit{GRASS Python Scripting Library}.
+Knihovna psycopg\footnote{\url{http://initd.org/psycopg/docs/}} umožňuje v jazyce Python přístup do databáze PostgreSQL. Této knihovny bylo využito pro veškerý přístup do databáze kromě přístupu z GRASS modulů volaných  \textit{GRASS Python Scripting Library}.
 
 \subsubsection{Uživatelské rozhraní}
-Uživatelské rozhraní částečně vyplývá z možností \textit{GRASS Python Scripting Library}, kde při tvorbě modulu jsou jednotlivé ovládací prvky v podobě přepínačů a parametrů.\ref{subsubsec:grassterminologie}. Program se ovládá (spouští) bud s příkazové řádky GRASS nebo ve wxGUI, kde se vygeneruje programové okno s jednotlivými předem nakonfugurovanými sekcemi. 
+Uživatelské rozhraní částečně vyplývá z možností \textit{GRASS Python Scripting Library}, kde při tvorbě modulu jsou jednotlivé ovládací prvky v podobě přepínačů a parametrů.\ref{subsubsec:grassterminologie}. Program se ovládá (spouští) buď z příkazové řádky GRASS nebo ve wxGUI, kde se vygeneruje programové okno s jednotlivými předem nakonfigurovanými sekcemi. 
 
 \begin{figure}[h!]
     \centering
@@ -939,11 +943,11 @@ Uživatelské rozhraní částečně vyplývá z možností \textit{GRASS Python
 
 \subsection{Modul r.mwprecip}
 Primární účel  modulu \textit{r.mwprecip} je zpracování hrubých dat do takové formy, která je rozhraní GRASS GIS vlastní. Základní funkčnost modulu spočívá jak ve zpracování dat, tak ve výstupu vhodném pro GIS analýzy. Modul pro výstupní data podporuje dvě základní geodatové reprezentace. Výstupem jsou jak interpolované srážky v rastrové podobě, tak vektorová reprezentace pro jednotlivé MV spoje. 
-Zpracování dlouhých časových řad ve zvoleném intervalu je výhodné pro časoprostorové analýzy, pro které je nově v \textit{GRASS GIS 7} implementován \textit{Temporal GRASS GIS framework}. Výstupní data z modulu jsou v kopatibilním formátu pro TGRASS včetné vytvořených registračních souborů do pracovní složky.
+Zpracování dlouhých časových řad ve zvoleném intervalu je výhodné pro časoprostorové analýzy, pro které je nově v \textit{GRASS GIS 7} implementován \textit{Temporal GRASS GIS framework}. Výstupní data z modulu jsou v kompatibilním formátu pro TGRASS včetně vytvořených registračních souborů do pracovní složky.
 
  
-\subsubsection{Funkcionalita a ovládání}
-V následujícím textu jsou shrnuty vlastnosti modulu \textit{r.mwprecip}. Funkcionalita modulu \textit{r.mwprecip} se dělí do tří dílčích částí.
+\subsubsection{Funkce a ovládání}
+V následujícím textu jsou shrnuty vlastnosti modulu \textit{r.mwprecip}. Funkcionalita modulu \textit{r.mwprecip} se dělí do tří částí.
 
 \begin{itemize}
 \item Výpočet srážek
@@ -951,7 +955,7 @@ V následujícím textu jsou shrnuty vlastnosti modulu \textit{r.mwprecip}. Funk
 \item Plošné interpolace 
 \end{itemize}
 
-Jediným povinným parametrem (sekce \textit{Required}) modulu \textit{r.mwprecip} je \texttt{database}, jehož vstupem je textový řetězec  s názvem databáze PostgeSQL. Modul je koncipován pro experimentální účely, kde se předpokládá práce na lokálním počítači bez přihlašovacího jména a hesla k databázi. V opačné případě je možnost v poslední sekci \textit{Database} definovat vstupní hodnoty pro parametry \texttt{user} a \texttt{password}. 
+Jediným povinným parametrem (sekce \textit{Required}) modulu \textit{r.mwprecip} je \texttt{database}, jehož vstupem je textový řetězec  s názvem databáze PostgeSQL. Modul je koncipován pro experimentální účely, kde se předpokládá práce na lokálním počítači bez přihlašovacího jména a hesla k databázi. V opačném případě je možnost v poslední sekci \textit{Database} definovat vstupní hodnoty pro parametry \texttt{user} a \texttt{password}. 
 
 
 \begin{table}[h]
@@ -977,15 +981,15 @@ Při každém uživatelském spuštění modulu \textit{r.mwprecip } proběhne k
 
 Modul pracuje v oddělených databázových schematech. Ze schéma \texttt{public} načítá veškerá data z databáze a až na prvotní jednorázovou úpravu databáze do něj nezapisuje. Výsledky dílčích tří kategorii jsou zapisovány do pracovního schématu, který si uživatel pojmenuje pomocí parametru \texttt{schema}.  Volbou různých názvů  \texttt{schema} je možné vytvářet schémata pro dané konfigurace výpočtu a zpětně se k nim vracet.
 
-Modul zapisuje konfiguraci nastavených výpočtu do textových souborů, které jsou uloženy ve složce s názvem zvoleným pro pracovní schéma (parametr \texttt{schema}). Složka je umístěna ve spouštěcím adresáři modulu. Při dalším spuštění modul porovnává nastavení s konfiguračními soubory a na základě toho provede jen   část výpočtu se změněnými parametry. 
+Modul zapisuje konfiguraci nastavených výpočtů do textových souborů, které jsou uloženy ve složce s názvem zvoleným pro pracovní schéma (parametr \texttt{schema}). Složka je umístěna ve spouštěcím adresáři modulu. Při dalším spuštění modul porovnává nastavení s konfiguračními soubory a na základě toho provede jen   část výpočtu se změněnými parametry. 
 
 V sekci \textit{Optional} je přepínač \texttt{-r}, který odstraní uživatelské schéma a složku s konfiguračními soubory. Této funkce se může využít pro vrácení databáze do původního stavu, nebo například při nekorektním ukončení modulu či výpočtu.
 
 
-\paragraph*{Výpočet srážek} je při kromě přípravy databáze první částí, která vychází z \acs{GUI} sekce \textit{Baseline}. Při konfiguraci volby výpočtu baseline se vypočtené srážky zapíší do pracovního schématu, které se vytvoří v databázi.
+\paragraph*{Výpočet srážek} je kromě přípravy databáze první částí, která vychází z \acs{GUI} sekce \textit{Baseline}. Vypočtené srážky  se zapíší do pracovního schématu, které se vytvoří v databázi na základě uživatelské volby.
 
-Baseline jde určit jak uživatelsky,  tak poloautomatizovaným výpočtem z období kdy neprší. 
-Pro ruční zadání hodnot slouží parametr \texttt{baselfile}, do kterého jsou vstupními hodnotami identifikátor spoje (\texttt{linkid}) a hodnota o baseline (typ real) ve formátu \acs{CSV}.
+Baseline jde určit jak zadáním známých hodnot,  tak poloautomatizovaným výpočtem z definovaných období, kdy neprší. 
+Pro ruční zadání hodnot slouží parametr \texttt{baselfile}, do kterého vstupuje textový soubor s hodnotami identifikátorů spojů (\texttt{linkid}) a příslušnými hodnotami  baseline ve formátu \acs{CSV}.
 
 \begin{table}[h!]
 \centering
@@ -1005,7 +1009,7 @@ baselfile                              & soubor         		 & interaktivní zadá
 
 Druhou možností je poloautomatizovaný výpočet, kdy jsou vstupními údaji časové intervaly, nebo okamžiky, které představují suché období.
 
-Pro příklad: první řádek označuje časový okamžik suchého období, na dalším řádku je časový interval  uvozeny řetězcem \texttt{int} a za ním nasledují dva řádky definující interval. Další řádek reprezentuje jeden zvolený časový okamžik. 
+Pro příklad: první řádek označuje časový okamžik suchého období, na dalším řádku je časový interval  uvozený řetězcem \texttt{int} a za ním následují dva řádky definující interval. Další řádek reprezentuje jeden zvolený časový okamžik. 
 
 
 \begin{figure}[h!]
@@ -1023,14 +1027,14 @@ int                     -uvozen'í' intervalu
 \end{figure}
 
 
-Po zvolení suchých období je možnost volby výpočtu výsledné baseline pro daný spoj pomocí základních statistických funkcí. K volbě slouží parametr \texttt{statfce}, která má explicitně nastavené možnosti \emph{avg} (průměr), \emph{mode} (modus), \emph{quantile} (kvantil). Výchozí hodnota je nastavena na mode. Při volbě funkce modus je možné nastavit počet desetinných míst při zaokrouhlení vzorku hodnot. Parametr \texttt{quantile}  vyjadřuje horní kvantil souboru dat v procentech. 
+Po zvolení suchých období je možnost volby výpočtu výsledné baseline pro daný spoj pomocí základních statistických funkcí. K volbě slouží parametr \texttt{statfce}, který má explicitně nastavené možnosti \emph{avg} (průměr), \emph{mode} (modus), \emph{quantile} (kvantil). Výchozí hodnota je nastavena na mode. Při volbě funkce modus je možné nastavit počet desetinných míst při zaokrouhlení vzorku hodnot. Parametr \texttt{quantile}  vyjadřuje horní kvantil souboru dat v procentech. 
 
 Posledním parametrem v této sekci je \texttt{aw} a vyplývá ze vztahu \ref{eq:Ar}.
 
 
 \paragraph*{Časová okna} jsou druhou samostatnou GUI sekcí s názvem \textit{Time-windows}. Vytvoření časových oken přímo navazuje na vypočtené hodnoty. Principiálně jde o vytvoření tabulek vždy pro jeden časový okamžik. K tomu je třeba z náhodného časového kroku vytvořit krok konstantní, tedy časovou řadu se zvoleným rozlišením.
 
-K volbě časového intervalu po kterém chceme okna vytvářet slouží parametr \texttt{interval}, který je explicitně nastaven na hodnoty \emph{minute} (minuta), \emph{hour} (hodina) a \emph{day} (den). Minuta je nastavena jako výchozí.  Například při volbě \emph{minute} jsou cca 15 [s] spočtené srážky zprůměrovány a výsledná hodnota se zapíše do databáze jako průměrná minututová srážka. Jelikož se hodnota počítá jako průměr  intenzita srážek je v [$mm \cdot h^{-1}$], i v případě vytváření časových oken po dni či minutě.
+K volbě časového intervalu, po kterém chceme okna vytvářet, slouží parametr \texttt{interval}, který je explicitně nastaven na hodnoty \emph{minute} (minuta), \emph{hour} (hodina) a \emph{day} (den). Minuta je nastavena jako výchozí.  Například při volbě \emph{minute} jsou cca 15 [s] spočtené srážky zprůměrovány a výsledná hodnota se zapíše do databáze jako průměrná minututová srážka. Jelikož se hodnota počítá jako průměr,  intenzita srážek je v [$mm \cdot h^{-1}$] i v případě generování časových oken v jiném časovém intervalu.
 \begin{table}[h]
 \centering
 \begin{tabular}{|lll|}
@@ -1044,11 +1048,11 @@ lignore                                & soubor                  & linkid       
 \caption{Parametry v GUI sekci Time-window}
 \label{my-label}
 \end{table}
-Oproti výpočtu srážek je vytvoření časových oken možno vymezit intervalem, ze kterého mají být okna vytvořena. Tato volba má přímou návaznost na plošnou interpolaci srážek, či časoprostorové analýzy. Vstupní hodnoty pro parametry \textit{fromtime} (začátek intervalu) a \textit{totime} (konec intervalu) jsou časového datového typu (timestamp) ve formátu \emph{"YYYY-MM-DD H:M:S"}. V sekci \textit{Optional} je přepínač \texttt{-p} který vypisuje do informačního terminálu informaci o začátku a konci časového rozsahu datasetu, pro zjištění možného maximálního intervalu.
+Generování časových oken je možno vymezit časovým intervalem. Tato volba má přímou návaznost na plošnou interpolaci srážek a další využití v GRASS. Vstupní hodnoty pro parametry \textit{fromtime} (začátek intervalu) a \textit{totime} (konec intervalu) jsou  datového typu (timestamp) ve formátu \emph{"YYYY-MM-DD H:M:S"}. V sekci \textit{Optional} je přepínač \texttt{-p}, který vypisuje do informačního terminálu informaci o začátku a konci časového rozsahu datasetu pro zjištění možného maximálního intervalu.
 
-Parametr \texttt{lignore} jehož vstupní hodnotou je soubor, definuje jednotlivé spoje, které mají být z časových oken vynechány. Tato funkce je vytvořena k zamezení přidání chybných nebo cíleně vynechaných spojů do časových oken, která by tak ztrácela validitu. Hodnoty \texttt{linkid} se zadávají po jednom řádku vždy ve formátu datového typu (integer) odvozeným z databázové tabulky \texttt{link}.
+Parametr \texttt{lignore}, jehož vstupní hodnotou je soubor, definuje jednotlivé spoje, které mají být z časových oken vynechány. Tato funkce je vytvořena k zamezení přidání chybných nebo cíleně vynechaných spojů do časových oken, která by tak ztrácela validitu pro plošné interpolace. Hodnoty \texttt{linkid} se zadávají po řádku vždy ve formátu datového typu (integer) odvozeného z databázové tabulky \texttt{link}.
 
-Další možností je načtení časových řad ze srážkoměrů pomocí parametru \texttt{rgauges}. Srážkoměrná data jsou načítána v předzpracovaném formátu a to v časových řadách s hodnotou intenzity srážky v [$mm \cdot h^{-1}$]. Formát vstupního souboru je následující.
+Další možností je načtení časových řad ze srážkoměrů pomocí parametru \texttt{rgauges}. Srážkoměrná data jsou načítána  v časových řadách s hodnotou intenzity srážky v [$mm \cdot h^{-1}$]. Formát vstupního souboru je následující.
 
 
 \begin{figure}[h!]
@@ -1072,7 +1076,7 @@ Vstupem do parametru \texttt{rgauges} je cílová složka se soubory, které jso
 
 \paragraph*{Interpolace} je jedním z výstupů modulu \textit{r.mwprecip}. GUI sekce \textit{Interpolation} je specifická dvěma částmi. První zahrnuje interpolace bodů podél spojů a druhá plošné interpolace srážek.
 
-Nastavení  výpočetního regionu je možné pomocí přednastavených hodnot modulu \textit{r.mwprecip}. Při uživatelské volbě z GRASS modulu g.region je možné tuto automatizaci vypnout přepínačem \texttt{-q}
+Nastavení  výpočetního regionu je možné pomocí přednastavených hodnot modu\-lu \textit{r.mwprecip}. Při uživatelské volbě z GRASS modulu \textit{g.region} je možné tuto automatizaci vypnout přepínačem \texttt{-q}
 \begin{table}[h]
 \centering
 \begin{tabular}{|lll|}
@@ -1086,26 +1090,26 @@ color                                  & string                  & hodnota R:G:B
 \end{tabular}
 \caption{Parametry v GUI sekci Interpolation}
 \end{table}
-Současná verze GRASS GIS neumožňuje interpolace z liniové reprezentace dat, což není nijak neobvyklé při porovnání s ostatními nástroji GIS. Parametr \texttt{pmethod} definuje metodu interpolace bodů podél spojů. Explicitně je nastaven na hodnotu \emph{permeter} (po metrech) a při volbě této metody je provedena interpolace bodů v pevně stanoveném kroku po metrech [m], který vychází z parametru \texttt{step}.
+Současná verze GRASS GIS neumožňuje interpolace z liniové reprezentace dat, což není při porovnání s ostatními GIS nijak neobvyklé. Parametr \texttt{pmethod} definuje metodu interpolace bodů podél spojů. Explicitně je nastaven na hodnotu \emph{permeter} (po metrech) a při volbě této metody je provedena interpolace bodů v pevně stanoveném kroku po metrech [m]. Hodnota se nastavuje  parametrem \texttt{step}.
 
-Parametr \texttt{step} je využit i k definování  druhé explicitní hodnoty \emph{count} (počet). Hodnota \emph{count} rozloží rovnoměrně body podél MV spojů v počtu právě dle parametru (\texttt{step}).
+Parametr \texttt{step} je využit i k definování  druhé explicitní hodnoty \emph{count} (počet). Hodnota \emph{count} rozloží rovnoměrně body podél MV spojů ve jejich zvoleném počtu dle nastavení parametru (\texttt{step}).
 
-Plošné interpolace využívají dostupných modulů v GRASS. Interpolace je možné definovat jak uživatelsky tak automaticky (výchozí hodnoty jednotlivých modulů). Pro volbu interpolace s výchozími hodnotami slouží parametr \texttt{interpolation}, který je explicitně nastaven na \emph{rst}(regular spline tension), \emph{idw} (invese distace weighting) a \emph{bspline} (bicubic spline tension). 
+K plošným interpolacím srážek je využito tří modulů ze stabilní verze GRASS. Interpolace je možné definovat jak uživatelsky tak automaticky (výchozí hodnoty jednotlivých modulů). Pro volbu interpolace s výchozími hodnotami slouží parametr \texttt{interpolation}, který má volby \emph{rst}(regular spline with tension), \emph{idw} (invese distace weighting) a \emph{bspline} (bicubic spline tension). 
 
-Druhou možností je uživatelské nastavení jednotlivých interpolací. Pro ty slouží parametr \texttt{isettings}, do kterých je vstupem textový řetězec definovaný ve formátu \textit{GRASS Python Scripting Library}. Je možné tyto řetězce nakonfigurovat pomocí wxGUI a z výstupního terminálu zkopírovat. Řetězec s parametry a přepínači musí být uvozen do závorek ve formátu:     
+Druhou možností je uživatelské nastavení jednotlivých interpolací. K této možnosti slouží parametr \texttt{isettings}, do kterého je vstupem textový řetězec  ve formátu \textit{GRASS Python Scripting Library}.  Řetězce je možné konfigurovat ve wxGUI daných modulů a z výstupního terminálu jej zkopírovat. Řetězec s parametry a přepínači musí být uvozen do závorek ve formátu:     
 
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
-grass.run_comma()                                                           
+grass.run_commad()                                                           
 \end{lstlisting}
 \end{footnotesize}
 \end{figure}
 Jednotlivé parametry v řetězci musí být odděleny čárkou ",".
 
-Některé parametry (vstup/výstup map) pro dané interpolační metody musí být nastaveny pro správné fungování dle tabulky\ref{tab:interpol}.
+Některé parametry (vstup/výstup map) pro dané interpolační metody musí být nastaveny ve formát podle tabulky \ref{tab:interpol}.
 
 \begin{table}[h]
 \centering
@@ -1128,7 +1132,7 @@ Některé parametry (vstup/výstup map) pro dané interpolační metody musí b�
 
 
 
-Příkladem může být interpolace IDW (r.surf.idw) s parametry pro nastavení hodnoty exponentu \texttt{power} a počtu bodů \texttt{npoints} ze které se daná buňka interpoluje. 
+Příkladem může být interpolace IDW (r.surf.idw) s parametry pro nastavení hodnoty exponentu \texttt{power} a počtu bodů \texttt{npoints}, ze kterých se daná buňka interpoluje. 
 
 \begin{figure}[h!]
 \begin{footnotesize}
@@ -1137,7 +1141,7 @@ escapeinside=''}
 \begin{lstlisting}[style=mybash]
 #Uk'á'zka mo'ž'n'é'ho vstupu parametru isettings
 grass.run_command( "v.surf.idw", input=points_nat,
-column=attribute_col, output=out, npoints=25, power=2.5 )                            
+	column=attribute_col, output=out, npoints=25, power=2.5 )                            
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
@@ -1148,9 +1152,11 @@ column=attribute_col, output=out, npoints=25, power=2.5 )
 \paragraph*{Vstup} hlavní datový vstup do modulu představuje konektivita s externí databází PostgreSQL. V ní byl uložen zmíněný vzorek dat.
 Modul dále podporuje dávkové načítání časových řad ze srážkoměru.
 \paragraph*{Výstup}
-Jedním z možných výstupů jsou vypočtené srážkové intenzity uložené v \textbf{databázi}. Ty jsou uloženy jak v časovém kroku sběru dat, tak ve zvoleném kroku. Pro zvolený časový krok se vytvářejí tabulky představující jednotlivá "časová okna", která jsou vhodná pro následné analýzy v GIS.
+Jedním ze základních výstupů jsou vypočtené srážkové intenzity uložené v \textbf{databázi}. Ty jsou uloženy jak v časovém kroku sběru dat, tak ve zvoleném kroku. Pro zvolený časový krok se vytvářejí tabulky představující jednotlivá "časová okna", která jsou vhodná pro následné analýzy v GIS.
+
 \textbf{Rastrová data}  reprezentují výsledek zvolené plošné interpolace vypočtených srážek.
-\textbf{Vektorová data} jsou vytvořena na základě polohových údajů o telekomunikačních spojích v databázi a jsou reprezentována  liniemi a  interpolovanými body podél MV spojů, ke kterým jsou pomocí modulu v.link.precip připojována jednotlivá časová okna z databáze.
+
+\textbf{Vektorová data} jsou vytvořena na základě polohových údajů o telekomunikačních spojích v databázi a jsou reprezentována  liniemi a  interpolovanými body podél MV spojů, ke kterým jsou pomocí modulu \textit{v.link.precip} připojována jednotlivá časová okna z databáze.
 
 
 
@@ -1159,10 +1165,10 @@ Hlavní funkcionalita modulu spočívá ve zjednodušeném přístupu k výsledk
 Toho lze docílit sledem po sobě jdoucích volání jednotlivých modulů v GRASS. Pro jednoduchost byl vytvořen  modul \textit{v.link.precip}, který to umožňuje v uživatelsky přístupně formě. 
 
 
-\subsubsection{Funkcionalita a ovládání}
+\subsubsection{Funkce a ovládání}
 Modul při prvním spuštění vytvoří vektorovou vrstvu v nativním prostředí GRASS na základě vytvořené geometrie v databázi PostgreSQL. Dále pak připojí nastavenou tabulku reprezentující časové okno. Při dalším připojení jiného časového okna je bývalá připojená tabulka odpojena a k té samé vektorové vrstvě se připojí nová. Modul je tvořen dvěma GUI záložkami \textit{Required} a \textit{Optional}. 
 
-První záložka \textit{Required} obsahuje jen povinné parametry.  Parametr \texttt{schema}  označuje pracovní schéma, ve kterém jsou uloženy výsledky pro  zobrazení. Druhým parametrem je časová známka (timestamp) časového okna, které chceme připojit k vektorovému podkladu(spoje). Výsledná vektorová mapa je vždy pojmenována \textit{"link\_nat"}. Další parametr  \texttt{type} je  explicitně nastaven na hodnoty \emph{links} a \emph{raingauge}. Při využití načítání srážkoměrných dat v modulu r.wmprecip, je možné připojit k bodové vrstvě "gauge\_nat" tabulku s časovým oknem stejně jako v případě výsledku pro MV spoje.
+První záložka \textit{Required} obsahuje jen povinné parametry.  Parametr \texttt{schema}  označuje pracovní schéma, ve kterém jsou uloženy výsledky pro  zobrazení. Druhým parametrem je časová známka (timestamp) časového okna, které chceme připojit k vektorovému podkladu (MV spoje). Výsledná vektorová mapa je vždy pojmenována \textit{"link\_nat"}. Další parametr  \texttt{type} je  explicitně nastaven na hodnoty \emph{links} a \emph{raingauge}. Při využití načítání srážkoměrných dat v modulu \textit{r.wmprecip}, je možné připojit k bodové vrstvě "gauge\_nat" tabulku s časovým oknem stejně jako v případě výsledku pro MV spoje.
 
 Druhá záložka \textit{Optional} obsahuje  tři přepínače a jeden parametr.  Přepínače jsou definovány:
 \begin{description}
@@ -1171,7 +1177,7 @@ Druhá záložka \textit{Optional} obsahuje  tři přepínače a jeden parametr.
 \item[-r] smaže dočasné  soubory z pracovního schéma.
 \end{description}
 
-Tabulka barev pro vektorovou vrstvu je možná nastavit parametrem \texttt{color}, jehož vstupní hodnota je textový soubor  analogický k formátu tabulky barev pro plošné interpolace.
+Tabulka barev pro vektorovou vrstvu je možná nastavit parametrem \texttt{color}, jehož vstupní hodnota je textový soubor  analogický k formátu tabulky barev pro plošné interpolace. 
 
 
 
@@ -1180,32 +1186,33 @@ Tabulka barev pro vektorovou vrstvu je možná nastavit parametrem \texttt{color
 \setcounter{footnote}{1}
 \section{Výstupy modulu a využití}
 
-V následujících ukázkách plošných map z jednotlivých interpolací bylo využito vektorových vrstev linií a bodů ke znázornění realně spočtené srážky z MV spojů. Vektorové linie znázorňují spoje. Čtverce vyjadřují body, ze kterých se spočetla interpoalce. Barva čtverce vyjadřuje intenzitu srážek stejné tabulky barev. 
+V následujících ukázkách plošných srážkových map z jednotlivých interpolací bylo využito vektorových vrstev  (linií a bodů) ke znázornění reálně spočtené srážky z MV spojů. Vektorové linie znázorňují spoje. Čtverce vyjadřují body, ze kterých se provedla interpolace interpolace. Barva čtverce vyjadřuje intenzitu srážek zvolené tabulky barev. 
 
 
 \subsection{Vizualizace}
 Zobrazení srážkových intenzit byl jedním z nároku na funkčnost GIS aplikace. Primárně pro umožnění  lepší orientace při rozborech naměřených dat.
 
-Vizualizovat je možné plošná srážková data, která jsou odhadem interpolačních metod. K vizualizaci je vytvořena tabulka barev odvozena od standardní  stupnic pro srážková data. Druhou možností je vizualizace liniová a bodová připojením jednotlivých časových oken k vektorové vrstvě (v.link.precip). Modul \textit{v.color} umožňuje definovat barvu vektorové vrstvy na základě přiřazené tabulky barev pro atributový sloupec v databázi.
+Vizualizovat je možné plošná srážková data, která jsou odhadem interpolačních metod. K vizualizaci je vytvořena tabulka barev odvozena od stupnice používané k radarové odrazivosti srážkových intenzit. Druhou možností je vizualizace liniová a bodová připojením jednotlivých časových oken k vektorové vrstvě (\textit{v.link.precip}). Modul \textit{v.color} umožňuje definovat barvu vektorové vrstvy na základě přiřazené tabulky barev pro atributový sloupec v databázi.
 
-Další možností zobrazení dat umožňuje modul \textit{g.gui.animation}, který je interaktivní a uživatelsky přístupný a umožňuje vytvářet animace z jednotlivých po sobě jdoucích časových oken. Těžiště jeho výhod je při vizualizaci srážkových map v čase jak přímo z modulu \textit{r.mwprecip} tak i z časoprostorových analýz. 
+Další možností zobrazení dat umožňuje modul \textit{g.gui.animation}, který je interaktivní a uživatelsky přístupný a umožňuje vytvářet animace z jednotlivých po sobě jdoucích časových oken. Těžiště jeho výhod je při vizualizaci srážkových map v čase které jsou výstupem přímo z modulu \textit{r.mwprecip} nebo produktem časoprostorových analýz. 
 
-V případě potřeby změny tabulky barev po výpočtu vlastního modulu, je možné editovat barevné škály moduly r.color pro raserová data a v.color pro vektorová data. U těchto modulu je možné nadefinovat škálu barev ze předpřipravených tabulek, či vytvořením vlastní.
+V případě potřeby změny tabulky barev po výpočtu vlastního modulu, je možné editovat barevné škály moduly  \textit{r.color} pro rastrová data a  \textit{v.color} pro vektorová data. U těchto modulu je možné nadefinovat škálu barev z předpřipravených tabulek, či vytvořením vlastní.
 
 
 \subsubsection{Plošná interpretace srážek}
-Výsledek plošných interpolací  je ovlivněn mnoha faktory, které se podílejí na správnosti interpolovaných  hodnot. Obecně interpolace z liniových vektorů je v GIS neobvyklá a jediným východiskem pro využití podporovaných interpolačních metod v GRASS je nahrazení liniové reprezentace body.
+Výsledek plošných interpolací  je ovlivněn mnoha faktory, které se podílejí na správnosti interpolovaných  hodnot.  Interpolace z liniových vektorů je obecně v GIS neobvyklá a jediným východiskem pro využití podporovaných interpolačních metod v GRASS je nahrazení liniové reprezentace body.
 
-Tento postup poukazuje na zcela novou problematiku interpolačních metod. MV spoje jsou poměrně hustě umístěny a z toho plyne velká variabilita v možném rozložení a volbě počtu bodů. Z ukázek interpolací je patrné, že počet bodů vstupujících do interpolací, má veliký vliv na jejich výsledky a to je patrně ovlivněno hustotou MV sítě dostupného vzorku. Ten se skládá se ze dvou referenčních vysílačů, které jsou od sebe při porovnáním s reálnou  hustotou rozložení vysílačů velmi vzdálené. Při využití disponibilních vysílačů např.  sítí T-mobile, by prostorovou mezeru doplnilo několik desítek až stovek dalších. Tím jsou výstupy následujících interpolací oproti možným výsledkům značně ovlivněny. Možným východiskem  problému nízké hustoty vzorku je zvolit výpočetní region jen pro jeden referenční vysílač, to by ale reálnou situaci také nedemonstrovalo.
+Tento postup poukazuje na zcela novou problematiku interpolačních metod. MV spoje jsou poměrně hustě rozmístěny a z toho plyne velká variabilita v možném rozložení a volbě počtu bodů. Z ukázek interpolací je patrné, že počet bodů vstupujících do interpolací, má veliký vliv na jejich výsledky. Zcela jistě má vliv na výsledek i dostupný vzorek dat. Ten se skládá se ze dvou referenčních vysílačů, které jsou od sebe při porovnáním s reálnou  hustotou rozložení vysílačů velmi vzdálené. Při využití disponibilních vysílačů např.  sítí T-mobile, by prostorovou mezeru doplnilo několik desítek až stovek dalších. Tím jsou výstupy následujících interpolací oproti možným výsledkům značně ovlivněny. Možným východiskem  problému nízké hustoty vzorku je zvolit výpočetní region jen pro jeden referenční vysílač, to by ale reálnou situaci také nedemonstrovalo.
 
 
 
-\paragraph*{Rozlišení a region} v systému GRASS byly nastaveny pomocí výchozí hodnoty modulu \textit{r.mwprecip}. Výchozí nastaveníje možné ignorovat přepínačem \texttt{-g}.
+\paragraph*{Rozlišení a region} v systému GRASS je možné použít z výchozího nastavení modulu \textit{r.mwprecip}, které lze ignorovat přepínačem \texttt{-g} a použit tak vlastní.
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
+# V'ý'choz'í' nastaven'í' modulu
         grass.run_command('g.region',
                           vect='link',
                           res='00:00:01',
@@ -1253,9 +1260,9 @@ sie = 0.010000 and sin = 0.010000
 
 \begin{figure}[h!]%
     \centering
-    \subfloat[Bikubická interpolace- 1 bod]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/bic1.png} }%
+    \subfloat[Bikubická interpolace - 1 bod]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/bic1.png} }%
     \qquad
-    \subfloat[Bikubická interpolace body po 500m]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/bic500.png} }%
+    \subfloat[Bikubická interpolace body po 500 [m]]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/bic500.png} }%
     \caption[Interpolace Bicubic]{Konfigurace parametrů a) sie=sin=0.01, lambda\_i=0.05; b) sie=sin=0.01, lambda\_i=0.01 \centering}%
     \label{fig:example}%
 \end{figure}
@@ -1302,10 +1309,6 @@ Metodu RST představuje v GRASS modul \textit{v.surf.rst}, který je oproti modu
     \caption[Interpolace RST]{Konfigurace parametrů RST a)tension=30; b)tension=20 \centering}%
     \label{fig:example}%
 \end{figure}
-
-
-\paragraph*{Zhodnocení}  Výše byly uvedeny tři možné metody s různou konfigurací bodů a interpolačních parametrů. Už z vizualizací je patrné, že jednotlivé výsledky nabývají rozdílných hodnot a to jak napříč metodami, tak při rozložení bodů. Tento fakt je  ovlivněn rozložením bodu, které není svým rozsahem v dostupném datovém vzorku podloženo na reálné hustotě bodů pro tuto oblast. Výše uvedený krátký přehled plošných interpolací naznačuje možnosti nových směrů bádání v oblasti MV spojů ve spojení s plošnou reprezentací srážek, ke kterým by modul \textit{r.mwprecip} sloužil jako zdroj dat.
-
 
 \subsection{Temporal GRASS framework}
 Kapitola \textit{Temporal GRASS framework} demonstruje možné využití TGRASS pro analýzu výsledků z modulu \textit{r.mwprecip}.  Protože je TGRASS poměrně nový a v současné době je jen několik nastínění jeho možné aplikace, bude následující text částečně psán stylem podobným formě návodu, který bude sloužit jako úvod pro experimentální využití modulu v GRASS GIS v rámci problematiky MV spojů. Tento směr má logickou návaznost na zadání projektu.
@@ -1552,6 +1555,12 @@ t.vect.observe.strds input=srazkomery strds=idw_gama\
 \end{footnotesize} 
 \end{figure}
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{./img/temporal/grafobs.png}
+    \caption[Timeline]{\centering  Porovnání měření srážkoměru s observací rastrového datasetu}
+ \end{figure}  
+
 
 
 Ve zvolené výchozí databázi se vytvoří časová okna v časovém kroku granularity datasetu.
@@ -1731,6 +1740,9 @@ Výsledkem je vektorová bodová mapa, kde ke každému bodu je připojena tabul
 
 
 \necislovana{Závěr}
+
+
+prekryt popisku canvas
 
 dodelani funkci do grass core
 
