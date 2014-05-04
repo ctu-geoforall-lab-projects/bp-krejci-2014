@@ -1265,7 +1265,7 @@ sie = 0.010000 and sin = 0.010000
     \centering
     \subfloat[Bikubická interpolace - 1 bod]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/bic1.png} }%
     \qquad
-    \subfloat[Bikubická interpolace body po 500 [m]]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/bic500.png} }%
+    \subfloat[Bikubická interpolace body po 500 m]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/bic500.png} }%
     \caption[Interpolace Bicubic]{Konfigurace parametrů a) sie=sin=0.01, lambda\_i=0.05; b) sie=sin=0.01, lambda\_i=0.01 \centering}%
     \label{fig:example}%
 \end{figure}
@@ -1727,9 +1727,9 @@ Výsledkem je vektorová bodová mapa, kde ke každému bodu je připojena tabul
 
 \begin{figure}[h!]%
     \centering
-    \subfloat[RST]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/basin1.png} }%
+    \subfloat[Agregace RST  ]{ \includegraphics[width=0.25\textwidth]{./img/intanalys/basin1.png} }%
     \qquad
-    \subfloat[IDW]{ \includegraphics[width=0.19\textwidth]{./img/intanalys/basin2.png} }%
+    \subfloat[Transformace srážek]{ \includegraphics[width=0.25\textwidth]{./img/intanalys/basin2.png} }%
 
     \caption[GUI modul]{ a) Agregovaný rastr - suma za 15 minut; b) povodí s bodovou vrstvou představující hodnoty jednotlivých povodí.  \centering  }
 \end{figure}
@@ -1737,26 +1737,25 @@ Výsledkem je vektorová bodová mapa, kde ke každému bodu je připojena tabul
 
 
 
-\newpage
-\setcounter{footnote}{1}
 
+\setcounter{footnote}{1}
+\newpage
 
 
 \necislovana{Závěr}
-Téma práce "Analýza a vizualizace srážkových dat z mikrovlnných telekomunikačních spojů pomocí GIS", vycházelo z přímých požadavků zadavatele této práce, který spolupracuje na projektu mezinárodního charakteru. Mezi hlavní požadavky patřilo zpracování naměřených dat do vhodné formy v prostředí GIS. Tento krok je první a potřebný k dalším  požadavkům vývoje GIS aplikací v rámci  problematiky MV spojů. Sekundárním cílem práce bylo uvést možné využití výsledků z vlastních modulů v novém balíčku časoprostorových funkcí systému GRASS. 
+Téma práce "Analýza a vizualizace srážkových dat z mikrovlnných telekomunikačních spojů pomocí GIS", vycházelo z přímých požadavků zadavatele této práce, který spolupracuje na projektu mezinárodního charakteru. Mezi hlavní požadavky patřilo zpracování naměřených dat do vhodné formy v prostředí GIS. Tento krok je první a potřebný k dalším  požadavkům vývoje GIS aplikací v rámci  problematiky MV spojů. Sekundárním cílem práce bylo demonstrovat možné využití výsledků z vlastních modulů v rámci balíčku časoprostorových funkcí systému GRASS. 
+
+Vývoji vlastních modulů  předcházela studia spojená s programovacím jazykem Python a problematikou databáze PostgreSQL. Kombinace těchto dvou nástrojů způsobovala problém s optimalizací zápisů do databáze.  Při tisících až desetitisících zápisů do databáze vznikala vysoká časová náročnost, která v rámci dostupných funkcí Python knihovny \textit{psycopg} nešla zcela korektně odstranit. Současná implementace využívá zápisů do přechodných souborů s následným dávkovým načtením do databáze.
+
+S ohledem na prvotní nároky zadavatele a neznalost jazyka Python je zdrojový kód aplikace psán procedurálně. V primární fázi vývoje byla tato volba výhodná avšak v posledních fázích implementace bylo zřejmé, že objektově orientovaný model by byl výhodnější. Modul \textit{r.mwprecip} je v současné době otevřený doplnění nových funkcí pro  určení baseline a to především pro rychlý vývoj nových metod. 
+
+V rámci vývoje aplikace s využitím \textit{GRASS Python Scripting Library} bylo ze vzniklých požadavků na implementaci  poukázáno na možné vylepšení dvou funkcí modulu \textit{v.in.ogr}, které následně byly předním vývojářem GRASS GIS upraveny. 
 
 
-prekryt popisku canvas
+Součástí práce je poukázáno na možné nové směry výzkumu v oblasti interpolací srážek z liniových reprezentací, které jsou zcela novým a málo zažitým jevem jak na úrovni GIS, tak součástí problematiky rekonstrukce dešťových srážek obecně. S velkou pravděpodobností bude v nejbližší době  ze strany T-Mobile zpřístupněn kvalitnější vzorek dat z pohledu hustoty MV spojů, který by umožňoval výzkum založený na  reálném datovém podkladu
 
-dodelani funkci do grass core
 
-odladenost TGRASS
-
-vzorek dat
-
-nove tema plosne interpolace
-
-optimalizace databzace
+\pagenumbering{gobble}
 \newpage
 \necislovana{Seznam použitých zkratek}
 \begin{acronym}
