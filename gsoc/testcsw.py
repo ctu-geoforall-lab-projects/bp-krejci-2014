@@ -34,6 +34,28 @@ $ curl http://localhost:8000/?service=CSW&version=2.0.2&request=GetCapabilities
 '''
 
 
+'''
+Setup the database:
+$ cd /var/www/pycsw
+$ export PYTHONPATH=`pwd`
+$ sudo python ./sbin/pycsw-admin.py -c setup_db -f default.cfg
+'''
+
+'''
+Nahrani matadat do databaze pycsw
+cd /var/www/pycsw
+   pycsw-admin.py -c load_records -f default.cfg -p ~/gisdata-master/gisdata/metadata/good -r
+'''
+
+
+
+'''
+SKRIPTY
+http://nbviewer.ipython.org/github/rsignell-usgs/notebook/tree/master/CSW/
+
+'''
+
+
 
 import sys, os,  argparse
 from owslib.csw import CatalogueServiceWeb

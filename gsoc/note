@@ -1,0 +1,8 @@
+copy metadata from folder
+~/Dropbox/gsoc/pycsw/pycsw/pycsw$ pycsw-admin.py -c load_records -f ../default.cfg -p /home/matt/Dropbox/gsoc/material/metadata/gisdata-master/gisdata/metadata/good/ -r
+
+
+
+start server 
+/pycsw/pycsw$ python csw.wsgi
+
