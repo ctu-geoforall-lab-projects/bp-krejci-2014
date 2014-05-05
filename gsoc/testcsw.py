@@ -50,8 +50,9 @@ cd /var/www/pycsw
 
 
 '''
-SKRIPTY
+SKRIPTY- ukazky
 http://nbviewer.ipython.org/github/rsignell-usgs/notebook/tree/master/CSW/
+https://github.com/geopython/OWSLib/tree/master/examples
 
 '''
 
