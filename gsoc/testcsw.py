@@ -20,6 +20,8 @@ http://geopython.github.io/OWSLib/index.html?highlight=cql#install
 
 http://pycsw.org/docs/latest/installation.html
 
+$ apt-get install libxml2-dev libxslt-dev
+
 $ virtualenv pycsw && cd pycsw && . bin/activate
 $ git clone https://github.com/geopython/pycsw.git && cd pycsw
 $ pip install -e . && pip install -r requirements-dev.txt
