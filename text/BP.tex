@@ -248,6 +248,11 @@ morecomment=[l]{\#},
 \pagenumbering{arabic}
 \setcounter{page}{1}
 \subsection*{Předmluva}
+
+%%% ML: text a hlavne zavery z neho plynouci jsi z neceho cerpal
+%%% (predpokladam), potom chybi ale citaci, ty zavery je potreba o
+%%% neco oprit
+
 Enviromentální procesy jsou nedílnou součástí historického vývoje na
 Zemi a vždy přitahovaly pozornost lidské populace. Obvykle jsou tyto
 jevy komplexního charakteru a pro jejich pochopení je nutné
@@ -256,39 +261,61 @@ dostupné ke studiu problematik stále propracovanější metody, které
 umožňují komplexnější přístup a pochopení dějů v širším kontextu. Mezi
 tyto metody se bezesporu řadí numerické fyzikální modely, kterých by
 bez výpočetního výkonu nebylo možno využít. Informační technologie v
-současné době dosahují velkého rozvoje a rozšíření i díky výpočetní
-výkonnosti, která se během desetiletími výrazně mění. Tato skutečnost
-umožňuje využívat metod, kterých by do nedávna nebylo možné.
+současné době dosahují velkého rozvoje a rozšíření i díky stále
+rostoucí výpočetní výkonnosti. Tato skutečnost umožňuje využívat
+metod, které by ještě do nedávna nebylo možné aplikovat.
 
 Většina modelů, které simulují přírodní procesy, jsou pro jejich
 komplexnost charakteristické značnými objemy dat, které je nutné
-spravovat a analyzovat. V posledních desetiletích velmi usnadňují
-práci nástroje geografických informačních systémů (GIS), které
- díky své dostupnosti a možnostem nacházejí nezastupitelné místo ve
-správě a analýze dat. Jednotlivé nástroje GIS zpravidla nebývají úzce
-zaměřené na specifické problematiky, ale jejich spíše obecný charakter
-umožňuje návaznost a možné propojení s vlastními aplikacemi a ulehčuje
-vytvoření nástrojů pro řešení komplexních systémů.
+spravovat a analyzovat. V~posle\-dních desetiletích tuto práci výrazně
+usnadňují nástroje geografických informačních systémů (GIS),
+které díky své dostupnosti a možnostem nacházejí nezastupitelné místo
+ve správě a analýze geografických dat. Jednotlivé nástroje GIS zpravidla nebývají
+úzce zaměřené na specifické problematiky, ale jejich spíše obecný
+charakter umožňuje návaznost a možné propojení s vlastními aplikacemi.
+Tím ulehčuje vytvoření nástrojů pro řešení komplexních systémů.
 
 \subsection*{Motivace}
-Modelování dešťových srážek je jednou z významných disciplín z oboru enviromentálního modelování. Jestliže se poohlédneme do počátku  minulého století, tak právě meteorologie byla jednou z prvních disciplín, která odpovídala dnešního chápání pojmu enviromentálního modelování. Odhad a rekonstrukce srážek na zemském povrchu jsou důležitou fází matematického modelování srážko-odtokových procesů. Zájem odborné veřejnosti i rozhodovacích složek v  různých sektorech národního hospodářství roste i díky stále hlouběji se projevujícímu dopadu klimatické změny. Oproti rozvoji fyzikálně numerických modelů nebyl technologický pokrok ve sběru srážkových dat v posledních desetiletích takřka zaznamenán. Pracovníci hydrometeorologických služeb naráží při zpřesňování  předpovědí odtoku či vývoje počasí především na problém nízkého pokrytí srážkoměry a tím i nedostatečné dostupnosti časoprostorového rozložení srážkových dat v povodněmi ohrožených oblastí městských aglomerací. Pokrokové operativní metody určování srážek metodou MV spojů proto představují perspektivní využití především v hydrologii urbanizovaných povodí, kde (díky hustotě MV sítí) mohou sloužit jako podklad vodohospodářských dispečinků operativního řízení při řešení kalamitních povodňových situací.
+
+%%% ML: bez citaci, viz predchozi odstavec
+Modelování dešťových srážek je jednou z významných disciplín z oboru
+enviromentálního modelování. Jestliže se poohlédneme do počátku
+minulého století, tak právě meteorologie byla jednou z prvních
+disciplín, která odpovídala dnešního chápání pojmu enviromentálního
+modelování. Odhad a rekonstrukce srážek na zemském povrchu jsou
+důležitou fází matematického modelování srážko-odtokových
+procesů. Zájem odborné veřejnosti i rozhodovacích složek v různých
+sektorech národního hospodářství roste i díky stále hlouběji se
+projevujícímu dopadu klimatických změn. Oproti rozvoji fyzikálně
+numerických modelů nebyl technologický pokrok ve sběru srážkových dat
+v posledních desetiletích takřka zaznamenán. Pracovníci
+hydrometeorologických služeb naráží při zpřesňování předpovědí odtoku
+či vývoje počasí především na problém nízkého pokrytí srážkoměry a tím
+i nedostatečné dostupnosti časoprostorového rozložení srážkových dat v
+povodněmi ohrožených oblastí městských aglomerací. Pokrokové
+%%% ML: pouzivat zkratka MV, ale nevysvetlena
+operativní metody určování srážek metodou MV spojů proto představují
+perspektivní využití především v hydrologii urbanizovaných povodí, kde
+(díky hustotě MV sítí) mohou sloužit jako podklad vodohospodářských
+dispečinků operativního řízení při řešení kalamitních povodňových
+situací.
 
 
 
 \subsection*{Cíl}
 Hlavním cílem této práce je vývoj nástroje pro zpracování hrubých dat
-z MV vysílačů v prostředí GIS. Tím se zpřístupní další analýzy, které
+z MV vysílačů v prostředí GIS. Tím se zpřístupní tato data pro další analýzy, které
 pomohou zefektivnit výzkum těchto nových metod. Svým vedlejším
-výstupem je práce zaměřena na využití grafických výstupů vlastního GIS
+výstupem je práce zaměřena na využití výstupů z GIS
 pro interpretaci plošných srážek. V návaznosti na vývoj nástroje pro
 zpracování hrubých dat z MV spojů je prezentována demonstrace využití
-časoprostorových funkcí nástroje GIS.
+časoprostorových analýz v GIS.
 
 Téma práce vychází z požadavků zpracovatele projektu, který se zabývá
 problematikou odhadu srážek z MV spojů v rámci projektu
-"TeleMAS"\footnote{GA ČR 14-22978S Predikce srážkového odtoku v
+"TeleMAS"\footnote{GA ČR 14-22978S \uv{Predikce srážkového odtoku v
   urbanizovaných povodích na základě deštěm generovaného útlumu
-  signálu mikrovlnných spojů telekomunikační sítě} v souvislosti s
+  signálu mikrovlnných spojů telekomunikační sítě}} v souvislosti s
 modelováním srážko-odtokových procesů v městských povodích. Tento
 projekt je řešen v úzké vědecké spolupráci s ETH\footnote{
   Eidgenössische Technische Hochschule
@@ -300,8 +327,7 @@ společnostmi T-Mobile a Veolia ČR a nově i s Ericsson Research
 Práce je systematicky rozdělena na část teoretickou a praktickou. V
 teoretické části je kladen důraz na představení základních pojmů,
 principů a definic, tvořících východiska pro část praktickou. Ta
-obsahuje představení funkčnosti vlastních GIS modulů a využití jejich
-vlastností ve spojení se stávajícími nástroji GIS.
+obsahuje popis funkčnosti nástrojů, které vznikly v rámci této práce a jejich využití ve spojení s ostatními GIS nástroji.
 
  
 
