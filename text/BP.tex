@@ -204,7 +204,7 @@ morecomment=[l]{\#},
 \begin{abstractx}{english}
 
  The aim of the thesis is the modelling of rainfall data from 
- microwave links of telecommunication operators. The data to be 
+ microwave links served by telecommunication operators. The data to be 
  processed are stored by virtue of the relational database PostgreSQL.
   The GRASS Python Scripting Library was used for the system module development.
    Based on user configuration, the module provides for the rainfall data reconstruction.
@@ -268,22 +268,7 @@ umožňuje návaznost a možné propojení s vlastními aplikacemi a ulehčuje
 vytvoření nástrojů pro řešení komplexních systémů.
 
 \subsection*{Motivace}
-Modelování dešťových srážek je jednou z významných disciplín z oboru
-enviromentálního modelování. Jestliže se poohlédneme do první poloviny
-19. století, tak právě meteorologie byla jednou z prvních disciplín,
-která splňovala definici enviromentálního modelování, tak jak ji
-chápeme nyní. Odhad a rekonstrukce srážek na zemském povrchu se s
-neobvyklým vývojem klimatu stávají důležitým krokem v modelování
-například odtokových procesů. Oproti rozvoji fyzikálně numerických modelů
-nebyl technologický pokrok ve sběru srážkových dat v posledních
-desetiletích takřka zaznamenán. Pracovníci hydrometeorologických
-ústavů ve zpřesnění svých předpovědí naráží především na problém s
-nízkým pokrytím srážkoměry a tím i neaktuálností srážkových dat v
-odtokově senzitivních oblastech jako jsou městské aglomerace. Pokrokové 
-operativní metody určování srážek metodou MV spojů představují perspektivní 
-využití především v hydrologii urbanizovaných povodí, kde (díky hustotě MV sítí) 
-mohou sloužit jako podklad vodohospodářských dispečinků operativního řízení při 
-řešení kalamitních povodňových situací v síti dešťové kanalizace. 
+Modelování dešťových srážek je jednou z významných disciplín z oboru enviromentálního modelování. Jestliže se poohlédneme do počátku  minulého století, tak právě meteorologie byla jednou z prvních disciplín, která odpovídala dnešního chápání pojmu enviromentálního modelování. Odhad a rekonstrukce srážek na zemském povrchu jsou důležitou fází matematického modelování srážko-odtokových procesů. Zájem odborné veřejnosti i rozhodovacích složek v  různých sektorech národního hospodářství roste i díky stále hlouběji se projevujícímu dopadu klimatické změny. Oproti rozvoji fyzikálně numerických modelů nebyl technologický pokrok ve sběru srážkových dat v posledních desetiletích takřka zaznamenán. Pracovníci hydrometeorologických služeb naráží při zpřesňování  předpovědí odtoku či vývoje počasí především na problém nízkého pokrytí srážkoměry a tím i nedostatečné dostupnosti časoprostorového rozložení srážkových dat v povodněmi ohrožených oblastí městských aglomerací. Pokrokové operativní metody určování srážek metodou MV spojů proto představují perspektivní využití především v hydrologii urbanizovaných povodí, kde (díky hustotě MV sítí) mohou sloužit jako podklad vodohospodářských dispečinků operativního řízení při řešení kalamitních povodňových situací.
 
 
 
@@ -304,9 +289,9 @@ problematikou odhadu srážek z MV spojů v rámci projektu
 modelováním srážko-odtokových procesů v městských povodích. Tento
 projekt je řešen v úzké vědecké spolupráci s ETH\footnote{
   Eidgenössische Technische Hochschule
-  Zürich}-Eawag\footnote{Eidgenössische Anstalt für Wasserversorgung,
+  Zürich}-EAWAH\footnote{Eidgenössische Anstalt für Wasserversorgung,
   Abwasserreinigung und Gewässerschutz} a odborné spolupráci se
-společnostmi T-Mobile a Veolia ČR a nově s Ericsson Research
+společnostmi T-Mobile a Veolia ČR a nově i s Ericsson Research
 (Sweden).
 
 Práce je systematicky rozdělena na část teoretickou a praktickou. V
@@ -345,8 +330,8 @@ splňují tyto požadavky v dostatečném rozsahu a částečně eliminují
 potřebu vývoje specifických solitérních systémů, které by vycházely ze
 stejných základů.
 
-Charakteristikou moderních GIS je především veliká disponibilita
-dílčích funkcí, jejichž hlavní přínos spočívá ve vzájemném propojení v
+Charakteristikou moderních GIS je především velká disponibilita
+dílčích funkcí, jejichž hlavní přínos spočívá  v možnosti vzájemného propojení v
 rámci rozsáhlých analýz. Pokud dostupné funkce konkrétního GIS nástroje
 k řešení daných problematik nedostačují, bývá obecně u většiny těchto
 systémů možnost vývoje vlastních aplikací pomocí knihovny
@@ -583,7 +568,7 @@ koncentraci vodní páry v atmosféře a scintilaci. Útlum vysílaných a
 přijímaných vln ovlivňuje také teplota prostředí jímž vlna
 prochází. Dalším činitelem, který může způsobovat kolísání signálu, je
 vítr.  Pro určování baseline se využívá různých metod, například
-   \acs{HMM} \cite{comparsinmv}, Retrieval Alghorithms
+   \acs{HMM} \cite{comparsinmv}, Retrieval Algorithms
 \cite{countryw} ad. Metody Určení baseline se dají klasifikovat na
 automatizované a uživatelské. Automatizovaným určováním baseline se
 myslí především algoritmy, které jsou schopny rozlišovat dešťové a suché
@@ -680,9 +665,8 @@ zlepšení přesnosti měření srážek.
 
 Jelikož tyto MV spoje operují těsně nad zemským povrchem, vypočtené
 intenzity by mohly být pomocí nástrojů    \acs{GIS}s velkou přesností
-přiřazovány do jednotlivých subpovodí. To by zpřesnilo vstupy do
-srážko odtokového modelu a umožnilo lépe modelovat členitá povodí na
-místě velkých aglomerací.
+přiřazovány do jednotlivých dílčích povodí. To by zpřesnilo vstupy do
+srážko-odtokového modelu a umožnilo lépe modelovat členitá povodí ve velkých městských aglomerací.
 
 Možnosti využití MV spojů v oblasti meteorologie nekončí u odhadu
 srážek. Pomocí MV lze také detekovat pevné částice, sníh, či vodní
@@ -824,7 +808,7 @@ prefixem \texttt{t.} Jednotlivé moduly se spouštějí pomocí příkazové
 umožňuje uživatelský vstup pomocí přepínačů a parametrů
 např. \texttt{r.mwprecip -p database=letnany}. Parametry se dělí na
 povinné (\texttt{required}) a volitelné (\texttt{optional}). V
-modulech jsou také globální přepínače, které jsou pro všechn)y moduly
+modulech jsou také zařazeny globální přepínače, které jsou pro všechny moduly
 definovány jednotně. Mezi nejčastěji využívané patří \texttt{--help},
 který do terminálu vypíše veškeré informace o vstupních parametrech
 včetně jejich popisu.
@@ -964,9 +948,8 @@ definice & optim* & příkaz & popis \\ \hline \hline
   síťových analýz, kde jednotlivé cesty jsou ohodnoceny a algoritmus
   vybere obecně tu nevýhodnější.
 
-\item[Exekutor] pracuje pouze s  \acs{DML}. Obdrží od výše zmíněného
-  \textit{planneru} plán nejvýhodnější cesty a začne daný strom
-  procesů zpracovávat od horního uzlu.
+\item[Exekutor] pracuje pouze s  \acs{DML}.  Od výše zmíněného
+  \textit{planneru} obdrží plán nejvýhodnější cesty a zahájí zpracování daného stromu procesu od horního uzlu.
 \end{description}
 
 
@@ -1000,7 +983,7 @@ přetypování, indexy, funkce, agregační funkce, operátory a další.
 v nativním jazyce PL/pgSQL, tak i v ostatních výše zmíněných
 podporách. Funkce po spuštění vracejí výsledek v řádcích, tedy
 tabulkou, kterou je možné využít k dalším příkazům. Podporuje
-vytvoření vlastních funkcí, či využití funkci z standardní knihovny
+vytvoření vlastních funkcí, či využití funkcí  standardní knihovny
 PostgreSQL.
 
 \paragraph*{Indexy} je možné vytvářet pomocí algoritmů
@@ -1011,20 +994,19 @@ specifického sloupce v tabulce, jehož jediný úkol je optimalizovat
 prohledávání daného sloupce.
 
 \paragraph*{Pravidla} Umožňují přepisování zpracovaného dotazu. 
-Jedno z běžných použití je implementace pohledů, které jsou logicky odkazují na vybrané sloupce v
+Jedno z běžných použití je implementace pohledů, které logicky odkazují na vybrané sloupce v
 jiných tabulkách. V \textit{PostgreSQL 9.3 } jsou nově implementované
 materializované pohledy (\texttt{MATERIALIZED VIEW}), které
 představují jak charakteristiky tabulky tak i pohledu. Data
 materializovaných pohledů jsou fyzicky uloženy na disku. Jejich hlavní
-výhoda spočívá v možnosti obnovení (\texttt{REFRESH}), čímž doje k
-obnovení tabulky na základě logických vazeb z vytvoření.
+výhodou je možnost  obnovení (\texttt{REFRESH})  tabulky na základě logických vazeb z jejího vytvoření.
 
 \paragraph*{Triggery} (spouštěče) mají funkcionalitu v podobě kontroly
 událostí, na které reagují podle své definice. Například při vytvoření
 nového záznamu provedou definovanou operaci v databázi.
 
-\paragraph*{Datové typy} definují druh nebo význam hodnot. V
-PostgreSQL je široká škála datových formátu. Specifickými pro tuto
+\paragraph*{Datové typy} definují druh nebo význam hodnot.
+PostgreSQL disponuje značným rozsahem datových formátů. Specifickými pro tuto
 práci jsou: numerické, časové, logické, řadící (enumerate) a
 geometrické typy.
 
@@ -1053,9 +1035,9 @@ jednotlivé operace mezi standardem SQL a prostorovými daty. Souřadnice
 jednotlivých objektů jsou ukládány v tabulkách, kde každá tabulka je
 specifická jedním typem geometrie (bod, linie, polygon atd.) a
 referenčním prostorovým systémem. Souřadnice jsou ukládány ve
-standardu    \acs{WKT}. Spolu s metadaty o geometrickém prvku jsou
+standardu    \acs{WKT}. Společně s metadaty  geometrického prvku jsou
 ukládány ve sloupci \texttt{geometry}, který má informaci o
-geometrickém typu a referenčním systému, \cite{postgis}.
+geometrickém typu o referenčním systému, \cite{postgis}.
 
 \begin{figure}[h!]
     \centering
@@ -1088,10 +1070,10 @@ konverze mezi jednotlivými systémy slouží funkce
 
 \paragraph*{Geometrie} (\texttt{geometry}) je datovým typem, který
 představuje geometrickou složku objektu.  Charakteristika tohoto
-datového typu je dána standardem \textit{Simple Features} ve formátu
+datového typu je dána standardem \textit{Simple Features} rovněž ve formátu
    \acs{WKT}.  Sloupec s geometrií je definován pomocí parametrů, které
-nastavují obecné a geometrické specifika: název, typ, souřadnicový
-systém a další.
+nastavují obecná a geometrická specifika: název, typ, souřadnicový
+systém ad.
 
 Pro definování typu objektu jsou k vytvořeny funkce \texttt{ST\_Make*
 }, kde \texttt{*} jsou níže uvedené typy standardu \textit{Simple
@@ -1127,9 +1109,9 @@ demonstrovány kategorie a nejzákladnější funkce.
   SQL-MM vyplývající z ISO99, standard o multimédiích, 
   \cite{sqlmm}. V této kategorii jsou funkce typické pro prostředí
   GIS. Mezi ně například patří: buffer \texttt{ST\_Buffer}, validita
-  geometrie \texttt{ST\_IsValid}, sjednocení \texttt{ST\_Union}.
+  geometrie \texttt{ST\_IsValid} nebo sjednocení \texttt{ST\_Union}.
 
-\item[Konverze] umožňují transformace mezi referenčními system. Dále
+\item[Konverze] umožňují transformace mezi referenčními systémy. Dále
   pak umožňují oboustrannou konverzi mezi binárními a textovými
   formáty. Například do  \acs{WKT}:
 
@@ -1154,22 +1136,17 @@ SELECT  ST_AsEWKT (geom) FROM link
 \setcounter{footnote}{1}
 \section{Časoprostorové analýzy}
 Hlavním účelem GIS je vytvoření informačního systému, který umožňuje
-získávání, ukládání, analýzu a vizualizaci dat, která mají prostorový
-rozsah povrchu Země. Všeobecně je hlavním cílem vytvoření operačních
-modelů reálného světa. Pro modelování některých reálných
-jevů je nedílnou součástí časová složka. Z historického pohledu na rozvoj 
-systémů GIS je zřejmá jejich původní orientace na řešení problémů navazujících 
-na analýzy prostorových dat. V prvních fázích rozvoje GIS nemohla ani být 
+získávání, ukládání, analýzu a vizualizaci dat vztažených k povrchu Země.  Všeobecně je však hlavním cílem vytváření operačních modelů reálného světa, při čemž je pro modelování některých reálných procesů nedílnou součástí časová složka.  Z historického pohledu na rozvoj systémů GIS je však zřejmá jejich primární orientace na řešení problémů  prostorových dat, bez této složky. V prvních fázích rozvoje GIS nemohla ani být 
 tato otázka z hlediska tehdejších omezení IT technologií i matematických
  formulací řešena. \cite{geospatialanal}. Systém GRASS nyní v nové verzi
-\textit{GRASS GIS 7 } obsahuje kompletně nově navržený balíček modulů
+\textit{GRASS GIS 7 } obsahuje zcela nově navržený balíček modulů
 TGRASS\footnote{\url{http://grass.osgeo.org/grass70/manuals/temporalintro.html}},
-který integruje do tohoto GIS systému časový rozměr.
+který integruje do původního GRASS systému časový rozměr.
 
 Hlavním obsahem této kapitoly je představení časoprostorových
 datových modelů s primárním zaměřením na model, který je implementován
 v modulech TGRASS. V praktické části budou představeny základní funkce
-a analýzy TGRASS pro zrekonstruované srážky pomocí vlastního modulu
+a analýzy TGRASS pro  srážky zrekonstruované pomocí vlastního modulu
 \textit{r.mwprecip}. K teoretické části byla jako primární zdroj
 využita kniha (\textit{Geographical information system vol.2})\cite{gistemporal}
 
@@ -1177,7 +1154,7 @@ využita kniha (\textit{Geographical information system vol.2})\cite{gistemporal
 \subsection{Terminologie}
 \label{subsec:terminologie}
 Tento odstavec pojednává základní terminologii časoprostorové
-problematiky v GIS. Hlavním zdrojem pro definice je publikace
+problematiky v GIS. Hlavním zdrojem  definic je publikace
 \cite{pelekis}
 \begin{description}
 \item[Reprezentace času] Jednotlivé stavy geodat jsou odkazovány k
@@ -1190,16 +1167,15 @@ problematiky v GIS. Hlavním zdrojem pro definice je publikace
 \item[Diskrétně časový model] je takový model, kde se proměnné, tedy
   geodata mění skokově. Geodata jednotlivých okamžiků na sebe navazují
   podle dostupného či zvoleného časového
-  rozlišení (granularity). Vhodným příkladem je sčítání lidu v daném časovém
+  rozlišení (granularity). Názorným příkladem je sčítání lidu v daném časovém
   intervalu.
 
 \item[Kontinuální/spojitý časový model] je charakteristický 
   jemným časovým rozlišením. Příkladem jsou data získaná ze
-  seismografu, či kontinuálního měření průtoku řek.
+  seismografu, či kontinuálního záznamu průtoku ve vodních tocích.
 
 \item[Časová topologie] je termín, který je analogický k termínu
-  prostorová topologie s tím rozdílem, že se jedná mimo prostorový
-  rozměr i o rozměr časový. Časová topologie geodat definuje vztahy
+  prostorová topologie s tím rozdílem, že kromě prostorového zobrazení zavádí i rozměr časový. Časová topologie geodat definuje vztahy
   mezi jednotlivými stavy daných objektů v datasetu.
 
 \item[Granularita] je ve spojení s časoprostorovými daty definována
@@ -1211,9 +1187,9 @@ problematiky v GIS. Hlavním zdrojem pro definice je publikace
 
 Časoprostorové modely se liší v jednotlivém pojetí vztahů, které
 propojují časovou složku s prostorovými daty. Současný vývoj a
-specifické nároky vědních oborů vytvořily poměrně velikou škálu
+specifické nároky vědních oborů vytvořily poměrně značný počet 
 časoprostorových modelů \cite{pelekis}, které jsou často sjednoceny
-základní myšlenkou a liší se pouze specificky. Níže jsou přiblíženy
+základní myšlenkou a liší se pouze v detailu. Níže jsou přiblíženy
 principy základních modelů se zaměřením na \textit{Snapshot model},
 který je časoprostorovým modelem v TGRASS.
 
@@ -1232,34 +1208,26 @@ relačního modelu, který je charakteristický relačními tabulkami, tedy
  \end{figure}   
 \footnotetext{Podkladem pro obrázek byly využity výstupy z modulu r.mwprecip}
 
-Hlavní výhoda \textit{snapshot} modelu je v jednoduchosti a především
-vhodné struktuře pro implementaci do GIS. Jak již bylo zmíněno, model
-uchovává jednotlivé vrstvy pro dané časové okamžiky odděleně, tedy
-jednotlivé tématické geoinformace zájmových oblastí jsou ukládány do
-separovaných vrstev \ref{fig:snapshot}.  Model charakteristikou svého navržení odpovídá
-diskrétním systémům. Jednotlivé proměnné - geodata se mění v
-průběhu času skokově. Z toho mimo jiné pro GIS plyne, že
+Výhodou \textit{snapshot} modelu je jeho jednoduchost a především
+vhodná struktura pro implementaci do GIS. Jak již bylo zmíněno, model
+uchovává jednotlivé vrstvy pro dané časové okamžiky odděleně.
+Jednotlivé tématické geoinformace o zájmových oblastech jsou ukládány do
+separovaných vrstev \ref{fig:snapshot}.  Model charakteristikou svého návrhu odpovídá
+diskrétním systémům. Jednotlivé proměnné - geodata se skokově mění v
+průběhu času. Z toho mimo jiné pro uplatnění v GIS plyne, že
 jednotlivé snímky nemají informace o stavech předchozího či
-následujícího časového okamžiku.  Nevýhodou tohoto modelu je datová
+následujícího časového okamžiku.  Nevýhodou tohoto modelu je proto datová
 redundance, která je způsobena ukládáním informací pro daný okamžik
 vždy v plném rozsahu.  Jednotlivá geodata jsou uchovávána pro časové
 okamžiky nenávazně na předchozích. Uvážíme-li pro názornost extrémní
 případ, kdy časový dataset obsahuje vrstvy znázorňující jev, který byl
 v průběhu času neměnný, tento model do úložiště počítače zapíše
-několikanásobně stejné geoinformace. Tato charakteristika je v GIS
-praxi poměrně nevýhodná, jelikož často jsou změny mezi jednotlivými
-okamžiky malé. Mezi nevýhody diskrétního modelování patří skoková
-interpretace problematiky. V GIS to může způsobit situaci, kdy dojde v
-nezaznamenaném intervalu k velké změně která se zpět ustálí. Změna
-ovšem nebude zaznamenána.  Pro srovnávání změn jednotlivých
-prostorových rámců v čase je díky architektuře modelu nutnost
-procházení a porovnávání buňky po buňce, což vede k vysoké operační
-náročnosti.
+několikanásobně stejné geoinformace. Tato skutečnost je pro práci v GIS poměrně nevýhodná, především v případech kdy změny sledovaných veličin časoprostorových dat mezi jednotlivými okamžiky měření jsou malé. Obecně se v oblasti numerického modelování hydrologických i meteorologických jevů jedná o častý tzv. scaling problém, spočívající v potřebě interpretovat průběh různých stavových veličin modelu (v tomto případě např. srážek) značně rozdílného časového vývoje. Mezi nevýhody diskrétního modelování patří skoková interpretace zobrazování procesů svou fyzikální podstatou původně spojitých . V časoprostorovém kontextu při využití GIS modelů tohoto typu to může vyvolat výpočetní stav, při němž dojde k ignorování zásadní změny hodnoty sledované veličiny (např. srážky) v okamžiku nepostihnutelném při zvoleném časovém intervalu měření.  Změna ovšem nebude zaznamenána a model založený na těchto předpokladech bude v praxi nepoužitelný . S ohledem na  potřebu porovnávání změn jednotlivých prostorových rámců v čase je díky architektuře modelu nutnost procházení a porovnávání buňky po buňce. To ovšem  vede k vysoké výpočetní  náročnosti.
 
 \paragraph*{Time Composit}
-\textit{\ac{STC}} byl navrhnut  v roce
+\textit{\ac{STC}} byl vyvinut  v roce
 1988, Lagran \cite{lagran}. Model \acs{STC} pracuje s vektorovou interpretací
- prostorových dat. Princip tohoto modelu spočívá v projekci linií do roviny, čímž se v
+ prostorových dat. Jeho princip  spočívá v projekci linií do roviny, čímž se v
 průběhu času jednotlivé prostory v projekční rovině sjednotí a tím z
 nich vznikají polygony - síť. V databázi jsou pak pro jednotlivé
 polygony uchovávány atributy, které odpovídají jejich historii.  Model
@@ -1268,7 +1236,7 @@ jsou relativní.
 
 \paragraph*{Time-stamping model} 
 Princip modelu je založen na dvojici časových razítek, které
-charakterizují čas vzniku a zániku, či současného stavu
+určují čas vzniku a zániku, či současného stavu
 objektu. Časové razítko zániku objektu je definováno třemi stavy
 \texttt{now}, \texttt{currnetm} a \texttt{null}.  Síla tohoto modelu
 je při aplikacích, kde se jednotlivé objekty v průběhu dlouhé doby
@@ -1277,9 +1245,8 @@ nemovitostí, kde požadavky přesně odpovídají funkcím tohoto
 modelu.\cite{hunter}
 
 \paragraph*{Event model}
-\textit{Event-Oriented Model}, je svým principem blízký  předchozího
-modelu. Model \textit{Time-stamping }nedokáže identifikovat jednotlivé změny v
-rámci datasetu. Oproti tomu je tento model rozšířený o logovací
+\textit{Event-Oriented Model}, je svým principem blízký  předchozího. Model \textit{Time-stamping }nedokáže identifikovat jednotlivé změny v
+rámci datasetu. Oproti tomu je  rozšířený o logovací
 soubor, do kterého jsou zaznamenávány jednotlivé časové instance
 objektů. Tento soubor představuje časovou topologii, která
 reprezentuje celou historii změn objektů a ten je možné procházet či
@@ -1287,37 +1254,34 @@ analyzovat.
 
 \paragraph*{Object-Relationship}
 jako jediný z výše zmíněných se zaměřuje na vztahy a popis
-jednotlivých změn. Object-Relationship model je tedy  specifický dle zaměření
-dané problematiky. Specifikem modelu je  náročnost v definování
+jednotlivých změn stavu sledované veličiny. Object-Relationship model je   specifický dle zaměření
+dané problematiky. Jeho specifikem  je  náročnost v definování
 jednotlivých vztahů mezi objekty.
 
 \paragraph*{Objektově orientovaný model}
-\textit{Object-Oriented model}  je principiálně podobný charakteristice objektově 
-orientovaných programovacích jazyků. Tato koncepce umožňuje vytvářet
+\textit{Object-Oriented model}  lze svou filosofií přirovnat k objektově 
+orientovaným programovacím jazykům. Umožňuje vytvářet
 objekty, třídy, metody, instance, dědičnost, operátory a dynamické
-vazby, tedy vše podstatné pro objektově orientovaný návrh. Díky tomu
-je možné poměrně uceleně simulovat reálné vztahy.  Jednotlivé objekty
+vazby, tedy vše podstatné pro objektově orientovaný návrh. Díky tomu model umožňuje  uceleně simulovat reálné vztahy.  Jednotlivé objekty
 v průběhu času ukládají své entity, které tak tvoří historii
-instancí. Výhoda objektově orientovaného návrhu je v jednoduchém a
-intuitivním přístupu k jednotlivým informacím.
+instancí. Výhodou objektově orientovaného modelu je možnost jednoduchého a
+intuitivního přístupu k jednotlivým informacím.
 
 
 \subsection{Úvod do Temporal GRASS framework}
 Temporal framework v GRASS je součástí nové verze GRASS GIS 7. Je
-implementován v jazyku Python a data která spravuje jsou ukládány buď
+implementován v jazyku Python a data která spravuje jsou ukládána buď
 v SQLite nebo v externí databázi PostgreSQL. Nejčastěji je však
 využívána nativní databáze SQLite.
 
-Časový model v GRASS je založen na Snapshot modelu. Ten se dělí na dvě
-úrovně - časovou a prostorovou složku. Prostorová složka je převzata
+Časová komponenta modelu v GRASS je založen na Snapshot modelu. Jak již bylo zmíněno,  dělí se na dvě úrovně: časovou a prostorovou složku. Prostorová složka je převzata
 ze standardního GRASSu, charakteristická vektorovými a rastrovými
-2D/3D mapami. Jednotlivé objekty s časovou charakteristikou jsou
-ukládány do časových datasetů. Ty pak přiřazují prostorové
-složce časové známky (timestamp).
+2D/3D mapami. Jednotlivé objekty s časovou charakteristikou jsou pak
+ukládány do časových datasetů, které jsou specifické přiřazením časové známky či časových intervalů. 
 
 \subsubsection{Koncept} 
 Koncept vychází z části již představené terminologie časoprostorových
-modelů. Je důležité porozumět základním charakteristikám času,
+modelů. Je důležité pochopit základní charakteristiky časových závislostí,
 granularity, časové topologii atd.
 
 \paragraph*{Okamžik a interval} charakterizují dva přístupy k časovému
@@ -1325,19 +1289,13 @@ modelu.  Časový okamžik charakterizuje jeden moment v čase, oproti
 tomu interval je definován počátečním  a koncovým okamžikem, nebo pouze
 počátečním časovým bodem a délkou intervalu.
 
-\paragraph*{Absolutní a relativní} jsou definovány v TGRASS obecně
-jako ve zmíněné terminologii viz \ref{subsec:terminologie} Terminologie.
+\paragraph*{Absolutní a relativní} jsou definovány v TGRASS obdobně jako v 
+ve zmíněné terminologii viz \ref{subsec:terminologie} Terminologie.
 
-\paragraph*{Granularita} - časová jemnost nebo časové 
-rozlišení je v TGRASS přepočítáno po každém zásahu do datasetu. Mezi
-vlastnosti granularity patří i vlastnost, kdy jednotlivé datasety
-obsahují mezery v čase (gaps) ve kterých nejsou dostupná data.
+\paragraph*{Granularita} - podrobnost časového rozlišení je v TGRASS přepočítána po každém zásahu do datasetu. Mezi vlastnosti granularity patří i vlastnost, kdy jednotlivé datasety obsahují mezery v čase (gaps) ve kterých nejsou dostupná data.
 
 
-\paragraph*{Časová topologie} představuje v problematice časových
-modelů analogický význam k obecnému termínu topologie. Topologie
-popisuje vztahy mezi jednotlivými časovými známkami jak pro časový
-interval tak pro časový okamžik. Jednotlivé charakteristiky byly
+\paragraph*{Časová topologie}  v problematice časové proměnné závislosti vychází obecně z principu obecné topologie. Časová topologie popisuje vztahy mezi jednotlivými časovými známkami jak pro časový interval tak pro časový okamžik. Jednotlivé charakteristiky byly
 odvozeny z booleovské algebry a aplikovány na časové známky.
 
 \paragraph*{Temporal sampling} vychází z časové topologie a určuje
@@ -1365,19 +1323,15 @@ Praktická část práce je dělena do dvou hlavních kapitol.
 \end{itemize}
 
 
-V části \textit{GRASS GIS modul} \ref{sec:grassgismodule} jsou popsány
-moduly, které vznikly v rámci této práce a jsou zde představeny jejich
-funkční vlastnosti, uživatelské rozhraní a možné vstupy/výstupy.
+V části jsou popsány moduly, které vznikly v rámci této práce a jsou zde představeny jejich funkční vlastnosti, uživatelská rozhraní a  vstupní/výstupní operace.
 
-V části druhé jsou definovány základní časoprostorové úlohy,
+V druhé části  jsou definovány základní časoprostorové úlohy,
 vyplývající z \textit{Temporal GRASS framework} s kombinací
-standardních GRASS nástrojů. K demonstraci je využito výstupů z
-vytvořených modulů.
+standardních GRASS nástrojů. Jejich funkčnost je ověřena  prezentací výstupů modulů vytvořených v rámci této práce. 
 
 \setcounter{footnote}{1}
 \section{Charakteristika dat}
-V současné době v rámci projektu pracovního názvu TeleMAS je v České
-Republice využíváno naměřených dat z MV spojů od telekomunikačního
+V současné době jsou v rámci  TeleMAS v ČR využíváno naměřených dat z MV spojů od telekomunikačního
 operátora T-Mobile, které jsou ukládány do databáze PostgreSQL.
 
 \subsection*{Data}  
@@ -1386,9 +1340,9 @@ Od dubna 2013 jsou sbírána data z 14 MV spojů na pilotním povodí
 projektu v Praze Letňanech a 7 spojů na území Praha Michle a
 okolí. Zároveň jsou k dispozici 3 referenční srážkoměry v okolí MV
 spojů v Letňanech.  V současné době se pracuje na dohodě o poskytování
-dat většího pokrytí území Prahy.
+dat většího pokrytí území hl.m. Prahy.
 
-\subsubsection*{ Charakteristika dat} Data jsou v současné době
+\subsubsection*{Charakteristika dat} Data jsou v současné době
 sbírána ze dvou referenčních vysílačů, které komunikují se spádovými
 vysílači příslušných oblastí.
 
@@ -1399,15 +1353,14 @@ vysílači příslušných oblastí.
         \label{fig:snapshot}
  \end{figure} 
  Časový krok sběru dat není konstantní. Jednotlivé hodnoty jsou
- zaznamenávány do databáze v rámci malých intervalů nahodile, což je způsobeno přenosovými rychlostmi dat a jejich  zápisem do databáze. Nehledě na skutečnost, že sběr dat probíhá  
- nahodile, systém garantuje pro jejich ukládání do databáze interval sběru 
+ zaznamenávány do databáze v rámci malých intervalů nahodile, což je způsobeno přenosovými rychlostmi dat a jejich  zápisem do databáze. Nehledě na skutečnost, že sběr dat probíhá  nahodile, systém garantuje pro jejich ukládání do databáze interval sběru 
  cca 15 (s).
 
 
 
 
 \subsection*{Databáze}  
-K záznamu naměřených dat využívá společnost T-Mobile databázi
+Pro záznam měřených hodnot využívá společnost T-Mobile databázi
 PostgreSQL. Záznam dat pro zmíněné lokality probíhá nepřetržitě od
 dubna 2013. Dostupná data pro potřeby vývoje GIS modulu jsou ve formě
 zálohy databáze (\textit{database dump}) časového rozsahu jednoho
@@ -1792,7 +1745,7 @@ typu (timestamp) ve formátu \emph{"YYYY-MM-DD H:M:S"}. V sekci
 informačního terminálu informaci o začátku a konci časového rozsahu
 datasetu pro zjištění možného maximálního intervalu.
 
-Parametr \texttt{lignore}, jehož vstupní hodnotou je soubor, definuje
+Vstupní hodnotou parametru \texttt{lignore}, je soubor definující
 jednotlivé spoje, které mají být z časových oken vynechány. Tato
 funkce je vytvořena k zamezení přidání chybných nebo cíleně
 vynechaných spojů do časových oken, která by tak ztrácela validitu pro
@@ -1801,8 +1754,7 @@ ve formátu datového typu (integer) odvozeného z databázové tabulky
 \texttt{link}.
 
 Další možností je načtení časových řad ze srážkoměrů pomocí parametru
-\texttt{rgauges}. Srážkoměrná data jsou načítána v časových řadách s
-hodnotou intenzity srážky v [$mm \cdot h^{-1}$]. Formát vstupního
+\texttt{rgauges}. Srážkoměrná data jsou načítána v časových řadách jejichž rozměr je intenzita srážky v [$mm \cdot h^{-1}$]. Struktura vstupního
 souboru je následující.
 
 
@@ -1823,10 +1775,10 @@ escapeinside=''}
 
 
 Vstupem do parametru \texttt{rgauges} je cílová složka se soubory,
-které jsou načteny dávkově. Jednotlivým srážkoměrům se vytvoří
-vektorová geometrie reprezentovaná body a ta se uloží do databáze
-PostgreSQL. Pro vytvoření časových oken z dat srážkoměrů slouží z
-podstaty věci stejné nastavení pro tvorbu časových oken jako pro
+které jsou načteny dávkově. Pro jednotlivé srážkoměry se vytvoří
+vektorová geometrie reprezentovaná body, která je uložena do databáze
+PostgreSQL. Pro vytvoření časových oken z dat srážkoměrů slouží 
+v zásadě identické nastavení jako pro tvorbu časových oken 
 intenzity srážek z MV spojů.
 
 
@@ -1835,7 +1787,7 @@ intenzity srážek z MV spojů.
 dvěma částmi. První zahrnuje interpolace bodů podél spojů a druhá
 plošné interpolace srážek.
 
-Nastavení výpočetního regionu je možné pomocí přednastavených hodnot
+Nastavení výpočetního regionu umožňují předem nastavené hodnoty
 modu\-lu \textit{r.mwprecip}. Při uživatelské volbě z GRASS modulu
 \textit{g.region} je možné tuto automatizaci vypnout přepínačem
 \texttt{-q}
@@ -1865,18 +1817,18 @@ hodnoty \emph{count} (počet). Hodnota \emph{count} rozloží rovnoměrně
 body podél MV spojů ve jejich zvoleném počtu dle nastavení parametru
 (\texttt{step}).
 
-K plošným interpolacím srážek je využito tří modulů ze stabilní verze
-GRASS. Interpolace je možné definovat jak uživatelsky tak automaticky
-(výchozí hodnoty jednotlivých modulů). Pro volbu interpolace s
+Pro plošné interpolace srážek je využito tří modulů ze stabilní verze
+GRASS. Interpolace lze definovat jak uživatelsky, tak i automatizovaně
+(výchozími hodnotami jednotlivých modulů). Pro volbu interpolace s
 výchozími hodnotami slouží parametr \texttt{interpolation}, který má
 volby \emph{rst}(regular spline with tension), \emph{idw} (invese
 distace weighting) a \emph{bspline} (bicubic spline tension).
 
-Druhou možností je uživatelské nastavení jednotlivých interpolací. K
-této možnosti slouží parametr \texttt{isettings}, do kterého je
+Druhou možností je uživatelské nastavení jednotlivých interpolací. Tomu
+ slouží parametr \texttt{isettings}, do kterého je
 vstupem textový řetězec ve formátu \textit{GRASS Python Scripting
   Library}.  Řetězce je možné konfigurovat ve wxGUI daných modulů a z
-výstupního terminálu jej zkopírovat. Řetězec s parametry a přepínači
+výstupního terminálu jej lze kopírovat. Řetězec s parametry a přepínači
 musí být uvozen do závorek ve formátu:
 
 \begin{figure}[h!]
@@ -1936,12 +1888,13 @@ grass.run_command( "v.surf.idw", input=points_nat,
 \paragraph*{Vstup} hlavní datový vstup do modulu představuje
 konektivita s externí databází PostgreSQL. V ní byl uložen zmíněný
 vzorek dat.  Modul dále podporuje dávkové načítání časových řad ze
-srážkoměru.
+srážkoměrů.
+
 \paragraph*{Výstup}
 Jedním ze základních výstupů jsou vypočtené srážkové intenzity uložené
 v databázi. Ty jsou uloženy jak v časovém kroku sběru dat, tak ve
-zvoleném kroku. Pro zvolený časový krok se vytvářejí tabulky
-představující jednotlivá "časová okna", která jsou vhodná pro následné
+zvoleném kroku. Pro zvolený časový krok jsou dále vytvářeny tabulky
+představující jednotlivá "časová okna", vhodná pro následné
 analýzy v GIS.
 
 \textbf{Rastrová data} reprezentují výsledek zvolené plošné
@@ -1955,7 +1908,7 @@ interpolovanými body podél MV spojů, ke kterým jsou pomocí modulu
 
 
 \subsection{Modul v.link.precip}
-Hlavní funkcionalita modulu spočívá ve zjednodušeném přístupu k
+Hlavní funkce  tohoto modulu je ve  zjednodušení přístupu k
 výsledkům z primárního modulu. Modul \textit{r.mwprecip} při vytváření
 časových oken zapisuje tabulky do databáze. Vektorová geometrie
 reprezentovaná liniemi (MV spoje) a body (interpolace) je v databázi
@@ -1963,7 +1916,7 @@ pro zamezení redundance dat v samostatné tabulce, nikoliv pro každé
 časové okno. Pro analýzy a další využití výsledků v GRASS GIS, je
 podstatné, aby bylo možné jednotlivá časová okna připojovat k
 vektorovému podkladu a s vhodnou tabulkou barev je zobrazovat.  Toho
-lze docílit sledem po sobě jdoucích volání jednotlivých modulů v
+lze docílit sledem po sobě jdoucích volání jednotlivých modulů z
 GRASS. Pro jednoduchost byl vytvořen modul \textit{v.link.precip},
 který to umožňuje v uživatelsky přístupné formě.
 
@@ -1976,7 +1929,7 @@ okno. Při dalším připojení jiného časového okna je bývalá připojená
 tabulka odpojena a k té samé vektorové vrstvě se připojí nová. Modul
 je tvořen dvěma GUI záložkami \textit{Required} a \textit{Optional}.
 
-První záložka \textit{Required} obsahuje jen povinné parametry.
+První záložka \textit{Required} obsahuje pouze povinné parametry.
 Parametr \texttt{schema} označuje pracovní schéma, ve kterém jsou
 uloženy výsledky pro zobrazení. Druhým parametrem je časová známka
 (timestamp) časového okna, které chceme připojit k vektorovému
@@ -2000,7 +1953,7 @@ parametry.  Přepínače a parametry jsou definovány:
   funkce je vhodná k přípravě dat pro časoprostorové analýzy.
 \item[-p] vypíše do výstupové řádky hodnoty připojené atributové
   tabulky.
-\item[-r] smaže dočasné soubory z pracovního schéma.
+\item[-r] vymaže dočasné soubory z pracovního schématu.
 \end{description}
 
 
@@ -2384,7 +2337,7 @@ například často používanému formátu CSV.
  známky registrovány jako absolutní bod v čase. Pro některé analýzy
  bude zapotřebí pracovat s intervaly. Modul \textit{t.snap} vytvoří
  automaticky intervaly ve bodle granularity datasetu. Modul nemá kromě
- \texttt{input} a \texttt{type} žádné zvláštní parametry.
+ \texttt{input} a \texttt{type} žádné další parametry.
 
 
 
@@ -2571,11 +2524,9 @@ t.vect.observe.strds input=srazkomery strds=idw_gama\
 
 \paragraph*{Suma z plošných interpolací}
 Modulem \emph{r.mwprecip} jsou vygenerována minutová časová okna z
-jednoho dne. Z oken byly interpolovány plošné srážkové intenzity
-metodou RST a IDW. Cílem analýzy je vytvořit rastr, který bude
-charakterizovat sumu srážek z intervalu 3 hodin z obou interpolačních
-metod. Odečtením rastrů od sebe získáme objem vody, který představuje
-objemovou odchylku za čas.
+jednoho dne. Z oken jsou dále interpolovány plošné srážkové intenzity
+metodou RST a IDW. Cílem analýzy je vytvořit rastr, který by
+charakterizoval srážkové úhrny z intervalu 3 hodin. Odečtením rastrů od sebe je získán objem vody, který představuje objemovou v daném časovém intervalu.
 
 
 
@@ -2802,7 +2753,7 @@ externí databáze, ve které jsou uložena hrubá data z mikrovlnných
 vysílačů. Výstupem modulu jsou srážková data vhodná jak pro standardní
 funkce GRASS tak pro časoprostorové analýzy. Vypočtená data jsou
 dostupná jak ve formě časových oken, tak ve formě vhodné pro export
-pro jiná využití. Výstupní formát modulu podporující \textit{Temopral GRASS
+pro jiná využití. Výstupní formát modulu podporující \textit{Temoporal GRASS
   framework} umožňuje větší prostor při analýze časových řad srážek,
 včetně dávkového exportu ve vhodném formátu pro vstup do
 srážko-odtokových modelů.
