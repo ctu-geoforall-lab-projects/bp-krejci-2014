@@ -252,6 +252,9 @@ morecomment=[l]{\#},
 %%% ML: text a hlavne zavery z neho plynouci jsi z neceho cerpal
 %%% (predpokladam), potom chybi ale citaci, ty zavery je potreba o
 %%% neco oprit
+%%% MK: citace doplneny, prvni odstavec je z vlastnich poznatku. 
+%%% Celkove uvod je hodne z vlastnich poznatku ziskanych v ramci bp.
+%%% (vseobecnej prehled)
 
 Enviromentální procesy jsou nedílnou součástí historického vývoje na
 Zemi a vždy přitahovaly pozornost lidské populace. Obvykle jsou tyto
@@ -270,7 +273,8 @@ komplexnost charakteristické značnými objemy dat, které je nutné
 spravovat a analyzovat. V~posle\-dních desetiletích tuto práci výrazně
 usnadňují nástroje geografických informačních systémů (GIS),
 které díky své dostupnosti a možnostem nacházejí nezastupitelné místo
-ve správě a analýze geografických dat. Jednotlivé nástroje GIS zpravidla nebývají
+ve správě a analýze geografických dat, \cite{coppock}.
+Jednotlivé nástroje GIS zpravidla nebývají
 úzce zaměřené na specifické problematiky, ale jejich spíše obecný
 charakter umožňuje návaznost a možné propojení s vlastními aplikacemi.
 Tím ulehčuje vytvoření nástrojů pro řešení komplexních systémů.
@@ -279,11 +283,11 @@ Tím ulehčuje vytvoření nástrojů pro řešení komplexních systémů.
 
 %%% ML: bez citaci, viz predchozi odstavec
 Modelování dešťových srážek je jednou z významných disciplín z oboru
-enviromentálního modelování. Jestliže se poohlédneme do počátku
+enviromentálního modelování. Jestliže se poohlédneme do 
 minulého století, tak právě meteorologie byla jednou z prvních
 disciplín, která odpovídala dnešního chápání pojmu enviromentálního
-modelování. Odhad a rekonstrukce srážek na zemském povrchu jsou
-důležitou fází matematického modelování srážko-odtokových
+modelování, \cite{wpc}, \cite{neuman}. Odhad a rekonstrukce srážek na 
+zemském povrchu jsou důležitou fází matematického modelování srážko-odtokových
 procesů. Zájem odborné veřejnosti i rozhodovacích složek v různých
 sektorech národního hospodářství roste i díky stále hlouběji se
 projevujícímu dopadu klimatických změn. Oproti rozvoji fyzikálně
@@ -292,13 +296,13 @@ v posledních desetiletích takřka zaznamenán. Pracovníci
 hydrometeorologických služeb naráží při zpřesňování předpovědí odtoku
 či vývoje počasí především na problém nízkého pokrytí srážkoměry a tím
 i nedostatečné dostupnosti časoprostorového rozložení srážkových dat v
-povodněmi ohrožených oblastí městských aglomerací. Pokrokové
+povodněmi ohrožených oblastí městských aglomerací, \cite{slavicek}. Pokrokové
 %%% ML: pouzivat zkratka MV, ale nevysvetlena
-operativní metody určování srážek metodou MV spojů proto představují
+operativní metody určování srážek metodou MV (mikrovlnných) spojů proto představují
 perspektivní využití především v hydrologii urbanizovaných povodí, kde
 (díky hustotě MV sítí) mohou sloužit jako podklad vodohospodářských
 dispečinků operativního řízení při řešení kalamitních povodňových
-situací.
+situací, \cite{countryw}.
 
 
 
@@ -327,7 +331,8 @@ společnostmi T-Mobile a Veolia ČR a nově i s Ericsson Research
 Práce je systematicky rozdělena na část teoretickou a praktickou. V
 teoretické části je kladen důraz na představení základních pojmů,
 principů a definic, tvořících východiska pro část praktickou. Ta
-obsahuje popis funkčnosti nástrojů, které vznikly v rámci této práce a jejich využití ve spojení s ostatními GIS nástroji.
+obsahuje popis funkčnosti nástrojů, které vznikly v rámci této práce a
+ jejich využití ve spojení s ostatními GIS nástroji.
 
  
 
@@ -2843,6 +2848,7 @@ Vzhledem k tomu, že se jedná o vývoj SW prostředku jako jednoho z modulů ko
 	
 	\acro{ITU}{International Telecommunication Union}
 	
+	\acro{MV}{mikrovlnny}
 	\acro{OGC}{Open Geospatial Consortium}
 	\acro{OSGeo}{Open Source Geospatial Foundation} 
 	\acro{ORDBMS}{Object-Relational Database Management System}
@@ -2875,17 +2881,32 @@ Vzhledem k tomu, že se jedná o vývoj SW prostředku jako jednoho z modulů ko
 
 
 
-\bibitem{radar_meterology}
-RAGHAVAN, S. \textit {Radar meteorology}.
-31 Oct 2003. Boston: Kluwer Academic Publishers, 2003, 549 s. ISBN 14-020-1604-2. 
+%\bibitem{radar_meterology}
+%RAGHAVAN, S. \textit {Radar meteorology}.
+%31 Oct 2003. Boston: Kluwer Academic Publishers, 2003, 549 s. ISBN 14-020-1604-2. 
+
+
+\bibitem{coppock}
+COPPOCK J.T.,  RHIND D.W. \textit{The History of GIS}
+In Maguire D.J., Goodchild M.F., and Rhind D.W. (editors) Geographical Information Systems : Principles and Applications, 1991, Volume 1
+
+\bibitem{neuman}
+NEBEKER, Frederik. \textit{Calculating the weather: meteorology in the 20th century}
+ San Diego: Academic Press, c1995, vii, 255 p. ISBN 01-251-5175-6. 
+
+\bibitem{slavicek}
+SLAVÍČEK, Marek. \textit{Zkoumání srážkoodtokových vztahů v urbanizovaném územi}
+ Praha, 2003. Disertační práce Ph.D. ČVUT.
+
+
+\bibitem{wpc}
+Hydrometeorological Prediction Center \textit{ A Brief History of the Hydrometeorological Prediction Center}
+[cit. 2014-04-14] URL: \textless\url{ http://www.hpc.ncep.noaa.gov/html/WPC_history.pdf}
+
 
 \bibitem{flash_floods}
 SENE, Kevin. \textit {Flash floods forecasting and warning}.
 2013. Dordrecht: Springer, 2013. ISBN 978-940-0751-644. 
-
-\bibitem{vanguard}
-GREEN, McLaughlin a Milton LOMASK. \textit {Vanguard - A history: succes - AND AFTER http://history.nasa.gov/SP-4202/toc2.html}.
-[online]. [cit. 2014-04-03]. URL:\textless\url {http://history.nasa.gov/SP-4202/chap12.html}
 
 \bibitem{sejong}
 STRANGEWAYS, Ian.  \textit {Precipitation: theory, measurement and distribution}.
@@ -2894,28 +2915,28 @@ New York: Cambridge University Press, 2007, x, 290 p. ISBN 978-052-1851-176.
 \bibitem{wmo}
 World Meteorological Organization. \textit{Guide to meteorological instruments and methods of observation CHAPTER 6}. WMO-No. 8. Geneva, Switzerland: World Meteorological Organization, 2008. ISBN 978-926-3100-085. 
 
-\bibitem{wren}
-ASIT K. BISWAS {Notes and Records of the Royal Society of London: The Automatic Rain-Gauge of Sir Christopher Wren} UK: The Royal Society, 1967. ISSN 00359149. 
+%\bibitem{wren}
+%ASIT K. BISWAS {Notes and Records of the Royal Society of London: The Automatic Rain-Gauge of Sir Christopher Wren} UK: The Royal Society, 1967. ISSN 00359149. 
 
-\bibitem{sevruk}
-SEVRUK, B.\textit{Niederschlag als Wasserkreislauf-element. Theorie und Praxis der Niederschlagsmessung.} 
-Zurich-Nitra: Eigenverlag ETH Zurich,  2004, 200 s, ISBN 80–969343–7–6.
+%\bibitem{sevruk}
+%SEVRUK, B.\textit{Niederschlag als Wasserkreislauf-element. Theorie und Praxis der Niederschlagsmessung.} 
+%Zurich-Nitra: Eigenverlag ETH Zurich,  2004, 200 s, ISBN 80–969343–7–6.
 
 \bibitem{chmu_navod}
 Česká republika, \textit{Návod pro pozorovatele meteorologických stanic.}
-In: Metodický předpis č. 13. Ostrava, 2013. URL:\textless\url {http://old.chmi.cz/OS/pdf/metodicky_navod/MP.pdf}
+In: Metodický předpis č. 13. Ostrava, 2013. URL:\textless {\url{http://old.chmi.cz/OS/pdf/metodicky_navod/MP.pdf}}
 
-\bibitem{doppler}
-DOVIAK, R. J.; D. S. Zrnic. \textit{Doppler Radar and Weather Observations (2nd ed.)}
-(1993), San Diego CA: Academic Press, ISBN 0-12-221420-X.
+%\bibitem{doppler}
+%DOVIAK, R. J.; D. S. Zrnic. \textit{Doppler Radar and Weather Observations (2nd ed.)}
+%(1993), San Diego CA: Academic Press, ISBN 0-12-221420-X.
 
 \bibitem{kohout}
 KOHOUT, Jan. \textit{Zpracování a prezentace srážkových dat měřících stanic meteorologického radaru pro ČHMÚ. Informační technologie pro praxi.}
 Ostrava: TANGER, 2003. s. 101-103. ISBN 80-85988-90-9.
 
 \bibitem{radar_chmu}
-KRÁČMAR, Jan. Český hydrometeorologický ústav. \textit{Meteorologické radiolokátory.} ČHMÚ.
-[online]. 1997-2011 [cit. 2014-04-06]. URL:\textless\url {http://portal.chmi.cz/files/portal/docs/meteo/rad/info_radar/index.html}
+KRÁČMAR, Jan. Český hydrometeorologický ústav. \textit{Meteorologické radiolokátory.} 
+ČHMÚ. [online]. 1997-2011 [cit. 2014-04-06]. URL:\textless \url{http://portal.chmi.cz/files/portal/docs/meteo/rad/info_radar/index.html}
 
 \bibitem{itu}
 RECOMMENDATION ITU-R P.838-3. \textit{Specific attenuation model for rain for use in prediction methods}. 
