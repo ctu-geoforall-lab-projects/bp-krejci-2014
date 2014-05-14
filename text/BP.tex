@@ -256,6 +256,7 @@ morecomment=[l]{\#},
 %%% MK: citace doplneny, prvni odstavec je z vlastnich poznatku. 
 %%% Celkove uvod je hodne z vlastnich poznatku ziskanych v ramci bp.
 %%% (vseobecnej prehled). Muze to tak byt?
+%%% ML: OK (jenom jsem odstranil carky pred citaci)
 
 Enviromentální procesy jsou nedílnou součástí historického vývoje na
 Zemi a vždy přitahovaly pozornost lidské populace. Obvykle jsou tyto
@@ -274,7 +275,7 @@ komplexnost charakteristické značnými objemy dat, které je nutné
 spravovat a analyzovat. V~posle\-dních desetiletích tuto práci výrazně
 usnadňují nástroje geografických informačních systémů (GIS),
 které díky své dostupnosti a možnostem nacházejí nezastupitelné místo
-ve správě a analýze geografických dat, \cite{coppock}.
+ve správě a analýze geografických dat \cite{coppock}.
 Jednotlivé nástroje GIS zpravidla nebývají
 úzce zaměřené na specifické problematiky, ale jejich spíše obecný
 charakter umožňuje návaznost a možné propojení s vlastními aplikacemi.
@@ -283,11 +284,12 @@ Tím ulehčuje vytvoření nástrojů pro řešení komplexních systémů.
 \subsection*{Motivace}
 
 %%% ML: bez citaci, viz predchozi odstavec
+%%% ML: OK
 Modelování dešťových srážek je jednou z významných disciplín z oboru
 enviromentálního modelování. Jestliže se poohlédneme do 
 minulého století, tak právě meteorologie byla jednou z prvních
 disciplín, která odpovídala dnešního chápání pojmu enviromentálního
-modelování, \cite{wpc}, \cite{neuman}. Odhad a rekonstrukce srážek na 
+modelování \cite{wpc, neuman}. Odhad a rekonstrukce srážek na 
 zemském povrchu jsou důležitou fází matematického modelování srážko-odtokových
 procesů. Zájem odborné veřejnosti i rozhodovacích složek v různých
 sektorech národního hospodářství roste i díky stále hlouběji se
@@ -297,13 +299,14 @@ v posledních desetiletích takřka zaznamenán. Pracovníci
 hydrometeorologických služeb naráží při zpřesňování předpovědí odtoku
 či vývoje počasí především na problém nízkého pokrytí srážkoměry a tím
 i nedostatečné dostupnosti časoprostorového rozložení srážkových dat v
-povodněmi ohrožených oblastí městských aglomerací, \cite{slavicek}. Pokrokové
+povodněmi ohrožených oblastí městských aglomerací \cite{slavicek}. Pokrokové
 %%% ML: pouzivat zkratka MV, ale nevysvetlena
+%%% ML: OK
 operativní metody určování srážek metodou MV (mikrovlnných) spojů proto představují
 perspektivní využití především v hydrologii urbanizovaných povodí, kde
 (díky hustotě MV sítí) mohou sloužit jako podklad vodohospodářských
 dispečinků operativního řízení při řešení kalamitních povodňových
-situací, \cite{countryw}.
+situací \cite{countryw}.
 
 
 
@@ -388,7 +391,7 @@ kapalném nebo pevném stavu, které padají z oblohy či kondenzují přímo
 na zemském povrchu. Srážky mohou mít formu sněhových vloček - pevné
 skupenství, nebo formu dešťových kapek - kapalné skupenství. Množství
 srážek bývá udáváno v milimetrech kapalné vody spadlé na zemský povrch
-za časový interval, \cite{wmo}.
+za časový interval \cite{wmo}.
 
 \subsection{Současné nástroje a metody }
 \label{subsec:11}
@@ -406,7 +409,7 @@ Radarová měření díky plošnému pokrytí a dobrému prostorovému i
 meteorologii. Poskytují přehled v reálném čase o pohybu a struktuře
 srážkových systémů, umožňují velmi krátkodobou předpověď v řádech
 minut až hodin a z ní plynoucí varování před nebezpečnými
-meteorologickými jevy, \cite{radar_chmu}.
+meteorologickými jevy \cite{radar_chmu}.
 
 \paragraph*{Srážková data} se měří obvykle v intervalu 5 -15
 minut. Horizontální rozlišení dat bývá 2×2 km, vertikální 1 km. Toto
@@ -416,7 +419,7 @@ jsou zobrazovány v barevné stupnici intenzit srážek.
 
 \paragraph*{Rozsah} meteorologického radaru bývá okolo 250 km. Hodnoty
 naměřené radarem mohou být použity pro odhad okamžitých intenzit
-srážek do vzdálenosti přibližně 150 km od radaru, \cite{kohout}.
+srážek do vzdálenosti přibližně 150 km od radaru \cite{kohout}.
 
 \subsubsection{Dálkový průzkum země}
 Je důležité zmínit možnost získávání informací o srážkách pomocí
@@ -575,7 +578,7 @@ empiricky vykazuje chyby méně než 10\emph{\%}. Na nízkých
 frekvencích okolo 10 GHz přesahuje chyby 20\emph{\%}. Přesnost
 určování srážek výše zmíněným modelem dle ITU P.838 je při těchto
 nízkých frekvencích mnohem více náchylná na rozložení
-kapek   \acs{DSD}, \cite{dsd}.
+kapek   \acs{DSD} \cite{dsd}.
 
 
 \paragraph*{Nejistoty modelu} založeného na vztahu \eqref{eq:Ar} jsou
@@ -585,13 +588,13 @@ rozložení kapek   \acs{DSD} podél MV spoje.
 \paragraph*{DSD} způsobují nejistoty při určení výsledného útlumu
 signálu \emph{$\gamma_{A_{m}} $}. Tyto chyby jsou zapříčiněny
 integrací jednotlivých úseků tlumících signál na linii MV
-spoje, \cite{mv1}.
+spoje \cite{mv1}.
 
 \paragraph*{Mokré antény}jsou značným zdrojem nejistot. Na vysílačích
 nejsou antény nijak kryty a při dešti moknou. Na anténách se vytváří
 tenký film vody, který ovlivňuje výsledný útlum signálu. Vytvoření
 modelu pro eliminaci tohoto problému se do značné míry podařilo
-(Schleiss et al., 2013), \cite{wetat}. Součástí výzkumu, pod který tato
+(Schleiss et al., 2013) \cite{wetat}. Součástí výzkumu, pod který tato
 práce částečně spadá, bude instalace krytu na antény, který by mohl
 zamezit jejich moknutí. Tato možnost doposud nebyla součástí žádné
 vědecké práce.
@@ -706,7 +709,7 @@ srážko-odtokového modelu a umožnilo lépe modelovat členitá povodí ve vel
 Možnosti využití MV spojů v oblasti meteorologie nekončí u odhadu
 srážek. Pomocí MV lze také detekovat pevné částice, sníh, či vodní
 páry. Tyto možnosti by mohly napomoci k lepšímu pochopení jevů
-spojených s přívalovými srážkami, \cite{mv2}.
+spojených s přívalovými srážkami \cite{mv2}.
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.8\textwidth]{./img/srazky/opensignalmap.png}
@@ -764,7 +767,7 @@ využívala pro územní správu a plánování. Během 90. let se postupně na
 vývoji projektu podíleli americké federální agentury, univerzity a
 soukromé společnosti. Hlavní vývoj projektu byl řízen z výzkumných
 laboratoří (USA-CERL\footnote{\url{http://www.cecer.army.mil/}})
-Champaign, Illinois, \cite{grasshist}.  Mezníkem historie GRASSu byl
+Champaign, Illinois \cite{grasshist}.  Mezníkem historie GRASSu byl
 rok 1995, ve kterém se laboratoře CERL zřekli tohoto projektu, čehož
 následkem bylo přesun vývoje na akademickou půdu. Rok před začátkem
 nového tisíciletí byla vydána první verze pod licencí GNU GPL, pod
@@ -911,7 +914,7 @@ jako \textit{SourceForge}\footnote{\url{http://sourceforge.net/}},
 systému a rozsáhlá dokumentace je především dílem komunity
 dobrovolníků, díky kterým je PostgreSQL schopen konkurovat i
 proprietárním databázovým systémům. Tomu také mimo jiné přispívá fakt,
-že se řadí mezi multiplatformní systémy, \cite{postgre}.
+že se řadí mezi multiplatformní systémy \cite{postgre}.
 
 \begin{figure}[h!]
     \centering
@@ -1072,7 +1075,7 @@ specifická jedním typem geometrie (bod, linie, polygon atd.) a
 referenčním prostorovým systémem. Souřadnice jsou ukládány ve
 standardu    \acs{WKT}. Společně s metadaty  geometrického prvku jsou
 ukládány ve sloupci \texttt{geometry}, který má informaci o
-geometrickém typu o referenčním systému, \cite{postgis}.
+geometrickém typu o referenčním systému \cite{postgis}.
 
 \begin{figure}[h!]
     \centering
