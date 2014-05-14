@@ -346,50 +346,61 @@ obsahuje popis funkčnosti nástrojů, které vznikly v rámci této práce a
 \chapter*{Teoretická
   část}\stepcounter{chapter}\addcontentsline{toc}{chapter}{Teoretická
   část}
-Tato kapitola je základním teoretickým východiskem k praktické části práce a je zaměřena na problematiku MV spojů a na nástroje využité k implementaci modulu Python v prostředí GRASS GIS. Popsány jsou základní principy a charakteristiky jednotlivých problémových okruhů, které jsou směřovány především  k aplikaci v praktické části práce.
+
+Tato kapitola je základním teoretickým východiskem k praktické části
+práce dotýkající se problematiky MV spojů a použitých technologií pro
+vývoj vlastních GIS nástrojů.
+%%% ML: tato veta (viz nize) zni divne, uplne bych ji vynechal...
+Popsány jsou základní principy a charakteristiky jednotlivých
+problémových okruhů, které jsou směřovány především k aplikaci v
+praktické části práce.
 
 
-
-\paragraph*{Geografické informační systémy} mimo jiné umožňují poměrně efektivně
-managment zpracování sráž\-kových dat. Jejich funkce jsou vhodné jak pro správu
-dat, tak pro jejich analýzu a vizualizaci. Jednotlivé metody měření
-srážek jsou specifické svojí datovou charakteristikou z prostorového a
-časového pohledu.
+%%% ML: efektivne "mamagement", preformuluj to tak, aby to znelo vice
+%%% cesky
+\paragraph*{Geografické informační systémy} mimo jiné umožňují poměrně
+efektivně managment zpracování sráž\-kových dat. Jejich funkce jsou
+vhodné jak pro správu dat, tak pro jejich analýzu a
+vizualizaci. Jednotlivé metody měření srážek jsou specifické svojí
+datovou charakteristikou jak z prostorového tak časového pohledu.
 
 Metody měření srážek ze své podstaty využití směřují ke kombinaci
 plošné a bodové informace, které jsou svoji charakteristikou
 rozdílné. Srážkoměry produkují bodová data v různých časových
 intervalech, výstupem z radaru jsou snímky představující plošnou
+%%% ML: satelitni druzice zni divne...
 intenzitu radarových srážek a satelitní družice produkují kromě odhadů
-srážek i dalších specifické druhy dat. Společnou mají tyto metody
-vlastnost, že je třeba jejich výstupy co nejjednodušeji spravovat a
-analyzovat v rámci primárního a sekundárního zpracování. GIS nástroje
-splňují tyto požadavky v dostatečném rozsahu a částečně eliminují
-potřebu vývoje specifických solitérních systémů, které by vycházely ze
-stejných základů.
+%%% ML: jake druhy dat?
+srážek i další specifické druhy dat. Společnou je pro tyto metody
+potřeba výstupy co nejjednodušeji spravovat a analyzovat jak v rámci
+%%% ML: pojmy primarni a sekundarni zpracovani nejsou vysvetleny
+primárního tak sekundá\-rního zpracování. GIS nástroje splňují tyto
+požadavky v dostatečném rozsahu a~částečně eliminují potřebu vývoje
+specifických solitérních systémů, které by vychá\-zely ze stejných
+základů.
 
 Charakteristikou moderních GIS je především velká disponibilita
-dílčích funkcí, jejichž hlavní přínos spočívá  v možnosti vzájemného propojení v
-rámci rozsáhlých analýz. Pokud dostupné funkce konkrétního GIS nástroje
-k řešení daných problematik nedostačují, bývá obecně u většiny těchto
-systémů možnost vývoje vlastních aplikací pomocí knihovny
-  \acs{API}. Díky tomu je v dnešní době umožněno vyvíjet specifické
-funkce pro GIS, bez nutnosti vývoje rozsáhlých softwarových produktů
-vytvářejících základy pro tato nadstavbová rozšíření.
+dílčích funkcí, jejichž hlavní přínos spočívá v možnosti vzájemného
+propojení v rámci rozsáhlých analýz. Pokud dostupné funkce konkrétního
+GIS nástroje k řešení daných problematik nedostačují, bývá obecně u
+většiny těchto systémů možnost vývoje vlastních aplikací postavených
+na knihovnách GIS. Díky tomu je v dnešní době umožněno vyvíjet
+specifické funkce pro GIS, bez nutnosti vývoje rozsáhlých softwarových
+produktů vytvářejících základy pro tato nadstavbová rozšíření.
 
 
 
 \section{Úvod do měření dešťových srážek}
-Úvod této kapitol má za cíl přiblížit současné metody měření dešťových
+Úvod této kapitoly má za cíl přiblížit současné metody měření dešťových
 srážek, které se liší především v přesnosti, časové variabilitě a
 vhodnosti výstupu pro další využití. Úvod do problematiky měření
 srážek poukazuje na klady a zápory metody odhadu srážek pomocí MV spojů.
 
 
-\paragraph*{Dešťové srážky}jsou definovány jako produkt vodní páry v
-kapalném nebo pevném stavu, které padají z oblohy či kondenzují přímo
+\paragraph*{Dešťové srážky} jsou definovány jako produkt vodní páry v
+kapalném nebo pevném stavu, které padají z oblohy či se kondenzují přímo
 na zemském povrchu. Srážky mohou mít formu sněhových vloček - pevné
-skupenství, nebo formu dešťových kapek - kapalné skupenství. Množství
+skupenství nebo formu dešťových kapek - kapalné skupenství. Množství
 srážek bývá udáváno v milimetrech kapalné vody spadlé na zemský povrch
 za časový interval \cite{wmo}.
 
@@ -406,7 +417,7 @@ podotknout, že produktem srážkoměrů jsou bodová srážkoměrná data.
 \subsubsection{Meteorologický radar}
 Radarová měření díky plošnému pokrytí a dobrému prostorovému i
 časovému rozlišení dat jsou vhodná pro synoptickou a leteckou
-meteorologii. Poskytují přehled v reálném čase o pohybu a struktuře
+meteorologii. Poskytují přehled v~reálném čase o pohybu a struktuře
 srážkových systémů, umožňují velmi krátkodobou předpověď v řádech
 minut až hodin a z ní plynoucí varování před nebezpečnými
 meteorologickými jevy \cite{radar_chmu}.
@@ -421,19 +432,21 @@ jsou zobrazovány v barevné stupnici intenzit srážek.
 naměřené radarem mohou být použity pro odhad okamžitých intenzit
 srážek do vzdálenosti přibližně 150 km od radaru \cite{kohout}.
 
-\subsubsection{Dálkový průzkum země}
+\subsubsection{Dálkový průzkum Země}
 Je důležité zmínit možnost získávání informací o srážkách pomocí
   \acs{DPZ}. Tento obor z hlediska meteorologie zaujímá zcela jiný
-náhled na měření srážek oproti předchozím metodám   \acs{DPZ} v
+náhled na měření srážek oproti předchozím metodám. \acs{DPZ} v
 meteorologii umožňuje globální pohled na meteorologické jevy. Makro
 náhled na enviromentální jevy, např. cyklóny, tropické bouře, tornáda
 či pohyb mraků, je podstatný pro sledování a pochopení globálního
 vývoje klimatu. Do této kategorie spadá pozorování pomocí družic na
-oběžných drahách a leteckých prostředků pohybujících se v zemské
+oběžných drahách a~leteckých prostředků pohybujících se v zemské
 atmosféře.
 
 
 \subsection{Mikrovlnné spoje}
+
+%%% ML: Zkratku ML pouzivas uz mnohem drive v textu
 Mikrovlnné (MV) spoje jsou rádiové systémy široce využívané v oblasti
 telekomunikací (zejména mobilními operátory) k bezdrátovému propojení
 dvou vzdálených stanovišť. MV spoje operují na frekvencích, kde
@@ -447,7 +460,8 @@ zefektivnit jak zpracování dat, tak jejich následnou správu.  Vhodná
 vizualizace těchto dat je důležitým předpokladem pro vylepšení
 stávajících modelů pro převod útlumu signálu MV spojů na srážkové
 intenzity i pro další využití těchto dat.
- 
+
+\newpage %%% ML: kvuli poznamce pod carou, pri zmene strankovani nutno opravit
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.7\textwidth]{./img/srazky/microwave_link.png}
@@ -461,33 +475,33 @@ srážek. Specifická je především reprezentací hodnoty srážkové
 intenzity v liniové podobě. MV spoje (linie), umožňují odhadovat pouze
 průměrnou intenzitu srážky v celé délce spoje a z toho plynou jisté
 meze této metody. Na hustě osídlených územích bývá pravidlem, že i
-hustota MV spojů je veliká a v takovém případě tento zápor částečně
+hustota MV spojů je veliká. V tomto případě je tento zápor částečně
 potlačen (Evropa). Oproti tomu, při využití MV spojů mimo osídlené
 lokality, je hustota poněkud menší a to limituje možnosti
-využití. Příkladem může být transformace srážek do povodí: uvažme např.
-spoj, který vede kolmo přes cílovou lokalitu. V případě že lokalita
-zasahuje do desetiny délky spoje, je pravděpodobnost toho, že srážka
-spadla právě do lokality velmi nízká a to především díky
-variabilitě intenzit srážek. Oproti tomu transformace srážek do povodí,
-kde spoj bude ležet v celém území povodí je ideální.
+využití. Příkladem může být transformace srážek do povodí: uvažme
+např.  spoj, který vede kolmo přes cílovou lokalitu. V případě že
+lokalita zasahuje do desetiny délky spoje, je pravděpodobnost toho, že
+srážka spadla právě do lokality velmi nízká a to především díky
+variabilitě intenzit srážek. Oproti tomu transformace srážek do
+povodí, kde spoj bude ležet v celém území povodí je ideální.
 
-Obecně jsou data z MV spojů měřeny v časovém kroku $\Delta t=15$ (s),
-ve výšce cca 70 (m). Topologie sítě představuje vždy jeden
-referenční vysílač na které jsou napojeny dílčí vysílače. Na jednom
+Obecně jsou data z MV spojů měřeny v časovém kroku $\Delta t=15$ s,
+ve výšce cca 70~m. Topologie sítě představuje vždy jeden
+referenční vysílač, na který jsou napojeny dílčí vysílače. Na jednom
 spoji jsou instalované zpravidla dvě antény. Je tedy k dispozici
 dvoje měření pro stejný prostorový úsek. V ideálním případě jsou dvě
 antény na stejném prostorovém úseku různých konfigurací (frekvence,
-polarizace) což umožňuje specifické analýzy.
+polarizace), což umožňuje specifické analýzy.
 
     
 \subsubsection{Princip}
-Mikrovlny jsou elektromagnetické vlny o délce v rozpětí od 1 (mm) do 1
-(m). Tomu odpovídá frekvence 0.3 až 300 (GHz). V oblasti
+Mikrovlny jsou elektromagnetické vlny o délce v rozpětí od 1 mm do 1
+m. Tomu odpovídá frekvence 0.3 až 300 GHz. V oblasti
 telekomunikací především mobilních operátorů se tohoto typu vln
-využívá ke komunikaci mezi jednotlivými vysílači a vysílači s
+využívá ke komunikaci mezi jednotlivými vysílači a~vysílači s
 mobilními telefony. Pro rekonstrukci srážek se využívá prvního
 případu, tedy komunikaci mezi vysílači. Tyto mikrovlnné spoje pracují
-na frekvencích v rozsahu 24-39 (GHz) (Praha). Hlavním zdrojem útlumu
+na frekvencích v~roz\-sahu 24-39 GHz (Praha). Hlavním zdrojem útlumu
 tohoto frekvenčního rozsahu jsou dešťové kapky. Jednotlivé spoje se
 vždy skládají ze dvou vysílačů. Vysílač neustále odesílá MV vlny,
 které jsou nositelem informace zajímavé především pro telekomunikační
@@ -495,16 +509,16 @@ operátory. Vedlejším produktem této komunikace je údaj o intenzitě
 signálu, jehož základní jednotkou je decibel (dB). Zaznamenat hodnotu
 intenzity odeslaného signálu a druhým přijímačem přijatého signálu je
 možné bez dalších instalací hardware. Pomocí matematického
-modelu dle ITU-R\cite{itu} lze vypočítat průměrné srážky na pomyslné
+modelu dle ITU-R \cite{itu} lze vypočítat průměrné srážky na pomyslné
 linii MV spoje.
 
 \subsubsection{Výpočet srážek}
 Vysílané hodnoty intenzit signálu \emph{tx} jednotlivých MV spojů jsou
 konstantní. Jednotlivé spoje jsou charakterizovány hodnotami:
 \begin{itemize}
-\item \textbf{Frekvence} \emph{f} rozsahu 24-39 (GHz)
-\item \textbf{Polarizace} signálu ve vertikální \emph{V} či horizontální poloze \emph{H}
-\item \textbf{Vzdálenost} \emph{L} která je vypočtená v daném souřadnicovém systému v kilometrech (km)
+\item \textbf{frekvence} \emph{f} rozsahu 24-39 (GHz),
+\item \textbf{polarizace} signálu ve vertikální \emph{V} či horizontální poloze \emph{H},
+\item \textbf{vzdálenost} \emph{L} která je vypočtená v daném souřadnicovém systému v kilometrech (km).
 \end{itemize}
 Přijaté hodnoty intenzit \emph{rx} jsou nositelem informace o útlumu
 signálu. Rozdílem vyslané \emph{tx} a přijaté \emph{tx} intenzity
@@ -512,12 +526,12 @@ dostaneme výsledný útlum \emph{$A_{r}$} v jednotkách decibel (dB).
 \begin{equation}
  A_{r}=tx-rx
 \end{equation}
-Dalším krokem je určení \emph{baseline}, tedy hodnoty \emph{ $A_{0}$ },
+Dalším krokem je určení \emph{baseline}, tedy hodnoty \emph{ $A_{0}$},
  která představuje konstantní útlum intenzity signálu MV spoje bez
-vlivu útlumu signálu dešťovými kapkami. Tato konstanta je v jednotkách
-decibel (dB). Konstanta \emph{$A_{w}$ } je hodnota
+vlivu útlumu signálu dešťovými kapkami. Tato konstanta je udávána v jednotkách
+decibel (dB). Konstanta \emph{$A_{w}$} je hodnota
 nadměrného útlumu způsobená mokrou anténou. Z toho plyne výsledný
-útlum \emph{$A_{m}$ }(dB).
+útlum \emph{$A_{m}$}~(dB).
 \begin{equation}\label{eq:Ar}
  A_{m}=A_{r}-A_{0}-A_{w}
 \end{equation}
@@ -527,13 +541,12 @@ Výsledný útlum je třeba převést na specifický útlum \emph{$\gamma_{R}
 \gamma_{R} =\frac{A_{m}}{L}
 \end{equation}
 Dle doporučení ITU P.838 \cite{itu} je specifický útlum
-\emph{$\gamma_{R} $} a intenzita srážek \emph{R} ($mm \cdot h^{-1}$)ve vztahu
+\emph{$\gamma_{R} $} a intenzita srážek \emph{R} ($mm \cdot h^{-1}$) ve vztahu
 \begin{equation}\label{eq:gamma}
 \gamma_{R}=kR^{\alpha}
 \end{equation}
 Koeficienty \emph{k} a \emph{$\alpha$} jsou určeny jako funkce
-frekvencí \emph{f}(GHz) v rozsahu od 1 do 1000 (GHz), z následujících
-rovnic.
+frekvencí \emph{f} v rozsahu od 1 do 1000 GHz, z následujících rovnic.
 
 \begin{equation}
 log_{10}k=\sum_{j=1}^{4} a_{j} exp\left [ -\left ( \frac{log_{10}f-b_{j}}{c_{j}} \right )^{2} \right ]+m {_{k}}log_{10}f+c_{k}
@@ -544,11 +557,11 @@ log_{10}k=\sum_{j=1}^{4} a_{j} exp\left [ -\left ( \frac{log_{10}f-b_{j}}{c_{j}}
 \end{equation} 
 kde:
 
-\emph{f}: frekvence (GHz)
+\emph{f}: frekvence (GHz),
 
-\emph{$\alpha$}:  dle polarizace \emph{$\alpha_{H}$} nebo \emph{$\alpha_{V}$}
+\emph{$\alpha$}:  dle polarizace \emph{$\alpha_{H}$} nebo \emph{$\alpha_{V}$},
 
-\emph{k}: dle polarizace  \emph{$k_{H}$} nebo \emph{$k_{V}$}
+\emph{k}: dle polarizace  \emph{$k_{H}$} nebo \emph{$k_{V}$}.
 
 {\raggedright{}Hodnoty pro  konstanty  $c_{k}$, $c_{\alpha}$, $m_{k}$, $m_{\alpha }$  jsou uvedeny v dokumentu 
   ITU-R \cite{itu}.}  \bigskip
@@ -568,7 +581,7 @@ Metoda odhadu srážek je založena na předpokladu, že dešťové kapky
 tlumí intenzitu signálu. Dešťové kapky nabývají mnoha variací
 velikosti a tvarů. Signál může být tlumen různými objekty počínaje vodní
 párou, přes mrholení až po velké dešťové
-kapky či srážky pevného skupenství. Vztah mezi intenzitou srážek \emph{R} a útlumem
+kapky či srážky pevného skupenství. Vztah mezi intenzitou srážek \emph{R} a~útlumem
 \emph{$\gamma_{R} $} je funkcí frekvence, polarizace a rozložení
 dešťových kapek   \acs{DSD}.
 
@@ -599,15 +612,16 @@ práce částečně spadá, bude instalace krytu na antény, který by mohl
 zamezit jejich moknutí. Tato možnost doposud nebyla součástí žádné
 vědecké práce.
 
-\paragraph*{Určení baseline } \emph{ $A_{0}$ } je jedním z důležitých
+\paragraph*{Určení baseline } \emph{$A_{0}$} je jedním z důležitých
 a nejvíce ovlivňujících činitelů při výpočtu výsledné srážky
 \emph{R}. Tato hodnota se zcela mění v čase a je závislá na
+%%% ML: pojem scintilace by mozna bylo vhodne vysvetlit (napr. poznamka pod carou)
 koncentraci vodní páry v atmosféře a scintilaci. Útlum vysílaných a
-přijímaných vln ovlivňuje také teplota prostředí jímž vlna
+přijímaných vln ovlivňuje také teplota prostředí, jímž vlna
 prochází. Dalším činitelem, který může způsobovat kolísání signálu, je
 vítr.  Pro určování baseline se využívá různých metod, například
    \acs{HMM} \cite{comparsinmv}, Retrieval Algorithms
-\cite{countryw} ad. Metody Určení baseline se dají klasifikovat na
+\cite{countryw} atd. Metody určení baseline se dají klasifikovat na
 automatizované a uživatelské. Automatizovaným určováním baseline se
 myslí především algoritmy, které jsou schopny rozlišovat dešťové a suché
 období. Některé tyto algoritmy využívají statistických prostředků a
@@ -618,13 +632,13 @@ jiné např. určují období srážek pomocí dat ze srážkoměrů
 \subsection{Porovnání metod}
 Tato podkapitola je zaměřena na shrnutí vlastností jednotlivých metod
 a jejich porovnání s metodou MV spojů. Hodnocení jednotlivých metod je
-založeno na kritériích, která jsou pro měření srážek typická.
+založeno na kritériích, která jsou pro měření srážek typická:
 \begin{itemize}
-\item\textbf{Časová spojitost}
-\item\textbf{Interval sběru dat}  
-\item\textbf{Prostorové rozlišení}
-\item\textbf{Disponibilita jednotlivých metod}
-\item\textbf{Chyby}
+\item\textbf{časová spojitost},
+\item\textbf{interval sběru dat},
+\item\textbf{prostorové rozlišení},
+\item\textbf{disponibilita jednotlivých metod},
+\item\textbf{chyby}.
 \end{itemize}
 V současné době jsou v oblasti hydrometeorologie požadována velmi
 přesná data ve vysokém prostorovém a časovém rozlišení. Tyto nároky
@@ -640,36 +654,36 @@ kritérium schopnosti vytvoření spojité časové řady až v minutových
 intervalech. Hlavním záporem těchto sítí je nedostatečné prostorové pokrytí. 
 Jelikož datovým výstupem těchto sítí jsou bodová data, je zde
 problém v nedostatečné hustotě pokrytí srážkoměry, která prakticky
-nemůže být nikdy odstraněna. Prostorová variabilita  srážek,
+nemůže být nikdy odstraněna. Prostorová variabilita  srážek
  má za následek zachycení či naopak nezaznamenání lokálních maxim, které jsou ve
 výsledné plošné rekonstrukci zdrojem nezanedbatelných chyb. Měření
 moderními srážkoměry může být při správné volbě umístění velmi
 přesné. Toho se v současnosti využívá jako referenčního indikátoru
-srážek pro kalibraci radarů, nebo k určování baseline při odhadu
-srážek MV spoji, viz (\ref{subsec:chyby}, Baseline).
+srážek pro kalibraci radarů nebo k určování baseline při odhadu
+srážek MV spoji, viz kap. \ref{subsec:chyby}.
 
 \paragraph*{Radary}
 jsou současnou nejvíce využívanou metodou, jejímž produktem je plošné vyjádření srážek.
 Skutečnost, že se intenzity srážek mohou během intervalu 
-pozorování (5-15 min.) řádově měnit, naznačuje nespolehlivost jejich předpovědi 
-v případě bleskových povodní. Mezi kladné vlastnosti radaru
+pozorování (5-15 min) řádově měnit, naznačuje nespolehlivost jejich předpovědi 
+v~pří\-padě bleskových povodní. Mezi kladné vlastnosti radaru
 bezesporu patří mimo klasické rozlišení v horizontálním směru (plošné)
-také i měření odrazivosti vertikálních profilů. Tuto vlastnost v
-rozlišení 1 km pro vertikální a 2 km pro horizontální ostatní metody
+také měření odrazivosti vertikálních profilů. Tuto vlastnost v
+rozlišení 1 km pro vertikální a 2 km pro horizontální směr ostatní metody
 neumožňují. Prostorové rozlišení je dále možno pozorovat jen pomocí
-některých meteorologických družic, které skenují Zemi pod sklonem
+některých meteorologických družic, které snímají povrch Země pod sklonem
 jiným než 90 stupňů. Jejich rozlišení je ale v desítkách jednotek
 horší. Pro zpřesnění radarových srážek pro potřeby hydrologie je
 potřeba adjustace radarů na pozemní srážkoměry. Obecně vzato je
 výsledné plošné rozlišení radaru pro srážko-odtokové modely
  ve městech nedostačující.
 
-\paragraph*{Družice} se z výše zmíněnými metodami nedají zcela
+\paragraph*{Družice} se s výše zmíněnými metodami nedají zcela
 korektně porovnávat. Družice na oběžných drahách slouží především k
-náhledu na chování klimatu. Snímky těchto družic jsou nositelem
+náhledu na chování klimatu. Snímky pořízené z těchto družic jsou nositelem
 informací v rozlišení, reflektující spíše obecnou informativní
 podstatu, např. pohybu front, vývoje cyklónu, globální přehled vývoje
-počasí, či dlouhodobě - klimatu.  Jednou z výhod rekonstrukce srážek
+počasí či dlouhodobě - klimatu.  Jednou z výhod rekonstrukce srážek
 pomocí metody infračerveného pásma je poměrně vysoká frekvence záznamu
 snímků v intervalu 15 minut na jakémkoliv místě na Zemi. Při porovnání
 s pozemním meteo radarem je slabost této metody ve špatném a u
@@ -684,7 +698,7 @@ komerčních telekomunikačních spojů v posledním desetiletí. Budoucnost
 této metody je také v pokrytí osídlených oblastí, kde je právě
 přesnost odhadu srážek nejvíce vyžadována. Pokrytí s vývojem mobilních
 technologií se stále zlepšuje. Data jsou sbírána ve velmi malých
-intervalech běžně po 15 (s). Při využití rozsáhlých sítí (Praha - stovky
+intervalech běžně po 15 sekundách. Při využití rozsáhlých sítí (Praha - stovky
 MV spojů), umožňuje tato metoda relevantní časoprostorovou informaci o
 srážce.
  
@@ -696,18 +710,18 @@ oblasti.
 
 Jedním z velkých potenciálů této metody je zlepšení přesnosti
 prostorové informace o srážkách ve vysokém rozlišení. To žádné jiné
-metody odhadu srážek neumožňují. Výsledky stude \cite{mv2} poukazují na
+metody odhadu srážek neumožňují. Výsledky studie \cite{mv2} poukazují na
 možnosti částečného nahrazení současných metod nebo možnosti
 vzájemného se doplňování jednotlivých metod, což by patrně vedlo k
 zlepšení přesnosti měření srážek.
 
 Jelikož tyto MV spoje operují těsně nad zemským povrchem, vypočtené
-intenzity by mohly být pomocí nástrojů    \acs{GIS}s velkou přesností
+intenzity by mohly být pomocí nástrojů \acs{GIS} velkou přesností
 přiřazovány do jednotlivých dílčích povodí. To by zpřesnilo vstupy do
 srážko-odtokového modelu a umožnilo lépe modelovat členitá povodí ve velkých městských aglomerací.
 
 Možnosti využití MV spojů v oblasti meteorologie nekončí u odhadu
-srážek. Pomocí MV lze také detekovat pevné částice, sníh, či vodní
+srážek. Pomocí MV lze také detekovat pevné částice, sníh či vodní
 páry. Tyto možnosti by mohly napomoci k lepšímu pochopení jevů
 spojených s přívalovými srážkami \cite{mv2}.
 \begin{figure}[h!]
@@ -719,10 +733,10 @@ spojených s přívalovými srážkami \cite{mv2}.
 
 Velkým potenciálem je takřka nulová finanční náročnost pro sběr
 dat. Telekomunikační sítě mobilních operátorů jsou v hustěji
-osídlených částech světa běžné. V rychle se rozvíjejících zemích
+osídlených částech světa běžné. V~rychle se rozvíjejících zemích
 třetího světa se v průběhu času stanou telekomunikační sítě
 samozřejmostí a využití metody odhadu srážek by se mohlo stát více
-dostupnou oproti budování radarů, pozemních stanic, či sítě
+dostupnou oproti budování radarů, pozemních stanic či sítě
 srážkoměrů.
  
 \setcounter{footnote}{1}
