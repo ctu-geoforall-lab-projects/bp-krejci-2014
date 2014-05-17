@@ -1108,50 +1108,62 @@ plyne že model nepodporuje geometrickou topologii. OGC definuje
 jednotlivé operace mezi standardem SQL a prostorovými daty. Souřadnice
 jednotlivých objektů jsou ukládány v tabulkách, kde každá tabulka je
 specifická jedním typem geometrie (bod, linie, polygon atd.) a
-referenčním prostorovým systémem. Souřadnice jsou ukládány ve
-standardu    \acs{WKT}. Společně s metadaty  geometrického prvku jsou
-ukládány ve sloupci \texttt{geometry}, který má informaci o
-geometrickém typu o referenčním systému \cite{postgis}.
+referenčním prostorovým systémem \cite{postgis}. 
+%%% ML: WKT rozhodne, tu vetu bych klidne vynechal
+%Souřadnice jsou ukládány ve standardu    \acs{WKT}.
+%%% ML: tahle veta je zmatecna, prozatim zakomentovano
+% Společně s metadaty  geometrického prvku jsou
+% ukládány ve sloupci \texttt{geometry}, který má informaci o
+% geometrickém typu o referenčním systému.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\textwidth]{./img/implementace/ogc1.jpg}
     \caption[Model PostGIS]{\centering Jednotlivé základní geometrické objekty 
-    jsou agregovány do složitějších tzv. Multi Obejct.     \footnotemark}
+    jsou agregovány do složitějších tzv.~multi objektů.     \footnotemark}
  \end{figure}   
+%%% ML: odkaz pod carou je potom duplictni, poznamky pod carou se daji sdilet
 \footnotetext{\url{http://www.opengeospatial.org/standards/sfs}}
 
-\paragraph*{Souřadnicový systém} \texttt{SPATIAL\_REF\_SYS} je v
-PostGIS definován v samostatných tabulkách. Obecně známé referenční
-systémy jsou již předdefinované, ostatní se dají dodatečně definovat a
-upravovat.
+\paragraph*{Souřadnicový systém} je v PostGIS definován v tabulce
+\texttt{SPATIAL\_REF\_SYS}. Obecně známé referenční souřadnicové systémy jsou již
+předdefinované, ostatní se dají dodatečně definovat a upravovat.
 
-\begin{verbatim}
-CREATE TABLE spatial_ref_sys (
-  srid       INTEGER NOT NULL PRIMARY KEY,
-  auth_name  VARCHAR(256),
-  auth_srid  INTEGER,
-  srtext     VARCHAR(2048),
-  proj4text  VARCHAR(2048)
-)
-\end{verbatim}
+%%% ML: tohle bych uplne vynechal...
 
-Souřadnicové systémy a projekce jsou charakterizovány unikátním kódem
-\texttt{   \acs{SRID}}, který je všeobecným standardem v GIS. Pro
-konverze mezi jednotlivými systémy slouží funkce
-\texttt{ST\_Transform}.\footnote{\url{http://postgis.org/docs/ST_Transform.html}}
+% \begin{verbatim}
+% CREATE TABLE spatial_ref_sys (
+%   srid       INTEGER NOT NULL PRIMARY KEY,
+%   auth_name  VARCHAR(256),
+%   auth_srid  INTEGER,
+%   srtext     VARCHAR(2048),
+%   proj4text  VARCHAR(2048)
+% )
+% \end{verbatim}
+
+Souřadnicové systémy jsou charakterizovány unikátním kódem
+\texttt{\acs{SRID}}.
+%%% ML: standardem?
+%, který je všeobecným standardem v GIS.
+Pro konverze mezi jednotlivými systémy slouží funkce
+\texttt{ST\_Transform}.
+%%% ML: zbytecne
+% \footnote{\url{http://postgis.org/docs/ST_Transform.html}}.
 
 
-\paragraph*{Geometrie} (\texttt{geometry}) je datovým typem, který
-představuje geometrickou složku objektu.  Charakteristika tohoto
-datového typu je dána standardem \textit{Simple Features} rovněž ve formátu
-   \acs{WKT}.  Sloupec s geometrií je definován pomocí parametrů, které
+\paragraph*{Geometrie} je datovým typem (\texttt{geometry}), který
+představuje geometrickou složku popisu geoprvků.  Charakteristika tohoto
+datového typu je dána standardem OGC \textit{Simple Features}.
+%%% ML: data jsou ukladana v binarni forme (WKB ci odvozene) nikoliv ve WKT
+%%% rovněž ve formátu \acs{WKT}.
+Sloupec s geometrií je definován pomocí parametrů, které
 nastavují obecná a geometrická specifika: název, typ, souřadnicový
-systém ad.
+systém apod.
 
-Pro definování typu objektu jsou k vytvořeny funkce \texttt{ST\_Make*
-}, kde \texttt{*} jsou níže uvedené typy standardu \textit{Simple
-  Features}:
+Pro definování typu geoprvku jsou k vytvořeny funkce
+\texttt{ST\_Make*}, kde \texttt{*} jsou níže uvedené typy standardu
+%%% ML: todo - vysvetlit zkratku WKT
+OGC \textit{Simple Features} (příklad v textové reprezentaci~WKT):
 
 
 \begin{verbatim}
@@ -1164,11 +1176,13 @@ MULTIPOLYGON(((0 0,4 0,4 4),(1 1,2 1,2 2)), ((-1 -1,-1 -2,-2 -2,)))
 GEOMETRYCOLLECTIONM(POINTM(2 3),LINESTRINGM(2 3,3 4))                
 \end{verbatim}
 
+%%% ML: podobne jako PostgreSQL, kapitola mohla byt vyrazne KRATSI,
+%%% ale nechme to tak jako je...
 \paragraph*{Funkce} jsou v této nadstavbě zaměřeny na operace s
 geometrií. Veškeré funkce mají prefix \texttt{ST\_} (\textit{spatial
-  type}). Část z nich je funkčností analogicky odvozena z nástrojů
+  type}). Část z nich je funkčností analogicky odvozena z~nástrojů
 GIS. Funkce jsou podle svého účelu roztříděny do kategorií. Níže jsou
-demonstrovány kategorie a nejzákladnější funkce.
+demonstrovány jejich kategorie a nejzákladnější funkce.
 \begin{description}
 \item[Měřičské] funkce jsou typické pro prostorové výpočty: plocha
   \texttt{ST\_Area}, vzdálenost \texttt{ST\_distance}, vzdálenost na
@@ -1176,19 +1190,20 @@ demonstrovány kategorie a nejzákladnější funkce.
 
 \item[Geometrické konstruktory] slouží k vytváření geometrie podle
   \textit{Simple Features}, např: bodu \texttt{ST\_MakePoint},
-  linie \texttt{ST\_MakeLine}, polygonu \texttt{ST\_MakePolygon} a
-  dalších.
+  linie \texttt{ST\_MakeLine}, polygonu \texttt{ST\_MakePolygon} a~dalších.
 
-\item[Analytické] funkce jsou v PostGIS implementovány dle standartu
-  SQL-MM vyplý\-vající z ISO99, standard o multimédiích 
+\item[Analytické] funkce jsou v PostGIS implementovány dle standardu
+  ISO SQL-MM vyplý\-vající z ISO99, standard o multimédiích 
   \cite{sqlmm}. V této kategorii jsou funkce typické pro prostředí
   GIS. Mezi ně například patří: buffer \texttt{ST\_Buffer}, validita
   geometrie \texttt{ST\_IsValid} nebo sjednocení \texttt{ST\_Union}.
 
-\item[Konverze] umožňují transformace mezi referenčními systémy. Dále
-  pak umožňují oboustrannou konverzi mezi binárními a textovými
-  formáty. Například do  \acs{WKT}:
+%%% ML: nejde o referencni (souradnicove) systemy ale formu zapisu geometrie
+\item[Konverze] umožňují převod mezi různými formami zápisu geometrie (binárními a~textovými
+  formáty). Například do \acs{WKT}:
 
+  %%% ML: tohle neni ciste WKT (tak jak se o nem mluvi ve OGC SF), ale
+  %%% o rozsirenou formu PostGISu
 \begin{verbatim}
 SELECT  ST_AsEWKT (geom) FROM link
 .......
@@ -1199,7 +1214,7 @@ SELECT  ST_AsEWKT (geom) FROM link
 
 \item[Agregační] funkce PostGIS jsou v principu stejné jako ve
   standardu SQL (průměr, max, min) s tím rozdílem, že jsou zaměřeny na
-  geometrická data. Příkladem je funkce pro sjednocení
+  prostorová data. Příkladem je funkce pro sjednocení
   \texttt{ST\_Union}.
 \end{description}
 
