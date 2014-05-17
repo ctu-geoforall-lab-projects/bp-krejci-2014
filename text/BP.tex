@@ -750,48 +750,53 @@ srážkoměrů.
 \subsection{Systém GRASS GIS}
 \textbf{GRASS} (Geographic Resources Analysis Support System) GIS
 \footnote{\url{http://grass.osgeo.org/}} je multiplatformní
-geografický systém, šiřitelný pod všeobecně veřejnou licencí    \acs{GNU
+geografický systém, šiřitelný pod všeobecně veřejnou licencí \acs{GNU
   GPL}. Systém je primárně určený pro správu 2D/3D rastrových a
 vektorových geodat, jejich zpracování, analýzu a vizualizaci. K těmto
-účelům knihovna GRASS GIS disponuje několika stovkami modulů, které
-jsou současní stabilních verzí. Mimo to je volně dostupných mnoho
-jiných modulů, které jsou vyvíjeny uživateli v rámci GRASS
-\textit{AddOns} a mohou se stát součástí stabilních vývojových verzí
-GRASS.
+účelům systém GRASS GIS disponuje několika stovkami nástrojů,
+tzv. \uv{modulů}.  Mimo to je volně dostupných mnoho dalších modulů,
+které jsou vyvíjeny uživateli v rámci GRASS \textit{AddOns}.
+%%% ML: tohle bych klidne vynechal
+% a~mohou se
+%stát součástí stabilních vývojových verzí GRASS.
 
 GRASS GIS je na poli GIS software zcela unikátní a to především díky
+%%% ML: pravda je, ze velka cast kodu pochazi z USA CERL, ktery system
+%%% vyvijel do poloviny 90.let..., OK zminujes to dal v textu, tedy OK
 svému rozsahu, čemuž vděčí především dobrovolným vývojářům z komunity
 GRASS po celém světě, kteří tento dlouholetý projekt vyvíjí. Důkazem jeho
 kvality jsou uživatelé jako např.
-\textit{NOAA}\footnote{\url{http://www.noaa.gov/}} či
-\textit{NASA}\footnote{\url{http://www.nasa.gov/}}.
+%%% ML: tady bych odkazy klidne vynechal, prilis mnoho poznamek pod carou,...
+\textit{NOAA} či %\footnote{\url{http://www.noaa.gov/}}
+\textit{NASA}.%\footnote{\url{http://www.nasa.gov/}}.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.3\textwidth]{./img/grass/grasslogo.png}
-    \caption[Logo GRASS]{\centering Logo GRASS GIS vydané symbolicky k 30. výročí od založení projektu. \footnotemark }
+    \caption[Logo GRASS]{\centering Logo GRASS GIS vydané symbolicky k 30. výročí od založení projektu \footnotemark. }
  \end{figure}   
-\footnotetext{\url{http://grass.osgeo.org/uploads/images/30-years-grass-gis-logo-black-300px.png}}
+\footnotetext{Autorka úpravy oficiálního loga: Žofije Marcela Zetková, \url{http://grass.osgeo.org/uploads/images/30-years-grass-gis-logo-black-300px.png}}
 
 
 \subsubsection*{Historie}
+%%% ML: moc nerozumim slovu "stala" v teto souvislosti...
 Vývojová linie GRASS GIS je stálá od poloviny osmdesátých let minulého
-století, kde byl vyvinut primárně pro americkou armádu, která jej
+století. Tehdy byl vyvíjen primárně pro americkou armádu, která jej
 využívala pro územní správu a plánování. Během 90. let se postupně na
 vývoji projektu podíleli americké federální agentury, univerzity a
 soukromé společnosti. Hlavní vývoj projektu byl řízen z výzkumných
 laboratoří (USA-CERL\footnote{\url{http://www.cecer.army.mil/}})
-Champaign, Illinois \cite{grasshist}.  Mezníkem historie GRASSu byl
+Champaign, Illinois \cite{grasshist}.  Mezníkem historie systému GRASS byl
 rok 1995, ve kterém se laboratoře CERL zřekli tohoto projektu, čehož
 následkem bylo přesun vývoje na akademickou půdu. Rok před začátkem
 nového tisíciletí byla vydána první verze pod licencí GNU GPL, pod
-kterou je vyvíjen dodnes. V letech 2008 se GRASS GIS zařadil do nadace
+kterou je vyvíjen dodnes. V letech 2008 se GRASS GIS zařadil pod hlavičku nadace
    \acs{OSGeo}, pod kterou spadá mnoho významných volně šiřitelných
-geografických
-projektů.\footnote{\url{http://www.osgeo.org/}}. Letošním rokem
+GIS
+projektů \footnote{\url{http://www.osgeo.org/}}. Letošním rokem
 oslavil GRASS dlouhých 30 let vývoje, které zaštítil vydáním verze
-\textit{GRASS GIS 7.0.0
-  beta1}.\footnote{\url{http://grass.osgeo.org/news/32/56/GRASS-GIS-7-0-0-beta1/}}
+%%% Minuly rok v cervenci byla vydana verze 6.4.3
+\textit{GRASS GIS 6.4.3} \footnote{\url{http://grass.osgeo.org/news/28/15/Stable-GRASS-GIS-6-4-3-released/}}.
 
 \subsubsection*{Základní terminologické pojmy}
 \label{subsubsec:grassterminologie}
@@ -803,24 +808,26 @@ zapotřebí definovat trojici nastavení. V grafickém rozhraní GRASS
    \acs{wxGUI} je implementován průvodce nastavením jednotlivých kroků:
 
 \begin{enumerate}
-\item \textbf{Database} v prostředí GRASS je stanovena proměnou
-  \texttt{\$GISBASE}. Jedná se o standardní adresář umístěný na disku,
-  který je pojmenován \textit{grassdata}. V tomto adresáři jsou
-  uložena veškerá uživatelská data mimo externě připojené databáze
-  (\textit{např. PostgreSQL, MySQL }).
+\item \textbf{Databanka} v prostředí GRASS je stanovena proměnou
+  \texttt{\$GISBASE}. Jedná se o standardní adresář umístěný na disku.
+%%% ML: adresar se muze jmenovat jakkoliv
+%  který je pojmenován \textit{grassdata}.
+  V tomto adresáři jsou uložena veškerá uživatelská data s vyjímkou
+  externě připojených databází (\textit{např. PostgreSQL, MySQL}).
 
 \item \textbf{Lokace} je adresář umístěný v souborové
   databance. Lokace je definována proměnou \texttt{\$LOCATION\_NAME} a
-  obsahuje data, která nesou informace o souřadnicovém systému a
+  obsahuje data, která nesou informace o souřadni\-covém systému a
   velikosti zájmového území. Pro nastavení lokace je v grafickém
   rozhraní průvodce nastavením lokace (\textit{Location wizard}), kde
-  je možné zvolit souřadnicový systém pomocí možností:
+  je možné zvolit souřadnicový systém na základě několika možností:
+%%% ML: pozor na termin "projekce" v cestine neznamena to co v anglictine
 \begin{itemize}
-\item seznam jednotlivých obecně známých projekcí 
-\item zadáním unikátního kódu z databáze    \acs{EPSG}. \footnote{\url{http://www.epsg-registry.org/}}
-\item načtením externích georeferencovaných dat
-\item definováním parametrů projekce s využitím pravidel PROJ.4\footnote{\url{http://trac.osgeo.org/proj/}}
-\item pomocí \ac{WKT} souboru \emph{.prj}, který je součástí shapefile jako doplňkový.
+\item seznam jednotlivých obecně známých kartografických zobrazení, 
+\item zadáním unikátního kódu z databáze    \acs{EPSG}. \footnote{\url{http://www.epsg-registry.org/}},
+\item načtením externích georeferencovaných dat,
+\item definováním parametrů souřadnicového systému s využitím pravidel\newline PROJ.4\footnote{\url{http://trac.osgeo.org/proj/}},
+\item pomocí \ac{WKT} souboru \emph{.prj}, který je součástí formátu Esri Shapefile.
 \end{itemize}
 
 \item \textbf{Mapset} definovaný proměnou \texttt{\$MAPSET}
@@ -839,13 +846,13 @@ pochází z doby, kdy výpočetní technika byla v počátcích a šetrné
 využití operační paměti a procesorového výkonu bylo nezbytností. Jádro
 systému je napsáno procedurálně v jazyce C a k němu jsou integrovány
 jednotlivé funkcionality pomocí \acs{API}, které je v jazyce C a
-Python. Funkcionality - moduly jsou logicky rozděleny do kategorií,
+Python. Funkcionality - moduly jsou logicky rozděleny do kategorií
 podle účelu jejich využití:
 \begin{table}[h]
 \centering
 \begin{tabular}{|cccccccc|}
 \hline
-db. & d. & g. & i. & ps. & r3. & r. & v. \\
+{\tt db.} & {\tt d.} & {\tt g.} & {\tt i.} & {\tt ps.} & {\tt r3.} & {\tt r.} & {\tt v.} \\
 \hline \hline
 database & display & general & imagery & postscript & 3D raster & raster & vector \\ \hline
 \end{tabular}
@@ -856,10 +863,10 @@ database & display & general & imagery & postscript & 3D raster & raster & vecto
 
 Nyní také nově v \textit{GRASS 7} moduly \textit{Temporal GRASS} s
 prefixem \texttt{t.} Jednotlivé moduly se spouštějí pomocí příkazové
-řádky a nebo v grafickém rozhraní \textit{wxGUI} . Rozhraní modulů
+řádky a nebo v grafickém rozhraní \textit{wxGUI}. Rozhraní modulů
 umožňuje uživatelský vstup pomocí přepínačů a parametrů
 např. \texttt{r.mwprecip -p database=letnany}. Parametry se dělí na
-povinné (\texttt{required}) a volitelné (\texttt{optional}). V
+povinné (\textit{required}) a~volitelné (\textit{optional}). V
 modulech jsou také zařazeny globální přepínače, které jsou pro všechny moduly
 definovány jednotně. Mezi nejčastěji využívané patří \texttt{--help},
 který do terminálu vypíše veškeré informace o vstupních parametrech
@@ -867,21 +874,21 @@ včetně jejich popisu.
 
 \subsubsection*{GRASS a Python}
 GRASS GIS v současné době podporuje dva přístupy k volání funkcionalit
-GRASSu z prostředí Python.
+systému GRASS z programovacího jazyka Python.
 \paragraph*{Python Scripting Library} je variantou API, které tvoří
-Python podporu pro funkcionality GRASS. Princip této knihovny spočívá
+Python podporu pro funkcionality systému GRASS. Princip této knihovny spočívá
 v zadávání příkazu v analogickém formátu, jako je formát pro spouštění
-jednotlivých modulů přímo v GRASS.
+jednotlivých modulů systému GRASS přímo z příkazové řádky.
 \paragraph*{pyGRASS} je objektově orientovaná API knihovna. Výhoda
-tohoto API spočívá ve možnosti přiřazování výsledků z volaných GRASS
-funkcionalit v podobě objektů. Tento přístup více odpovídá současným trendům.
+tohoto API spočívá v možnosti přiřazování výsledků z volaných GRASS
+funkcionalit v podobě objektů. Tento přístup více odpovídá současným trendům a zároveň objektovému návrhu programovacího jazyka Python jako takového.
 
-\subsubsection*{Plošné interpolace v GRASS }
+\subsubsection*{Plošné interpolace v systému GRASS }
 \label{sec:plostneinterpolace}
 Plošné interpolace slouží k odhadu hodnot v prostoru, který je vymezen 
 body se známými hodnotami. Nutnost odhadovat hodnoty má logickou návaznost na
 problematiku sběru dat.  Podobně tomu je i v oblasti
-hydrometeorologie viz (\ref{subsec:11} Současné nástroje a metody).
+hydrometeorologie viz kap.~\ref{subsec:11}.
  Možnou variantou interpolací v GIS
 systémech je datový vstup reprezentovaný bodovým polem (vektor) a
 výstup v podobě rastru (grid). Interpolace se také využívají k
@@ -894,9 +901,9 @@ Deterministické metody jsou charakteristické tím, že pro odhad
 neznámých využívají neměnnou matematickou funkci.  Oproti tomu
 geostaticické metody, využívají pro odhad sofistikovanějších statistických metod.
 
-V systému GRASS GIS je nativně implementována čtveřice typů
+V systému GRASS GIS je nativně implementována několik typů
 interpolací, pro které jsou vstupem bodová vektorová data. Všechny
-čtyři se řadí do skupiny deterministických metod.
+níže zmíněné algoritmy se řadí do skupiny deterministických metod.
 
 Do geostatistických metod bychom mohli zařadit metodu Kriging, která
 je v GRASS GIS podporována externě ze statistického systému \textit{R
@@ -907,12 +914,13 @@ je v GRASS GIS podporována externě ze statistického systému \textit{R
 \begin{tabular}{|ll|}
 \hline
 interpolace & GRASS modul \\ \hline\hline
-Bilinear spline & \multirow{2}{*}{v.surf.bspline} \\
+Bilinear spline & \multirow{2}{*}{{\tt v.surf.bspline}} \\
 Bicubic spline &  \\
-Regularized spline tension & v.surf.rst \\
-IDW & v.surf.idw \\ \hline
+Regularized spline tension & {\tt v.surf.rst} \\
+%%% ML: rozepsat zkratku...
+IDW & {\tt v.surf.idw} \\ \hline
 \end{tabular}
-\caption{Přehled vhodných metod v GRASS GIS}
+\caption{Přehled modulů pro interpolaci v GRASS GIS}
 \label{my-label}
 \end{table}
 
@@ -921,14 +929,16 @@ IDW & v.surf.idw \\ \hline
 PostgreSQL\footnote{\url{http://www.postgresql.org/}} je open-source
 projekt, který vznikl v roce 1986. Tento projekt je dnes celosvětově
 uznávaný, čehož důkazem je využití systému ve světových projektech
-jako \textit{SourceForge}\footnote{\url{http://sourceforge.net/}},
-\textit{Debian}\footnote{\url{http://www.debian.org/}} či \textit{Open
+%%% ML: vynechal byl odkaz na mene dulezetite
+jako \textit{SourceForge}, %\footnote{\url{http://sourceforge.net/}},
+\textit{Debian} či %\footnote{\url{http://www.debian.org/}}
+\textit{Open
   Street
   Map}\footnote{\url{http://www.openstreetmap.org\#map=15/49.9503/14.5322}}. Kvalita
 systému a rozsáhlá dokumentace je především dílem komunity
 dobrovolníků, díky kterým je PostgreSQL schopen konkurovat i
-proprietárním databázovým systémům. Tomu také mimo jiné přispívá fakt,
-že se řadí mezi multiplatformní systémy \cite{postgre}.
+proprietárním databázovým systémům jako je například Oracle. Tomu také mimo jiné přispívá fakt,
+že se řadí mezi multiplatformní systémy~\cite{postgre}.
 
 \begin{figure}[h!]
     \centering
@@ -937,16 +947,18 @@ proprietárním databázovým systémům. Tomu také mimo jiné přispívá fakt
  \end{figure}   
 
 
-\subsubsection{Princip databáze PostgreSQL}
+ %%% ML: tato kapitola mohla byt vyrazne KRATSI, ale nech to tak jak
+ %%% to je ted...
+\subsubsection{Základní charakteristika}
 \paragraph*{Architektura}
-Databáze PostgreSQL funguje na principu klient-server, kde
-každý klient je obsluhován samostatným procesem, který se stará o
-zpracování dotazu. Tedy \textit{host} server se skládá ze dvou částí:
-\textit{postmaster} a \textit{postgres}.  Když klient odešle požadavek
-k přístupu k databázi na server, \textit{postmaster} na serveru založí
-nový proces \textit{postgres} a ten přímo komunikuje s klientem. Z
-toho plyne že proces \textit{postmaster} musí nepřetržitě běžet,
-oproti tomu proces \textit{postgres} začne a skončí na příkaz klienta.
+Databáze PostgreSQL funguje na principu klient-server, kde každý
+klient je obsluhován samostatným procesem, který se stará o zpracování
+dotazu. Server se skládá ze dvou částí: \textit{postmaster} a
+\textit{postgres}.  Když klient odešle požadavek k přístupu k databázi
+na server, \textit{postmaster} na serveru založí nový proces, 
+\textit{postgres} poté přímo komunikuje s klientem. Z toho plyne, že
+proces \textit{postmaster} musí nepřetržitě běžet, oproti tomu proces
+\textit{postgres} začne a skončí na příkaz klienta.
 
 
 \paragraph*{Zpracování dotazu}
@@ -975,6 +987,7 @@ definice & optim* & příkaz & popis \\ \hline \hline
  &  & TRUNCATE & mazání všech záznamů z tabulky \\ \hline
 \end{tabular}
 
+%%% ML: je nekde vysvetlena zkratka SQL?
 \caption{Zařazení a popis SQL příkazu do kategorií.
 *( ne/optimalizovaných )}
 \label{tab:prikazy}
@@ -1020,34 +1033,34 @@ PostgreSQL je systém relační databáze doplněný o objektově orientovaný
 model. Ten je specifikován v rozšíření standardu SQL3 z roku
 1999\cite{sql1999}. Objektový model podporuje objekty, třídy a
 dědičnost v databázových schématech. Objektově-relační systém pro
-zprávu databáze poskytuje střední cestu mezi relační a plně objektově
+správu databáze poskytuje střední cestu mezi relační a plně objektově
 orientovanou databází. To umožňuje vytváření vlastních
-datových typů a metod, které umožňují vyšší míry abstrakce. Nechybí
-podpora implementace vlastních procedur buď s využitím vlastního
-jazyka PL/pgSQL nebo využít externí podpory C/C$++$ (knihovny libpq a
+datových typů a metod, které umožňují vyšší míru abstrakce. Nechybí
+podpora implementace vlastních procedur buď s využitím 
+jazyka PL/pgSQL nebo externí podpory C/C$++$ (knihovny libpq a
 libpq$++$), Python (PyGreSQL) či Perl (pgsql\_perl5).
 
 
 \paragraph{Objekty} umožňují vytváření nových datových typů, konverzí,
-přetypování, indexy, funkce, agregační funkce, operátory a další.
+přetypování, indexů, funkcí, agregačních funkci, operátorů a dalších.
 
 \paragraph*{Funkce} umožňují spouštění bloků kódu, které mohou být jak
 v nativním jazyce PL/pgSQL, tak i v ostatních výše zmíněných
 podporách. Funkce po spuštění vracejí výsledek v řádcích, tedy
 tabulkou, kterou je možné využít k dalším příkazům. Podporuje
-vytvoření vlastních funkcí, či využití funkcí  standardní knihovny
+vytvoření vlastních funkcí či využití funkcí  standardní knihovny
 PostgreSQL.
 
 \paragraph*{Indexy} je možné vytvářet pomocí algoritmů
 \textit{B-tree}, \textit{hash}, \textit{GiSTm} a \textit{GIN}
 \footnote{\url{http://www.postgresql.org/docs/9.1/static/sql-createindex.html}},
 nebo lze vytvářet i vlastní. Princip indexu spočívá ve vytvoření
-specifického sloupce v tabulce, jehož jediný úkol je optimalizovat
+specifického sloupce v~tabulce, jehož jediný úkol je optimalizovat
 prohledávání daného sloupce.
 
-\paragraph*{Pravidla} Umožňují přepisování zpracovaného dotazu. 
+\paragraph*{Pravidla} umožňují přepisování zpracovaného dotazu. 
 Jedno z běžných použití je implementace pohledů, které logicky odkazují na vybrané sloupce v
-jiných tabulkách. V \textit{PostgreSQL 9.3 } jsou nově implementované
+jiných tabul\-kách. V \textit{PostgreSQL 9.3 } jsou nově implementované
 materializované pohledy (\texttt{MATERIALIZED VIEW}), které
 představují jak charakteristiky tabulky tak i pohledu. Data
 materializovaných pohledů jsou fyzicky uloženy na disku. Jejich hlavní
@@ -1068,9 +1081,9 @@ PostGIS\footnote{\url{http://postgis.net/}} je open-source rozšířením
 objektů. Jde tedy o velice vhodný nástroj pro využití v GIS. PostGIS
 implementuje specifikaci \textit{Simple Features for
   SQL}\footnote{\url{http://www.opengeospatial.org/standards/sfs} }
-konsorcia    \acs{OGC}, která v současné době plní funkci standardizační
+konsorcia \acs{OGC}, která v současné době plní funkci standardizační
 organizace pro geoprostorová data. PostGIS je 2D/3D vektorovou
-databázovou nadstavbou, vedle které je i extenze PostGIS Raster.
+databázovou nadstavbou, vedle které existuje i extenze PostGIS Raster pro data rastrová.
 
   
 \begin{figure}[h!]
