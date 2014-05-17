@@ -1237,34 +1237,42 @@ SELECT  ST_AsEWKT (geom) FROM link
 \newpage
 \setcounter{footnote}{1}
 \section{Časoprostorové analýzy}
+
 Hlavním účelem GIS je vytvoření informačního systému, který umožňuje
-získá\-vání, ukládání, analýzu a vizualizaci dat vztažených k povrchu Země.  Všeobecně je však hlavním cílem vytváření operačních modelů reálného světa, při čemž je pro modelování některých reálných procesů nedílnou součástí časová složka.  Z historického pohledu na rozvoj systémů GIS je však zřejmá jejich primární orientace na řešení problémů  prostorových dat, bez této složky. V prvních fázích rozvoje GIS nemohla ani být 
-tato otázka z hlediska tehdejších omezení IT technologií i matematických
- formulací řešena. \cite{geospatialanal}. Systém GRASS nyní v nové verzi
-\textit{GRASS GIS 7 } obsahuje zcela nově navržený balíček modulů
+získá\-vání, ukládání, analýzu a vizualizaci dat vztažených k povrchu
+Země.  Všeobecně je však hlavním cílem vytváření operačních modelů
+reálného světa, přičemž je pro modelo\-vání některých reálných procesů
+nedílnou součástí časová složka.  Z histo\-rického pohledu vývoje GIS
+je zřejmá primární orientace na řešení problémů
+prostorových dat bez časové  složky. V prvních fázích rozvoje GIS
+nemohla ani být tato otázka z hlediska tehdejších omezení IT
+technologií i~matematických formulací řešena
+\cite{geospatialanal}. Systém GRASS v nové verzi \textit{GRASS
+  GIS 7} obsahuje zcela nově navržený balíček modulů
+%%% ML: tady bych vysvetlil zkratku TGRASS
 TGRASS\footnote{\url{http://grass.osgeo.org/grass70/manuals/temporalintro.html}},
 který integruje do původního GRASS systému časový rozměr.
 
 Hlavním obsahem této kapitoly je představení časoprostorových
 datových modelů s primárním zaměřením na model, který je implementován
-v modulech TGRASS. V praktické části budou představeny základní funkce
+v modulech TGRASS. V~praktické části budou představeny základní funkce
 a analýzy TGRASS pro  srážky zrekonstruované pomocí vlastního modulu
-\textit{r.mwprecip}. K teoretické části byla jako primární zdroj
-využita kniha (\textit{Geographical information system vol.2})\cite{gistemporal}
+\texttt{r.mwprecip}. K teoretické části byla jako primární zdroj
+využita kniha \textit{Geographical information system vol.2} \cite{gistemporal}.
 
 
 \subsection{Terminologie}
 \label{subsec:terminologie}
-Tento odstavec pojednává základní terminologii časoprostorové
+Tento odstavec pojednává o základní terminologii časoprostorové
 problematiky v GIS. Hlavním zdrojem  definic je publikace
-\cite{pelekis}
+\cite{pelekis}.
 \begin{description}
-\item[Reprezentace času] Jednotlivé stavy geodat jsou odkazovány k
-  časovým okamžikům dvěma způsoby - relativně (\textit{dny, roky,
+\item[Reprezentace času] -- jednotlivé stavy geodat jsou odkazovány k
+  časovým okam\-žikům dvěma způsoby - relativně (\textit{dny, roky,
     minuty}) či absolutně (\textit{1990-30-06 1:35:59}). Možností
-  relativní reprezentace je vyjádření času záporně
+  relativní reprezentace je vyjádření času v záporné notaci
   (\textit{-rok}). Další reprezentace je vyjádřena pomocí 
-  dělení času (\textit {před - minulý, teď - současný, po - budoucí}).
+  dělení času (\textit {před -- minulý, teď -- současný, po -- budoucí}).
 
 \item[Diskrétně časový model] je takový model, kde se proměnné, tedy
   geodata mění skokově. Geodata jednotlivých okamžiků na sebe navazují
@@ -1274,10 +1282,10 @@ problematiky v GIS. Hlavním zdrojem  definic je publikace
 
 \item[Kontinuální/spojitý časový model] je charakteristický 
   jemným časovým rozli\-šením. Příkladem jsou data získaná ze
-  seismografu, či kontinuálního záznamu průtoku ve vodních tocích.
+  seismografu či kontinuálního záznamu průtoku ve vodních tocích.
 
 \item[Časová topologie] je termín, který je analogický k termínu
-  prostorová topologie s tím rozdílem, že kromě prostorového zobrazení zavádí i rozměr časový. Časová topologie geodat definuje vztahy
+  prostorová topologie s~tím rozdílem, že kromě prostorového zobrazení zavádí i rozměr časový. Časová topologie geodat definuje vztahy
   mezi jednotlivými stavy daných objektů v datasetu.
 
 \item[Granularita] je ve spojení s časoprostorovými daty definována
@@ -1289,11 +1297,11 @@ problematiky v GIS. Hlavním zdrojem  definic je publikace
 
 Časoprostorové modely se liší v jednotlivém pojetí vztahů, které
 propojují časovou složku s prostorovými daty. Současný vývoj a
-specifické nároky vědních oborů vytvořily poměrně značný počet 
+specifické nároky vědních oborů vytvořily poměrně značný počet
 časoprostorových modelů \cite{pelekis}, které jsou často sjednoceny
 základní myšlenkou a liší se pouze v detailu. Níže jsou přiblíženy
 principy základních modelů se zaměřením na \textit{Snapshot model},
-který je časoprostorovým modelem v TGRASS.
+který je použit jako časoprostorový model v TGRASS.
 
 \subsubsection*{Snapshot model}
 Jedná se o jeden z  nejednodušších a nejvyužívanějších časoprostorových
@@ -1305,59 +1313,77 @@ relačního modelu, který je charakteristický relačními tabulkami, tedy
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.3\textwidth]{./img/temporal/snapshot.png}
-    \caption[Snapshot model]{Jednotlivé snímky \emph{S} reprezentují  geodata v čase \emph{t}. Obrázek schématicky znázorňuje vývoj dešťových srážek.  \centering \footnotemark }
+    \caption[Snapshot model]{Jednotlivé snímky \emph{S} reprezentují  geodata v čase \emph{t}. Obrázek schématicky znázorňuje vývoj dešťových srážek  \centering \footnotemark. }
         \label{fig:snapshot}
  \end{figure}   
-\footnotetext{Podkladem pro obrázek byly využity výstupy z modulu r.mwprecip}
+\footnotetext{Podkladem pro obrázek byly využity výstupy z modulu {\tt r.mwprecip} (viz praktická část práce).}
 
 Výhodou \textit{snapshot} modelu je jeho jednoduchost a především
 vhodná struktura pro implementaci do GIS. Jak již bylo zmíněno, model
 uchovává jednotlivé vrstvy pro dané časové okamžiky odděleně.
-Jednotlivé tématické geoinformace o zájmových oblastech jsou ukládány do
-separovaných vrstev \ref{fig:snapshot}.  Model charakteristikou svého návrhu odpovídá
-diskrétním systémům. Jednotlivé proměnné - geodata se skokově mění v
-průběhu času. Z toho mimo jiné pro uplatnění v GIS plyne, že
-jednotlivé snímky nemají informace o stavech předchozího či
-následujícího časového okamžiku.  Nevýhodou tohoto modelu je proto datová
-redundance, která je způsobena ukládáním informací pro daný okamžik
-vždy v plném rozsahu.  Jednotlivá geodata jsou uchovávána pro časové
-okamžiky nenávazně na předchozích. Uvážíme-li pro názornost extrémní
-případ, kdy časový dataset obsahuje vrstvy znázorňující jev, který byl
-v průběhu času neměnný, tento model do úložiště počítače zapíše
-několikanásobně stejné geoinformace. Tato skutečnost je pro práci v GIS poměrně nevýhodná, především v případech kdy změny sledovaných veličin časoprostorových dat mezi jednotlivými okamžiky měření jsou malé. Obecně se v oblasti numerického modelování hydrologických i meteorologických jevů jedná o častý tzv. scaling problém, spočívající v potřebě interpretovat průběh různých stavových veličin modelu (v tomto případě např. srážek) značně rozdílného časového vývoje. Mezi nevýhody diskrétního modelování patří skoková interpretace zobrazování procesů svou fyzikální podstatou původně spojitých . V časoprostorovém kontextu při využití GIS modelů tohoto typu to může vyvolat výpočetní stav, při němž dojde k ignorování zásadní změny hodnoty sledované veličiny (např. srážky) v okamžiku nepostihnutelném při zvoleném časovém intervalu měření.  Změna ovšem nebude zaznamenána a model založený na těchto předpokladech bude v praxi nepoužitelný . S ohledem na  potřebu porovnávání změn jednotlivých prostorových rámců v čase je díky architektuře modelu nutnost procházení a porovnávání buňky po buňce. To ovšem  vede k vysoké výpočetní  náročnosti.
+Jednotlivé tématické informace o zájmových oblastech jsou ukládány do
+separovaných datových vrstev \ref{fig:snapshot}.  Model
+charakte\-ristikou svého návrhu odpovídá diskrétním
+systémům. Jednotlivé proměnné - geodata se skokově mění v průběhu
+času. Z toho mimo jiné pro uplatnění v GIS plyne, že jednotlivé snímky
+nemají informace o stavech předchozího či následujícího časového
+okamžiku.  Nevýhodou tohoto modelu je proto datová redundance, která
+je způsobena ukládáním informací pro daný okamžik vždy v plném
+rozsahu.  Jednotlivá geodata jsou uchovávána pro časové okamžiky
+nenávazně na předchozích. Uvážíme-li pro názornost extrémní případ,
+kdy časový dataset obsahuje vrstvy znázorňující jev, který byl v
+průběhu času neměnný, tento model do úložiště počítače zapíše
+několikanásobně stejné geoinformace. Tato skutečnost je pro práci v
+GIS poměrně nevýhodná, především v případech kdy změny sledovaných
+veličin časoprostorových dat mezi jednotlivými okamžiky měření jsou
+malé. Obecně se v oblasti numeri\-ckého modelování hydrologických i
+meteorologických jevů jedná o častý tzv. {\em scaling} problém,
+spočívající v potřebě interpretovat průběh různých stavových veličin
+modelu (v tomto případě např. srážek) značně rozdílného časového
+vývoje. Mezi nevýhody diskrétního modelování patří skoková
+interpretace zobrazování procesů svou fyzikální podstatou původně
+spojitých. V časoprostorovém kontextu při využití GIS modelů tohoto
+typu to může vyvolat výpočetní stav, při němž dojde k igno\-rování
+zásadní změny hodnoty sledované veličiny (např. srážky) v okamžiku
+nepostihnutelném při zvoleném časovém intervalu měření.  Změna ovšem
+nebude zaznamenána a model založený na těchto předpokladech bude v
+praxi nepoužitelný. S~ohledem na potřebu porovnávání změn
+jednotlivých prostorových rámců v čase je díky architektuře modelu
+nutnost procházení a porovnávání buňky po buňce. To ovšem vede k
+vysoké výpočetní náročnosti.
 
 \paragraph*{Time Composit}
-\textit{\ac{STC}} byl vyvinut  v roce
+\textit{\ac{STC}} byl vyvinut v~roce
 1988, Lagran \cite{lagran}. Model \acs{STC} pracuje s vektorovou interpretací
- prostorových dat. Jeho princip  spočívá v projekci linií do roviny, čímž se v
-průběhu času jednotlivé prostory v projekční rovině sjednotí a tím z
-nich vznikají polygony - síť. V databázi jsou pak pro jednotlivé
-polygony uchovávány atributy, které odpovídají jejich historii.  Model
-je charakteristický diskrétním systémem, kde jednotlivé časové skoky
+ prostorových dat. Jeho princip  spočívá v zobrazení linií do roviny, čímž se v~průběhu času jednotlivé prostory v projekční rovině sjednotí a tím z
+nich vznikají polygony -- síť. V databázi jsou pak pro jednotlivé
+polygony uchovávány atributy, které odpovídají jejich historii. Tento model
+patří mezi diskrétní systémy, kde jednotlivé časové skoky
 jsou relativní.
 
 \paragraph*{Time-stamping model} 
 Princip modelu je založen na dvojici časových razítek, které
-určují čas vzniku a zániku, či současného stavu
+určují čas vzniku a zániku či současného stavu
 objektu. Časové razítko zániku objektu je definováno třemi stavy
 \texttt{now}, \texttt{currnetm} a \texttt{null}.  Síla tohoto modelu
 je při aplikacích, kde se jednotlivé objekty v průběhu dlouhé doby
 mění sporadicky. Model byl navržen a otestován na katastru
 nemovitostí, kde požadavky přesně odpovídají funkcím tohoto
-modelu.\cite{hunter}
+modelu \cite{hunter}.
 
 \paragraph*{Event model}
-\textit{Event-Oriented Model}, je svým principem blízký  předchozího. Model \textit{Time-stamping }nedokáže identifikovat jednotlivé změny v
+\textit{Event-Oriented Model} je svým principem podobný modelu Time-stamping. Model \textit{Time-stamping }nedokáže identifikovat jednotlivé změny v
 rámci datasetu. Oproti tomu je  rozšířený o logovací
 soubor, do kterého jsou zaznamenávány jednotlivé časové instance
 objektů. Tento soubor představuje časovou topologii, která
-reprezentuje celou historii změn objektů a ten je možné procházet či
-analyzovat.
+reprezentuje celou historii změn objektů.
+% a ten je možné procházet či
+%analyzovat.
 
 \paragraph*{Object-Relationship}
-jako jediný z výše zmíněných se zaměřuje na vztahy a popis
+jako jediný z výše zmíněných datových modelů se zaměřuje na vztahy a popis
 jednotlivých změn stavu sledované veličiny. Object-Relationship model je   specifický dle zaměření
-dané problematiky. Jeho specifikem  je  náročnost v definování
+dané problematiky. Jeho specifikem  je  náročnost v~definování
 jednotlivých vztahů mezi objekty.
 
 \paragraph*{Objektově orientovaný model}
@@ -1371,34 +1397,42 @@ intuitivního přístupu k jednotlivým informacím.
 
 
 \subsection{Úvod do Temporal GRASS framework}
-Temporal framework v GRASS je součástí nové verze GRASS GIS 7. Je
-implementován v jazyku Python a data která spravuje jsou ukládána buď
-v SQLite nebo v externí databázi PostgreSQL. Nejčastěji je však
-využívána nativní databáze SQLite.
+Temporal framework v systému GRASS (TGRASS) je součástí nové verze GRASS GIS 7. Je
+implementován v jazyku C a Python. Data, která spravuje, jsou ukládána buď
+v databázi SQLite nebo PostgreSQL. Nejčastěji je však
+využívána výchozí databáze SQLite.
 
-Časová komponenta modelu v GRASS je založen na Snapshot modelu. Jak již bylo zmíněno,  dělí se na dvě úrovně: časovou a prostorovou složku. Prostorová složka je převzata
-ze standardního GRASSu, charakteristická vektorovými a rastrovými
-2D/3D mapami. Jednotlivé objekty s časovou charakteristikou jsou pak
-ukládány do časových datasetů, které jsou specifické přiřazením časové známky či časových intervalů. 
+TGRASS je založen na tzv. {\em snapshot modelu} a dělí se na dvě úrovně:
+časovou a~prostorovou složku. Prostorová složka je převzata ze systému GRASS a je
+charakterizována 2D/3D vektorovými a rastrovými mapami. Jednotlivé
+geoprvky s časovou charakteristikou jsou pak ukládány do časoprostorových
+datasetů, které jsou specifické přiřazením časové známky či časových
+intervalů.
 
 \subsubsection{Koncept} 
 Koncept vychází z části již představené terminologie časoprostorových
 modelů. Je důležité pochopit základní charakteristiky časových závislostí,
-granularity, časové topologii atd.
+granularity a časové topologie.
 
 \paragraph*{Okamžik a interval} charakterizují dva přístupy k časovému
 modelu.  Časový okamžik charakterizuje jeden moment v čase, oproti
-tomu interval je definován počátečním  a koncovým okamžikem, nebo pouze
+tomu interval je definován počátečním  a koncovým okamžikem nebo pouze
 počátečním časovým bodem a délkou intervalu.
 
-\paragraph*{Absolutní a relativní} jsou definovány v TGRASS obdobně jako v 
-ve zmíněné terminologii viz \ref{subsec:terminologie} Terminologie.
+\paragraph*{Absolutní a relativní} jsou definovány v TGRASS obdobně
+jako kap. \ref{subsec:terminologie}.
 
-\paragraph*{Granularita} - podrobnost časového rozlišení je v TGRASS přepočítána po každém zásahu do datasetu. Mezi vlastnosti granularity patří i vlastnost, kdy jednotlivé datasety obsahují mezery v čase (gaps) ve kterých nejsou dostupná data.
+\paragraph*{Granularita} tj. podrobnost časového rozlišení je v TGRASS
+přepočítána po každém zásahu do datasetu. Mezi vlastnosti granularity
+patří i vlastnost, kdy jednotlivé datasety obsahují mezery v čase
+(gaps), ve kterých nejsou dostupná data.
 
 
-\paragraph*{Časová topologie}  v problematice časové proměnné závislosti vychází obecně z principu obecné topologie. Časová topologie popisuje vztahy mezi jednotlivými časovými známkami jak pro časový interval tak pro časový okamžik. Jednotlivé charakteristiky byly
-odvozeny z booleovské algebry a aplikovány na časové známky.
+\paragraph*{Časová topologie} v problematice časové proměnné
+závislosti vychází obecně z~principu obecné topologie. Časová
+topologie popisuje vztahy mezi jednotlivými časovými známkami jak pro
+časový interval tak pro časový okamžik. Jednotlivé charakteristiky
+byly odvozeny z booleovské algebry a aplikovány na časové známky.
 
 \paragraph*{Temporal sampling} vychází z časové topologie a určuje
 jednotlivé vztahy mezi časovými datasety. Pro představu jsou uvedeny
@@ -1410,25 +1444,8 @@ follows (X je za Y).
 Pomocí těchto výroků lze definovat výběr časových oken z datasetu X
 na základě datasetu Y (např. průnik).
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+%%% ML: tady by se hodil obrazek prostorovych vztahu ze Soerenovych
+%%% materialu (s prislusnou citaci...)
 
 \newpage
 \setcounter{footnote}{1}
