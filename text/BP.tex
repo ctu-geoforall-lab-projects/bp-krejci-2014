@@ -353,10 +353,7 @@ Tato kapitola je základním teoretickým východiskem k praktické části
 práce dotýkající se problematiky MV spojů a použitých technologií pro
 vývoj vlastních GIS nástrojů.
 %%% ML: tato veta (viz nize) zni divne, uplne bych ji vynechal...
-Popsány jsou základní principy a charakteristiky jednotlivých
-probl\-émových okruhů, které jsou směřovány především k aplikaci v
-praktické části práce.
-
+%%% MK: smazano
 
 %%% ML: efektivne "mamagement", preformuluj to tak, aby to znelo vice
 %%% cesky
@@ -469,6 +466,7 @@ stávajících modelů pro převod útlumu signálu MV spojů na srážkové
 intenzity i pro další využití těchto dat.
 
 \newpage %%% ML: kvuli poznamce pod carou, pri zmene strankovani nutno opravit
+		 %%% MK: diky
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.7\textwidth]{./img/srazky/microwave_link.png}
@@ -767,6 +765,7 @@ které jsou vyvíjeny uživateli v rámci GRASS \textit{AddOns}.
 %%% ML: tohle bych klidne vynechal
 % a~mohou se
 %stát součástí stabilních vývojových verzí GRASS.
+%%% MK: ok
 
 GRASS GIS je na poli GIS software zcela unikátní a to především díky
 %%% ML: pravda je, ze velka cast kodu pochazi z USA CERL, ktery system
@@ -775,6 +774,7 @@ svému rozsahu, čemuž vděčí především dobrovolným vývojářům z komun
 GRASS po celém světě, kteří tento dlouholetý projekt vyvíjí. Důkazem jeho
 kvality jsou uživatelé jako např.
 %%% ML: tady bych odkazy klidne vynechal, prilis mnoho poznamek pod carou,...
+%%% MK: ok
 \textit{NOAA} či %\footnote{\url{http://www.noaa.gov/}}
 \textit{NASA}.%\footnote{\url{http://www.nasa.gov/}}.
 
@@ -788,7 +788,8 @@ kvality jsou uživatelé jako např.
 
 \subsubsection*{Historie}
 %%% ML: moc nerozumim slovu "stala" v teto souvislosti...
-Vývojová linie GRASS GIS je stálá od poloviny osmdesátých let minulého
+%%% MK: predelano
+Vývoj GRASS GIS je stálý od poloviny osmdesátých let minulého
 století. Tehdy byl vyvíjen primárně pro americkou armádu, která jej
 využívala pro územní správu a plánování. Během 90. let se postupně na
 vývoji projektu podíleli americké federální agentury, univerzity a
@@ -802,9 +803,9 @@ kterou je vyvíjen dodnes. V letech 2008 se GRASS GIS zařadil pod hlavičku nad
    \acs{OSGeo}, pod kterou spadá mnoho významných volně šiřitelných
 GIS
 projektů \footnote{\url{http://www.osgeo.org/}}. Letošním rokem
-oslavil GRASS dlouhých 30 let vývoje, které zaštítil vydáním verze
+oslavil GRASS dlouhých 30 let vývoje.
 %%% Minuly rok v cervenci byla vydana verze 6.4.3
-\textit{GRASS GIS 6.4.3} \footnote{\url{http://grass.osgeo.org/news/28/15/Stable-GRASS-GIS-6-4-3-released/}}.
+%%% MK: smazano
 
 \subsubsection*{Základní terminologické pojmy}
 \label{subsubsec:grassterminologie}
@@ -820,6 +821,7 @@ zapotřebí definovat trojici nastavení. V grafickém rozhraní GRASS
   \texttt{\$GISBASE}. Jedná se o standardní adresář umístěný na disku.
 %%% ML: adresar se muze jmenovat jakkoliv
 %  který je pojmenován \textit{grassdata}.
+%%% MK: to je fakt...
   V tomto adresáři jsou uložena veškerá uživatelská data s vyjímkou
   externě připojených databází (\textit{např. PostgreSQL, MySQL}).
 
@@ -927,7 +929,8 @@ Bilinear spline & \multirow{2}{*}{{\tt v.surf.bspline}} \\
 Bicubic spline &  \\
 Regularized spline tension & {\tt v.surf.rst} \\
 %%% ML: rozepsat zkratku...
-IDW & {\tt v.surf.idw} \\ \hline
+%%% MK: rozepsano
+Inverse distance weighting & {\tt v.surf.idw} \\ \hline
 \end{tabular}
 \caption{Přehled modulů pro interpolaci v GRASS GIS}
 \label{my-label}
@@ -939,6 +942,7 @@ PostgreSQL\footnote{\url{http://www.postgresql.org/}} je open-source
 projekt, který vznikl v roce 1986. Tento projekt je dnes celosvětově
 uznávaný, čehož důkazem je využití systému ve světových projektech
 %%% ML: vynechal byl odkaz na mene dulezetite
+%%% MK: ok
 jako \textit{SourceForge}, %\footnote{\url{http://sourceforge.net/}},
 \textit{Debian} či %\footnote{\url{http://www.debian.org/}}
 \textit{Open
@@ -958,6 +962,7 @@ proprietárním databázovým systémům jako je například Oracle. Tomu také 
 
  %%% ML: tato kapitola mohla byt vyrazne KRATSI, ale nech to tak jak
  %%% to je ted...
+ %%% MK: taky jsem po zkraceni, nevedel jsem ale kde ubrat...
 \subsubsection{Základní charakteristika}
 \paragraph*{Architektura}
 Databáze PostgreSQL funguje na principu klient-server, kde každý
@@ -997,7 +1002,8 @@ definice & optim* & příkaz & popis \\ \hline \hline
 \end{tabular}
 
 %%% ML: je nekde vysvetlena zkratka SQL?
-\caption{Zařazení a popis SQL příkazu do kategorií.
+%%% MK: doplneno
+\caption{Zařazení a popis \acs{SQL} příkazu do kategorií.
 *( ne/optimalizovaných )}
 \label{tab:prikazy}
 \end{table}
@@ -1115,6 +1121,7 @@ referenčním prostorovým systémem \cite{postgis}.
 % Společně s metadaty  geometrického prvku jsou
 % ukládány ve sloupci \texttt{geometry}, který má informaci o
 % geometrickém typu o referenčním systému.
+%%% MK: textu je dost, vynechame
 
 \begin{figure}[h!]
     \centering
@@ -1123,6 +1130,7 @@ referenčním prostorovým systémem \cite{postgis}.
     jsou agregovány do složitějších tzv.~multi objektů.     \footnotemark}
  \end{figure}   
 %%% ML: odkaz pod carou je potom duplictni, poznamky pod carou se daji sdilet
+%%% MK: tomuhle moc nerozumim. Jak to myslis?
 \footnotetext{\url{http://www.opengeospatial.org/standards/sfs}}
 
 \paragraph*{Souřadnicový systém} je v PostGIS definován v tabulce
@@ -1130,7 +1138,7 @@ referenčním prostorovým systémem \cite{postgis}.
 předdefinované, ostatní se dají dodatečně definovat a upravovat.
 
 %%% ML: tohle bych uplne vynechal...
-
+%%% MK: ok
 % \begin{verbatim}
 % CREATE TABLE spatial_ref_sys (
 %   srid       INTEGER NOT NULL PRIMARY KEY,
@@ -1142,20 +1150,21 @@ předdefinované, ostatní se dají dodatečně definovat a upravovat.
 % \end{verbatim}
 
 Souřadnicové systémy jsou charakterizovány unikátním kódem
-\texttt{\acs{SRID}}.
+\texttt{\acs{SRID}}, který je všeobecně zažitým formátem v aplikacích GIS.
 %%% ML: standardem?
-%, který je všeobecným standardem v GIS.
+%%% MK: muze to byt takhle? který je všeobecně zažitým formátem v aplikacích GIS.
 Pro konverze mezi jednotlivými systémy slouží funkce
 \texttt{ST\_Transform}.
 %%% ML: zbytecne
 % \footnote{\url{http://postgis.org/docs/ST_Transform.html}}.
-
+%%% MK: ok
 
 \paragraph*{Geometrie} je datovým typem (\texttt{geometry}), který
 představuje geometrickou složku popisu geoprvků.  Charakteristika tohoto
 datového typu je dána standardem OGC \textit{Simple Features}.
 %%% ML: data jsou ukladana v binarni forme (WKB ci odvozene) nikoliv ve WKT
 %%% rovněž ve formátu \acs{WKT}.
+%%% MK: no jasne. Chyba
 Sloupec s geometrií je definován pomocí parametrů, které
 nastavují obecná a geometrická specifika: název, typ, souřadnicový
 systém apod.
@@ -1163,7 +1172,7 @@ systém apod.
 Pro definování typu geoprvku jsou k vytvořeny funkce
 \texttt{ST\_Make*}, kde \texttt{*} jsou níže uvedené typy standardu
 %%% ML: todo - vysvetlit zkratku WKT
-OGC \textit{Simple Features} (příklad v textové reprezentaci~WKT):
+OGC \textit{Simple Features} (příklad v textové reprezentaci~\acs{WKT}):
 
 
 \begin{verbatim}
@@ -1178,6 +1187,7 @@ GEOMETRYCOLLECTIONM(POINTM(2 3),LINESTRINGM(2 3,3 4))
 
 %%% ML: podobne jako PostgreSQL, kapitola mohla byt vyrazne KRATSI,
 %%% ale nechme to tak jako je...
+%%% MK: Tuto kapitolu bych nechal jak je, u kapitoly POSTGRESQL jsem pro neco SMAZAT.
 \paragraph*{Funkce} jsou v této nadstavbě zaměřeny na operace s
 geometrií. Veškeré funkce mají prefix \texttt{ST\_} (\textit{spatial
   type}). Část z nich je funkčností analogicky odvozena z~nástrojů
@@ -1200,10 +1210,11 @@ demonstrovány jejich kategorie a nejzákladnější funkce.
 
 %%% ML: nejde o referencni (souradnicove) systemy ale formu zapisu geometrie
 \item[Konverze] umožňují převod mezi různými formami zápisu geometrie (binárními a~textovými
-  formáty). Například do \acs{WKT}:
+  formáty). Například do rozšířeného formátu \acs{WKT}:
 
   %%% ML: tohle neni ciste WKT (tak jak se o nem mluvi ve OGC SF), ale
   %%% o rozsirenou formu PostGISu
+  %%% MK: v PostGis manualu je psano WKT. Nevim jak to uchopit. Muze byt?: Například do rozšířeného formátu \acs{WKT}:
 \begin{verbatim}
 SELECT  ST_AsEWKT (geom) FROM link
 .......
@@ -2938,6 +2949,7 @@ Vzhledem k tomu, že se jedná o vývoj SW prostředku jako jednoho z modulů ko
   	\acro{STC}{The Space-Time Composite Data Model}
   	\acro{SRTM}{Shuttle Radar Topography Mission}
     \acro{SRID}{Spatial Reference System Identifier}
+    \acro{SQL}{Structured Query Language}
 	\acro{wxGUI}{WxPython-based GUI for GRASS}	
 	
 	\acro{WKT}{Well-known text}
