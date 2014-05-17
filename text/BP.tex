@@ -1452,29 +1452,35 @@ na základě datasetu Y (např. průnik).
 \chapter*{Praktická část}\stepcounter{chapter}\addcontentsline{toc}{chapter}{Praktická část}
 
 
-Praktická část práce je dělena do dvou hlavních kapitol.
+\noindent Praktická část práce je rozdělena do dvou hlavních kapitol:
 
 \begin{itemize}
-\item Rekonstrukce srážek v GRASS GIS
-\item GIS analýzy
+\item Rekonstrukce srážek v GRASS GIS a
+\item GIS analýzy.
 \end{itemize}
 
 
-V části jsou popsány moduly, které vznikly v rámci této práce a jsou zde předst\-aveny jejich funkční vlastnosti, uživatelská rozhraní a  vstupní/výstupní operace.
+Jsou zde popsány nástroje, které vznikly v rámci této
+práce a jsou zde předst\-aveny jejich funkční vlastnosti, uživatelská
+rozhraní a vstupní/výstupní operace.
 
-V druhé části  jsou definovány základní časoprostorové úlohy,
-vyplývající z \textit{Temporal GRASS framework} s kombinací
-standardních GRASS nástrojů. Jejich funkčnost je ověřena  prezentací výstupů modulů vytvořených v rámci této práce. 
+V druhé části jsou definovány základní časoprostorové úlohy
+vyplývající z \textit{Temporal GRASS framework} v kombinaci se
+standardními nástroji systému GRASS. Jejich funkčnost je ověřena
+prezentací výstupů modulů vytvořených v rámci této práce.
 
 \setcounter{footnote}{1}
 \section{Charakteristika dat}
-V současné době jsou v rámci  TeleMAS v ČR využíváno naměřených dat z MV spojů od telekomunikačního
-operátora T-Mobile, které jsou ukládány do databáze PostgreSQL.
+
+%%% ML: odkaz na to co je TeleMAS...
+V současné době jsou v rámci TeleMAS v ČR využíváno naměřených dat z
+MV spojů od telekomunikačního operátora T-Mobile, která jsou ukládána
+do databáze PostgreSQL.
 
 \subsection*{Data}  
  
 Od dubna 2013 jsou sbírána data z 14 MV spojů na pilotním povodí
-projektu v Praze Letňanech a 7 spojů na území Praha Michle a
+projektu v~Praze Letňanech a 7 spojů na území Praha Michle a
 okolí. Zároveň jsou k dispozici 3 referenční srážkoměry v okolí MV
 spojů v Letňanech.  V současné době se pracuje na dohodě o poskytování
 dat většího pokrytí území hl.m. Prahy.
@@ -1489,19 +1495,20 @@ vysílači příslušných oblastí.
     \caption[Snapshot model]{Současný stav MV spojů dostupných v rámci projektu v lokalitě Praha  \centering  }
         \label{fig:snapshot}
  \end{figure} 
+
  Časový krok sběru dat není konstantní. Jednotlivé hodnoty jsou
- zaznamenávány do databáze v rámci malých intervalů nahodile, což je způsobeno přenosovými rychlostmi dat a jejich  zápisem do databáze. Nehledě na skutečnost, že sběr dat probíhá  nahodile, systém garantuje pro jejich ukládání do databáze interval sběru 
- cca 15 (s).
-
-
-
+ zaznamenávány do databáze v rámci malých intervalů nahodile, což je
+ způsobeno přenosovými rychlostmi dat a jejich zápisem do
+ databáze. Nehledě na skutečnost, že sběr dat probíhá nahodile, systém
+ garantuje pro jejich ukládání do databáze interval sběru cca 15
+ sekund.
 
 \subsection*{Databáze}  
 Pro záznam měřených hodnot využívá společnost T-Mobile databázi
 PostgreSQL. Záznam dat pro zmíněné lokality probíhá nepřetržitě od
-dubna 2013. Dostupná data pro potřeby vývoje GIS modulu jsou ve formě
-zálohy databáze (\textit{database dump}) časového rozsahu jednoho
-týdne sběru. Databáze obsahuje tabulky \texttt{link}, \texttt{node} a
+dubna 2013. Dostupná data jsou ve formě zálohy databáze
+(\textit{database dump}) časového rozsahu jednoho týdne
+sběru. Databáze obsahuje tabulky \texttt{link}, \texttt{node} a
 \texttt{record}.
  
  
@@ -1544,7 +1551,7 @@ record & \begin{tabular}[c]{@{}l@{}}linkid, time, frequency\\ rxpower, txpower\e
 
 
 \paragraph*{Tabulka node} obsahuje klíčové informace o poloze vysílačů
-v souřadnicovém systému WGS-84 (\texttt{lat, long}).
+v souřadnicovém systému WGS-84 (\texttt{lat, long}) -- EPSG 4326.
 
 \begin{figure}[h!]
 \centering
@@ -1584,25 +1591,28 @@ odeslané a přijaté intenzitě signálu.
 \subsubsection*{Úprava databáze}
 \label{subsubsec:upravadatabaze}  
 V databázové dávce chybí atribut s informací o vertikální či
-horizontální polarizaci signálu (\texttt{polarization}), proto byl do
+horizontální pola\-rizaci signálu (\texttt{polarization}), proto byl do
+%%% ML: tato cast vety mi nedava smysl, neco tam chybi...
 tabulky \texttt{link} přidán ručně a následně i známé hodnoty pro
 jednotlivé spoje. V současné době probíhá jednání se správcem databáze
 T-Mobile o přidání tohoto atributu.
  
-Úprava databáze se provádí v prostředí modulu a je charakterizována následujícím postupem:
+Úprava databáze se provádí v prostředí navrženého GRASS modulu a je
+charakterizována následujícím postupem:
 \begin{enumerate}
-\item \textbf{Geometrie} - extenze PostGIS
-\item \textbf{Indexy} - vytvoření indexů pro optimalizaci vyhledávání dotazů
-\item \textbf{Funkce} - přidání agregačních funkcí pro statistické výpočty
-\item \textbf{Konfigurace} - dílčí úpravy databáze pro výpočty
+%%% ML: odkaz na kapitolu o PostGISu
+\item \textbf{Geometrie} - extenze PostGIS,
+\item \textbf{Indexy} - vytvoření indexů pro optimalizaci vyhledávání dotazů,
+\item \textbf{Funkce} - přidání agregačních funkcí pro statistické výpočty,
+\item \textbf{Konfigurace} - dílčí úpravy databáze pro výpočty.
 \end{enumerate}
 
-\paragraph*{Geometrie} Do databáze byla přidána extenze PostGIS
-(\texttt{CREATE EXTENSION post\-gis}), která umožnila vytvořit
-geometrický atribut (\texttt{geom}) u tabulky node a
-link. Souřad\-nicový systém byl definován pro WGS-84 (SRID 4326).
+\paragraph*{Geometrie.} Do databáze je přidána extenze PostGIS
+(\texttt{CREATE EXTENSION post\-gis}), která umožňuje vytvořit
+geometrický atribut (\texttt{geom}) u tabulky {\tt node} a
+{\tt link}. Souřad\-nicový systém je WGS-84 (EPSG 4326).
 
-Definování geometrického atributu (geom) datového typu POINT pro
+Vytvoření geometrického atributu ({\tt geom}) datového typu POINT pro
 vysílače.
 
 \begin{footnotesize}
@@ -1611,7 +1621,7 @@ SELECT AddGeometryColumn ('public','node','geom',4326,'POINT',2)
 \end{lstlisting}
 \end{footnotesize}
 
-Vytvoření geometrického atributu (geom) datového typu LINESTRING pro spoje. 
+Vytvoření geometrického atributu ({\tt geom}) datového typu LINESTRING pro spoje. 
 
 \begin{footnotesize}
 \begin{lstlisting}[style=mybash]
@@ -1619,7 +1629,7 @@ SELECT AddGeometryColumn('public','link','geom',4326,'LINESTRING',2)
 \end{lstlisting}
 \end{footnotesize}
 
-Definování geometrického atributu (geom) datového typu POINT. 
+Definování geometrie vysílače.
 
 \begin{footnotesize}
 \begin{lstlisting}[style=mybash]
@@ -1627,15 +1637,15 @@ UPDATE node SET geom = ST_SetSRID(ST_MakePoint(long, lat), 4326)
 \end{lstlisting}
 \end{footnotesize}
 
-Pomocí funkce \texttt{ST\_MakeLine} byla rekonstruována geometrie
+Dále byla pomocí funkce \texttt{ST\_MakeLine} zrekonstruována geometrie
 spojů (\texttt{link}) z vysí\-lačů (\texttt{node}). Z geometrie spojů
 (\texttt{link}) byla vypočtena jejich délka funkcí
 \texttt{ST\_Length}.
 
 \paragraph*{Indexy} byly vytvořeny v tabulce \texttt{record} nad
-atributy time a recordid, pro optimalizaci dotazů nad tabulkou
-record. K vytvoření indexů bylo využito algoritmu
-\textit{B-tree}. \footnote{\url{http://www.postgresql.org/docs/9.2/static/indexes-types.html}}
+atributy {\tt time} a {\tt recordid}, po optimalizaci dotazů nad tabulkou
+{\tt record}. K vytvoření indexů bylo využito algoritmu
+\textit{B-tree} \footnote{\url{http://www.postgresql.org/docs/9.2/static/indexes-types.html}}.
 
 \begin{footnotesize}
 \begin{lstlisting}[style=mybash]
@@ -1657,27 +1667,21 @@ které charakterizují výpadek spoje.
 Veškeré primární úpravy databáze se provádí automaticky modulem
 \textit{r.mwprecip} a jsou vykonány jen při prvním spuštění.
 
-
-
-
-
-
-
-
-\section{GRASS GIS modul}
+\section{Navržené nástroje pro systém GRASS}
 \label{sec:grassgismodule}
-Jedním z hlavních výsledků této práce je návrh a implementace
+Jedním z hlavních výstupů této práce je návrh a implementace
 modulu \textit{r.mwprecip} pro zpracování hrubých dat z MV spojů v
 GIS. K tomuto účelu byl zvolen systém GRASS GIS s využitím rozhraní
 \textit{GRASS Python Scripting Library}. V rámci vývoje byly vytvořeny
 dva moduly:
 
-\paragraph*{r.mwprecip} modul, který tvoří hlavní GIS nástroj pro
-zpracování dat z externí databáze.
-
-\paragraph*{v.link.precip} je sekundárním k modulu
-\textit{r.mwprecip}, jehož funkcionalita spočívá v nativním přístupu k
-výsledkům v GRASS GIS.
+\begin{itemize}
+\item {\it r.mwprecip} je modul, který tvoří hlavní GIS nástroj pro
+  zpracování dat MV spojů uložených v databázi.
+\item {\it v.link.precip} je doplňkovým modulem k \textit{r.mwprecip},
+  jehož funkcionalita spočívá v nativním přístupu k výsledkům v GRASS
+  GIS.
+\end{itemize}
 
 \subsubsection{Použité knihovny}
 Při psaní programu bylo využito jazyka Python, který je podporován
@@ -1687,17 +1691,17 @@ knihovny \textit{The Python Standard
   Library}\footnote{\url{https://docs.python.org/3.4/library/}}.
 
 Knihovna \textit{psycopg}\footnote{\url{http://initd.org/psycopg/docs/}}
-umožňuje v jazyce Python přístup do databáze PostgreSQL. Této knihovny
-bylo využito pro veškerý přístup do databáze s výjimkou přístupu z GRASS
+umožňuje v jazyce Python přístup k databázi PostgreSQL. Této knihovny
+bylo využito pro veškerý přístup do databáze s výjimkou přístupu z~GRASS
 modulů volaných z \textit{GRASS Python Scripting Library}.
 
 \subsubsection{Uživatelské rozhraní}
-Uživatelské rozhraní částečně vyplývá z možností \textit{GRASS Python
-  Scripting Library}, kde při tvorbě modulu jsou jednotlivé ovládací
-prvky v podobě přepínačů a
-parametrů viz \ref{subsubsec:grassterminologie} Systém GRASS GIS. Program se ovládá
-(spouští) buď z příkazové řádky GRASS nebo ve wxGUI, kde se vygeneruje
-programové okno s jednotlivými předem nakonfigurovanými sekcemi.
+%%% ML: zminku o GRASS Py lib jsem odtranil, nemela souvislost k UI
+Uživatelské rozhraní navržených modulů je definováno sadou přepínačů
+a~ para\-metrů viz kap. \ref{subsubsec:grassterminologie}. Program se
+ovládá (spouští) buď z příkazové řádky GRASS nebo ve wxGUI, kde se
+vygeneruje dialogové okno s jednotlivými předem nakonfigu\-rovanými
+sekcemi.
 
 \begin{figure}[h!]
     \centering
@@ -1707,16 +1711,15 @@ programové okno s jednotlivými předem nakonfigurovanými sekcemi.
  \end{figure}
 
 \subsection{Modul r.mwprecip}
-Primární účel modulu \textit{r.mwprecip} je zpracování hrubých dat do
-takové formy, která je rozhraní GRASS GIS vlastní. Základní funkčnost
-modulu spočívá jak ve zpracování dat, tak ve výstupu vhodném pro GIS
-analýzy. Modul pro výstupní data podporuje dvě základní geodatové
-reprezentace. Výstupem jsou jak interpolované srážky v rastrové
-podobě, tak vektorová reprezentace pro jednotlivé MV spoje.
-Zpracování dlouhých časových řad ve zvoleném intervalu je výhodné pro
-časoprostorové analýzy, pro které je nově v \textit{GRASS GIS 7}
-implementován \textit{Temporal GRASS GIS framework}. Výstupní data z
-modulu jsou v kompatibilním formátu s TGRASS včetně vytvořených
+Primární účel modulu \textit{r.mwprecip} je zpracování hrubých dat MV
+spojů. Základní funkčnost modulu spočívá jak ve zpracování dat, tak ve
+výstupu vhodném pro GIS analýzy. Modul pro výstupní data podporuje dvě
+základní reprezentace dat. Výstupem jsou jak interpolované
+srážky v rastrové podobě, tak vektorová reprezentace pro jednotlivé MV
+spoje.  Zpracování dlouhých časových řad ve zvoleném intervalu je
+výhodné pro časoprostorové analýzy, pro které je nově v \textit{GRASS
+  GIS 7} implementován \textit{Temporal GRASS GIS framework}. Výstupní
+data z modulu jsou v kompatibilním formátu s TGRASS včetně vytvořených
 registračních souborů do pracovní složky.
 
  
