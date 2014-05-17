@@ -13,6 +13,8 @@
 \usepackage[final,pdftex, colorlinks=false]{hyperref}
 \usepackage{fancyhdr}
 
+
+\usepackage{verbatim}
 %\usepackage{pdfpages}
 \usepackage{perpage} %the perpage package
 %\MakePerPage{footnote} %the perpage package command
@@ -352,16 +354,16 @@ práce dotýkající se problematiky MV spojů a použitých technologií pro
 vývoj vlastních GIS nástrojů.
 %%% ML: tato veta (viz nize) zni divne, uplne bych ji vynechal...
 Popsány jsou základní principy a charakteristiky jednotlivých
-problémových okruhů, které jsou směřovány především k aplikaci v
+probl\-émových okruhů, které jsou směřovány především k aplikaci v
 praktické části práce.
 
 
 %%% ML: efektivne "mamagement", preformuluj to tak, aby to znelo vice
 %%% cesky
+%%% MK: spojeni dvou vet do jedne
 \paragraph*{Geografické informační systémy} mimo jiné umožňují poměrně
-efektivně managment zpracování sráž\-kových dat. Jejich funkce jsou
-vhodné jak pro správu dat, tak pro jejich analýzu a
-vizualizaci. Jednotlivé metody měření srážek jsou specifické svojí
+efektivně  správu, analýzu a vizualizaci sráž\-kových dat. 
+Jednotlivé metody měření srážek jsou specifické svojí
 datovou charakteristikou jak z prostorového tak časového pohledu.
 
 Metody měření srážek ze své podstaty využití směřují ke kombinaci
@@ -369,12 +371,16 @@ plošné a bodové informace, které jsou svoji charakteristikou
 rozdílné. Srážkoměry produkují bodová data v různých časových
 intervalech, výstupem z radaru jsou snímky představující plošnou
 %%% ML: satelitni druzice zni divne...
-intenzitu radarových srážek a satelitní družice produkují kromě odhadů
-%%% ML: jake druhy dat?
-srážek i další specifické druhy dat. Společnou je pro tyto metody
+intenzitu radarových srážek a stejně tak meteorologické družice na oběžných drahách Země
+mimo jiné produkují  snímky s plošnou reprezentaci srážek. 
+%%% ML: jake druhy dat? 
+%%% MK: predelano
+Společné je pro tyto metody
 potřeba výstupy co nejjednodušeji spravovat a analyzovat jak v rámci
+primárního tak sekundá\-rního zpracován. Primární zpracování hrubých měřených dat spočívá v převodu dat do formy, která umožní analýzy v prostředí GIS, tedy sekundární zpracování dat.
 %%% ML: pojmy primarni a sekundarni zpracovani nejsou vysvetleny
-primárního tak sekundá\-rního zpracování. GIS nástroje splňují tyto
+%%% MK: vysvetleno
+GIS nástroje splňují tyto
 požadavky v dostatečném rozsahu a~částečně eliminují potřebu vývoje
 specifických solitérních systémů, které by vychá\-zely ze stejných
 základů.
@@ -418,8 +424,8 @@ podotknout, že produktem srážkoměrů jsou bodová srážkoměrná data.
 Radarová měření díky plošnému pokrytí a dobrému prostorovému i
 časovému rozlišení dat jsou vhodná pro synoptickou a leteckou
 meteorologii. Poskytují přehled v~reálném čase o pohybu a struktuře
-srážkových systémů, umožňují velmi krátkodobou předpověď v řádech
-minut až hodin a z ní plynoucí varování před nebezpečnými
+srážkových systémů, umožňují velmi krátko\-dobou předpověď v řádech
+minut až hodin a z ní plynoucí varování před nebezpečný\-mi
 meteorologickými jevy \cite{radar_chmu}.
 
 \paragraph*{Srážková data} se měří obvykle v intervalu 5 -15
@@ -447,7 +453,8 @@ atmosféře.
 \subsection{Mikrovlnné spoje}
 
 %%% ML: Zkratku ML pouzivas uz mnohem drive v textu
-Mikrovlnné (MV) spoje jsou rádiové systémy široce využívané v oblasti
+%%% MK: pravda
+Mikrovlnné spoje jsou rádiové systémy široce využívané v oblasti
 telekomunikací (zejména mobilními operátory) k bezdrátovému propojení
 dvou vzdálených stanovišť. MV spoje operují na frekvencích, kde
 dešťové kapky představují hlavní zdroj útlumu signálu. Analýza útlumu
@@ -616,7 +623,8 @@ vědecké práce.
 a nejvíce ovlivňujících činitelů při výpočtu výsledné srážky
 \emph{R}. Tato hodnota se zcela mění v čase a je závislá na
 %%% ML: pojem scintilace by mozna bylo vhodne vysvetlit (napr. poznamka pod carou)
-koncentraci vodní páry v atmosféře a scintilaci. Útlum vysílaných a
+%%% MK: vysvetleno 
+koncentraci vodní páry v atmosféře a scintilaci\footnote{Scintilace je jev, při kterém vznikají slabé světelné záblesky (pulsy světla) v některých látkách při dopadu ionizujícího záření}. Útlum vysílaných a
 přijímaných vln ovlivňuje také teplota prostředí, jímž vlna
 prochází. Dalším činitelem, který může způsobovat kolísání signálu, je
 vítr.  Pro určování baseline se využívá různých metod, například
@@ -811,7 +819,7 @@ zapotřebí definovat trojici nastavení. V grafickém rozhraní GRASS
 
 \item \textbf{Lokace} je adresář umístěný v souborové
   databance. Lokace je definována proměnou \texttt{\$LOCATION\_NAME} a
-  obsahuje data, která nesou informace o souřadnicovém systému a
+  obsahuje data, která nesou informace o souřadni\-covém systému a
   velikosti zájmového území. Pro nastavení lokace je v grafickém
   rozhraní průvodce nastavením lokace (\textit{Location wizard}), kde
   je možné zvolit souřadnicový systém pomocí možností:
@@ -867,7 +875,7 @@ včetně jejich popisu.
 
 \subsubsection*{GRASS a Python}
 GRASS GIS v současné době podporuje dva přístupy k volání funkcionalit
-GRASSu z prostředí Python.
+GRASS z prostředí Python.
 \paragraph*{Python Scripting Library} je variantou API, které tvoří
 Python podporu pro funkcionality GRASS. Princip této knihovny spočívá
 v zadávání příkazu v analogickém formátu, jako je formát pro spouštění
@@ -1153,12 +1161,12 @@ demonstrovány kategorie a nejzákladnější funkce.
   elipsoidu \texttt{ST\_length\_spheroid} a další.
 
 \item[Geometrické konstruktory] slouží k vytváření geometrie podle
-  \textit{Simple Features}, např: vytvoření bodu \texttt{ST\_MakePoint},
+  \textit{Simple Features}, např: bodu \texttt{ST\_MakePoint},
   linie \texttt{ST\_MakeLine}, polygonu \texttt{ST\_MakePolygon} a
   dalších.
 
 \item[Analytické] funkce jsou v PostGIS implementovány dle standartu
-  SQL-MM vyplývající z ISO99, standard o multimédiích, 
+  SQL-MM vyplý\-vající z ISO99, standard o multimédiích 
   \cite{sqlmm}. V této kategorii jsou funkce typické pro prostředí
   GIS. Mezi ně například patří: buffer \texttt{ST\_Buffer}, validita
   geometrie \texttt{ST\_IsValid} nebo sjednocení \texttt{ST\_Union}.
@@ -1188,7 +1196,7 @@ SELECT  ST_AsEWKT (geom) FROM link
 \setcounter{footnote}{1}
 \section{Časoprostorové analýzy}
 Hlavním účelem GIS je vytvoření informačního systému, který umožňuje
-získávání, ukládání, analýzu a vizualizaci dat vztažených k povrchu Země.  Všeobecně je však hlavním cílem vytváření operačních modelů reálného světa, při čemž je pro modelování některých reálných procesů nedílnou součástí časová složka.  Z historického pohledu na rozvoj systémů GIS je však zřejmá jejich primární orientace na řešení problémů  prostorových dat, bez této složky. V prvních fázích rozvoje GIS nemohla ani být 
+získá\-vání, ukládání, analýzu a vizualizaci dat vztažených k povrchu Země.  Všeobecně je však hlavním cílem vytváření operačních modelů reálného světa, při čemž je pro modelování některých reálných procesů nedílnou součástí časová složka.  Z historického pohledu na rozvoj systémů GIS je však zřejmá jejich primární orientace na řešení problémů  prostorových dat, bez této složky. V prvních fázích rozvoje GIS nemohla ani být 
 tato otázka z hlediska tehdejších omezení IT technologií i matematických
  formulací řešena. \cite{geospatialanal}. Systém GRASS nyní v nové verzi
 \textit{GRASS GIS 7 } obsahuje zcela nově navržený balíček modulů
@@ -1223,7 +1231,7 @@ problematiky v GIS. Hlavním zdrojem  definic je publikace
   intervalu.
 
 \item[Kontinuální/spojitý časový model] je charakteristický 
-  jemným časovým rozlišením. Příkladem jsou data získaná ze
+  jemným časovým rozli\-šením. Příkladem jsou data získaná ze
   seismografu, či kontinuálního záznamu průtoku ve vodních tocích.
 
 \item[Časová topologie] je termín, který je analogický k termínu
@@ -1231,7 +1239,7 @@ problematiky v GIS. Hlavním zdrojem  definic je publikace
   mezi jednotlivými stavy daných objektů v datasetu.
 
 \item[Granularita] je ve spojení s časoprostorovými daty definována
-  jako velikost základního časového intervalu na časové
+  jako velikost zákla\-dního časového intervalu na časové
   ose. 
 \end{description}
 
@@ -1362,6 +1370,24 @@ na základě datasetu Y (např. průnik).
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \setcounter{footnote}{1}
 \chapter*{Praktická část}\stepcounter{chapter}\addcontentsline{toc}{chapter}{Praktická část}
@@ -1375,7 +1401,7 @@ Praktická část práce je dělena do dvou hlavních kapitol.
 \end{itemize}
 
 
-V části jsou popsány moduly, které vznikly v rámci této práce a jsou zde představeny jejich funkční vlastnosti, uživatelská rozhraní a  vstupní/výstupní operace.
+V části jsou popsány moduly, které vznikly v rámci této práce a jsou zde předst\-aveny jejich funkční vlastnosti, uživatelská rozhraní a  vstupní/výstupní operace.
 
 V druhé části  jsou definovány základní časoprostorové úlohy,
 vyplývající z \textit{Temporal GRASS framework} s kombinací
@@ -1419,6 +1445,10 @@ zálohy databáze (\textit{database dump}) časového rozsahu jednoho
 týdne sběru. Databáze obsahuje tabulky \texttt{link}, \texttt{node} a
 \texttt{record}.
  
+ 
+%%% MK: Myslis ze by tu tato tabulka mela byt? Moc sem nesedi hlavne z pohledu formatovani...
+\begin{comment}
+
 \begin{table}[h!]
 \centering
 \begin{tabular}{|lll|}
@@ -1432,11 +1462,12 @@ record & \begin{tabular}[c]{@{}l@{}}linkid, time, frequency\\ rxpower, txpower\e
 \label{tab:database}
 \end{table}
 
+\end{comment}
+
 
 \paragraph*{Tabulka link} obsahuje informace, ze kterých vysílačů
 (\texttt{fromnodeid, tonodeid}) jsou jednotlivé spoje
-(\texttt{linkid}) definovány. Ostatní atributy nejsou pro danou
-problematiku významné.
+(\texttt{linkid}) definovány. Ostatní atributy nebyly využity.
 
 \begin{figure}[h!]
 \centering
@@ -1489,6 +1520,8 @@ odeslané a přijaté intenzitě signálu.
 \end{figure}
 
 
+
+
 \subsubsection*{Úprava databáze}
 \label{subsubsec:upravadatabaze}  
 V databázové dávce chybí atribut s informací o vertikální či
@@ -1506,9 +1539,9 @@ T-Mobile o přidání tohoto atributu.
 \end{enumerate}
 
 \paragraph*{Geometrie} Do databáze byla přidána extenze PostGIS
-(\texttt{CREATE EXTENSION postgis}), která umožnila vytvořit
+(\texttt{CREATE EXTENSION post\-gis}), která umožnila vytvořit
 geometrický atribut (\texttt{geom}) u tabulky node a
-link. Souřadnicový systém byl definován pro WGS-84 (SRID 4326).
+link. Souřad\-nicový systém byl definován pro WGS-84 (SRID 4326).
 
 Definování geometrického atributu (geom) datového typu POINT pro
 vysílače.
@@ -1536,7 +1569,7 @@ UPDATE node SET geom = ST_SetSRID(ST_MakePoint(long, lat), 4326)
 \end{footnotesize}
 
 Pomocí funkce \texttt{ST\_MakeLine} byla rekonstruována geometrie
-spojů (\texttt{link}) z vysílačů (\texttt{node}). Z geometrie spojů
+spojů (\texttt{link}) z vysí\-lačů (\texttt{node}). Z geometrie spojů
 (\texttt{link}) byla vypočtena jejich délka funkcí
 \texttt{ST\_Length}.
 
@@ -1562,7 +1595,7 @@ které charakterizují výpadek spoje.
 
 \bigskip
 
-Veškeré přípravné úpravy databáze se provádí automaticky pomocí modulu
+Veškeré primární úpravy databáze se provádí automaticky modulem
 \textit{r.mwprecip} a jsou vykonány jen při prvním spuštění.
 
 
@@ -1761,7 +1794,7 @@ Posledním parametrem v této sekci je \texttt{Aw} a vyplývá ze vztahu
 
 
 \paragraph*{Časová okna} jsou druhou samostatnou GUI sekcí s názvem
-\textit{Time-windows}. Vytvoření časových oken přímo navazuje na
+\textit{Time-windows}. Vytvo\-ření časových oken přímo navazuje na
 vypočtené hodnoty. Principiálně jde o vytvoření tabulek vždy pro jeden
 časový okamžik. K tomu je třeba z náhodného časového kroku vytvořit
 krok konstantní, tedy časovou řadu se zvoleným rozlišením.
@@ -2010,7 +2043,7 @@ parametry.  Přepínače a parametry jsou definovány:
 
 
 Parametr \texttt{layername} nastavuje výchozí vektorovou vrstvu, ke
-které chceme připojit výsledky v podobě časových oken. Podmínkou je,
+které chceme při\-pojit výsledky v podobě časových oken. Podmínkou je,
 že daná vektorová vrstva musí obsahovat identifikátory (linkid). V
 praxi zde budou nejčastěji připojovány vrstvy vytvořené v rámci
 výpočtu primárního modulu \texttt{r.mwprecip}. Ty jsou pojmenovány
@@ -2108,9 +2141,9 @@ Modulu \textit{v.surf.bspline} má parametr \texttt{method}, který umožňuje v
 
 \item Parametry \texttt{sie} a \texttt{sin}, určují vzdálenost spline
   křivky pro jednotlivé kroky ve směrech východ-západ (sie) a
-  sever-jih (sin). Maximální hodnota \texttt{sie} a texttt{sin}, určují vzdálenost spline
+  sever-jih (sin). Maximální hodnota \texttt{sie} a \texttt{sin}, určují vzdálenost spline
   křivky pro jednotlivé kroky ve směrech. Pro oba směry by měla neměla 
-  být menší než vzdálenost známých bodů.
+  být menší než vzdálenost známých bodů.\footnote{\url{http://grass.osgeo.org/grass64/manuals/v.surf.bspline.html}}
 
 \item Parametr \texttt{lambda\_i} (Thykonov regularization parameter)
   ovlivňuje vyhlazení interpolace. Při volbě malé \texttt{lambda\_i}
@@ -2146,21 +2179,14 @@ sie = 0.010000 and sin = 0.010000
 
 \begin{figure}[h!]%
     \centering
-    \subfloat[Bikubická interpolace - 1 bod]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/bic1.png} }%
+    \subfloat[Bikubická interpolace- nahrazení linie jedním bodem, sie=sin=0.01, lambda\_i=0.05;]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/bic1.png} }%
     \qquad
-    \subfloat[Bikubická interpolace body po 500 m]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/bic500.png} }%
-    \caption[Interpolace Bicubic]{Konfigurace parametrů a) sie=sin=0.01, lambda\_i=0.05; b) sie=sin=0.01, lambda\_i=0.01 \centering}%
+    \subfloat[Bikubická interpolace body po 500 m,  sie=sin=0.01, lambda\_i=0.01]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/bic500.png} }%
+           \caption[Bikubická interpolace]{Názorné porovnání výsledků Bikubická interpolace s různou volbou rozložení bodů \centering}%
+
     \label{fig:example}%
 \end{figure}
 
-\begin{figure}[h!]%
-    \centering
-    \subfloat[IDW interpolace - 1 bod]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/idw1.png} }%
-    \qquad
-    \subfloat[IDW interpolace body po 500 m]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/idw500.png} }%
-    \caption[Interpolace IDW]{Konfigurace parametrů IDW a) npoints=15, power=1.5; b) npoints=150, power=1.5\centering}%
-    \label{fig:example}%
-\end{figure}
 
 \subsubsection*{v.surf.idw}
 Modul \texttt{v.surf.idw} umožňuje nastavení exponentu \texttt{power}
@@ -2175,9 +2201,18 @@ výpočtu neznámé buňky zahrnoval zvolený počet bodů. Dalším důležitý
 omezením u IDW je určení vzdálenostní bariéry, která ignoruje vzdálené
 body do výpočtu. Z volby možných dvou parametrů vyplynulo několik
 poznatků:
+\begin{figure}[h!]%
+    \centering
+    \subfloat[IDW interpolace- nahrazení linie jedním bodem, npoints=15, power=1.5;]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/idw1.png} }%
+    \qquad
+    \subfloat[IDW interpolace body po 500 m, npoints=150, power=1.5]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/idw500.png} }%
+       \caption[Interpolace IDW]{Názorné porovnání výsledků interpolace IDW s různou volbou rozložení bodů \centering}%
+
+    \label{fig:example}%
+\end{figure}
 
 \begin{description}
-\item \textbf{Volba počtu bodů}, ze kterých se provádí interpolace, má
+\item \textbf{Volba počtu bodů} ze kterých se provádí interpolace, má
   velký vliv na možné výsledky. IDW je vhodná interpolační metoda pro
   rovnoměrně rozmístěné známé body. V tomto případě je vhodné
   výpočetní region rozdělit do dvou částí, čímž se do jisté míry
@@ -2185,8 +2220,7 @@ poznatků:
   regionu lze částečně suplovat parametrem \texttt{npoints}, ale v
   případě dvou ohnisek bodů s rozdílnou hustotou, což koresponduje s
   topologií dostupného vzorku dat, tento úsudek neplatí. Výsledná mapa
-  obsahuje na pomyslném spoji dvou regionů jednotlivých ohnisek bodů
-  neplynulý přechod způsobený limitem \texttt{npoints}.
+  obsahuje na pomy\-slné hranici mezi danými lokalitami nespojitý povrch.
 
 \item \textbf{Volba exponentu} ovlivňuje váhu (vzdálenost)
   jednotlivých bodů. Při volbě vysokého exponentu je odhadovaná buňka
@@ -2206,9 +2240,7 @@ nulovou srážkou a použít ji zcela chybně pro výpočet.
 
 
 \subsubsection*{v.surf.rst}
-Metodu RST představuje v GRASS modul \textit{v.surf.rst}, který oproti
-modulu \textit{v.surf.idw} disponuje mnoha funkcemi a volbou
-parametrů. Mimo jiné generuje specifické rastry vyplývající z
+Metodu RST představuje v GRASS modul \textit{v.surf.rst}. Mimo výškové mapy povrchu generuje jiné  specifické rastry vyplývající z
 generovaného povrchu: mapu sklonu, orientace, zakřivení a
 dalších. Dále umožňuje volbu maximální a minimální vzdálenosti bodů
 při segmentaci. Mezi charakteristické parametry této metody patří:
@@ -2218,10 +2250,10 @@ napětí povrchu.
 
 \begin{figure}[h!]%
     \centering
-    \subfloat[RST interpolace - 1 bod]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/rst1.png} }%
+    \subfloat[RST interpolace- nahrazení linie jedním bodem, tension $=30$]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/rst1.png} }%
     \qquad
-    \subfloat[RST interpolace body po 500 m]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/rst500.png} }%
-    \caption[Interpolace RST]{Konfigurace parametrů RST a)tension=30; b)tension=20 \centering}%
+    \subfloat[RST interpolace body po 500 m, tension $=20$]{ \includegraphics[width=0.3\textwidth]{./img/intanalys/rst500.png} }%
+    \caption[Interpolace RST]{Názorné porovnání  výsledků interpolace RST s různou volbou rozložení bodů \centering}%
     \label{fig:example}%
 \end{figure}
 
@@ -2345,9 +2377,9 @@ jednotlivých buněk jinými.
 \lstset{extendedchars=false,
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
-t.rast.extract input=temporalLetnany where="start_time > '2013-09-10 \
-             23:59:00'"output=selected_precip base=new_prec_map \
-             expression="if(precipitation < 0, null(), precipitation)" 
+t.rast.extract input=temporalLetnany where="start_time >\ 
+    2013-09-10 23:59:00"output=selected_precip base=new_prec_map\
+    expression="if(precipitation < 0, null(), precipitation)" 
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
@@ -2425,7 +2457,7 @@ souřadnicích do jednoho rastru na základě zvolené matematické funkce
 (průměr, suma, max, min atd.). Rastry jsou slučovány podle zvoleného
 časového kroku.
 
-Modul, který představuje agregační funkcionalitu, se jmenuje
+Modul, který představuje agregační funkci, se jmenuje
 t.rast.aggregate\footnote{\url{http://grass.osgeo.org/grass70/manuals/t.rast.aggregate.html}}.
 Vytvořený dataset je nazván \emph{temporalLetnany}.
 
@@ -2481,7 +2513,7 @@ t.rast.series input=rstt method=maximum output=rstt_seriesmax
 \paragraph*{Mapová algebra}
 Mapová algebra se v rámci TGRASS dělí na dva typy:
 \begin{description}
-\item [t.rast.mapcalc] plně podporuje funkcionalitu mapové algebry \textit{r.mapcalc}. Z časoprostorového modelu podporuje například start\_time, end\_time, které jsou nejčastěji využívané.
+\item [t.rast.mapcalc] plně podporuje funkcionalitu mapové algebry \textit{r.mapcalc}. Z časo\-prostorového modelu podporuje například start\_time, end\_time, které jsou nejčastěji využívané.
 \item [t.rast.mapcalc2] umožňuje využívat časoprostorové algebry, která je vůbec první svého druhu.
 \end{description}
 
@@ -2521,8 +2553,8 @@ vytváří pro každý rastr ze zvoleného datasetu jedna tabulka. Výsledkem
 z observace je nový časový vektorový dataset.
 
 Při volbě observačních bodů v místech dostupných referenčních
-srážkoměrů umožní porovnání interpolovaných bodů s
-referencí. Vektorovou vrstvu lze zvolit buď z tabulky srážkoměrů, nebo
+srážkoměrů je umožněno z výsledků observace porovnat interpolované body s
+referenčními hodnotami. Vektorovou vrstvu lze zvolit buď z databázové tabulky srážkoměrů, nebo
 přidat jednotlivé body s využitím modulu \textit{v.in.ascii}.
 \begin{figure}[h!]
 \begin{footnotesize}
@@ -2837,7 +2869,7 @@ nejbližší době ze strany T-Mobile zpřístupněn pro projekt kvalitnější
 vzorek dat z pohledu hustoty MV spojů, který by umožňoval výzkum
 založený na reálném datovém podkladu.
 
-Vzhledem k tomu, že se jedná o vývoj SW prostředku jako jednoho z modulů komplexního programu řešeného v rámci mezinárodního projektu, nebyla v rámci této BP. zdůrazněna aplikační hodnota vyvinutého programu. Závěrem lze však konstatovat, že dílčí modul vyvíjeného SW dostatečně prokázal v rámci případové studie svou funkčnost a splnil předpoklad vytvoření datového rozhraní časoprostorové databáze meteorologických a hydrologických podkladů
+Vzhledem k tomu, že se jedná o vývoj SW prostředku jako jednoho z modulů komplexního programu řešeného v rámci mezinárodního projektu, nebyla v rámci této BP. zdůrazněna aplikační hodnota vyvinutého programu. Závěrem lze však konstatovat, že dílčí modul vyvíjeného SW dostatečně prokázal v rámci případové studie svou funkčnost a splnil předpoklad vytvoření datového rozhraní časoprostorové data\-báze meteorologických a hydrologických podkladů
 
 \pagenumbering{gobble}
 \newpage
