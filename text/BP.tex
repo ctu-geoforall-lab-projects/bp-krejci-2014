@@ -2158,7 +2158,7 @@ jednotlivých časových oken k vektorové vrstvě
 barevné znázornění prvků vektorové vrstvy na základě přiřazené tabulky
 barev pro atributový sloupec v databázi.
 
-Způsob zobrazení dat umožňuje modul \textit{g.gui.animation}, který je
+Vizualizaci v podobě animace umožňuje modul \textit{g.gui.animation}, který je
 interaktivní a~uživatelsky přístupný a umožňuje vytvářet animace z
 %%% ML: veta nize nedava prislis smysl, neco tam chybi...
 jednotlivých po sobě jdoucích časových oken. Těžiště jeho výhod ve 
@@ -2939,8 +2939,7 @@ minut, po kterých proběhla agregace.
 \necislovana{Závěr}
 
 Téma práce "Analýza a vizualizace srážkových dat z mikrovlnných
-telekomunikačních spojů pomocí GIS" vycházelo z přímých požadavků
-%%% ML: co uvest zadavatele konkretneji (alespon v poznamce pod carou)???
+telekomunikačních spojů pomocí GIS", vycházelo z přímých požadavků
 zadavatele této práce, který spolupracuje na projektu mezinárodního
 charakteru. Mezi hlavní požadavky patřilo zpracování naměřených dat do
 vhodné formy v prostředí GIS. Tento krok je první a potřebný k dalším
@@ -2954,13 +2953,11 @@ externí databáze, ve které jsou uložena hrubá data z mikrovlnných
 vysílačů. Výstupem modulu jsou srážková data vhodná jak pro standardní
 funkce GRASS tak pro časoprostorové analýzy. Vypočtená data jsou
 dostupná jak ve formě časových oken, tak ve formě vhodné pro export
-pro jiná využití. Výstupní formát modulu podporující \textit{Temporal GRASS
+pro jiná využití. Výstupní formát modulu podporující \textit{Temoporal GRASS
   framework} umožňuje větší prostor při analýze časových řad srážek,
 včetně dávkového exportu ve vhodném formátu pro vstup do
 srážko-odtokových modelů.
 
-%%% ML: uvod a zaver je jedine misto, kde se muze objevit prvni osoba
-%%% - prave ze zduvodu zhodnoceni vysledku (to jenom poznamka)
 
 Vývoji vlastních modulů předcházela studia spojená s programovacím
 jazykem Python a problematikou databáze PostgreSQL. Kombinace těchto
@@ -2971,10 +2968,6 @@ strojová náročnost, která v rámci dostupných funkcí Python knihovny
 využívá zápisů do přechodných souborů s následným dávkovým načtením do
 databáze.
 
-%%% ML: mozna bych zminit objektovy navrh...
-
-%%% ML: take bych zminil publikovani navrzenych modulu v addons (do obhajoby tam budou na 100%)
-
 Modul \textit{r.mwprecip} je v současné době otevřený doplnění nových
 funkcí pro určení baseline a to především pro rychlý vývoj nových
 metod.
@@ -2982,24 +2975,17 @@ metod.
 V rámci vývoje aplikace s využitím \textit{GRASS Python Scripting
   Library} bylo ze vzniklých požadavků na implementaci poukázáno na
 možné vylepšení dvou funkcí modulu \textit{v.in.ogr}, které následně
-byly vedoucím práce v GRASS GIS upraveny.
+byly předním vývojářem GRASS GIS upraveny.
 
 Práce ukazuje na možné nové směry výzkumu v oblasti
-interpolací srážek z linio\-vých reprezentací, které jsou zcela novým a
+interpolací srážek z liniových reprezentací, které jsou zcela novým a
 málo zažitým jevem jak na úrovni GIS, tak i  součástí problematiky
 rekonstrukce dešťových srážek obecně. S velkou pravděpodobností bude v
 nejbližší době ze strany T-Mobile zpřístupněn pro projekt kvalitnější
 vzorek dat z pohledu hustoty MV spojů, který by umožňoval výzkum
 založený na reálném datovém podkladu.
 
-%%% ML: teto vete (a celemu odstavci) prilis nerozumim...
-Vzhledem k tomu, že se jedná o vývoj SW prostředku jako jednoho z
-modulů komplexního programu řešeného v rámci mezinárodního projektu,
-nebyla v rámci této práce zdůrazněna aplikační hodnota vyvinutého
-programu. Závěrem lze však konstatovat, že dílčí modul vyvíjeného SW
-dostatečně prokázal v rámci případové studie svou funkčnost a splnil
-předpoklad vytvoření datového rozhraní časoprostorové data\-báze
-meteorologických a hydrologických podkladů.
+Vzhledem k tomu, že se jedná o vývoj SW prostředku jako jednoho z modulů komplexního programu řešeného v rámci mezinárodního projektu, nebyla v rámci této BP. zdůrazněna aplikační hodnota vyvinutého programu. Závěrem lze však konstatovat, že dílčí modul vyvíjeného SW dostatečně prokázal v rámci případové studie svou funkčnost a splnil předpoklad vytvoření datového rozhraní časoprostorové data\-báze meteorologických a hydrologických podkladů
 
 \pagenumbering{gobble}
 \newpage
