@@ -1713,7 +1713,7 @@ sekcemi.
 \subsection{Modul r.mwprecip}
 Primární účel modulu \textit{r.mwprecip} je zpracování hrubých dat MV
 spojů. Základní funkčnost modulu spočívá jak ve zpracování dat, tak ve
-výstupu vhodném pro GIS analýzy. Modul pro výstupní data podporuje dvě
+výstupu vhodném pro další GIS analýzy. Modul pro výstupní data podporuje dvě
 základní reprezentace dat. Výstupem jsou jak interpolované
 srážky v rastrové podobě, tak vektorová reprezentace pro jednotlivé MV
 spoje.  Zpracování dlouhých časových řad ve zvoleném intervalu je
@@ -1725,38 +1725,37 @@ registračních souborů do pracovní složky.
  
 \subsubsection{Funkce a ovládání}
 V následujícím textu jsou shrnuty vlastnosti modulu
-\textit{r.mwprecip}. Funkcionalita modulu \textit{r.mwprecip} se dělí
-do tří částí.
+\textit{r.mwprecip}. Jeho funkcionalita se dělí do tří částí:
 
 \begin{itemize}
-\item výpočet srážek
-\item vytvoření časových oken
-\item plošné interpolace 
+\item výpočet srážek,
+\item vytvoření časových oken,
+\item plošné interpolace.
 \end{itemize}
 
 Jediným povinným parametrem (sekce \textit{Required}) modulu
 \textit{r.mwprecip} je \texttt{database}, jehož vstupem je textový
-řetězec s názvem databáze PostgeSQL. Modul je koncipován pro
+řetězec s názvem databáze PostgreSQL. Modul je koncipován pro
 experimentální účely, kde se předpokládá práce na lokálním počítači
 bez přihlašovacího jména a hesla k databázi. V opačném případě je
-možnost v poslední sekci \textit{Database} definovat vstupní hodnoty
+možnost v~poslední sekci \textit{Database} definovat vstupní hodnoty
 pro parametry \texttt{user} a \texttt{password}.
-
 
 \begin{table}[h]
 \centering
+{\small
 \begin{tabular}{|lll|}
 \hline
 \multicolumn{1}{|c}{sekce} & \multicolumn{1}{c}{parametry/ přepínače}                                                    & \multicolumn{1}{c|}{popis}    \\ \hline\hline
-Required                   & database                                                                                    & jméno databáze s daty         \\\hline
-Baseline                   & \begin{tabular}[c]{@{}l@{}}statfce quantile roundm\\aw baseltime baselfile\end{tabular}    & nastavení výpočtu baseline   \\\hline
-Time-windows               & \begin{tabular}[c]{@{}l@{}}interval fromtime\\totime lignore\end{tabular}                 & nastavení časových oken       \\\hline
-Rain Gauges                & rgauges                                                                                     & nastavení vstupu srážkoměrů   \\\hline
-Interpolation              & \begin{tabular}[c]{@{}l@{}}-g -q interpolation isettings\\pmetohod step color\end{tabular} & nastavení interpolací a barev \\\hline
-Database                   & user password                                                                               & doplňkové nastavení db        \\\hline
-Optional                   & -p -r schema                                                                                & informace o db, smazání temp, \\ \hline
+Required                   & {\tt database}                                                                                    & jméno databáze s daty         \\\hline
+Baseline                   & \begin{tabular}[c]{@{}l@{}}{\tt statfce quantile roundm}\\{\tt aw baseltime baselfile}\end{tabular}    & nastavení výpočtu baseline   \\\hline
+Time-windows               & \begin{tabular}[c]{@{}l@{}}{\tt interval fromtime}\\{\tt totime lignore}\end{tabular}                 & nastavení časových oken       \\\hline
+Rain Gauges                & {\tt rgauges}                                                                                    & nastavení vstupu srážkoměrů   \\\hline
+Interpolation              & \begin{tabular}[c]{@{}l@{}}{\tt -g -q interpolation}\\{\tt isettings pmetohod step color}\end{tabular} & nastavení interpolací a barev \\\hline
+Database                   & {\tt user password}                                                                               & doplňkové nastavení db        \\\hline
+Optional                   & {\tt -p -r schema}                                                                                & informace o db, smazání temp \\ \hline
 \end{tabular}
-
+}
 \caption{Přehled parametrů v jednotlivých GUI sekcích}
 \label{tab:rozhrani}
 \end{table}
@@ -1765,10 +1764,10 @@ Optional                   & -p -r schema                                       
 Při každém uživatelském spuštění modulu \textit{r.mwprecip } proběhne
 kontrola stavu databáze. Při prvním spuštění je databáze uvedena do
 potřebného stavu \ref{subsubsec:upravadatabaze}. Filosofie modulu je
-založena na předpokladu, že bude sloužit k experimentálním pokusům v
-rozhraní GRASS GIS. Jednotlivé kroky výpočtů jsou od sebe odděleny, tak
-aby se při změně parametrů  části programu znovu nemusely provádět
-veškeré výpočty. Tyto kroky dělí se do výše zmíněných tří kategorií.
+založena na předpokladu, že bude sloužit k experimentálním pokusům
+v~rozhraní GRASS GIS. Jednotlivé kroky výpočtů jsou od sebe odděleny
+tak, aby se při změně parametrů části programu znovu nemusely provádět
+veškeré výpočty. Tyto kroky se dělí do výše zmíněných tří kategorií.
 
 Modul pracuje v oddělených databázových schematech. Ze schématu
 \texttt{public} načítá veškerá data z databáze a až na prvotní
@@ -1807,19 +1806,19 @@ hodnotami baseline ve formátu    \acs{CSV}.
 \begin{tabular}{|lll|}
 \hline
 \multicolumn{1}{|c}{parametr} & \multicolumn{1}{c}{typ} & \multicolumn{1}{c|}{explicitní hodnoty}                                \\ \hline\hline
-statfce                                & string                  & \begin{tabular}[c]{@{}c@{}}mode avg quantile\end{tabular}     \\
-quantile                               & integer                 & 1-100                                                         \\
-roundm                                 & integer                 & -                                                             \\
-aw                                     & float                   & -                                                             \\
-baseltime                              & soubor         		 & interaktivní zadání                                           \\
-baselfile                              & soubor         		 & interaktivní zadání                                           \\ \hline
+{\tt statfce}                                & string                  & \begin{tabular}[c]{@{}c@{}}mode avg quantile\end{tabular}     \\
+{\tt quantile}                               & integer                 & 1-100                                                         \\
+{\tt roundm}                                 & integer                 & -                                                             \\
+{\tt aw}                                     & float                   & -                                                             \\
+{\tt baseltime}                              & soubor         		 & interaktivní zadání                                           \\
+{\tt baselfile}                              & soubor         		 & interaktivní zadání                                           \\ \hline
 \end{tabular}
 \caption{Parametry v GUI sekci Baseline}
 \label{my-label}
 \end{table}
 
 Druhou možností je poloautomatizovaný výpočet, kdy jsou vstupními
-údaji časové intervaly, nebo okamžiky, které představují suché období.
+údaji časové intervaly nebo okamžiky, které představují suché období.
 
 Pro příklad: první řádek označuje časový okamžik suchého období, na
 dalším řádku je časový interval uvozený řetězcem \texttt{int} a za ním
@@ -1865,8 +1864,8 @@ Volbě časového intervalu, po kterém chceme okna vytvářet, slouží
 parametr \texttt{interval}, který je explicitně nastaven na hodnoty
 \emph{minute} (minuta), \emph{hour} (hodina) a \emph{day}
 (den). Minuta je nastavena jako výchozí.  Například při volbě
-\emph{minute} jsou cca 15 [s] spočtené srážky zprůměrovány a výsledná
-hodnota se zapíše do databáze jako průměrná minututová srážka. Jelikož
+\emph{minute} jsou cca 15 sekund spočtené srážky zprůměrovány a výsledná
+hodnota se zapíše do databáze jako průměrná minutová srážka. Jelikož
 se hodnota počítá jako průměr, intenzita srážek je v [$mm \cdot
 h^{-1}$] i v případě generování časových oken v jiném časovém
 intervalu.
@@ -1875,10 +1874,10 @@ intervalu.
 \begin{tabular}{|lll|}
 \hline
 \multicolumn{1}{|c}{parametr} & \multicolumn{1}{c}{typ} & \multicolumn{1}{c|}{explicitní hodnoty} \\ \hline\hline
-interval                               & string                  & minute, hour, day             \\
-fromtime                               & timestamp               & YYYY-MM-DD H:M:S              \\
-roundm                                 & integer                 & YYYY-MM-DD H:M:S              \\
-lignore                                & soubor                  & linkid                        \\ \hline
+{\tt interval}                               & string                  & minute, hour, day             \\
+{\tt fromtime}                               & timestamp               & YYYY-MM-DD H:M:S              \\
+{\tt roundm}                                 & integer                 & YYYY-MM-DD H:M:S              \\
+{\tt lignore}                                & soubor                  & linkid                        \\ \hline
 \end{tabular}
 \caption{Parametry v GUI sekci Time-window}
 \label{my-label}
@@ -1887,9 +1886,9 @@ Generování časových oken je možno vymezit časovým intervalem. Tato
 volba má přímou návaznost na plošnou interpolaci srážek a další
 využití v GRASS. Vstupní hodnoty pro parametry \textit{fromtime}
 (začátek intervalu) a \textit{totime} (konec intervalu) jsou datového
-typu (timestamp) ve formátu \emph{"YYYY-MM-DD H:M:S"}. V sekci
-\textit{Optional} je přepínač \texttt{-p}, který vypisuje do
-informačního terminálu informaci o začátku a konci časového rozsahu
+typu (timestamp) ve formátu \emph{"YYYY-MM-DD H:M:S"}. V~sekci
+\textit{Optional} je přepínač \texttt{-p}, který vypisuje na
+standardní výstup informaci o začátku a~konci časového rozsahu
 datasetu pro zjištění možného maximálního intervalu.
 
 Vstupní hodnotou parametru \texttt{lignore}, je soubor definující
@@ -1924,7 +1923,7 @@ escapeinside=''}
 Vstupem do parametru \texttt{rgauges} je cílová složka se soubory,
 které jsou načteny dávkově. Pro jednotlivé srážkoměry se vytvoří
 vektorová geometrie reprezentovaná body, která je uložena do databáze
-PostgreSQL. Pro vytvoření časových oken z dat srážkoměrů slouží 
+PostgreSQL. Pro vytvoření časových oken z~dat srážkoměrů slouží 
 v zásadě identické nastavení jako pro tvorbu časových oken 
 intenzity srážek z MV spojů.
 
@@ -1936,18 +1935,20 @@ plošné interpolace srážek.
 
 Nastavení výpočetního regionu umožňují předem nastavené hodnoty
 modu\-lu \textit{r.mwprecip}. Při uživatelské volbě z GRASS modulu
+%%% ML: tomu nerozumim, co se dat vypnout pomoci prepinase `-q`???
 \textit{g.region} je možné tuto automatizaci vypnout přepínačem
-\texttt{-q}
+\texttt{-q}.
 \begin{table}[h]
 \centering
 \begin{tabular}{|lll|}
 \hline
 \multicolumn{1}{|c}{parametr} & \multicolumn{1}{c}{typ} & \multicolumn{1}{c|}{explicitní hodnoty} \\ \hline\hline
-interpolation                          & string                  & rest, idw, bspline           \\
-isettings                              & string                  &                              \\
-pmethod                                & integerstring           & permeter, count              \\
-step                                   & integer                 &                              \\
-color                                  & string                  & hodnota R:G:B                \\ \hline
+{\tt interpolation}                          & string                  & rest, idw, bspline           \\
+{\tt isettings}                              & string                  &                              \\
+%%% ML: integerstring ?
+{\tt pmethod}                                & integerstring           & permeter, count              \\
+{\tt step}                                   & integer                 &                              \\
+{\tt color}                                  & string                  & hodnota R:G:B                \\ \hline
 \end{tabular}
 \caption{Parametry v GUI sekci Interpolation}
 \end{table}
@@ -1983,7 +1984,7 @@ musí být uvozen do závorek ve formátu:
 \lstset{extendedchars=false,
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
-grass.run_commad()                                                           
+grass.run_command()                                                           
 \end{lstlisting}
 \end{footnotesize}
 \end{figure}
@@ -2029,10 +2030,14 @@ grass.run_command( "v.surf.idw", input=points_nat,
 \end{footnotesize} 
 \end{figure}
 
+%%% ML: tomu nerozumim, nastaveni isettings bych v tomto pripade cekal
+%%% `isettings="npoints=25 power=2.5", samotny prikaz pro funkci
+%%% run_command() si sestavi modul sam a uzivate tim neobrezuje,
+%%% celkove mi tato cast prijde nejasna...
 
  
 \subsubsection{Vstup a výstup modulu}
-\paragraph*{Vstup} hlavní datový vstup do modulu představuje
+\paragraph*{Vstup} Hlavní datový vstup do modulu představuje
 konektivita s externí databází PostgreSQL. V ní byl uložen zmíněný
 vzorek dat.  Modul dále podporuje dávkové načítání časových řad ze
 srážkoměrů.
@@ -2041,7 +2046,7 @@ srážkoměrů.
 Jedním ze základních výstupů jsou vypočtené srážkové intenzity uložené
 v databázi. Ty jsou uloženy jak v časovém kroku sběru dat, tak ve
 zvoleném kroku. Pro zvolený časový krok jsou dále vytvářeny tabulky
-představující jednotlivá "časová okna", vhodná pro následné
+představující jednotlivá \uv{časová okna}, vhodná pro následné
 analýzy v GIS.
 
 \textbf{Rastrová data} reprezentují výsledek zvolené plošné
@@ -2063,32 +2068,32 @@ pro zamezení redundance dat v samostatné tabulce, nikoliv pro každé
 časové okno. Pro analýzy a další využití výsledků v GRASS GIS, je
 podstatné, aby bylo možné jednotlivá časová okna připojovat k
 vektorovému podkladu a s vhodnou tabulkou barev je zobrazovat.  Toho
-lze docílit sledem po sobě jdoucích volání jednotlivých modulů z
+lze docílit sledem po sobě jdoucích volání jednotlivých modulů ze systému
 GRASS. Pro jednoduchost byl vytvořen modul \textit{v.link.precip},
 který to umožňuje v uživatelsky přístupné formě.
 
 
 \subsubsection{Funkce a ovládání}
 Modul při prvním spuštění vytvoří vektorovou vrstvu v nativním
-prostředí GRASS na základě vytvořené geometrie v databázi
+formátu GRASS na základě vytvořené geometrie v databázi
 PostgreSQL. Dále pak připojí nastavenou tabulku reprezentující časové
-okno. Při dalším připojení jiného časového okna je bývalá připojená
-tabulka odpojena a k té samé vektorové vrstvě se připojí nová. Modul
+okno. Při dalším připojení jiného časového okna je původně připojená
+tabulka odpojena a k té samé vektorové vrstvě se připojí tabulka nová. Modul
 je tvořen dvěma GUI záložkami \textit{Required} a \textit{Optional}.
 
 První záložka \textit{Required} obsahuje pouze povinné parametry.
 Parametr \texttt{schema} označuje pracovní schéma, ve kterém jsou
 uloženy výsledky pro zobrazení. Druhým parametrem je časová známka
-(timestamp) časového okna, které chceme připojit k vektorovému
+(timestamp) časového okna, které chceme připojit k~vektorovému
 podkladu (MV spoje). Výsledná vektorová mapa je vždy pojmenována
 \textit{"link\_nat"}. Další parametr \texttt{type} je explicitně
 nastaven na hodnoty \emph{links} a \emph{raingauge}. Při využití
-načítání srážkoměrných dat v modulu \textit{r.wmprecip} je možné
+načítání srážkoměrných dat v modulu \textit{r.mwprecip} je možné
 připojit k bodové vrstvě "gauge\_nat" tabulku s časovým oknem stejně
 jako v případě výsledku pro MV spoje.
 
 Druhá záložka \textit{Optional} obsahuje čtyři přepínače a tři
-parametry.  Přepínače a parametry jsou definovány:
+parametry.  Přepínače a~parametry jsou definovány:
 \begin{description}
 \item[-c] slouží pro případ, kdy bude nutno pracovat s více časovými
   okny najednou. Přepínač \texttt{-c} časová okna nepřipojuje k
@@ -2098,7 +2103,7 @@ parametry.  Přepínače a parametry jsou definovány:
 \item[-a] umožňuje dávkově vytvořit pro všechna časová okna z modulu
   \textit{r.mwprecip} vektorové vrstvy s připojenými tabulkami. Tato
   funkce je vhodná k přípravě dat pro časoprostorové analýzy.
-\item[-p] vypíše do výstupové řádky hodnoty připojené atributové
+\item[-p] vypíše na standardní výstup hodnoty připojené atributové
   tabulky.
 \item[-r] vymaže dočasné soubory z pracovního schématu.
 \end{description}
@@ -2108,8 +2113,8 @@ Parametr \texttt{layername} nastavuje výchozí vektorovou vrstvu, ke
 které chceme při\-pojit výsledky v podobě časových oken. Podmínkou je,
 že daná vektorová vrstva musí obsahovat identifikátory (linkid). V
 praxi zde budou nejčastěji připojovány vrstvy vytvořené v rámci
-výpočtu primárního modulu \texttt{r.mwprecip}. Ty jsou pojmenovány
-\textit{linkpoints} s postfixem hodnoty parametru \texttt{step}(počet
+výpočtu primárního modulu \textit{r.mwprecip}. Ty jsou pojmenovány
+\textit{linkpoints} s postfixem hodnoty parametru \texttt{step} (počet
 bodů či krok). Pro připojení liniových vrstev MV spojů je výchozí
 název \textit{link}.  Tabulka barev pro vektorovou vrstvu je možná
 nastavit parametrem \texttt{color}, kde vstupní hodnota je textový
