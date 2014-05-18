@@ -1092,6 +1092,7 @@ práci jsou: numerické, časové, logické, řadící (enumerate) a
 geometrické typy.
 
 \subsection{Extenze PostGIS}
+\label{subsec:postgis}
 PostGIS\footnote{\url{http://postgis.net/}} je open-source rozšířením
 (\texttt{EXTENSION}) databáze PostgreSQL o podporu geografických
 objektů. Jde tedy o velice vhodný nástroj pro využití v GIS. PostGIS
@@ -1153,7 +1154,7 @@ předdefinované, ostatní se dají dodatečně definovat a upravovat.
 Souřadnicové systémy jsou charakterizovány unikátním kódem
 \texttt{\acs{SRID}}, který je všeobecně zažitým formátem v aplikacích GIS.
 %%% ML: standardem?
-%%% MK: muze to byt takhle? který je všeobecně zažitým formátem v aplikacích GIS.
+%%% MK: muze to byt takhle?... který je všeobecně zažitým formátem v aplikacích GIS.
 Pro konverze mezi jednotlivými systémy slouží funkce
 \texttt{ST\_Transform}.
 %%% ML: zbytecne
@@ -1251,7 +1252,7 @@ technologií i~matematických formulací řešena
   GIS 7} obsahuje zcela nově navržený balíček modulů
 %%% ML: tady bych vysvetlil zkratku TGRASS
 %%% MK: muze byt formou zkratky?
-\asc{TGRASS}\footnote{\url{http://grass.osgeo.org/grass70/manuals/temporalintro.html}},
+\acs{TGRASS} \footnote{\url{http://grass.osgeo.org/grass70/manuals/temporalintro.html}},
 který integruje do původního GRASS systému časový rozměr.
 
 Hlavním obsahem této kapitoly je představení časoprostorových
@@ -1473,8 +1474,9 @@ prezentací výstupů modulů vytvořených v rámci této práce.
 \setcounter{footnote}{1}
 \section{Charakteristika dat}
 
-%%% ML: odkaz na to co je TeleMAS...
-V současné době jsou v rámci TeleMAS v ČR využíváno naměřených dat z
+%%% ML: odkaz na to co je TeleMAS.
+%%% MK: Telemas je vnitrni nazev projektu. nedam to tam
+V současné době je v rámci zadavatelského projektu  využíváno naměřených dat z
 MV spojů od telekomunikačního operátora T-Mobile, která jsou ukládána
 do databáze PostgreSQL.
 
@@ -1591,18 +1593,19 @@ odeslané a přijaté intenzitě signálu.
 
 \subsubsection*{Úprava databáze}
 \label{subsubsec:upravadatabaze}  
-V databázové dávce chybí atribut s informací o vertikální či
-horizontální pola\-rizaci signálu (\texttt{polarization}), proto byl do
+V současné době není do databáze zahrnut atribut s hodnotami o vertikální či
+horizontální pola\-rizaci signálu (\texttt{polarization}). Tyto hodnoty byly přidány do databáze externího zdroje informací. 
 %%% ML: tato cast vety mi nedava smysl, neco tam chybi...
-tabulky \texttt{link} přidán ručně a následně i známé hodnoty pro
-jednotlivé spoje. V současné době probíhá jednání se správcem databáze
+%%% MK: opraveno
+V současné době probíhá jednání se správcem databáze
 T-Mobile o přidání tohoto atributu.
  
 Úprava databáze se provádí v prostředí navrženého GRASS modulu a je
 charakterizována následujícím postupem:
 \begin{enumerate}
 %%% ML: odkaz na kapitolu o PostGISu
-\item \textbf{Geometrie} - extenze PostGIS,
+%%% MK: opraveno
+\item \textbf{Geometrie} - extenze PostGIS\ref{subsec:postgis},
 \item \textbf{Indexy} - vytvoření indexů pro optimalizaci vyhledávání dotazů,
 \item \textbf{Funkce} - přidání agregačních funkcí pro statistické výpočty,
 \item \textbf{Konfigurace} - dílčí úpravy databáze pro výpočty.
@@ -1698,6 +1701,7 @@ modulů volaných z \textit{GRASS Python Scripting Library}.
 
 \subsubsection{Uživatelské rozhraní}
 %%% ML: zminku o GRASS Py lib jsem odtranil, nemela souvislost k UI
+%%% MK: ok
 Uživatelské rozhraní navržených modulů je definováno sadou přepínačů
 a~ para\-metrů viz kap. \ref{subsubsec:grassterminologie}. Program se
 ovládá (spouští) buď z příkazové řádky GRASS nebo ve wxGUI, kde se
@@ -1934,11 +1938,15 @@ intenzity srážek z MV spojů.
 dvěma částmi. První zahrnuje interpolace bodů podél spojů a druhá
 plošné interpolace srážek.
 
-Nastavení výpočetního regionu umožňují předem nastavené hodnoty
-modu\-lu \textit{r.mwprecip}. Při uživatelské volbě z GRASS modulu
+
+
+Modul \textit{r.mwprecip} má pro dávkové generovaní interpolací 
+nastaven výpočetní region na výchozí hodnoty, které definují oblast
+výpočetního regionu. Toto výchozí nastavení modulu lze ignorovat přepínačem \texttt{-q}
+a využít tedy nastavení globální či nastavené modulem \textit{g.region}.
 %%% ML: tomu nerozumim, co se dat vypnout pomoci prepinase `-q`???
-\textit{g.region} je možné tuto automatizaci vypnout přepínačem
-\texttt{-q}.
+%%% MK: ta funkce nedava smysl. Smazu ji z modulu ok?
+
 \begin{table}[h]
 \centering
 \begin{tabular}{|lll|}
@@ -1947,7 +1955,8 @@ modu\-lu \textit{r.mwprecip}. Při uživatelské volbě z GRASS modulu
 {\tt interpolation}                          & string                  & rest, idw, bspline           \\
 {\tt isettings}                              & string                  &                              \\
 %%% ML: integerstring ?
-{\tt pmethod}                                & integerstring           & permeter, count              \\
+%%% MK: string 
+{\tt pmethod}                                & string                  & permeter, count              \\
 {\tt step}                                   & integer                 &                              \\
 {\tt color}                                  & string                  & hodnota R:G:B                \\ \hline
 \end{tabular}
@@ -2035,7 +2044,7 @@ grass.run_command( "v.surf.idw", input=points_nat,
 %%% `isettings="npoints=25 power=2.5", samotny prikaz pro funkci
 %%% run_command() si sestavi modul sam a uzivate tim neobrezuje,
 %%% celkove mi tato cast prijde nejasna...
-
+%%% MK: to je pravda, asi me to v tu chvili nedoslo, ze by to treba takhle..
  
 \subsubsection{Vstup a výstup modulu}
 \paragraph*{Vstup} Hlavní datový vstup do modulu představuje
