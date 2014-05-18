@@ -12,6 +12,11 @@
 \usepackage[final]{pdfpages}
 \usepackage[final,pdftex, colorlinks=false]{hyperref}
 \usepackage{fancyhdr}
+%mensi mezera z figure
+%\setlength{\belowcaptionskip}{-10pt}
+\newcommand{\squeezeup}{\vspace{-2.5mm}}
+
+
 
 
 \usepackage{verbatim}
@@ -172,7 +177,6 @@ morecomment=[l]{\#},
 \renewcommand{\contentsname}{Obsah}
 \renewcommand{\figurename}{Obr.}
 \renewcommand{\tablename}{Tab.}
-
 
 
 
@@ -1193,7 +1197,7 @@ MULTILINESTRING((0 0,1 1,1 2),(2 3,3 2,5 4))
 MULTIPOLYGON(((0 0,4 0,4 4),(1 1,2 1,2 2)), ((-1 -1,-1 -2,-2 -2,))) 
 GEOMETRYCOLLECTIONM(POINTM(2 3),LINESTRINGM(2 3,3 4))                
 \end{verbatim}
-
+\vskip-2ex
 %%% ML: podobne jako PostgreSQL, kapitola mohla byt vyrazne KRATSI,
 %%% ale nechme to tak jako je...
 %%% MK: Tuto kapitolu bych nechal jak je, u kapitoly POSTGRESQL jsem pro neco SMAZAT.
@@ -1231,7 +1235,7 @@ SELECT  ST_AsEWKT (geom) FROM link
 "SRID=4326;LINESTRING(14.4533605575562 50.0689735412598,
                       14.4754581451416 50.0387687683105)"
 \end{verbatim}
-
+\vskip-2ex
 \item[Agregační] funkce PostGIS jsou v principu stejné jako ve
   standardu SQL (průměr, max, min) s tím rozdílem, že jsou zaměřeny na
   prostorová data. Příkladem je funkce pro sjednocení
@@ -1457,7 +1461,6 @@ na základě datasetu Y (např. průnik).
 
 \newpage
 \setcounter{footnote}{1}
-\setcounter{section}{4}
 \chapter*{Praktická část}\stepcounter{chapter}\addcontentsline{toc}{chapter}{Praktická část}
 \setcounter{section}{3}
 
@@ -1631,7 +1634,7 @@ vysílače.
 SELECT AddGeometryColumn ('public','node','geom',4326,'POINT',2)
 \end{lstlisting}
 \end{footnotesize}
-
+\vskip-2ex
 Vytvoření geometrického atributu ({\tt geom}) datového typu LINESTRING pro spoje. 
 
 \begin{footnotesize}
@@ -1639,7 +1642,7 @@ Vytvoření geometrického atributu ({\tt geom}) datového typu LINESTRING pro s
 SELECT AddGeometryColumn('public','link','geom',4326,'LINESTRING',2)
 \end{lstlisting}
 \end{footnotesize}
-
+\vskip-2ex
 Definování geometrie vysílače.
 
 \begin{footnotesize}
@@ -1647,7 +1650,7 @@ Definování geometrie vysílače.
 UPDATE node SET geom = ST_SetSRID(ST_MakePoint(long, lat), 4326)
 \end{lstlisting}
 \end{footnotesize}
-
+\vskip-2ex
 Dále byla pomocí funkce \texttt{ST\_MakeLine} zrekonstruována geometrie
 spojů (\texttt{link}) z vysí\-lačů (\texttt{node}). Z geometrie spojů
 (\texttt{link}) byla vypočtena jejich délka funkcí
@@ -1664,7 +1667,7 @@ atributy {\tt time} a {\tt recordid}, po optimalizaci dotazů nad tabulkou
 CREATE INDEX idindex ON record USING btree(recordid);		
 \end{lstlisting}
 \end{footnotesize}
-
+\vskip-2ex
 \paragraph*{Funkce} v nativním jazyku PL/pgSQL byla využita pro
 agregaci hodnot pro daný sloupec ve zvolené tabulce k výpočtu
 statistické funkce modus.
@@ -1851,7 +1854,7 @@ int                     -uvozen'í' intervalu
 \end{lstlisting}
 \end{footnotesize}
 \end{figure}
-
+\vskip-2ex
 
 Po výběru časových intervalů suchých období je možnost volby výpočtu výsledné baseline
 pro daný spoj pomocí základních statistických funkcí. K volbě slouží
@@ -1930,7 +1933,7 @@ escapeinside=''}
 \end{lstlisting}
 \end{footnotesize}
 \end{figure}
-
+\vskip-2ex
 
 Vstupem do parametru \texttt{rgauges} je cílová složka se soubory,
 které jsou načteny dávkově. Pro jednotlivé srážkoměry se vytvoří
@@ -2035,7 +2038,7 @@ grass.run_command( "v.surf.idw", input=points_nat,
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 %%% ML: tomu nerozumim, nastaveni isettings bych v tomto pripade cekal
 %%% `isettings="npoints=25 power=2.5", samotny prikaz pro funkci
 %%% run_command() si sestavi modul sam a uzivate tim neobrezuje,
@@ -2210,6 +2213,7 @@ escapeinside=''}
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
+\vskip-2ex
 %%% MK: vysvetleno
 Parametr \texttt{vect} umožňuje nastavení velikosti výpočetního regionu 
 na základě území vektorové mapy ohraničené minimálním obdélníkem.  
@@ -2252,7 +2256,7 @@ v.surf.bspline complete. Cross validation finished \
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 
 
 \begin{figure}[h!]%
@@ -2397,7 +2401,7 @@ escapeinside=''}
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 
 \subsubsection{Základní operace}
 
@@ -2420,7 +2424,7 @@ t.create output=temporalLetnany title="MV letnany" \
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 \paragraph*{Registrace} jednotlivých map do datasetu je druhým nutným
 krokem. Modul \textit{r.mwprecip} do pracovní složky automaticky
 generuje soubor vhodný pro tuto registraci (ve formátu "$<$název
@@ -2435,7 +2439,7 @@ temp14.lview2013_09_11_23_19_rst|2013-09-11 23:19:00
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 Registraci map do časového datasetu umožňuje modul \textit{t.register}
 \begin{figure}[h!]
 \begin{footnotesize}
@@ -2447,7 +2451,7 @@ t.register input=temporalLetnany file=/adresar/tmp_temp14/ \
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 
 Pro kontrolu úspěšné registrace je možné využít modul \textit{t.info}.
 \begin{figure}[h!]
@@ -2459,7 +2463,7 @@ t.info input=temporalLetnany
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 Po spuštění se vypíše tabulka s obecnými informacemi o časovém
 datasetu. Jednou s užitečných funkcí je vypsání celé historie příkazů
 v daném datasetu. Vypíše se přepínačem \texttt{-h}.
@@ -2501,7 +2505,7 @@ t.rast.extract input=temporalLetnany where="start_time > \
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 Ve tomto případě jsou nahrazeny hodnoty menší než 0 (MV šum - chyby)
 hodnotou NULL. To je výhodné například pro vizualizaci srážek nad
 podkladovou mapou, kde je vodné, aby nulové hodnoty byly průhledné.
@@ -2564,7 +2568,7 @@ t.shift input=rastr@tletnany granularity=1 hours
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 %%% ML: nepsal bych jake ma modul parametry, ale co dela...
 %%% MK: pravda
 \paragraph*{t.merge} je modul který umožňuje spojení dvou časových datasetů. 
@@ -2599,7 +2603,7 @@ t.rast.aggregate input=temporalLetnany output=temporal_aggreg \
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 Jinou agregační funkcí je \textit{t.rast.aggregate.ds}, která má na
 vstupu dva datasety \emph{a} a \emph{b}. Funkci této agregační funkce
 je agregace datasetu \emph{a} podle datasetu \emph{b}, tedy vytvoření
@@ -2622,7 +2626,7 @@ t.rast.series input=rstt method=maximum output=rstt_seriesmax
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 %%% ML: obrazek jsem zvetsil na standardni velikost
 \begin{figure}[h!]%
     \centering
@@ -2668,7 +2672,7 @@ alfa1.lview2013_09_09_00_01_rst@test4|2013-09-09 00:01:00 \
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 
 \paragraph{Observace}
 Modul \textit{t.vect.observe.strds} umožňuje definovat vektorovou
@@ -2703,7 +2707,7 @@ t.vect.observe.strds input=srazkomery strds=idw_gama \
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{./img/temporal/grafobs.png}
@@ -2778,7 +2782,7 @@ t.rast.mapcalc inputs=idw_gama_extract_agg@test,\
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
    
 
 %%% ML: opet nestastne umisteni legendy, mela byt mimo rastr
@@ -2849,7 +2853,7 @@ r.mwprecip.py -g database=letnany baseltime=/adresar/norain \
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 Vstupem do parametru \texttt{baseltime} jsou dva časové intervaly
 období sucha vyplývající z měření srážkoměrů. Sumy srážek jsou
 vytvořeny po 1 minutě. Do parametru \texttt{lignore} vstupuje soubor s
@@ -2879,7 +2883,7 @@ r.watershed  elevation=dem_srtm threshold=5000 \
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 Parametr \texttt{treshold} určuje jemnost segmentace jednotlivých
 povodí. Menší hodnota vede k většímu počtu povodí.
 
@@ -2902,6 +2906,7 @@ sum15minute_103	test3  2013-09-10 01:44:00 2013-09-10 01:59:00
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
+\vskip-2ex
 Odtud lze vybrat mapu z požadovaného intervalu, která je vstupem (\texttt{input}) pro \textit{r.volume}. 
 \begin{figure}[h!]
 \begin{footnotesize}
@@ -2913,7 +2918,7 @@ r.volume input=sum15minute_103 clump=basin \
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-
+\vskip-2ex
 
 
 \end{enumerate} 
@@ -2933,8 +2938,8 @@ r.volume input=sum15minute_103 clump=basin \
 Výsledkem je vektorová bodová mapa, kde ke každému bodu je připojena
 tabulka s hodnotami výsledků (sum, avg). Parametr \texttt{output}
 umožňuje uložení tabulky ve formě textového souboru se statistikami
-celé plochy výpočetního regionu.  Aby výsledné hodnoty jednotlivých povodí byly v jednotkách stejných jako vstupní rastry ($mm \cdot h^{-1}$), je nutno výsledný objem vydělit počtem minut, po kterých byla nastavena agregace.
-Výsledné hodnoty pro jednotlivá
+celé plochy výpočetního regionu.  Aby výsledné hodnoty jednotlivých povodí byly v jednotkách stejných jako vstupní rastry ($mm \cdot h^{-1}$), je nutno výsledný objem vydělit počtem minut po kterých byla nastavena agregace.
+
 %%% ML: v jakych jednotkach tedy jsou
 %%% MK: predelano
 
@@ -3020,6 +3025,23 @@ založený na reálném datovém podkladu.
 Závěrem lze konstatovat, že vlastní modul pro systém GRASS GIS
 dostatečně prokázal v rámci testování svou funkčnost a splnil
 předpoklad vytvoření datového rozhraní pro standardní a časoprostorové analýzy v prostředí GIS.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3226,6 +3248,156 @@ Cubic convolution interpolation for digital image processing. [online]. 1981, vo
 
 
 \end{thebibliography}
+
+
+
+
+\setcounter{footnote}{1}
+\newpage
+
+\appendix
+\chapter*{Přílohy}
+\renewcommand\thesection{\Alph{section}}
+
+\section{Instalace systému GRASS}
+\label{priloha:instalace}
+Postup instalace systému GRASS se odvíjí od  dané platformy operačního systému.
+Následující ukázka postupu je pro systém GNU/Linux
+(distribuci Ubuntu), podrobnosti instalace pro systém MS Windows jsou popsány na portálu \textbf{freegis}\footnote{\url{http://freegis.fsv.cvut.cz/gwiki/GRASS\_GIS\_/\_Instalace\_MS\_Windows}}
+
+\subsubsection*{Pomocí balíčku}
+Nejjednodušší je nainstalovat stabilní verzi GRASS 6.4, která je
+dostupná v~ba\-líčku. Lze ji proto nainstalovat pomocí správce balíčků
+\emph{Synaptic}. Nebo do příkazové řádky napsat:
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+$ sudo apt-get install grass70 grass70-gui
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure}
+\vskip-2ex
+\subsubsection*{Ze zdrojového kódu}
+Ke stažení zdrojových kódů je se využívá systému \textit{Subversion}. Instalaci lze spustit daným příkazem v terminálu.
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+$ sudo apt-get install subversion
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure}
+\vskip-2ex
+Dalším krokem je stažení zdrojového kódu:
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+$ svn checkout svn checkout https://svn.osgeo.org/grass/grass/trunk grass_trunk
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure}
+
+GRASS GIS potřebuje má závislosti na externích knihovnách. Ty je možné snadno nainstalovat pomocí balíčků:
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+$ sudo apt-get install flex bison libncurses5-dev zlib1g-dev libproj-dev \
+     proj-data proj-bin libreadline6-dev libgdal1-dev libtiff4-dev mesa-common-dev \
+     libglu1-mesa-dev tcl8.5-dev tk8.5-dev libfftw3-dev lesstif2-dev libxmu-dev \
+     libcairo2-dev g++ wx-common python-wxgtk2.8 libwxgtk2.8-dev libxmu-headers \
+     libavcodec-dev libavformat-dev libswscale-dev libpq-dev
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure}
+\vskip-2ex
+Následující kroky se skládají z konfigurace, kompilace a instalace.
+Nejdříve se přesuneme do složky grass71\_release.
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+$ cd grass71_release
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure}
+\vskip-2ex
+Dalším krokem je konfigurace spuštěním příkazu:
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+./configure --prefix=/usr/local \
+            --with-gdal --with-proj --with-proj-share=/usr/share/proj --with-geos \
+            --with-nls --with-readline --with-cxx --enable-largefile \
+            --with-freetype --with-freetype-includes=/usr/include/freetype2 \
+            --with-sqlite --with-python --with-wxwidgets --with-pthread --with-cairo
+            --with-postgres --with-postgres-includes=/usr/include/postgresql \
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure}     
+\vskip-2ex
+Dále kompilace zdrojového kódu:       
+  \begin{figure}[h!]  
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+$ make
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure}
+   \vskip-2ex
+Posledním krokem je instalace:   
+\begin{figure}[h!]
+\begin{scriptsize}
+\begin{lstlisting}[style=mybash]
+$ sudo make install
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure}   
+\vskip-2ex
+Pro spuštění GRASS slouží příkaz v terminálu:
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+$ grass71
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure} 
+     
+\newpage
+\section{Instalace modulů}
+
+Instalaci modulů z repozitáře GRASS Add-ons, kde jsou uloženy i moduly které vzniklé v rámci této práce, lze stáhnout přímo z prostředí GRASS GIS. Ke stahování modulů z externích Subversion repozitářů slouží modul \textit{g.extension}.
+
+Stažení  modulu \textit{r.mwprecip} a \textit{v.link.precip} je možno pomocí následující konfigurace modulu.
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+g.extension extension=r.mwprecip operation=add  
+g.extension extension=v.link.precip operation=add                                                       
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure} 
+
+
+
+
+
+
 \end{document}
 
 
