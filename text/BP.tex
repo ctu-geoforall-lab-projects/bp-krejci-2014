@@ -2284,7 +2284,7 @@ v.surf.bspline complete. Cross validation finished \
 
 \begin{figure}[h!]%
     \centering
-    \subfloat[Bikubická interpolace -- nahrazení linie jedním bodem, sie=sin=0.01, lambda\_i=0.05;]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/bic1.png} }%
+    \subfloat[Bikubická interpolace -- nahrazení linie jedním bodem, sie=sin=0.01, lambda\_i=0.05]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/bic1.png} }%
     \qquad
     \subfloat[Bikubická interpolace -- body po 500 m,  sie=sin=0.01, lambda\_i=0.01]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/bic500.png} }%
            \caption[Bikubická interpolace]{Názorné porovnání výsledků bikubické interpolace s různou volbou rozložení bodů \centering}%
@@ -2306,15 +2306,7 @@ v.surf.bspline complete. Cross validation finished \
 Modul \texttt{v.surf.idw} umožňuje nastavení exponentu \texttt{power}
 a počet známých bodů \texttt{npoints}, ze kterého se odhadovaný bod
 určuje \ref{sec:plostneinterpolace}.
-\begin{figure}[h!]%
-    \centering
-    \subfloat[IDW interpolace -- nahrazení linie jedním bodem, npoints=15, power=1.5;]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/idw1.png} }%
-    \qquad
-    \subfloat[IDW interpolace -- body po 500~m, npoints=150, power=1.5]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/idw500.png} }%
-       \caption[Interpolace IDW]{Názorné porovnání výsledků interpolace IDW s různou volbou rozložení bodů \centering}%
 
-    \label{fig:example}%
-\end{figure}
 
 Metoda \ac{IDW} v GRASS nedisponuje některými nastaveními, které by byla vhodná
 pro odhad plošných srážek pomocí MV. Jedním z nastavení je
@@ -2324,7 +2316,15 @@ výpočtu neznámé buňky zahrnoval zvolený počet bodů. Dalším důležitý
 omezením u IDW je určení vzdálenostní bariéry, která ignoruje vzdálené
 body do výpočtu. Z volby možných dvou parametrů vyplynulo několik
 poznatků:
+\begin{figure}[h!]%
+    \centering
+    \subfloat[IDW interpolace -- nahrazení linie jedním bodem, npoints=15, power=1.5]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/idw1.png} }%
+    \qquad
+    \subfloat[IDW interpolace -- body po 500~m, npoints=150, power=1.5]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/idw500.png} }%
+       \caption[Interpolace IDW]{Názorné porovnání výsledků interpolace IDW s různou volbou rozložení bodů \centering}%
 
+    \label{fig:example}%
+\end{figure}
 \begin{description}
 \item \textbf{Volba počtu bodů}, ze kterých se provádí interpolace, má
   velký vliv na možné výsledky. IDW je vhodná interpolační metoda pro
@@ -2361,7 +2361,7 @@ nulovou srážkou a použít ji zcela chybně pro výpočet.
 %%% kdyz obrazek pretece na dalsi stranku
 \begin{figure}[h!]%
     \centering
-    \subfloat[RST interpolace -- nahrazení linie jedním bodem, tension $=30$;]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/rst1.png} }%
+    \subfloat[RST interpolace -- nahrazení linie jedním bodem, tension $=30$]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/rst1.png} }%
     \qquad
     \subfloat[RST interpolace -- body po 500~m, tension $=20$]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/rst500.png} }%
     \caption[Interpolace RST]{Názorné porovnání  výsledků interpolace RST s různou volbou rozložení bodů \centering}%
@@ -2382,7 +2382,8 @@ dalších. Dále umožňuje volbu maximální a minimální vzdálenosti bodů
 při segmentaci. Mezi charakteristické parametry této metody patří:
 \texttt{dmin} a \texttt{dmax} umožňující nastavení minimální a
 maximální vzdálenosti mezi body; parametr \texttt{tension} určující
-napětí povrchu.
+napětí povrchu. Obrázek \ref{fig:rst} znázorňuje dva výsledné rastry s 
+rozdílnou konfigurací bodů a nastavením tenze.
 
 
 
@@ -2414,17 +2415,8 @@ zvoleném časovém intervalu tří dnů. Jednotlivá časová okna byla
 vygenerována v časovém kroku 1~minuta.  Rastrové mapy byly
 interpolovány metodou RST a IDW pomocí jednoho bodu uprostřed linie
 (\texttt{pmethod=count, step=1}).
-\begin{figure}[h!]
-\begin{footnotesize}
-\lstset{extendedchars=false,
-escapeinside=''}
-\begin{lstlisting}[style=mybash]
-2013-09-08 23:59:00
-2013-09-11 23:59:00                       
-\end{lstlisting}
-\end{footnotesize} 
-\end{figure}
-\vskip-2ex
+
+
 
 \subsubsection{Základní operace}
 
@@ -2580,8 +2572,7 @@ například často používanému formátu CSV.
  \paragraph*{Posunutí časového datasetu} Posunutí časového datasetu v
  čase může být využito například při změně času nebo při práci s
  daty s různými časovými referencemi. Modul \textit{t.shift} umožňuje
- posunutí datasetu o absolutní hodnotu. Příkazem jsme posunuli časový
- dataset o 1 hodinu dopředu.
+ posunutí datasetu o absolutní hodnotu.
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
@@ -2591,9 +2582,12 @@ t.shift input=rastr@tletnany granularity=1 hours
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-\vskip-2ex
+\vskip-2ex Tímto příkazem jsem  posunuli časový dataset o 1 hodinu dopředu.
+
+
+
 %%% ML: nepsal bych jake ma modul parametry, ale co dela...
-%%% MK: pravda
+%%% MK: ok
 \paragraph*{t.merge} je modul který umožňuje spojení dvou časových datasetů. 
 K nastavení slouží  dva parametry -
 \texttt{inputs}, do něhož vstupuje libovolné množství datasetů, které
@@ -2636,7 +2630,7 @@ Další možností je modul \textit{r.rast.series}, který využívá k agregaci
 algoritmů a je určen pro analýzu celého datasetu bez zvolené
 granularity.  Příkladem je vytvoření rastru s maximálními intenzitami
 srážek v celém časovém intervalu datasetu. Byly vytvořeny maximální
-intenzity časového datasetu z plošných interpolací metod RST a IDW.
+intenzity časového datasetu z plošných interpolací\ref{fig:maximasraz} metod RST a IDW.
 
 
 \begin{figure}[h!]
@@ -2658,10 +2652,11 @@ t.rast.series input=rstt method=maximum output=rstt_seriesmax
     \subfloat[IDW]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/max2.png} }%
 
     \caption[Serie max]{ Srážková maxima z celého časoprostorového datasetu  \centering }
+    \label{fig:maximasraz}
 \end{figure}
 
 
-
+\newpage
 
 \paragraph*{Mapová algebra} se v rámci TGRASS dělí na dva typy:
 \begin{description}
@@ -3304,9 +3299,9 @@ Následující ukázka postupu je pro systém GNU/Linux
 (distribuci Ubuntu), podrobnosti instalace pro systém MS Windows jsou popsány na portálu \textbf{freegis}\footnote{\url{http://freegis.fsv.cvut.cz/gwiki/GRASS\_GIS\_/\_Instalace\_MS\_Windows}}
 
 \subsubsection*{Pomocí balíčku}
-Nejjednodušší je nainstalovat stabilní verzi GRASS 6.4, která je
+Nejjednodušší je nainstalovat stabilní verzi GRASS, která je
 dostupná v~ba\-líčku. Lze ji proto nainstalovat pomocí správce balíčků
-\emph{Synaptic}. Nebo do příkazové řádky napsat:
+\emph{Synaptic}, nebo z příkazové řádky:
 \begin{figure}[h!]
 \begin{scriptsize}
 \lstset{extendedchars=false,
@@ -3417,9 +3412,9 @@ $ grass71
 \newpage
 \section{Instalace modulů}
 
-Instalaci modulů z repozitáře GRASS Add-ons, kde jsou uloženy i moduly které vzniklé v rámci této práce, lze stáhnout přímo z prostředí GRASS GIS. Ke stahování modulů z externích Subversion repozitářů slouží modul \textit{g.extension}.
+Instalaci modulů z repozitáře GRASS Add-ons, kde jsou uloženy i moduly vzniklé v rámci této práce, lze stáhnout přímo z prostředí systému GRASS GIS. Ke stahování modulů z externích Subversion repozitářů slouží modul \textit{g.extension}.
 
-Stažení  modulu \textit{r.mwprecip} a \textit{v.link.precip} je možno pomocí následující konfigurace modulu.
+Stažení  modulu \textit{r.mwprecip} a \textit{v.link.precip} je možno pomocí spuštění \textit{g.extension} s následujícími parametry.
 \begin{figure}[h!]
 \begin{scriptsize}
 \lstset{extendedchars=false,
@@ -3430,12 +3425,133 @@ g.extension extension=v.link.precip operation=add
 \end{lstlisting}
 \end{scriptsize} 
 \end{figure} 
+\vskip-2ex
+
+Modul lze pak spustit ze standardního vstupu GRASS např:
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+r.mwprecip.py database=letnany interval=day                                             
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure} 
+
+\newpage
+\section{Ukázka konfigurace parametrů modulu}
+Pro názornost vytvořme následující zadání:
+Data jsou uložena v db. PostgreSQL, jejíž název je \textit{letnany}. Cílem zadání je vytvořit \textbf{rastry plošných interpolací} v časovém kroku 1 minuta. Tyto rastry nás zajímají pouze z \textbf{časového intervalu} od 2013-09-08 23:59:00 do 2013-09-09 23:59:00. Ze stejného období pro následující časoprostorové analýzy potřebujeme vytvořit časová okna z časových řad srážkoměrů. Pro výpočet baseline známe  časové intervaly nulových srážek (suchá období). Z těchto suchých období chceme určit baseline z horního 96 \% \textbf{kvantilu} daných hodnot. Máme informaci o \textbf{rozbitých spojích} linkid= 63, 58 a 71. Jejich hodnoty pro odhady plošných srážek chceme ignorovat. K plošným interpolacím využijeme metody IDW s exponentem 1.6 a počtem bodů zasahujícím do výpočtu 35. Vizualizaci rastru nastavíme vlastní \textbf{tabulkou barev}. K nahrazení linií body využijeme nahrazení linie \textbf{dvěma body rovnoměrně}. Celý výpočet uložíme do \textbf{pracovního schema} \textit{ukazka}.
+
+
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+#nastaven'í' p'ř''í'stupu k datab'á'zi.
+database=letnany                          
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure} 
+\vskip-2ex
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./img/priloha/db.png}
+    \caption[DB]{Snímek okna modulu znázorňující volbu databáze   \centering  }
+ \end{figure}
+
+
+
+ 
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+#volba kvantilu a such'é'ho obdob'í'- v'ý'po'č'et baseline
+statfce=quantile  quantile96 baseltime= adresa/k/souboru        
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure} 
+\vskip-2ex
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./img/priloha/bs.png}
+    \caption[TW]{Snímek okna modulu znázorňující konfiguraci určení baseline  \centering  }
+ \end{figure}
+
+
+
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+#konfigurace časov'ý'ch oken pro interpolovan'é' rastry a sr'á''ž'kom'ě'ry
+fromtime= 2013-09-08 23:59:00 totime= 2013-09-09 23:59:00\
+lignore=cesta/ignorovanespoje v rgauges=cesta/k/slo'ž'ce
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure} 
+\vskip-2ex
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./img/priloha/tw.png}
+    \caption[TW]{Okno modulu pro konfiguraci vytvoření časových oken  \centering  }
+ \end{figure}
+
+
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+#konfigurace plo'š'n'ý'ch interpolac'í'
+isettings=grass.run_command( "v.surf.idw", input=points_nat,\
+	column=attribute_col, output=out, npoints=35, power=1.8 )
+pmethod=count step=2 color=cesta/k/tabulce/barevRGB	   
+-g 
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure} 
+\vskip-2ex
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./img/priloha/int.png}
+    \caption[Interpolace]{Okno modulu pro  konfiguraci plošných interpolací  \centering  }
+ \end{figure}
+
+\begin{figure}[h!]
+\begin{scriptsize}
+\lstset{extendedchars=false,
+escapeinside=''}
+\begin{lstlisting}[style=mybash]
+#pojmenov'á'n'í' pracovn'í'ho sch'é'ma
+schema=ukazka
+\end{lstlisting}
+\end{scriptsize} 
+\end{figure} 
+\vskip-2ex
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth]{./img/priloha/opt.png}
+    \caption[Optional]{Okno pro nastavení pracovního schéma a doplňkových parametrů \centering  }
+ \end{figure}
 
 
 
 
 
-
+;
 \end{document}
+
+
+
+
+
+
+
 
 
