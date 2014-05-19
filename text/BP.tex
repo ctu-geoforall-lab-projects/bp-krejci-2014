@@ -354,10 +354,12 @@ práce dotýkající se problematiky MV spojů a použitých technologií pro
 vývoj vlastních GIS nástrojů.
 %%% ML: tato veta (viz nize) zni divne, uplne bych ji vynechal...
 %%% MK: smazano
+%%% ML: OK
 
 %%% ML: efektivne "mamagement", preformuluj to tak, aby to znelo vice
 %%% cesky
 %%% MK: spojeni dvou vet do jedne
+%%% ML: OK
 \paragraph*{Geografické informační systémy} mimo jiné umožňují poměrně
 efektivně  správu, analýzu a vizualizaci sráž\-kových dat. 
 Jednotlivé metody měření srážek jsou specifické svojí
@@ -366,18 +368,22 @@ datovou charakteristikou jak z prostorového tak časového pohledu.
 Metody měření srážek ze své podstaty využití směřují ke kombinaci
 plošné a bodové informace, které jsou svoji charakteristikou
 rozdílné. Srážkoměry produkují bodová data v různých časových
-intervalech, výstupem z radaru jsou snímky představující plošnou
+intervalech. Naopak výstupem z radaru či meteorologických družic jsou
+snímky představující plošnou
 %%% ML: satelitni druzice zni divne...
 %%% MK: predelano
-intenzitu radarových srážek a stejně tak meteorologické družice na oběžných drahách Země
-mimo jiné produkují  snímky s plošnou reprezentaci srážek. 
+%%% ML: tu vetu jsem zjednodusil, zkontroluj to...
+intenzitu srážek. 
 %%% ML: jake druhy dat? 
 %%% MK: predelano
-Společné je pro tyto metody
-potřeba výstupy co nejjednodušeji spravovat a analyzovat jak v rámci
-primárního tak sekundá\-rního zpracován. Primární zpracování hrubých měřených dat spočívá v převodu dat do formy, která umožní analýzy v prostředí GIS, tedy sekundární zpracování dat.
+Společné je pro tyto metody potřeba výstupy co nejjednodušeji
+spravovat a analyzovat, jak v rámci primárního tak sekundá\-rního
+zpracování. Primární zpracování hrubých měřených dat spočívá v jejich převodu
+do formy, která umožní analýzy v prostředí GIS, tj.~sekundárního
+zpracování.
 %%% ML: pojmy primarni a sekundarni zpracovani nejsou vysvetleny
 %%% MK: vysvetleno
+%%% ML: OK, i kdyz mi to zni porad divne, ale OK (trosku jsem to preformuloval, radeji to zkontroluj)
 GIS nástroje splňují tyto
 požadavky v dostatečném rozsahu a~částečně eliminují potřebu vývoje
 specifických solitérních systémů, které by vychá\-zely ze stejných
@@ -452,7 +458,8 @@ atmosféře.
 
 %%% ML: Zkratku ML pouzivas uz mnohem drive v textu
 %%% MK: pravda
-Mikrovlnné spoje jsou rádiové systémy široce využívané v oblasti
+%%% ML: pridal jsem zkratku do zavorek (MV)
+Mikrovlnné spoje (MV) jsou rádiové systémy široce využívané v oblasti
 telekomunikací (zejména mobilními operátory) k bezdrátovému propojení
 dvou vzdálených stanovišť. MV spoje operují na frekvencích, kde
 dešťové kapky představují hlavní zdroj útlumu signálu. Analýza útlumu
@@ -468,6 +475,7 @@ intenzity i pro další využití těchto dat.
 
 \newpage %%% ML: kvuli poznamce pod carou, pri zmene strankovani nutno opravit
 		 %%% MK: diky
+%%% ML: uz tu zadnou poznamku pod carou nevidim, ale strankovani je OK
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.7\textwidth]{./img/srazky/microwave_link.png}
@@ -609,7 +617,7 @@ signálu \emph{$\gamma_{A_{m}} $}. Tyto chyby jsou zapříčiněny
 integrací jednotlivých úseků tlumících signál na linii MV
 spoje \cite{mv1}.
 
-\paragraph*{Mokré antény}jsou značným zdrojem nejistot. Na vysílačích
+\paragraph*{Mokré antény} jsou značným zdrojem nejistot. Na vysílačích
 nejsou antény nijak kryty a při dešti moknou. Na anténách se vytváří
 tenký film vody, který ovlivňuje výsledný útlum signálu. Vytvoření
 modelu pro eliminaci tohoto problému se do značné míry podařilo
@@ -618,12 +626,13 @@ práce částečně spadá, bude instalace krytu na antény, který by mohl
 zamezit jejich moknutí. Tato možnost doposud nebyla součástí žádné
 vědecké práce.
 
-\paragraph*{Určení baseline } \emph{$A_{0}$} je jedním z důležitých
+\paragraph*{Určení baseline} \emph{$A_{0}$} je jedním z důležitých
 a nejvíce ovlivňujících činitelů při výpočtu výsledné srážky
 \emph{R}. Tato hodnota se zcela mění v čase a je závislá na
 %%% ML: pojem scintilace by mozna bylo vhodne vysvetlit (napr. poznamka pod carou)
 %%% MK: vysvetleno 
-koncentraci vodní páry v atmosféře a scintilaci\footnote{Scintilace je jev, při kterém vznikají slabé světelné záblesky (pulsy světla) v některých látkách při dopadu ionizujícího záření}. Útlum vysílaných a
+%%% ML: OK
+koncentraci vodní páry v atmosféře a scintilaci \footnote{Scintilace je jev, při kterém vznikají slabé světelné záblesky (pulsy světla) v některých látkách při dopadu ionizujícího záření.}. Útlum vysílaných a
 přijímaných vln ovlivňuje také teplota prostředí, jímž vlna
 prochází. Dalším činitelem, který může způsobovat kolísání signálu, je
 vítr.  Pro určování baseline se využívá různých metod, například
@@ -792,7 +801,8 @@ kvality jsou uživatelé jako např.
 \subsubsection*{Historie}
 %%% ML: moc nerozumim slovu "stala" v teto souvislosti...
 %%% MK: predelano
-Vývoj GRASS GIS je stálý od poloviny osmdesátých let minulého
+%%% ML: preformulovano, klidne zmen
+Vývoj GRASS GIS sahá do poloviny osmdesátých let minulého
 století. Tehdy byl vyvíjen primárně pro americkou armádu, která jej
 využívala pro územní správu a plánování. Během 90. let se postupně na
 vývoji projektu podíleli americké federální agentury, univerzity a
@@ -809,7 +819,7 @@ projektů \footnote{\url{http://www.osgeo.org/}}. Letošním rokem
 oslavil GRASS dlouhých 30 let vývoje.
 %%% Minuly rok v cervenci byla vydana verze 6.4.3
 %%% MK: smazano
-
+%%% ML: OK
 \subsubsection*{Základní terminologické pojmy}
 \label{subsubsec:grassterminologie}
 Hlavním cílem této sekce je představit základní filosofii
@@ -933,6 +943,7 @@ Bicubic spline &  \\
 Regularized spline tension & {\tt v.surf.rst} \\
 %%% ML: rozepsat zkratku...
 %%% MK: rozepsano
+%%% ML: OK
 Inverse distance weighting & {\tt v.surf.idw} \\ \hline
 \end{tabular}
 \caption{Přehled modulů pro interpolaci v GRASS GIS}
@@ -969,6 +980,7 @@ proprietárním databázovým systémům jako je například Oracle. Tomu také 
  %%% MK: zakomentoval jsem ji, vyhotim zpracovani dotazu
 \begin{comment}
  %%% MK: comment begin
+%%% ML: \begin{comment} jsem neznal, porad se mam co ucit :-), jinak souhlas
 \paragraph*{Architektura}
 Databáze PostgreSQL funguje na principu klient-server, kde každý
 klient je obsluhován samostatným procesem, který se stará o zpracování
@@ -1009,6 +1021,7 @@ definice & optim* & příkaz & popis \\ \hline \hline
 
 %%% ML: je nekde vysvetlena zkratka SQL?
 %%% MK: doplneno
+%%% ML: OK
 \caption{Zařazení a popis \acs{SQL} příkazu do kategorií.
 *( ne/optimalizovaných )}
 \label{tab:prikazy}
@@ -1130,6 +1143,13 @@ referenčním prostorovým systémem \cite{postgis}.
 % ukládány ve sloupci \texttt{geometry}, který má informaci o
 % geometrickém typu o referenčním systému.
 %%% MK: textu je dost, vynechame
+%%% ML: OK
+
+\paragraph*{Souřadnicový systém} je v PostGIS definován v tabulce
+\texttt{SPATIAL\_REF\_SYS}. Obecně známé referenční souřadnicové systémy jsou již
+předdefinované, ostatní se dají dodatečně definovat a upravovat.
+
+\newpage %%% ML: fix poznamka pod carou
 
 \begin{figure}[h!]
     \centering
@@ -1139,11 +1159,8 @@ referenčním prostorovým systémem \cite{postgis}.
  \end{figure}   
 %%% ML: odkaz pod carou je potom duplictni, poznamky pod carou se daji sdilet
 %%% MK: tomuhle moc nerozumim. Jak to myslis?
+%%% ML: je tam dvakrat poznamka pod carou se stejnym textem - http://www.opengeospatial.org/standards/sfs, kvuli preteceni obrazku na dalsi stranku, prohodil jsem odstavce
 \footnotetext{\url{http://www.opengeospatial.org/standards/sfs}}
-
-\paragraph*{Souřadnicový systém} je v PostGIS definován v tabulce
-\texttt{SPATIAL\_REF\_SYS}. Obecně známé referenční souřadnicové systémy jsou již
-předdefinované, ostatní se dají dodatečně definovat a upravovat.
 
 %%% ML: tohle bych uplne vynechal...
 %%% MK: ok
@@ -1161,6 +1178,7 @@ Souřadnicové systémy jsou charakterizovány unikátním kódem
 \texttt{\acs{SRID}}, který je všeobecně zažitým formátem v aplikacích GIS.
 %%% ML: standardem?
 %%% MK: muze to byt takhle?... který je všeobecně zažitým formátem v aplikacích GIS.
+%%% ML: zacitym je spis EPSG (kteremu SRID v PostGISu i vetsinou odpovida...)
 Pro konverze mezi jednotlivými systémy slouží funkce
 \texttt{ST\_Transform}.
 %%% ML: zbytecne
@@ -1181,6 +1199,7 @@ Pro definování typu geoprvku jsou k vytvořeny funkce
 \texttt{ST\_Make*}, kde \texttt{*} jsou níže uvedené typy standardu
 %%% ML: todo - vysvetlit zkratku WKT
 %%% MK: radek 841 je wkt poprve, dal jsem poznamku pod caru. Muze to tak byt? Nebo spis do textu?: "WKT je značkovací jazyk pro reprezentaci vektorových objektů na digitálních mapách."
+%%% ML: OK
 OGC \textit{Simple Features} (příklad v textové reprezentaci~\acs{WKT}):
 
 
@@ -1197,6 +1216,7 @@ GEOMETRYCOLLECTIONM(POINTM(2 3),LINESTRINGM(2 3,3 4))
 %%% ML: podobne jako PostgreSQL, kapitola mohla byt vyrazne KRATSI,
 %%% ale nechme to tak jako je...
 %%% MK: Tuto kapitolu bych nechal jak je, u kapitoly POSTGRESQL jsem pro neco SMAZAT.
+%%% ML: nemam zasadnich namitek, i kdyz tu neni prima navaznost na text prace...
 \paragraph*{Funkce} jsou v této nadstavbě zaměřeny na operace s
 geometrií. Veškeré funkce mají prefix \texttt{ST\_} (\textit{spatial
   type}). Část z nich je funkčností analogicky odvozena z~nástrojů
@@ -1224,6 +1244,7 @@ demonstrovány jejich kategorie a nejzákladnější funkce.
   %%% ML: tohle neni ciste WKT (tak jak se o nem mluvi ve OGC SF), ale
   %%% o rozsirenou formu PostGISu
   %%% MK: v PostGis manualu je psano WKT. Nevim jak to uchopit. Muze byt?: Například do rozšířeného formátu \acs{WKT}:
+  %%% ML: OK
 \begin{verbatim}
 SELECT  ST_AsEWKT (geom) FROM link
 .......
@@ -1258,6 +1279,7 @@ technologií i~matematických formulací řešena
   GIS 7} obsahuje zcela nově navržený balíček modulů
 %%% ML: tady bych vysvetlil zkratku TGRASS
 %%% MK: muze byt formou zkratky?
+%%% ML: OK
 \acs{TGRASS} \footnote{\url{http://grass.osgeo.org/grass70/manuals/temporalintro.html}},
 který integruje do původního GRASS systému časový rozměr.
 
@@ -1460,6 +1482,7 @@ follows (A je za B).
 %%% ML: tady by se hodil obrazek prostorovych vztahu ze Soerenovych
 %%% materialu (s prislusnou citaci...)
 %%% MK:
+%%% ML: OK
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.7\textwidth]{./img/temporal/sampling.png}
@@ -1509,6 +1532,7 @@ prezentací výstupů modulů vytvořených v rámci této práce.
 
 %%% ML: odkaz na to co je TeleMAS.
 %%% MK: Telemas je vnitrni nazev projektu. nedam to tam
+%%% ML: to je ten grant, nekde to urcite zmin, chtel to vylozene Vojta...
 V současné době je v rámci zadavatelského projektu  využíváno naměřených dat z
 MV spojů od telekomunikačního operátora T-Mobile, která jsou ukládána
 do databáze PostgreSQL.
@@ -1630,6 +1654,7 @@ V současné době není do databáze zahrnut atribut s hodnotami o vertikální
 horizontální pola\-rizaci signálu (\texttt{polarization}). Tyto hodnoty byly přidány do databáze externího zdroje informací. 
 %%% ML: tato cast vety mi nedava smysl, neco tam chybi...
 %%% MK: opraveno
+%%% ML: OK
 V současné době probíhá jednání se správcem databáze
 T-Mobile o přidání tohoto atributu.
  
@@ -1638,7 +1663,8 @@ charakterizována následujícím postupem:
 \begin{enumerate}
 %%% ML: odkaz na kapitolu o PostGISu
 %%% MK: opraveno
-\item \textbf{Geometrie} - extenze PostGIS\ref{subsec:postgis},
+%%% MK: OK, jemne upraveno
+\item \textbf{Geometrie} - extenze PostGIS (viz kap. \ref{subsec:postgis}),
 \item \textbf{Indexy} - vytvoření indexů pro optimalizaci vyhledávání dotazů,
 \item \textbf{Funkce} - přidání agregačních funkcí pro statistické výpočty,
 \item \textbf{Konfigurace} - dílčí úpravy databáze pro výpočty.
@@ -1979,7 +2005,7 @@ výpočetního regionu. Toto výchozí nastavení modulu lze ignorovat přepína
 a využít tedy nastavení globální či nastavené modulem \textit{g.region}.
 %%% ML: tomu nerozumim, co se dat vypnout pomoci prepinase `-q`???
 %%% MK: ta funkce nedava smysl. Smazu ji z modulu ok?
-
+%%% ML: jo...
 \begin{table}[h]
 \centering
 \begin{tabular}{|lll|}
@@ -1988,7 +2014,8 @@ a využít tedy nastavení globální či nastavené modulem \textit{g.region}.
 {\tt interpolation}                          & string                  & rest, idw, bspline           \\
 {\tt isettings}                              & string                  &                              \\
 %%% ML: integerstring ?
-%%% MK: string 
+%%% MK: string
+%%% ML: ty to vis nejlip;-) 
 {\tt pmethod}                                & string                  & permeter, count              \\
 {\tt step}                                   & integer                 &                              \\
 {\tt color}                                  & string                  & hodnota R:G:B                \\ \hline
@@ -2067,6 +2094,7 @@ grass.run_command( "v.surf.idw", input=points_nat,
 %%% run_command() si sestavi modul sam a uzivate tim neobrezuje,
 %%% celkove mi tato cast prijde nejasna...
 %%% MK: to je pravda, asi me to v tu chvili nedoslo, ze by to treba takhle..
+%%% ML: v textu to nech byt, modul potrebuje vic - objektovy navrh, odstraneni zavislosti na postgis a dalsi, to ale je mimo rozsah textu...
 \subsubsection{Vstup a výstup modulu}
 \paragraph*{Vstup} Hlavní datový vstup do modulu představuje
 konektivita s externí databází PostgreSQL. V ní byl uložen zmíněný
@@ -2181,10 +2209,12 @@ Vizualizaci rastrových map umožňuje modul \textit{g.gui.animation}, který je
  uživatelsky přístupný a umožňuje vytvářet animace z
 %%% ML: veta nize nedava prislis smysl, neco tam chybi...
 %%% MK: opraveno
+%%% ML: OK
 po sobě jdoucích časových oken (rastrů), které jsou výstupem z modulu \textit{r.mwprecip}. 
 Výhodné může být využití tohoto modulu k animaci výstupů z časoprostorových analýz.
 
 %%% ML: veta zni kostrbate...
+%%% ML: OK
 K volbě tabulky barev pro jednotlivé mapy slouží dva moduly: modul \textit{r.color} pro rastrová data
 a \textit{v.color} pro vektorová data. U těchto modulů je možné
 nadefinovat škálu barev z předpřipravených tabulek či vytvořit
@@ -2209,6 +2239,7 @@ sítí T-mobile, by prostorovou mezeru doplnilo několik desítek až
 stovek dalších. Tím jsou výstupy následujících interpolací oproti
 %%% ML: zkus vetu prepsat, na prvni pohled nedava prilis smysl...
 %%% MK: smazal jsem to, nemuselo to tam byt
+%%% ML: OK
 možným výsledkům značně ovlivněny. 
 
 
@@ -2238,6 +2269,7 @@ escapeinside=''}
 \end{figure}
 \vskip-2ex
 %%% MK: vysvetleno
+%%% ML: OK
 Parametr \texttt{vect} umožňuje nastavení velikosti výpočetního regionu 
 na základě území vektorové mapy ohraničené minimálním obdélníkem.  
 Parametr \texttt{res} nastavuje velikost rozlišení výpočetního regionu,
@@ -2299,7 +2331,7 @@ v.surf.bspline complete. Cross validation finished \
 %%% ML: priste bych legendu daval mimo obrazek (pokud nemas skripty,
 %%% ktere obrazky vyrabeji automaticky, tak uz to takto nech byt)
 %%% MK: nemam, o moznisti jsi mi rekl az kdyz bylo vse hotove :)
-
+%%% ML: pro priste :-)
 
 
 \subsubsection*{v.surf.idw}
@@ -2355,7 +2387,7 @@ nulovou srážkou a použít ji zcela chybně pro výpočet.
 %%% ML: rozepsat RST a podobne i IDW, nebo alespon odkaz na seznam
 %%% zkratek
 %%% MK: doplneno na pri prvnim zmineni
-
+%%% ML: mozna doplit zkratky (\arc)?
 
 %%% ML: v textu by mely byt odkazy na obrazky, to pomuze predevsim
 %%% kdyz obrazek pretece na dalsi stranku
@@ -2399,10 +2431,11 @@ rozdílnou konfigurací bodů a nastavením tenze.
 %%% tak nech (je to detail)
 
 \subsection{Temporal GRASS framework}
-Kapitola \textit{Temporal GRASS framework} demonstruje možné využití
+Kapitola \textit{Temporal GRASS framework} (TGRASS) demonstruje jeho možné využití
 %%% ML: prilis dlouhe souveti...
 %%% MK: Rozdeleno
-TGRASS pro analýzu výsledků z modulu \textit{r.mwprecip}.  Protože je
+%%% ML: mirne preformulovano...
+pro analýzu výsledků z modulu \textit{r.mwprecip}.  Protože je
 TGRASS poměrně nový a~v~současné době existuje jen několik málo nastínění jeho
 možné aplikace, bude následující text částečně psán stylem podobným
 formě návodu. Tato forma je zvolena z důvodu, aby mohl text
@@ -2543,8 +2576,9 @@ například často používanému formátu CSV.
 %%% ML: v odstavci chybi odkaz na obrazek (viz obr.~\ref{x}), tak jako
 %%% vsude v textu...
 %%% MK: doplneno
+%%% ML: doplnena mezera, jinak OK
 \paragraph*{Zobrazení časoprostorových datasetů } umožňuje modul
-\emph{g.gui.timeline}\ref{fig:timeline}, který na časové ose zobrazuje zvolené
+\emph{g.gui.timeline} \ref{fig:timeline}, který na časové ose zobrazuje zvolené
 časoprostorové datasety a jejich granularitu. Modul dokáže zobrazit jak
 časovou osu ve 2D, tak časovou krychli ve 3D.
 
@@ -2846,6 +2880,7 @@ model.
 
 %%% ML: otazka - je subpovodi korektni termin?
 %%% MK: v literature se to puziva. Jestli je to spatne jsem nenasel. Martin F. toho pouzil v navrhu  moznych BP.
+%%% ML: OK
 Zjednodušená varianta úlohy demonstruje využití funkcí GRASS a TGRASS
 pro transformaci srážek do subpovodí. Postup je následující:
 
@@ -2967,11 +3002,12 @@ Ve výše zmíněných příkladech byly demonstrovány jednoduché analýzy, kt
 
 %%% ML: v jakych jednotkach tedy jsou
 %%% MK: predelano
+%%% ML: OK
 
 %%% ML: smysluplnost tohoto prikladu jsi predpokladam konzlultoval, to
 %%% nedokazu posoudit...
 %%% MK: ukazoval jsem mu to a nerikal nic spatnyho. 
-
+%%% ML: dobra zprava :-)
 \setcounter{footnote}{1}
 
 
@@ -2983,6 +3019,7 @@ Téma zadání "Analýza a vizualizace srážkových dat z mikrovlnných
 telekomunikačních spojů pomocí GIS" vycházelo z přímých požadavků
 %%% ML: co uvest zadavatele konkretneji (alespon v poznamce pod carou)???
 %%% MK:  Jasne
+%%% ML: co uvest jeste jeho skolitele???
 zadavatele\footnote{Ing. Martin Fencl, řešitel projektu: GA ČR 14-22978S \uv{Predikce srážkového odtoku v
   urbanizovaných povodích na základě deštěm generovaného útlumu
   signálu mikrovlnných spojů telekomunikační sítě}} této práce, který spolupracuje na projektu mezinárodního
@@ -3017,6 +3054,7 @@ databáze.
 
 %%% ML: mozna bych zminit objektovy navrh...
 %%% MK doplneno
+%%% ML: OK
 Prvotní pochopení nároků na daný GIS modul nasvědčovalo výhodě koncipovat 
 psaní kódu procedurálně. V závěru psaní aplikace bylo zjištěno, že objektově 
 orientovaný návrh by byl vhodnější a to především pro zvyšující se počet funkcí
@@ -3024,11 +3062,12 @@ orientovaný návrh by byl vhodnější a to především pro zvyšující se po
  který nebyl z časového důvodu dokončen.
 %%% ML: take bych zminil publikovani navrzenych modulu v addons (do obhajoby tam budou na 100%)
 %%% MK doplneno
+%%% ML: OK
 Modul \textit{r.mwprecip} je v současné době otevřený doplnění nových
 funkcí pro určení baseline a to především pro vývoj nových
-metod jejího určování.  Moduly, které vznikly v rámci této práce, byly přidány do 
- \textit{GRASS Add-ons repository} 
-a jsou současně volně dostupné pro uživatele GRASSu. 
+metod jejího určování. Moduly, které vznikly v rámci této práce, byly přidány do 
+ \textit{GRASS Add-ons} repozitáře 
+a jsou současně volně dostupné pro uživatele systému GRASS. 
 
 
 V rámci vývoje aplikace s využitím \textit{GRASS Python Scripting
@@ -3048,6 +3087,7 @@ založený na významnějším datovém podkladu.
 
 %%% ML: teto vete (a celemu odstavci) prilis nerozumim...
 %%% MK: jo, nedavalo to smysl. 
+%%% ML: OK
 Závěrem lze konstatovat, že vlastní modul pro systém GRASS GIS
 dostatečně prokázal v rámci testování svou funkčnost a splnil
 předpoklad vytvoření datového rozhraní pro standardní a časoprostorové analýzy v prostředí GIS.
