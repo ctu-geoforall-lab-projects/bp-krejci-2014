@@ -266,7 +266,7 @@ jevy komplexního charakteru a pro jejich pochopení je nutné
 interdisciplinárních přístupů. S vývojem informačních technologií jsou
 dostupné ke studiu problematik stále propracovanější metody, které
 umožňují komplexnější přístup a pochopení dějů v širším kontextu. Mezi
-tyto metody se bezesporu řadí numerické fyzikální modely, kterých by
+tyto metody se bezesporu řadí numerické fyzikálně založené modely, kterých by
 bez výpočetního výkonu nebylo možno využít. Informační technologie v
 současné době dosahují velkého rozvoje a rozšíření i díky stále
 rostoucí výpočetní výkonnosti. Tato skutečnost umožňuje využívat
@@ -290,7 +290,7 @@ Tím ulehčuje vytvoření nástrojů pro řešení komplexních systémů.
 Modelování dešťových srážek je jednou z významných disciplín z oboru
 enviromentálního modelování. Jestliže se poohlédneme do 
 minulého století, tak právě meteorologie byla jednou z prvních
-disciplín, která odpovídala dnešního chápání pojmu enviromentálního
+disciplín, která by ze současného pohledu odpovídala pojmu enviromentálního
 modelování \cite{wpc, neuman}. Odhad a rekonstrukce srážek na 
 zemském povrchu jsou důležitou fází matematického modelování srážko-odtokových
 procesů. Zájem odborné veřejnosti i rozhodovacích složek v různých
@@ -306,19 +306,19 @@ povodněmi ohrožených oblastí městských aglomerací \cite{slavicek}. Pokrok
 %%% ML: OK
 operativní metody určování srážek metodou MV (mikrovlnných) spojů proto představují
 perspektivní využití především v hydrologii urbanizovaných povodí, kde
-(díky hustotě MV sítí) mohou sloužit jako podklad vodohospodářských
+díky hustotě MV sítí mohou sloužit jako podklad vodohospodářských
 dispečinků operativního řízení při řešení kalamitních povodňových
 situací \cite{countryw}.
 
 
 
 \subsection*{Cíl}
-Hlavním cílem této práce je vývoj nástroje pro zpracování hrubých dat
-z MV vysílačů v prostředí GIS. Tím se zpřístupní tato data pro další analýzy, které
+Hlavním cílem práce je vývoj nástroje pro zpracování hrubých dat
+z MV vysílačů v prostředí GIS a současně jejich zpřístupnění pro další analýzy, které
 pomohou zefektivnit výzkum těchto nových metod. Svým vedlejším
 výstupem je práce zaměřena na využití výstupů z GIS
 pro interpretaci plošných srážek. V návaznosti na vývoj nástroje pro
-zpracování hrubých dat z MV spojů je prezentována demonstrace využití
+zpracování hrubých dat z MV spojů je demonstrováno využití
 časoprostorových analýz v GIS.
 
 Téma práce vychází z požadavků zpracovatele projektu, který se zabývá
@@ -2979,7 +2979,7 @@ Ve výše zmíněných příkladech byly demonstrovány jednoduché analýzy, kt
 \newpage
 \necislovana{Závěr}
 
-Téma práce "Analýza a vizualizace srážkových dat z mikrovlnných
+Téma zadání "Analýza a vizualizace srážkových dat z mikrovlnných
 telekomunikačních spojů pomocí GIS" vycházelo z přímých požadavků
 %%% ML: co uvest zadavatele konkretneji (alespon v poznamce pod carou)???
 %%% MK:  Jasne
@@ -2995,11 +2995,11 @@ systému GRASS.
 
 Modul \textit{r.mwprecip} umožňuje výpočet srážek metodou MV spojů z
 externí databáze, ve které jsou uložena hrubá data z mikrovlnných
-vysílačů. Výstupem modulu jsou srážková data vhodná jak pro standardní
+vysílačů. Výstupem modulu jsou srážková data ve vhodném formátu  jak pro standardní
 funkce GRASS tak pro časoprostorové analýzy. Vypočtená data jsou
-dostupná jak ve formě časových oken, tak ve formě vhodné pro export
+dostupná jak ve formě časových oken, tak ve f vhodné pro export
 pro jiná využití. Výstupní formát modulu podporující \textit{Temporal GRASS
-  framework} umožňuje větší prostor při analýze časových řad srážek,
+  framework} umožňuje větší možnosti při analýze časových řad srážek
 včetně dávkového exportu ve vhodném formátu pro vstup do
 srážko-odtokových modelů.
 
@@ -3016,18 +3016,19 @@ využívá zápisů do přechodných souborů s následným dávkovým načtení
 databáze.
 
 %%% ML: mozna bych zminit objektovy navrh...
-Prvotní pochopení nároků na daný GIS modul nasvědčovali výhodě koncipovat 
+%%% MK doplneno
+Prvotní pochopení nároků na daný GIS modul nasvědčovalo výhodě koncipovat 
 psaní kódu procedurálně. V závěru psaní aplikace bylo zjištěno, že objektově 
-orientovaný návrh by byl vhodnější a to především pro zvyšující se počet funkci
+orientovaný návrh by byl vhodnější a to především pro zvyšující se počet funkcí
  modulu. V rámci práce proběhl pokus o objektově orientovaný návrh, 
  který nebyl z časového důvodu dokončen.
 %%% ML: take bych zminil publikovani navrzenych modulu v addons (do obhajoby tam budou na 100%)
-
+%%% MK doplneno
 Modul \textit{r.mwprecip} je v současné době otevřený doplnění nových
 funkcí pro určení baseline a to především pro vývoj nových
-metod jejího určování.  Moduly které vznikly v rámci této práce byly přidány do 
+metod jejího určování.  Moduly, které vznikly v rámci této práce, byly přidány do 
  \textit{GRASS Add-ons repository} 
-a jsou současně volně dostupny všem uživatelům GRASSu. 
+a jsou současně volně dostupné pro uživatele GRASSu. 
 
 
 V rámci vývoje aplikace s využitím \textit{GRASS Python Scripting
@@ -3043,7 +3044,7 @@ málo zažitým jevem jak na úrovni GIS, tak i  součástí problematiky
 rekonstrukce dešťových srážek obecně. S velkou pravděpodobností bude v
 nejbližší době ze strany T-Mobile zpřístupněn pro projekt kvalitnější
 vzorek dat z pohledu hustoty MV spojů, který by umožňoval výzkum
-založený na reálném datovém podkladu.
+založený na významnějším datovém podkladu.
 
 %%% ML: teto vete (a celemu odstavci) prilis nerozumim...
 %%% MK: jo, nedavalo to smysl. 
@@ -3412,6 +3413,21 @@ $ grass71
 \newpage
 \section{Instalace modulů}
 
+
+\subsection{Pomocí grafického rozhraní GRASS}
+V grafickém rozhraní GRASS je lze pomocí volby: settings $\Rightarrow$ addons extensions $\Rightarrow$
+install extensions from addons, spustit prohlížeč dostupných Addons v GRASS repozitáři.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{./img/priloha/addons.png}
+    \caption[DB]{Snímek okna modulu znázorňující volbu databáze   \centering  }
+ \end{figure}
+
+
+\subsection{Z příkazové řádky GRASS}
+
+
 Instalaci modulů z repozitáře GRASS Add-ons, kde jsou uloženy i moduly vzniklé v rámci této práce, lze stáhnout přímo z prostředí systému GRASS GIS. Ke stahování modulů z externích Subversion repozitářů slouží modul \textit{g.extension}.
 
 Stažení  modulu \textit{r.mwprecip} a \textit{v.link.precip} je možno pomocí spuštění \textit{g.extension} s následujícími parametry.
@@ -3420,28 +3436,45 @@ Stažení  modulu \textit{r.mwprecip} a \textit{v.link.precip} je možno pomocí
 \lstset{extendedchars=false,
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
-g.extension extension=r.mwprecip operation=add  
-g.extension extension=v.link.precip operation=add                                                       
+# Instalace modul'ů'
+g.extension extension=r.mwprecip 
+g.extension extension=v.link.precip     
+# Spu'š'ten'í' modul'ů'
+r.mwprecip
+v.link.precip                                 
 \end{lstlisting}
 \end{scriptsize} 
 \end{figure} 
 \vskip-2ex
 
-Modul lze pak spustit ze standardního vstupu GRASS např:
 \begin{figure}[h!]
 \begin{scriptsize}
 \lstset{extendedchars=false,
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
-r.mwprecip.py database=letnany interval=day                                             
+                                  
 \end{lstlisting}
 \end{scriptsize} 
 \end{figure} 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 \section{Ukázka konfigurace parametrů modulu}
 Pro názornost vytvořme následující zadání:
-Data jsou uložena v db. PostgreSQL, jejíž název je \textit{letnany}. Cílem zadání je vytvořit \textbf{rastry plošných interpolací} v časovém kroku 1 minuta. Tyto rastry nás zajímají pouze z \textbf{časového intervalu} od 2013-09-08 23:59:00 do 2013-09-09 23:59:00. Ze stejného období pro následující časoprostorové analýzy potřebujeme vytvořit časová okna z časových řad srážkoměrů. Pro výpočet baseline známe  časové intervaly nulových srážek (suchá období). Z těchto suchých období chceme určit baseline z horního 96 \% \textbf{kvantilu} daných hodnot. Máme informaci o \textbf{rozbitých spojích} linkid= 63, 58 a 71. Jejich hodnoty pro odhady plošných srážek chceme ignorovat. K plošným interpolacím využijeme metody IDW s exponentem 1.6 a počtem bodů zasahujícím do výpočtu 35. Vizualizaci rastru nastavíme vlastní \textbf{tabulkou barev}. K nahrazení linií body využijeme nahrazení linie \textbf{dvěma body rovnoměrně}. Celý výpočet uložíme do \textbf{pracovního schema} \textit{ukazka}.
+Data jsou uložena v db. PostgreSQL, jejíž název je \textit{letnany}. Cílem zadání je vytvořit \textbf{rastry plošných interpolací} v časovém kroku 1 minuta. Tyto rastry nás zajímají pouze z \textbf{časového intervalu} od 2013-09-08 23:59:00 do 2013-09-09 23:59:00. Ze stejného období pro následující časoprostorové analýzy potřebujeme vytvořit časová okna z časových řad srážkoměrů. Pro výpočet baseline známe  časové intervaly nulových srážek (suchá období). Z těchto suchých období chceme určit baseline z horního 96 \% \textbf{kvantilu} daných hodnot. Máme informaci o \textbf{rozbitých spojích} linkid= 63, 58 a 71. Jejich hodnoty pro odhady plošných srážek chceme ignorovat. K plošným interpolacím využijeme metody IDW s exponentem 1.6 a počtem bodů zasahujícím do výpočtu 35. Vizualizaci rastru nastavíme vlastní \textbf{tabulkou barev}. Pro interpolaci chceme linie nahradit  \textbf{rovnoměrně dvěma body}. Celý výpočet uložíme do \textbf{pracovního schema} \textit{ukazka}.
 
 
 \begin{figure}[h!]
@@ -3544,7 +3577,6 @@ schema=ukazka
 
 
 
-;
 \end{document}
 
 
