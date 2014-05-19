@@ -116,14 +116,10 @@ morecomment=[l]{\#},
     basicstyle={\ttfamily\footnotesize},
     keywordstyle={\bfseries},
     commentstyle={\itshape},
-    frame=lines,
+    %frame=lines,
     backgroundcolor=\color{lightGrey}
 }
-\lstnewenvironment{psmap}[1][]
-{\lstset{style=psmap,
-   #1}}
-   {}
-\renewcommand{\lstlistingname}{Ukázka}
+
 
 \lstdefinestyle{mybash}{
    language=bash,
@@ -131,7 +127,7 @@ morecomment=[l]{\#},
    keywordstyle=[1]{\bfseries},
    keywordstyle=[2]{\color{black}},
    commentstyle={\itshape},
-   frame=lines,
+   %frame=lines,
    showstringspaces=false,
    backgroundcolor=\color{lightGrey},
 }
@@ -1443,21 +1439,48 @@ patří i vlastnost, kdy jednotlivé datasety obsahují mezery v čase
 \paragraph*{Časová topologie} v problematice časové proměnné
 závislosti vychází obecně z~principu obecné topologie. Časová
 topologie popisuje vztahy mezi jednotlivými časovými známkami jak pro
-časový interval tak pro časový okamžik. Jednotlivé charakteristiky
+časový interval\ref{fig:topology} tak pro časový okamžik. Jednotlivé charakteristiky
 byly odvozeny z booleovské algebry a aplikovány na časové známky.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{./img/temporal/topology.png}
+    \caption[Temporal sampling]{ Vztahy mezi časovými intervaly podle Allen, 1983. Zdroj obrázku: \cite{soren}. \centering  }
+        \label{fig:topology}
+ \end{figure}   
 
 \paragraph*{Temporal sampling} vychází z časové topologie a určuje
-jednotlivé vztahy mezi časovými datasety. Pro představu jsou uvedeny
-některé vztahy pro časové datasety např. X a Y následující: start
-(X, Y mají stejný začátek), during (X během Y), overlap (X, Y se v
-čase překrývají ), contain (X obsahuje Y), equal (X a Y jsou stejné),
-follows (X je za Y).
+jednotlivé vztahy mezi časovými datasety\ref{fig:sampling}. Pro představu jsou uvedeny
+některé vztahy pro časové datasety např. h a B následující: start
+(A, B mají stejný začátek), during (A během B), overlap (A, B se v
+čase překrývají ), contain (A obsahuje B), equal (A a B jsou stejné),
+follows (A je za B).
 
-Pomocí těchto výroků lze definovat výběr časových oken z datasetu X
-na základě datasetu Y (např. průnik).
+
 
 %%% ML: tady by se hodil obrazek prostorovych vztahu ze Soerenovych
 %%% materialu (s prislusnou citaci...)
+%%% MK:
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{./img/temporal/sampling.png}
+    \caption[Temporal sampling]{Schema vztahů pro temporal sampling \cite{soren}.   \centering  }
+        \label{fig:sampling}
+ \end{figure}   
+
+Pomocí těchto výroků lze definovat výběr časových oken z datasetu A
+na základě datasetu B (např. průnik).
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \setcounter{footnote}{1}
@@ -2275,7 +2298,7 @@ v.surf.bspline complete. Cross validation finished \
 
 %%% ML: priste bych legendu daval mimo obrazek (pokud nemas skripty,
 %%% ktere obrazky vyrabeji automaticky, tak uz to takto nech byt)
-%%% MK: nemam, o moznisti jsi mi rekl az kdyz bylo vse hotove
+%%% MK: nemam, o moznisti jsi mi rekl az kdyz bylo vse hotove :)
 
 
 
@@ -2342,7 +2365,7 @@ nulovou srážkou a použít ji zcela chybně pro výpočet.
     \qquad
     \subfloat[RST interpolace -- body po 500~m, tension $=20$]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/rst500.png} }%
     \caption[Interpolace RST]{Názorné porovnání  výsledků interpolace RST s různou volbou rozložení bodů \centering}%
-    \label{fig:example}%
+    \label{fig:rst}%
 \end{figure}
 \subsubsection*{v.surf.rst}
 Metoda \ac{RST} odhaduje neznámé hodnoty pomocí spline křivky, která 
@@ -2707,7 +2730,15 @@ t.vect.observe.strds input=srazkomery strds=idw_gama \
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-\vskip-2ex
+
+
+Ve zvolené výchozí databázi se vytvoří časová okna v časovém kroku
+ granularity datasetu.  Po observaci bude nejspíše následovat analýza
+ výsledků. Je možné výsledky prohlížet v databázi nebo využít modul
+ \textit{t.vect.select}, který vypíše tabulku do řádku s hlavičkami a
+ oddělovačem podle nastavení parametru \texttt{separator}. Je tedy
+ možné například vytvořit standardizovaný výstup formátu CSV.
+ 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth]{./img/temporal/grafobs.png}
@@ -2716,12 +2747,6 @@ t.vect.observe.strds input=srazkomery strds=idw_gama \
 
 
 
- Ve zvolené výchozí databázi se vytvoří časová okna v časovém kroku
- granularity datasetu.  Po observaci bude nejspíše následovat analýza
- výsledků. Je možné výsledky prohlížet v databázi nebo využít modul
- \textit{t.vect.select}, který vypíše tabulku do řádku s hlavičkami a
- oddělovačem podle nastavení parametru \texttt{separator}. Je tedy
- možné například vytvořit standardizovaný výstup formátu CSV.
 
  Modul \textit{t.vect.observe} v současné době nemá zcela vyladěnou
  správu    \acs{RAM}. Při větších počtech vstupních rastrů se data
@@ -2829,6 +2854,7 @@ model.
 Zjednodušená varianta úlohy demonstruje využití funkcí GRASS a TGRASS
 pro transformaci srážek do subpovodí. Postup je následující:
 
+\begin{comment}
 \begin{enumerate}
 \item {\it r.mwprecip} - vytvoření plošných interpolací
 \item TGRASS - {\it t.create}, {\it t.register} a {\it t.rast.aggregate}
@@ -2836,9 +2862,9 @@ pro transformaci srážek do subpovodí. Postup je následující:
 \item {\it r.watershed} -  vytvoření subpovodí z DMT
 \item {\it r.volume} - určení objemu vody v subpovodích 
 \end{enumerate}
+\end{comment}
 
 \begin{enumerate}
-
 \item Prvním krokem je vytvoření plošných interpolací z modulu
   \textit{r.mwprecip}.
 
@@ -2893,10 +2919,7 @@ povodí. Menší hodnota vede k většímu počtu povodí.
   územími. Pro vstup rastru s hodnotami je použit výstupní rastr z
   \textit{t.rast.aggregate}. Z názvu \textit{max15minute\_148} nelze
   poznat, o jaký časový interval se jedná; pro získání této informace
-  je určen modul \textit{t.rast.list}, kde je možné konfigurovat
-  parametry pro vypsání na standardní výstup. Při spuštění bez
-  volitelných parametrů vypadá výpis následovně.
-
+  je určen modul \textit{t.rast.list}.
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
@@ -2907,6 +2930,7 @@ sum15minute_103	test3  2013-09-10 01:44:00 2013-09-10 01:59:00
 \end{footnotesize} 
 \end{figure}
 \vskip-2ex
+
 Odtud lze vybrat mapu z požadovaného intervalu, která je vstupem (\texttt{input}) pro \textit{r.volume}. 
 \begin{figure}[h!]
 \begin{footnotesize}
@@ -2938,7 +2962,13 @@ r.volume input=sum15minute_103 clump=basin \
 Výsledkem je vektorová bodová mapa, kde ke každému bodu je připojena
 tabulka s hodnotami výsledků (sum, avg). Parametr \texttt{output}
 umožňuje uložení tabulky ve formě textového souboru se statistikami
-celé plochy výpočetního regionu.  Aby výsledné hodnoty jednotlivých povodí byly v jednotkách stejných jako vstupní rastry ($mm \cdot h^{-1}$), je nutno výsledný objem vydělit počtem minut po kterých byla nastavena agregace.
+celé plochy výpočetního regionu.  Aby výsledné hodnoty jednotlivých 
+povodí byly v jednotkách stejných jako vstupní rastry ($mm \cdot h^{-1}$), 
+je nutno výsledný objem vydělit počtem minut po kterých byla nastavena agregace.
+
+Ve výše zmíněných příkladech byly demonstrovány jednoduché analýzy, které
+ především sloužily k otestování datových výstupů z vlastních modulů a 
+ zároveň demonstrovaly základní a pokročilejší funkce časoprostorového modelu TGRASS. 
 
 %%% ML: v jakych jednotkach tedy jsou
 %%% MK: predelano
@@ -2958,9 +2988,9 @@ Téma práce "Analýza a vizualizace srážkových dat z mikrovlnných
 telekomunikačních spojů pomocí GIS" vycházelo z přímých požadavků
 %%% ML: co uvest zadavatele konkretneji (alespon v poznamce pod carou)???
 %%% MK:  Jasne
-zadavatele této práce\footnote{Ing. Martin Fencl řešitel projektu: GA ČR 14-22978S \uv{Predikce srážkového odtoku v
+zadavatele\footnote{Ing. Martin Fencl, řešitel projektu: GA ČR 14-22978S \uv{Predikce srážkového odtoku v
   urbanizovaných povodích na základě deštěm generovaného útlumu
-  signálu mikrovlnných spojů telekomunikační sítě}}, který spolupracuje na projektu mezinárodního
+  signálu mikrovlnných spojů telekomunikační sítě}} této práce, který spolupracuje na projektu mezinárodního
 charakteru. Mezi hlavní požadavky patřilo zpracování naměřených dat do
 vhodné formy v prostředí GIS. Tento krok je první a potřebný k dalším
 požadavkům vývoje GIS aplikací v rámci problematiky MV
@@ -3194,6 +3224,14 @@ URL:\textless\url {http://www.sciencedirect.com/science/article/pii/S01698095110
 
 \bibitem{grasshist}
 Historical Notes. \textit{GRASS GIS} [online]. 1998-2014 [cit. 2014-04-17]. URL:\textless\url {http://grass.osgeo.org/home/history/}
+
+
+
+\bibitem{soren}
+Sören GEBBERT a Edzer PEBESMA. \textit{A temporal GIS for field based environmental modeling.} [online]. 2014, vol. 53, s. 1-12. DOI: 10.1016/j.envsoft.2013.11.001. URL:\textless\url {http://linkinghub.elsevier.com/retrieve/pii/S136481521300282X}
+
+
+
 
 \bibitem{geospatialanal}
 SMITH, Michael J, Michael F GOODCHILD a Paul LONGLEY. \textit{Geospatial analysis: a comprehensive guide to principles, techniques and software tools} [online]. 4th ed. Winchelsea, UK: The Winchelsea Press, c2013, s. 130-135 [cit. 2014-04-18]. ISBN 9781906221980.
