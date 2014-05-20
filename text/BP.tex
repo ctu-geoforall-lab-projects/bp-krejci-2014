@@ -307,19 +307,20 @@ povodněmi ohrožených oblastí městských aglomerací \cite{slavicek}. Pokrok
 operativní metody určování srážek metodou MV (mikrovlnných) spojů proto představují
 perspektivní využití především v hydrologii urbanizovaných povodí, kde
 díky hustotě MV sítí mohou sloužit jako podklad vodohospodářských
-dispečinků operativního řízení při řešení kalamitních povodňových
+dispečinků operativního řízení při řešení kalamitních povo\-dňových
 situací \cite{countryw}.
 
 
 
 \subsection*{Cíl}
 Hlavním cílem práce je vývoj nástroje pro zpracování hrubých dat
-z MV vysílačů v prostředí GIS a současně jejich zpřístupnění pro další analýzy, které
+z MV vysílačů v prostředí GIS a současně jejich zpřístupnění pro 
+další analýzy, které
 pomohou zefektivnit výzkum těchto nových metod. Svým vedlejším
 výstupem je práce zaměřena na využití výstupů z GIS
 pro interpretaci plošných srážek. V návaznosti na vývoj nástroje pro
 zpracování hrubých dat z MV spojů je demonstrováno využití
-časoprostorových analýz v GIS.
+časo\-prostorových analýz v GIS.
 
 Téma práce vychází z požadavků zpracovatele projektu, který se zabývá
 problematikou odhadu srážek z MV spojů v rámci projektu
@@ -1229,7 +1230,7 @@ demonstrovány jejich kategorie a nejzákladnější funkce.
 
 \item[Geometrické konstruktory] slouží k vytváření geometrie podle
   \textit{Simple Features}, např: bodu \texttt{ST\_MakePoint},
-  linie \texttt{ST\_MakeLine}, polygonu \texttt{ST\_MakePolygon} a~dalších.
+  linie \texttt{ST\_MakeLine}, polygonu \texttt{ST\_MakePolygon} ad.
 
 \item[Analytické] funkce jsou v PostGIS implementovány dle standardu
   ISO SQL-MM vyplý\-vající z ISO99, standard o multimédiích 
@@ -2142,28 +2143,6 @@ grass.run_command( "v.surf.idw", input=points_nat,
 %%% celkove mi tato cast prijde nejasna...
 %%% MK: to je pravda, asi me to v tu chvili nedoslo, ze by to treba takhle..
 %%% ML: v textu to nech byt, modul potrebuje vic - objektovy navrh, odstraneni zavislosti na postgis a dalsi, to ale je mimo rozsah textu...
-\subsubsection{Vstup a výstup modulu}
-\paragraph*{Vstup} Hlavní datový vstup do modulu představuje
-konektivita s externí databází PostgreSQL. V ní byl uložen zmíněný
-vzorek dat.  Modul dále podporuje dávkové načítání časových řad ze
-srážkoměrů.
-
-\paragraph*{Výstup}
-Jedním ze základních výstupů jsou vypočtené srážkové intenzity uložené
-v databázi. Ty jsou uloženy jak v časovém kroku sběru dat, tak ve
-zvoleném kroku. Pro zvolený časový krok jsou dále vytvářeny tabulky
-představující jednotlivá \uv{časová okna}, vhodná pro následné
-analýzy v GIS.
-
-\textbf{Rastrová data} reprezentují výsledek zvolené plošné
-interpolace vypočtených srážek.
-
-\textbf{Vektorová data} jsou vytvořena na základě polohových údajů o
-telekomunikačních spojích v databázi a jsou reprezentována liniemi a
-interpolovanými body podél MV spojů, ke kterým jsou pomocí modulu
-\textit{v.link.precip} připojována jednotlivá \uv{časová okna} z databáze.
-
-
 
 \subsection{Modul v.link.precip}
 Hlavní vlastnosti tohoto modulu jsou v umožnění  jednoduššího přístupu k
@@ -2179,13 +2158,13 @@ GRASS. Pro jednoduchost byl vytvořen modul \textit{v.link.precip},
 který to umožňuje v uživatelsky přístupné formě.
 
 \paragraph*{Funkce} modulu spočívají v připojování či vytváření vektorových
- podkladů s atributovými tabulkami intenzit srážek. Produktem modulu je:
+ podkladů s atributovými tabulkami intenzit srážek. Funkce modulu umožňují:
  
 \begin{itemize}
-\item[MV spoje] je možno reprezentovat liniemi, nebo nahrazenými body daných linií.
+\item MV spoje  je možno reprezentovat liniemi, nebo nahrazenými body daných linií.
  Na základě této volby a zvoleného časového okamžiku se připojí příslušné časové okno
   (atributová tabulka) s výsledky intenzit srážek z MV spojů.
-\item[Srážkoměry] jsou logicky reprezentovány bodovou vrstvou. K té je možné výše 
+\item Srážkoměry  jsou logicky reprezentovány bodovou vrstvou. K té je možné výše 
 zmíněným principem připojit příslušných \uv{časová okna} ze zvoleného okamžiku.
 \end{itemize} 
  
@@ -3214,6 +3193,7 @@ předpoklad vytvoření datového rozhraní pro standardní a časoprostorové a
   	\acro{SRTM}{Shuttle Radar Topography Mission}
     \acro{SRID}{Spatial Reference System Identifier}
     \acro{SQL}{Structured Query Language}
+    \acro{TGRASS}{Temporal GRASS Framework}
 	\acro{wxGUI}{WxPython-based GUI for GRASS}	
 	
 	\acro{WKT}{Well-known text}
