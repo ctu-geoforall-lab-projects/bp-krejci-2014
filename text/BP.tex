@@ -1795,44 +1795,55 @@ výhodné pro časoprostorové analýzy, pro které je nově v \textit{GRASS
 data z modulu jsou v kompatibilním formátu s TGRASS včetně vytvořených
 registračních souborů do pracovní složky.
 
+Funkčnost modulu je možné rozdělit do hlavních čtyř skupin, 
+které charakterizují vlastnosti modulu. 
+Na obrázku \ref{fig:schema1} je znázorněn základní princip fungování modulu a 
+jeho  datových toků mezi databází, modulem a rozhraním systému GRASS. 
+ Zmíněné skupiny funkcí mají následující chronologický postup:
+\begin{enumerate}
+\item \textbf{příprava databáze} - automatizovaná konfigurace databáze PostgreSQL
+\item \textbf{výpočet srážek}	 - intenzity srážek z MV spojů
+\item \textbf{generování časových oken}	 - vytvoření instancí MV spojů pro časové okamžiky
+\item \textbf{interpolace} - vytvoření plošných interpolací z časových oken
+\end{enumerate}
+
+Jednotlivé podrobnosti dílčích funkcí spadajících do těchto kategorií
+jsou podrobně rozepsány v podkapitole (\ref{subsub:pouzitimodulurmw}, Použití modulu).
+
+
+
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\textwidth]{./img/grass/diagram.png}
     \caption[GUI modul]{Schéma programu a jeho datových toků  \centering  }
-        \label{fig:baseline}
+        \label{fig:schema1}
 \end{figure}
 
-\paragraph{Datový vstup}
-Hlavní datový vstup do modulu představuje konektivita s externí 
+\paragraph{Datový vstup} do modulu představuje konektivita s externí 
 databází PostgreSQL. V ní se nachází zmíněný vzorek dat od společnosti T-Mobile.
 Modul dále podporuje dávkové načítání časových řad ze srážkoměrů.
 
-\paragraph*{Datový výstup}
-Jedním ze základních výstupů jsou vypočtené srážkové intenzity uložené
+\paragraph*{Datový výstup} Jedním ze základních výstupů jsou vypočtené srážkové intenzity uložené
 v databázi. Ty jsou uloženy jak v časovém kroku sběru dat, tak ve
 zvoleném kroku. Pro zvolený časový krok jsou dále vytvářeny tabulky
-představující jednotlivá \uv{časová okna}, vhodná pro následné
+představující jednotlivá \uv{časová okna} (atributové tabulky), vhodná pro následné
 analýzy v GIS.
 
 \textbf{Rastrová data} reprezentují výsledek zvolené plošné
-interpolace vypočtených srážek.
-
-\textbf{Vektorová data} jsou vytvořena na základě polohových údajů o
+interpolace vypočtených srážek. \textbf{Vektorová data} jsou vytvořena na základě polohových údajů o
 telekomunikačních spojích v databázi a jsou reprezentována liniemi a
 interpolovanými body podél MV spojů, ke kterým je možné pomocí modulu
-\textit{v.link.precip} připojit jednotlivá časová okna (atributové tabulky) z databáze.
+\textit{v.link.precip} připojit jednotlivá \uv{časová okna} (atributové tabulky) z databáze.
  
 \subsubsection*{Použití modulu}
+\label{subsub:pouzitimodulurmw}
 V následujícím textu jsou představeny obecně jednotlivé specifika vlastních funkcí modulu
-\textit{r.mwprecip} a jejich možná konfigurace. Konkrétní nastavení modulu je v příloze \ref{appendix:ukazkakonf}
-Uživatelské rozhraní se primárně dělí do tří částí:
+\textit{r.mwprecip} a jejich možná konfigurace. Konkrétní ukázka nastavení modulu
+ je v příloze \ref{appendix:ukazkakonf}.
+Uživatelské rozhraní se primárně dělí na již zmíněné čtyři části, 
+které jsou v následujícím textu podrobně rozebrány.
 
-\begin{itemize}
-\item výpočet srážek,
-\item vytvoření časových oken,
-\item plošné interpolace.
-\end{itemize}
-
+\paragraph*{Příprava databáze}
 Jediným povinným parametrem (sekce \textit{Required}) modulu
 \textit{r.mwprecip} je \texttt{database}, jehož vstupem je textový
 řetězec s názvem databáze PostgreSQL. Modul je koncipován pro
@@ -2150,18 +2161,18 @@ interpolace vypočtených srážek.
 \textbf{Vektorová data} jsou vytvořena na základě polohových údajů o
 telekomunikačních spojích v databázi a jsou reprezentována liniemi a
 interpolovanými body podél MV spojů, ke kterým jsou pomocí modulu
-\textit{v.link.precip} připojována jednotlivá časová okna z databáze.
+\textit{v.link.precip} připojována jednotlivá \uv{časová okna} z databáze.
 
 
 
 \subsection{Modul v.link.precip}
 Hlavní vlastnosti tohoto modulu jsou v umožnění  jednoduššího přístupu k
 výsled\-kům z primárního modulu. Modul \textit{r.mwprecip} při vytváření
-časových oken zapisuje tabulky (časová okna) do databáze. Vektorová geometrie
+časových oken zapisuje tabulky (\uv{časová okna}) do databáze. Vektorová geometrie
 reprezentovaná liniemi (MV spoje) a body (pro interpolace) je v databázi
 pro zamezení redundance dat v samostatné tabulce, nikoliv pro každé
 časové okno. Pro analýzy a další využití výsledků v GRASS GIS, je
-podstatné, aby bylo možné jednotlivá časová okna připojovat k
+podstatné, aby bylo možné jednotlivá \uv{časová okna} připojovat k
 vektorovému podkladu a s vhodnou tabulkou barev je zobrazovat.  Toho
 lze docílit sledem po sobě jdoucích volání jednotlivých modulů ze systému
 GRASS. Pro jednoduchost byl vytvořen modul \textit{v.link.precip},
@@ -2175,7 +2186,7 @@ který to umožňuje v uživatelsky přístupné formě.
  Na základě této volby a zvoleného časového okamžiku se připojí příslušné časové okno
   (atributová tabulka) s výsledky intenzit srážek z MV spojů.
 \item[Srážkoměry] jsou logicky reprezentovány bodovou vrstvou. K té je možné výše 
-zmíněným principem připojit příslušných časová okna ze zvoleného okamžiku.
+zmíněným principem připojit příslušných \uv{časová okna} ze zvoleného okamžiku.
 \end{itemize} 
  
 Mimo to je možné pro zvolený  okamžik data ne pouze připojovat ale i vytvářet vektorové mapy s připojenými příslušnými daty. V tomto případě dochází k redundanci dat. 
@@ -2208,11 +2219,11 @@ vektorové mapě v podobě spojů či bodů (body z interpolace).
 Druhá záložka \textit{Optional} obsahuje:
 \begin{description}
 \item[-c] slouží pro případ, kdy bude nutno pracovat s více časovými
-  okny najednou. Přepínač \texttt{-c} časová okna nepřipojuje k
+  okny najednou. Přepínač \texttt{-c} \uv{časová okna} nepřipojuje k
   vektorové vrstvě \textit{"link\_nat"}, ale vytváří nové s názvem
   ($"view" + <hodnota timestamp>$). Při této volbě dochází k
   redundanci dat vektorových vrstev.
-\item[-a] umožňuje dávkově vytvořit pro všechna časová okna z modulu
+\item[-a] umožňuje dávkově vytvořit pro všechna \uv{časová okna} z modulu
   \textit{r.mwprecip} vektorové vrstvy s připojenými tabulkami. Tato
   funkce je vhodná k přípravě dat pro časoprostorové analýzy.
 \item[-p] vypíše na standardní výstup hodnoty připojené atributové
@@ -2494,7 +2505,7 @@ modulu v GRASS GIS v rámci problematiky MV spojů. Tento směr má
 logickou návaznost na zadání projektu.
 
 Pro názornost bylo využito výstupů z modulu \textit{r.mwprecip} ve
-zvoleném časovém intervalu tří dnů. Jednotlivá časová okna byla
+zvoleném časovém intervalu tří dnů. Jednotlivá \uv{časová okna} byla
 vygenerována v časovém kroku 1~minuta.  Rastrové mapy byly
 interpolovány metodou RST a IDW pomocí jednoho bodu uprostřed linie
 (\texttt{pmethod=count, step=1}).
@@ -2584,7 +2595,7 @@ operace při práci s časo\-prostorovým datasetem.
 využít modul \textit{t.rast.extract}.
 
 První je situace, kdy jsou z modulu \textit{r.mwprecip} vygenerována
-časová okna z~většího časového intervalu, než chceme využít k analýzám
+\uv{časová okna} z~většího časového intervalu, než chceme využít k analýzám
 TGRASS. V takovém případě je možné při registraci interaktivně
 editovat registrační soubor, nebo využít \textit{t.rast.extract} a
 definovat v parametru \texttt{where} podmínku.
@@ -2811,7 +2822,7 @@ t.vect.observe.strds input=srazkomery strds=idw_gama \
 \end{figure}
 
 
-Ve zvolené výchozí databázi se vytvoří časová okna v časovém kroku
+Ve zvolené výchozí databázi se vytvoří \uv{časová okna} v časovém kroku
  granularity datasetu.  Po observaci bude nejspíše následovat analýza
  výsledků. Je možné výsledky prohlížet v databázi nebo využít modul
  \textit{t.vect.select}, který vypíše tabulku do řádku s hlavičkami a
@@ -2839,7 +2850,7 @@ Ve zvolené výchozí databázi se vytvoří časová okna v časovém kroku
 \subsubsection{Kombinace TGRASS a GRASS}
 
 \paragraph*{Suma z plošných interpolací}
-Modulem \emph{r.mwprecip} jsou vygenerována minutová časová okna z
+Modulem \emph{r.mwprecip} jsou vygenerována minutová \uv{časová okna} z
 jednoho dne. Z oken jsou dále interpolovány plošné srážkové intenzity
 metodou RST a IDW. Cílem analýzy je vytvořit rastr, který by
 charakterizoval srážkové úhrny z intervalu 3 hodin. Odečtením rastrů od sebe je získán objem vody, který představuje objemovou v daném časovém intervalu.
@@ -3542,7 +3553,7 @@ v.link.precip
 \section{Ukázka konfigurace parametrů modulu}
 \label{appendix:ukazkakonf}
 Pro názornost vytvořme následující zadání:
-Data jsou uložena v databázi \textit{letnany}. Cílem zadání je vytvořit \textbf{rastry plošných interpolací} v časovém kroku 1 minuta. Tyto rastry nás zajímají pouze z \textbf{časového intervalu} od 2013-09-08 23:59:00 do 2013-09-09 23:59:00. Ze stejného období pro následující časoprostorové analýzy potřebujeme vytvořit časová okna z časových řad srážkoměrů. Pro výpočet baseline známe  časové intervaly nulových srážek (suchá období). Z těchto suchých období chceme určit baseline z horního 96 \% \textbf{kvantilu} daných hodnot. Máme informaci o \textbf{rozbitých spojích} linkid= 63, 58 a 71. Jejich hodnoty pro odhady plošných srážek chceme ignorovat. K plošným interpolacím využijeme metody IDW s exponentem 1.6 a počtem bodů zasahujícím do výpočtu 35. Vizualizaci rastru nastavíme vlastní \textbf{tabulkou barev}. Pro interpolaci chceme linie nahradit  \textbf{rovnoměrně dvěma body}. Celý výpočet uložíme do \textbf{pracovního schematu} \textit{ukazka}.
+Data jsou uložena v databázi \textit{letnany}. Cílem zadání je vytvořit \textbf{rastry plošných interpolací} v časovém kroku 1 minuta. Tyto rastry nás zajímají pouze z \textbf{časového intervalu} od 2013-09-08 23:59:00 do 2013-09-09 23:59:00. Ze stejného období pro následující časoprostorové analýzy potřebujeme vytvořit \uv{časová okna} z časových řad srážkoměrů. Pro výpočet baseline známe  časové intervaly nulových srážek (suchá období). Z těchto suchých období chceme určit baseline z horního 96 \% \textbf{kvantilu} daných hodnot. Máme informaci o \textbf{rozbitých spojích} linkid= 63, 58 a 71. Jejich hodnoty pro odhady plošných srážek chceme ignorovat. K plošným interpolacím využijeme metody IDW s exponentem 1.6 a počtem bodů zasahujícím do výpočtu 35. Vizualizaci rastru nastavíme vlastní \textbf{tabulkou barev}. Pro interpolaci chceme linie nahradit  \textbf{rovnoměrně dvěma body}. Celý výpočet uložíme do \textbf{pracovního schematu} \textit{ukazka}.
 
 
 \begin{figure}[h!]
