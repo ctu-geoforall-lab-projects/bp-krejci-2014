@@ -1781,12 +1781,14 @@ sekcemi.
 
 
 \subsection{Modul r.mwprecip}
-\subsubsection{Vlastnosti}
-Primární účel modulu \textit{r.mwprecip} je zpracování hrubých dat MV
-spojů. Základní funkčnost modulu spočívá jak ve zpracování dat, tak ve
+Primární účel modulu \textit{r.mwprecip} je ve vytvoření rozhraní, 
+pomocí kterého je možno zpracovat hrubá data MV
+spojů do vhodných formátů pro analýzy v GRASS.
+
+\paragraph{Funkce} modulu spočívají jak ve zpracování dat, tak ve
 výstupu vhodném pro další GIS analýzy. Modul pro výstupní data podporuje dvě
-základní reprezentace dat. Výstupem jsou jak interpolované
-srážky v rastrové podobě, tak vektorová reprezentace pro jednotlivé MV
+základní reprezentace dat. Výstupem jsou interpolované
+srážky v rastrové podobě a vektorová reprezentace pro jednotlivé MV
 spoje.  Zpracování dlouhých časových řad ve zvoleném intervalu je
 výhodné pro časoprostorové analýzy, pro které je nově v \textit{GRASS
   GIS 7} implementován \textit{Temporal GRASS GIS framework}. Výstupní
@@ -2153,7 +2155,6 @@ interpolovanými body podél MV spojů, ke kterým jsou pomocí modulu
 
 
 \subsection{Modul v.link.precip}
-\subsubsection{Vlastnosti}
 Hlavní vlastnosti tohoto modulu jsou v umožnění  jednoduššího přístupu k
 výsled\-kům z primárního modulu. Modul \textit{r.mwprecip} při vytváření
 časových oken zapisuje tabulky (časová okna) do databáze. Vektorová geometrie
@@ -3069,7 +3070,8 @@ telekomunikačních spojů pomocí GIS" vycházelo z přímých požadavků
 %%% ML: co uvest zadavatele konkretneji (alespon v poznamce pod carou)???
 %%% MK:  Jasne
 %%% ML: co uvest jeste jeho skolitele???
-zadavatele\footnote{Ing. Martin Fencl, řešitel projektu: GA ČR 14-22978S \uv{Predikce srážkového odtoku v
+zadavatele\footnote{Odpovědný řešitel: Ing. Vojtech Bareš Ph.D, řešitel: 
+ Ing. Martin Fencl: GA ČR 14-22978S \uv{Predikce srážkového odtoku v
   urbanizovaných povodích na základě deštěm generovaného útlumu
   signálu mikrovlnných spojů telekomunikační sítě}} této práce, který spolupracuje na projektu mezinárodního
 charakteru. Mezi hlavní požadavky patřilo zpracování naměřených dat do
