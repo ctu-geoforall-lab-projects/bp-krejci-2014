@@ -3334,12 +3334,12 @@ Cubic convolution interpolation for digital image processing. [online]. 1981, vo
 \label{priloha:instalace}
 Postup instalace systému GRASS se odvíjí od  dané platformy operačního systému.
 Následující ukázka postupu je pro systém GNU/Linux
-(distribuci Ubuntu), podrobnosti instalace pro systém MS Windows jsou popsány na portálu \textbf{freegis}\footnote{\url{http://freegis.fsv.cvut.cz/gwiki/GRASS\_GIS\_/\_Instalace\_MS\_Windows}}
+(distribuci Ubuntu), podrobnosti instalace pro systém MS Windows jsou popsány na portálu \textbf{freegis}\footnote{\url{http://freegis.fsv.cvut.cz/gwiki/GRASS\_GIS\_/\_Instalace\_MS\_Windows}}.
 
 \subsubsection*{Pomocí balíčku}
 Nejjednodušší je nainstalovat stabilní verzi GRASS, která je
-dostupná v~ba\-líčku. Lze ji proto nainstalovat pomocí správce balíčků
-\emph{Synaptic}, nebo z příkazové řádky:
+dostupná v~ba\-líčku. Lze jej nainstalovat pomocí správce balíčků
+\emph{Synaptic} nebo z příkazové řádky:
 \begin{figure}[h!]
 \begin{scriptsize}
 \lstset{extendedchars=false,
@@ -3351,7 +3351,7 @@ $ sudo apt-get install grass70 grass70-gui
 \end{figure}
 \vskip-2ex
 \subsubsection*{Ze zdrojového kódu}
-Ke stažení zdrojových kódů je se využívá systému \textit{Subversion}. Instalaci lze spustit daným příkazem v terminálu.
+Ke stažení zdrojových kódů se využívá systému \textit{Subversion}. Instalaci lze spustit daným příkazem v terminálu.
 \begin{figure}[h!]
 \begin{scriptsize}
 \lstset{extendedchars=false,
@@ -3362,7 +3362,7 @@ $ sudo apt-get install subversion
 \end{scriptsize} 
 \end{figure}
 \vskip-2ex
-Dalším krokem je stažení zdrojového kódu:
+Dalším krokem je stažení zdrojového kódu systému GRASS (zde vývojová verze -- trunk):
 \begin{figure}[h!]
 \begin{scriptsize}
 \lstset{extendedchars=false,
@@ -3373,7 +3373,7 @@ $ svn checkout svn checkout https://svn.osgeo.org/grass/grass/trunk grass_trunk
 \end{scriptsize} 
 \end{figure}
 
-GRASS GIS potřebuje má závislosti na externích knihovnách. Ty je možné snadno nainstalovat pomocí balíčků:
+GRASS GIS vyžaduje řadu externích knihoven. Ty je možné snadno nainstalovat pomocí balíčků:
 \begin{figure}[h!]
 \begin{scriptsize}
 \lstset{extendedchars=false,
@@ -3389,18 +3389,18 @@ $ sudo apt-get install flex bison libncurses5-dev zlib1g-dev libproj-dev \
 \end{figure}
 \vskip-2ex
 Následující kroky se skládají z konfigurace, kompilace a instalace.
-Nejdříve se přesuneme do složky grass71\_release.
+Nejdříve se přesuneme do složky grass\_trunk.
 \begin{figure}[h!]
 \begin{scriptsize}
 \lstset{extendedchars=false,
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
-$ cd grass71_release
+$ cd grass_trunk
 \end{lstlisting}
 \end{scriptsize} 
 \end{figure}
 \vskip-2ex
-Dalším krokem je konfigurace spuštěním příkazu:
+Dalším krokem je konfigurace:
 \begin{figure}[h!]
 \begin{scriptsize}
 \lstset{extendedchars=false,
@@ -3450,10 +3450,11 @@ $ grass71
 \newpage
 \section{Instalace modulů}
 
+Instalaci modulů z repozitáře GRASS Add-ons, kde jsou uloženy i moduly vzniklé v rámci této práce, lze stáhnout přímo z prostředí systému GRASS GIS. 
 
 \subsection{Pomocí grafického rozhraní GRASS}
-V grafickém rozhraní GRASS je lze pomocí volby: settings $\Rightarrow$ addons extensions $\Rightarrow$
-install extensions from addons, spustit prohlížeč dostupných Addons v GRASS repozitáři.
+V grafickém rozhraní GRASS je možné doinstalovat moduly pomocí volby: {\sc settings $\Rightarrow$ addons extensions $\Rightarrow$
+install extensions from addons}.
 
 \begin{figure}[h!]
     \centering
@@ -3464,8 +3465,7 @@ install extensions from addons, spustit prohlížeč dostupných Addons v GRASS 
 
 \subsection{Z příkazové řádky GRASS}
 
-
-Instalaci modulů z repozitáře GRASS Add-ons, kde jsou uloženy i moduly vzniklé v rámci této práce, lze stáhnout přímo z prostředí systému GRASS GIS. Ke stahování modulů z externích Subversion repozitářů slouží modul \textit{g.extension}.
+%Ke stahování modulů z externích Subversion repozitářů slouží modul \textit{g.extension}.
 
 Stažení  modulu \textit{r.mwprecip} a \textit{v.link.precip} je možno pomocí spuštění \textit{g.extension} s následujícími parametry.
 \begin{figure}[h!]
@@ -3484,34 +3484,10 @@ v.link.precip
 \end{figure} 
 \vskip-2ex
 
-\begin{figure}[h!]
-\begin{scriptsize}
-\lstset{extendedchars=false,
-escapeinside=''}
-\begin{lstlisting}[style=mybash]
-                                  
-\end{lstlisting}
-\end{scriptsize} 
-\end{figure} 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\newpage
+%\newpage
 \section{Ukázka konfigurace parametrů modulu}
 Pro názornost vytvořme následující zadání:
-Data jsou uložena v db. PostgreSQL, jejíž název je \textit{letnany}. Cílem zadání je vytvořit \textbf{rastry plošných interpolací} v časovém kroku 1 minuta. Tyto rastry nás zajímají pouze z \textbf{časového intervalu} od 2013-09-08 23:59:00 do 2013-09-09 23:59:00. Ze stejného období pro následující časoprostorové analýzy potřebujeme vytvořit časová okna z časových řad srážkoměrů. Pro výpočet baseline známe  časové intervaly nulových srážek (suchá období). Z těchto suchých období chceme určit baseline z horního 96 \% \textbf{kvantilu} daných hodnot. Máme informaci o \textbf{rozbitých spojích} linkid= 63, 58 a 71. Jejich hodnoty pro odhady plošných srážek chceme ignorovat. K plošným interpolacím využijeme metody IDW s exponentem 1.6 a počtem bodů zasahujícím do výpočtu 35. Vizualizaci rastru nastavíme vlastní \textbf{tabulkou barev}. Pro interpolaci chceme linie nahradit  \textbf{rovnoměrně dvěma body}. Celý výpočet uložíme do \textbf{pracovního schema} \textit{ukazka}.
+Data jsou uložena v databázi \textit{letnany}. Cílem zadání je vytvořit \textbf{rastry plošných interpolací} v časovém kroku 1 minuta. Tyto rastry nás zajímají pouze z \textbf{časového intervalu} od 2013-09-08 23:59:00 do 2013-09-09 23:59:00. Ze stejného období pro následující časoprostorové analýzy potřebujeme vytvořit časová okna z časových řad srážkoměrů. Pro výpočet baseline známe  časové intervaly nulových srážek (suchá období). Z těchto suchých období chceme určit baseline z horního 96 \% \textbf{kvantilu} daných hodnot. Máme informaci o \textbf{rozbitých spojích} linkid= 63, 58 a 71. Jejich hodnoty pro odhady plošných srážek chceme ignorovat. K plošným interpolacím využijeme metody IDW s exponentem 1.6 a počtem bodů zasahujícím do výpočtu 35. Vizualizaci rastru nastavíme vlastní \textbf{tabulkou barev}. Pro interpolaci chceme linie nahradit  \textbf{rovnoměrně dvěma body}. Celý výpočet uložíme do \textbf{pracovního schematu} \textit{ukazka}.
 
 
 \begin{figure}[h!]
@@ -3528,7 +3504,7 @@ database=letnany
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth]{./img/priloha/db.png}
-    \caption[DB]{Okno pro instalaci externích modulů z repozitáře  GRASS   \centering  }
+    \caption[DB]{Okno modulu pro povinnou konfiguraci   \centering  }
  \end{figure}
 
 
@@ -3539,7 +3515,7 @@ database=letnany
 \lstset{extendedchars=false,
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
-#volba kvantilu a such'é'ho obdob'í'- v'ý'po'č'et baseline
+#volba kvantilu a such'é'ho obdob'í' - v'ý'po'č'et baseline
 statfce=quantile  quantile96 baseltime= adresa/k/souboru        
 \end{lstlisting}
 \end{scriptsize} 
@@ -3549,7 +3525,7 @@ statfce=quantile  quantile96 baseltime= adresa/k/souboru
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth]{./img/priloha/bs.png}
-    \caption[TW]{Snímek okna modulu znázorňující konfiguraci určení baseline  \centering  }
+    \caption[TW]{Okno modulu pro konfiguraci určení baseline  \centering  }
  \end{figure}
 
 
@@ -3579,9 +3555,9 @@ lignore=cesta/ignorovanespoje v rgauges=cesta/k/slo'ž'ce
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
 #konfigurace plo'š'n'ý'ch interpolac'í'
-isettings=grass.run_command( "v.surf.idw", input=points_nat,\
+isettings=grass.run_command( "v.surf.idw", input=points_nat, \
 	column=attribute_col, output=out, npoints=35, power=1.8 )
-pmethod=count step=2 color=cesta/k/tabulce/barevRGB	   
+pmethod=count step=2 color=cesta/k/tabulce/barevRGB \	   
 -g 
 \end{lstlisting}
 \end{scriptsize} 
