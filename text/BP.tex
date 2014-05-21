@@ -1680,6 +1680,14 @@ dva moduly:
   GIS.
 \end{itemize}
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{./img/grass/diagram.png}
+    \caption[GUI modul]{Schéma programu a jeho datových toků  \centering  }
+        \label{fig:schema1}
+\end{figure}
+
+
 
  
 \begin{figure}[h!]
@@ -1738,14 +1746,6 @@ jeho  datových toků mezi databází, modulem a rozhraním systému GRASS.
 \item \textbf{interpolace} - vytvoření plošných interpolací z časových oken
 \end{enumerate}
 
-
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=1\textwidth]{./img/grass/diagram.png}
-    \caption[GUI modul]{Schéma programu a jeho datových toků  \centering  }
-        \label{fig:schema1}
-\end{figure}
 
 
 
@@ -3006,6 +3006,7 @@ region je nastaven automaticky.
   subpovodí. Tento krok nám umožňuje demonstrovat úlohu bez dostupných
   reálných vektorových vrstev o jednotlivých povodích.
 
+
 \begin{figure}[h!]
 \begin{footnotesize}
 \lstset{extendedchars=false,
@@ -3019,7 +3020,15 @@ r.watershed  elevation=dem_srtm threshold=5000 \
 \vskip-2ex
 Parametr \texttt{treshold} určuje jemnost segmentace jednotlivých
 povodí. Menší hodnota vede k většímu počtu povodí.
-
+\begin{figure}[h!]%
+    \centering
+    \subfloat[RST]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/basin1.png} }%
+    \qquad
+    \subfloat[IDW]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/basin2.png} }%
+    \caption[GUI modul]{ a) Agregovaný rastr - suma za 15 minut; b) povodí s bodovou vrstvou představující hodnoty jednotlivých povodí.  \centering 
+     }
+     \label{fig:vysledekaggrrast}
+\end{figure}
 \item Posledním krokem je určení objemu srážek, které spadly do daných
   povodí. K~tomu je vhodné využít modul \textit{r.volume}, pro který
   jsou vstupními parametry rastr s hodnotami a rastr s klasifikovanými
@@ -3057,16 +3066,9 @@ r.volume input=sum15minute_103 clump=basin \
 
 %%% ML: zvetseno na standardni velikost
 
-\begin{figure}[h!]%
-    \centering
-    \subfloat[RST]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/basin1.png} }%
-    \qquad
-    \subfloat[IDW]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/basin2.png} }%
 
-    \caption[GUI modul]{ a) Agregovaný rastr - suma za 15 minut; b) povodí s bodovou vrstvou představující hodnoty jednotlivých povodí.  \centering  }
-\end{figure}
 
-Výsledkem je vektorová bodová mapa, kde ke každému bodu je připojena
+Výsledkem je vektorová bodová mapa\ref{fig:vysledekaggrrast}, kde ke každému bodu je připojena
 tabulka s hodnotami výsledků (sum, avg). Parametr \texttt{output}
 umožňuje uložení tabulky ve formě textového souboru se statistikami
 celé plochy výpočetního regionu.  Aby výsledné hodnoty jednotlivých 
