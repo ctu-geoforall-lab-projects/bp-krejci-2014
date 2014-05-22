@@ -2181,37 +2181,39 @@ který to umožňuje v uživatelsky přístupné formě.
  Na základě této volby a zvoleného časového okamžiku se připojí příslušné časové okno
   (atributová tabulka) s výsledky intenzit srážek z MV spojů.
 \item Srážkoměry  jsou logicky reprezentovány bodovou vrstvou. K té je možné výše 
-zmíněným principem připojit příslušných \uv{časová okna} ze zvoleného okamžiku.
+zmíněným principem připojit příslušná \uv{časová okna} ze zvoleného okamžiku.
 \end{itemize} 
  
-Mimo to je možné pro zvolený  okamžik data ne pouze připojovat ale i vytvářet vektorové mapy s připojenými příslušnými daty. V tomto případě dochází k redundanci dat. 
+Mimo to je možné pro zvolený  okamžik data ne pouze připojovat, ale i \textbf{vytvářet} vektorové mapy
+ s připojenými příslušnými daty. V tomto případě dochází k redundanci dat. 
  
  
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\textwidth]{./img/grass/diagram2.png}
     \caption[GUI modul]{Schéma připojení vektorových vrstev k atributovým tabulkám \centering  }
-        \label{fig:baseline}
+        \label{fig:baseline1}
  \end{figure}
 
 \subsubsection{Použití modulu}
 Modul při prvním spuštění vytvoří vektorovou vrstvu v nativním
 formátu GRASS na základě vytvořené geometrie v databázi
-PostgreSQL. Dále pak připojí zvolenou tabulku reprezentující časové
+PostgreSQL. K ní připojí zvolenou tabulku reprezentující časové
 okno. Při dalším připojení jiného časového okna je původně připojená
 tabulka odpojena a k té samé vektorové vrstvě se připojí tabulka nová. Modul
 je tvořen dvěma GUI záložkami \textit{Required} a \textit{Optional}.
 
-První záložka \textit{Required} obsahuje pouze povinné parametry.
+\paragraph{První záložka} názvu \textit{Required} obsahuje pouze povinné parametry.
 Parametr \texttt{schema} označuje pracovní schéma, ve kterém jsou
-uloženy výsledky pro zobrazení. Parametr \texttt{type} nastavuje zda chceme
-připojovat připojovat hodnoty ke srážkoměrům nebo k MV spojům.
+uloženy výsledky pro zobrazení. Parametr \texttt{type} nastavuje, zda chceme
+připojovat  hodnoty ke srážkoměrům nebo k MV spojům.
 Při volbě MV spojů je možné určit, zda chceme připojit hodnoty k 
-vektorové mapě v podobě spojů či bodů (body z interpolace).
+vektorové mapě v podobě spojů či bodů (body z interpolace). 
+Možnosti konfigurace jsou znázorněny ve schématu \ref{fig:baseline1}
 
 
 
-Druhá záložka \textit{Optional} obsahuje:
+\paragraph{Druhá záložka} v grafickém rozhraní je \textit{Optional}  a obsahuje přepínače a parametry:
 \begin{description}
 \item[-c] slouží pro případ, kdy bude nutno pracovat s více časovými
   okny najednou. Přepínač \texttt{-c} \uv{časová okna} nepřipojuje k
