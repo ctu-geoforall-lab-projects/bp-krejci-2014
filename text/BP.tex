@@ -176,6 +176,7 @@ morecomment=[l]{\#},
 
 
 
+
 %nastaveni velikosti footnote
 \renewcommand\footnotelayout{\footnotesize}
 \pagenumbering{gobble}
@@ -1500,7 +1501,7 @@ follows (A je za B).
         \label{fig:sampling}
  \end{figure}   
 
-Pomocí těchto výroků lze definovat výběr časových oken z datasetu A
+Pomocí těchto výroků lze definovat výběr \uv{časových oken} z datasetu A
 na základě datasetu B (např. průnik).
 
 
@@ -1741,10 +1742,10 @@ Na obrázku \ref{fig:schema1} je znázorněn základní princip fungování modu
 jeho  datových toků mezi databází, modulem a rozhraním systému GRASS. 
  Zmíněné skupiny funkcí mají následující chronologický postup:
 \begin{enumerate}
-\item \textbf{Data} - konfigurace a přístup
+\item \textbf{data} - konfigurace a přístup
 \item \textbf{výpočet srážek}	 - intenzity srážek z MV spojů
 \item \textbf{generování časových oken}	 - vytvoření instancí MV spojů pro časové okamžiky
-\item \textbf{interpolace} - vytvoření plošných inter{subsec:postgresql}polací z časových oken
+\item \textbf{interpolace} - vytvoření plošných inter{subsec:postgresql}polací z \uv{časových oken}
 \end{enumerate}
 
 
@@ -1764,7 +1765,7 @@ V následujícím textu je popsána příprava databáze a filozofie správy dat
 \paragraph*{Příprava databáze}
  se provádí automaticky v prostředí navrženého GRASS modulu a 
  skládá se z jednotlivých dílčích úkonů, které jsou na obecné úrovni popsány v praktické části \ref{subsec:postgis} a \ref{subsec:postgresql}. Úpravy databáze jsou: 
-\begin{enumerate}
+\begin{itemize}
 %%% ML: odkaz na kapitolu o PostGISu
 %%% MK: opraveno
 %%% MK: OK, jemne upraveno
@@ -1777,7 +1778,7 @@ V následujícím textu je popsána příprava databáze a filozofie správy dat
 
 \item \textbf{Konfigurace} -  spočívá především v doplnění
 atributů a vytvořením sekvencí v databázi.
-\end{enumerate}
+\end{itemize}
 
 
 %%% MK:start- zakomentovano na prani martina.
@@ -1958,9 +1959,9 @@ další zvolený časový okamžik.
 
 Z vybraných suchých období se určují výsledné hodnoty \textit{baseline} pomocí základních statistických funkcí (parametr \texttt{statfce}):
 \begin{itemize}
-\item průměr (avg) - určení hodnot baseline prostým průměrováním hodnot pro jednotlivé spoje
-\item modus (mode) - určení pomocí funkce modus. Z podstaty této funkce je nutno nastavit zaokrouhlení (parametr \texttt{roundm}) dat, které je provedeno před samotným výpočtem funkce modus.
-\item quantile (kvanitl) - určení hodnot uživatelsky nastaveným kvantilem. Hodnota kvantilu se nastavuje parametrem \texttt{quantile}.  
+\item průměr - určení hodnot baseline prostým průměrováním hodnot pro jednotlivé spoje
+\item modus - určení pomocí funkce modus. Z podstaty této funkce je nutno nastavit zaokrouhlení (parametr \texttt{roundm}) dat, které je provedeno před samotným výpočtem funkce modus.
+\item  kvantil - určení hodnot uživatelsky nastaveným kvantilem. Hodnota kvantilu se nastavuje parametrem \texttt{quantile}.  
 \end{itemize}
 
 
@@ -1969,8 +1970,8 @@ Posledním parametrem v této sekci je \texttt{Aw} a vyplývá ze vztahu
 
 
 \subsubsection*{Časová okna} 
-Časová okna jsou druhou samostatnou GUI sekcí s názvem
-\textit{Time-windows}. Vytvo\-ření časových oken přímo navazuje na
+\uv{Časová okna} jsou druhou samostatnou GUI sekcí s názvem
+\textit{Time-windows}. Vytvo\-ření \uv{časových oken} přímo navazuje na
 vypočtené hodnoty z minulé sekce. Principiálně jde o vytvoření tabulek v databázi vždy pro jeden
 časový okamžik.  K tomu je třeba převedení srážkových řad s nepravidelným
 krokem na časové řady s krokem pravidelným. 
@@ -1980,7 +1981,7 @@ Konfigurovatelné funkce této GUI sekce jsou následující:
 
 \item převedení srážkových řad na konstantní časový krok,
 \item vynechání zvolených MV spojů z výpočtu,
-\item generování časových oken ze zvoleného  intervalu
+\item generování \uv{časových oken} ze zvoleného  intervalu
 \item načtení časových řad z referenčních srážkoměrů
 \end{enumerate}
 
@@ -1992,7 +1993,7 @@ parametrem \texttt{interval}, který je explicitně nastaven na hodnoty
 \emph{minute} jsou srážky v kroku cca 15 sekund zprůměrovány a výsledná
 hodnota se zapíše do databáze jako průměrná minutová srážka. Jelikož
 se hodnota počítá jako průměr, intenzita srážek je v [$mm \cdot
-h^{-1}$] i v případě generování časových oken v jiném časovém
+h^{-1}$] i v případě generování \uv{časových oken} v jiném časovém
 intervalu.
 \begin{table}[h]
 \centering
@@ -2012,9 +2013,9 @@ intervalu.
 
 \paragraph*{Vynechání spojů} je možné pomocí vstupního souboru do parametru \texttt{lignore},
  který definuje jednotlivé spoje,
- které mají být z časových oken vynechány. Tato
+ které mají být z \uv{časových oken} vynechány. Tato
 funkce je vytvořena k zamezení přidání chybných nebo cíleně
-vynechaných spojů do časových oken, která by tak ztrácela validitu pro
+vynechaných spojů do \uv{časových oken}, která by tak ztrácela validitu pro
 plošné interpolace. Hodnoty \texttt{linkid} se zadávají po řádku vždy
 ve formátu datového typu (integer) odvozeného z databázové tabulky
 \texttt{link}.
@@ -2024,7 +2025,7 @@ přímou návaznost na plošné interpolace srážek a další
 analýzy v GRASS. Jedná se o převedení tabulky s časovou řadou na tabulky, 
 které představují vždy pouze data pro jeden okamžik. 
 
-Časový úsek, ze kterého jsou časová okna vytvářena je vymezen krajními hodnotami: \textit{fromtime}
+Časový úsek, ze kterého jsou \uv{časová okna} vytvářena je vymezen krajními hodnotami: \textit{fromtime}
 (začátek intervalu) a \textit{totime} (konec intervalu)
 Vstupní hodnoty  jsou datového
 typu (timestamp) ve formátu \emph{"YYYY-MM-DD H:M:S"}. 
@@ -2059,21 +2060,24 @@ escapeinside=''}
 Vstupem do parametru \texttt{rgauges} je cílová složka se soubory,
 které jsou načteny dávkově. Pro jednotlivé srážkoměry se vytvoří
 vektorová geometrie reprezentovaná body, která je uložena do databáze
-PostgreSQL. Pro vytvoření časových oken z~dat srážkoměrů slouží 
-v zásadě identické nastavení jako pro tvorbu časových oken 
+PostgreSQL. Pro vytvoření \uv{časových oken} z~dat srážkoměrů slouží 
+v zásadě identické nastavení jako pro tvorbu \uv{časových oken} 
 intenzity srážek z MV spojů.
 
 
 \subsubsection*{Interpolace} 
 Plošné interpolace srážek jsou  jedním z hlavních výstupů modulu
 \textit{r.mwprecip}. GUI sekce \textit{Interpolation} je charakteristická
-dvěma částmi: 
+třemi částmi: 
 \begin{itemize}
-\item interpolace bodů podél spojů
-\item plošné interpolace srážek
+\item volba výpočetního regionu - nastavení oblasti a rozlišení rastru
+\item interpolace bodů podél spojů - nahrazení linií body
+\item plošné interpolace srážek - volba a konfigurace interpolačních metod
 \end{itemize}
 
-\paragraph*{Volba regionu}
+Následující odstavce popisují výše zmíněné tři hlavní oblasti nastavení GUI sekce \textit{Interpolation}: 
+
+\paragraph*{Volba výpočetního regionu}
 Modul \textit{r.mwprecip} má pro dávkové generovaní interpolací 
 nastaven výpočetní region na výchozí hodnoty, které definují oblast
 výpočetního regionu. Toto výchozí nastavení modulu lze ignorovat přepínačem \texttt{-q}
@@ -2098,8 +2102,9 @@ a využít tedy nastavení globální či nastavené modulem \textit{g.region}.
 \caption{Parametry v GUI sekci Interpolation}
 \end{table}
 
+\paragraph*{Interpolace bodů podél spojů}
 Současná verze GRASS GIS neumožňuje interpolace z liniové reprezentace
-dat, což není při porovnání s ostatními GIS nijak neobvyklé. Parametr
+dat, což není při porovnání s ostatními GIS neobvyklé. Parametr
 \texttt{pmethod} definuje metodu interpolace bodů podél
 spojů. Explicitně je nastaven na hodnotu \emph{permeter} (po metrech)
 a při volbě této metody je provedena interpolace bodů v pevně
@@ -2111,19 +2116,17 @@ hodnoty \emph{count} (počet). Hodnota \emph{count} rozloží rovnoměrně
 body podél MV spojů ve jejich zvoleném počtu dle nastavení parametru
 (\texttt{step}).
 
-Pro plošné interpolace srážek je využito tří modulů ze stabilní verze
-GRASS. Interpolace lze definovat jak uživatelsky, tak i automatizovaně
-(výchozími hodnotami jednotlivých modulů). Pro volbu interpolace s
-výchozími hodnotami slouží parametr \texttt{interpolation}, který má
-volby \emph{rst}(regular spline with tension), \emph{idw} (invese
+\paragraph*{Plošné interpolace srážek} K určení interpolovaných hodnot je možno využít
+ tří modulů ze stabilní verze GRASS.  Jedná se o metody \emph{rst}(regular spline with tension), \emph{idw} (invese
 distace weighting) a \emph{bspline} (bicubic spline tension).
 
-Druhou možností je uživatelské nastavení jednotlivých interpolací. Tomu
- slouží parametr \texttt{isettings}, do kterého je
+Interpolace lze definovat jak uživatelsky, tak i automatizovaně
+(výchozími hodnotami jednotlivých modulů). 
+
+Uživatelské nastavení jednotlivých interpolací lze pomocí parametru \texttt{isettings}, do kterého je
 vstupem textový řetězec ve formátu \textit{GRASS Python Scripting
   Library}.  Řetězce je možné konfigurovat ve wxGUI daných modulů a z
 výstupního terminálu jej lze kopírovat.
-
 
 Některé parametry (vstup/výstup map) pro dané interpolační metody musí
 být nastaveny ve formátu podle tabulky \ref{tab:interpol}.
@@ -2148,8 +2151,7 @@ být nastaveny ve formátu podle tabulky \ref{tab:interpol}.
 \end{table}
 
 
-
-Příkladem může být interpolace IDW (r.surf.idw) s parametry pro
+Příkladem uživatelské konfigurace může být interpolace IDW (r.surf.idw) s parametry pro
 nastavení hodnoty exponentu \texttt{power} a počtu bodů
 \texttt{npoints}, ze kterých se daná buňka interpoluje.
 
@@ -2183,10 +2185,10 @@ grass.run_command( "v.surf.idw", input=points_nat,
 \subsection{Modul v.link.precip}
 Hlavní vlastnosti tohoto modulu jsou v umožnění  jednoduššího přístupu k
 výsled\-kům z primárního modulu. Modul \textit{r.mwprecip} při vytváření
-časových oken zapisuje tabulky (\uv{časová okna}) do databáze. Vektorová geometrie
+\uv{časových oken} zapisuje tabulky (\uv{časová okna}) do databáze. Vektorová geometrie
 reprezentovaná liniemi (MV spoje) a body (pro interpolace) je v databázi
 pro zamezení redundance dat v samostatné tabulce, nikoliv pro každé
-časové okno. Pro analýzy a další využití výsledků v GRASS GIS, je
+\uv{časové okno}. Pro analýzy a další využití výsledků v GRASS GIS, je
 podstatné, aby bylo možné jednotlivá \uv{časová okna} připojovat k
 vektorovému podkladu a s vhodnou tabulkou barev je zobrazovat.  Toho
 lze docílit sledem po sobě jdoucích volání jednotlivých modulů ze systému
@@ -2198,7 +2200,7 @@ který to umožňuje v uživatelsky přístupné formě.
  
 \begin{itemize}
 \item MV spoje  je možno reprezentovat liniemi, nebo nahrazenými body daných linií.
- Na základě této volby a zvoleného časového okamžiku se připojí příslušné časové okno
+ Na základě této volby a zvoleného časového okamžiku se připojí příslušné \uv{časové okno}
   (atributová tabulka) s výsledky intenzit srážek z MV spojů.
 \item Srážkoměry  jsou logicky reprezentovány bodovou vrstvou. K té je možné výše 
 zmíněným principem připojit příslušná \uv{časová okna} ze zvoleného okamžiku.
@@ -2218,12 +2220,12 @@ Mimo to je možné pro zvolený  okamžik data ne pouze připojovat, ale i \text
 \subsubsection{Použití modulu}
 Modul při prvním spuštění vytvoří vektorovou vrstvu v nativním
 formátu GRASS na základě vytvořené geometrie v databázi
-PostgreSQL. K ní připojí zvolenou tabulku reprezentující časové
-okno. Při dalším připojení jiného časového okna je původně připojená
+PostgreSQL. K ní připojí zvolenou tabulku reprezentující \uv{časové
+okno}. Při dalším připojení jiného \uv{časového okna} je původně připojená
 tabulka odpojena a k té samé vektorové vrstvě se připojí tabulka nová. Modul
 je tvořen dvěma GUI záložkami \textit{Required} a \textit{Optional}.
 
-\paragraph{První záložka} názvu \textit{Required} obsahuje pouze povinné parametry.
+\paragraph{Záložka Required} obsahuje pouze povinné parametry.
 Parametr \texttt{schema} označuje pracovní schéma, ve kterém jsou
 uloženy výsledky pro zobrazení. Parametr \texttt{type} nastavuje, zda chceme
 připojovat  hodnoty ke srážkoměrům nebo k MV spojům.
@@ -2233,10 +2235,10 @@ Možnosti konfigurace jsou znázorněny ve schématu \ref{fig:baseline1}
 
 
 
-\paragraph{Druhá záložka} v grafickém rozhraní je \textit{Optional}  a obsahuje přepínače a parametry:
+\paragraph{Záložka Optional}  obsahuje přepínače a parametry:
 \begin{description}
-\item[-c] slouží pro případ, kdy bude nutno pracovat s více časovými
-  okny najednou. Přepínač \texttt{-c} \uv{časová okna} nepřipojuje k
+\item[-c] slouží pro případ, kdy bude nutno pracovat s více \uv{časovými
+  okny} najednou. Přepínač \texttt{-c} \uv{časová okna} nepřipojuje k
   vektorové vrstvě \textit{"link\_nat"}, ale vytváří nové s názvem
   ($"view" + <hodnota timestamp>$). Při této volbě dochází k
   redundanci dat vektorových vrstev.
@@ -2250,7 +2252,7 @@ Možnosti konfigurace jsou znázorněny ve schématu \ref{fig:baseline1}
 
 
 Parametr \texttt{layername} nastavuje výchozí vektorovou vrstvu, ke
-které chceme při\-pojit výsledky v podobě časových oken. Podmínkou je,
+které chceme při\-pojit výsledky v podobě \uv{časových oken}. Podmínkou je,
 že daná vektorová vrstva musí obsahovat identifikátory (linkid). V
 praxi zde budou nejčastěji připojovány vrstvy vytvořené v rámci
 výpočtu primárního modulu \textit{r.mwprecip}. Ty jsou pojmenovány
@@ -2309,7 +2311,7 @@ intenzit.  Škálu barev je možno zvolit jak z předefinovaných možností, ta
 K nastavení škály barev rastrů slouží modul \textit{r.color} .
 
 K vhodné vizualizaci rastrových map může posloužit modul \textit{g.gui.animation},
-který umožňuje vytvářet animace z po sobě jdoucích časových oken (rastrů). 
+který umožňuje vytvářet animace z po sobě jdoucích rastrů. 
 
 Součástí další kapitoly jsou obrázky reprezentující ukázky vizualizovaných rastrových map.
 
