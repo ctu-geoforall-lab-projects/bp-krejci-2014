@@ -961,6 +961,7 @@ Inverse distance weighting & {\tt v.surf.idw} \\ \hline
 
 
 \subsection{Databáze PostgreSQL}
+\label{subsec:postgresql}
 PostgreSQL\footnote{\url{http://www.postgresql.org/}} je open-source
 projekt, který vznikl v roce 1986. Tento projekt je dnes celosvětově
 uznávaný, čehož důkazem je využití systému ve světových projektech
@@ -1728,11 +1729,11 @@ spojů do vhodných formátů pro analýzy v GRASS.
 výstupu vhodném pro další GIS analýzy. Modul pro výstupní data podporuje dvě
 základní reprezentace dat. Výstupem jsou interpolované
 srážky v rastrové podobě a vektorová reprezentace pro jednotlivé MV
-spoje.  Zpracování dlouhých časových řad ve zvoleném intervalu je
-výhodné pro časoprostorové analýzy, pro které je nově v \textit{GRASS
-  GIS 7} implementován \textit{Temporal GRASS GIS framework}. Výstupní
-data z modulu jsou v kompatibilním formátu s TGRASS včetně vytvořených
-registračních souborů do pracovní složky.
+spoje.  K zpracování a analýzám dlouhých časových řad ve zvoleném intervalu je
+výhodné využít balíčku časoprostorových modulů (TGRASS), které jsou nově v \textit{GRASS
+  GIS 7} . Výstupní data z modulu \textit{r.mwprecip} jsou v kompatibilním formátu s TGRASS. 
+  Součástí plné kompatibility jsou automaticky předpřipraveny nutné 
+registrační soubory do uživatelské pracovní složky.  
 
 Funkčnost modulu je možné rozdělit do hlavních čtyř skupin, 
 které charakterizují vlastnosti modulu. 
@@ -1740,10 +1741,10 @@ Na obrázku \ref{fig:schema1} je znázorněn základní princip fungování modu
 jeho  datových toků mezi databází, modulem a rozhraním systému GRASS. 
  Zmíněné skupiny funkcí mají následující chronologický postup:
 \begin{enumerate}
-\item \textbf{příprava databáze} - automatizovaná konfigurace databáze PostgreSQL
+\item \textbf{Data} - konfigurace a přístup
 \item \textbf{výpočet srážek}	 - intenzity srážek z MV spojů
 \item \textbf{generování časových oken}	 - vytvoření instancí MV spojů pro časové okamžiky
-\item \textbf{interpolace} - vytvoření plošných interpolací z časových oken
+\item \textbf{interpolace} - vytvoření plošných inter{subsec:postgresql}polací z časových oken
 \end{enumerate}
 
 
@@ -1755,31 +1756,31 @@ jeho  datových toků mezi databází, modulem a rozhraním systému GRASS.
 V následujícím textu jsou obecně představeny  jednotlivé funkce modulu
 \textit{r.mwprecip} a s tím spojená jejich možná konfigurace. Konkrétní ukázka nastavení modulu
  je v příloze \ref{appendix:ukazkakonf}.
-Uživatelské rozhraní se primárně dělí na již zmíněné čtyři části, 
-které jsou v následujícím textu podrobně rozebrány.
+Uživatelské rozhraní se primárně dělí na již zmíněné čtyři části a následující text se je podlé tohoto dělení strukturován.
 
-\subsubsection*{Příprava databáze}
+\subsubsection*{Data}
+V následujícím textu je popsána příprava databáze a filozofie správy dat. 
 
-Úprava databáze se provádí automaticky v prostředí navrženého GRASS modulu a 
- skládá se z jednotlivých dílčích kroků, které jsou na obecné úrovni popsány v praktické části. 
+\paragraph*{Příprava databáze}
+ se provádí automaticky v prostředí navrženého GRASS modulu a 
+ skládá se z jednotlivých dílčích úkonů, které jsou na obecné úrovni popsány v praktické části \ref{subsec:postgis} a \ref{subsec:postgresql}. Úpravy databáze jsou: 
 \begin{enumerate}
 %%% ML: odkaz na kapitolu o PostGISu
 %%% MK: opraveno
 %%% MK: OK, jemne upraveno
-\item \textbf{Geometrie} - extenze PostGIS (viz kap. \ref{subsec:postgis}) pomocí které je vytvořen geometrický prvek pro MV spoje v databázi.
+\item \textbf{Geometrie} - využití extenze PostGIS (viz kap. \ref{subsec:postgis}) k vytvoření geometrických prvků pro MV spoje v databázi.
 
 \item \textbf{Indexy} - vytvoření indexů pro optimalizaci vyhledávání dotazů v databázi. K vytvoření indexů bylo využito algoritmu.
 \textit{B-tree}. \footnote{\url{http://www.postgresql.org/docs/9.2/static/indexes-types.html}}.
 
-\item \textbf{Funkce} -  K agregaci hodnot daných sloupců byla použita funkce modus, která je implementována v nativním jazyku PL/pgSQL.
+\item \textbf{Funkce} - přidání funkce v jazyku PL/pgSQL k agregaci hodnot daných sloupců a z nich výpočet statistické funkce modus. 
 
-\item \textbf{Konfigurace} - databáze spočívá především v doplnění
-atributů vytvořením sekvencí a vymazáním záznamů $rxpower= -99.9$,
-které charakterizují výpadek spoje.
+\item \textbf{Konfigurace} -  spočívá především v doplnění
+atributů a vytvořením sekvencí v databázi.
 \end{enumerate}
 
 
-%%% MK: zakomentovano na prani martina.
+%%% MK:start- zakomentovano na prani martina.
 \begin{comment}
 \paragraph*{Geometrie} Do databáze je přidána extenze PostGIS
 (\texttt{CREATE EXTENSION post\-gis}), která umožňuje vytvořit
@@ -1835,37 +1836,40 @@ atributů vytvořením sekvencí a vymazáním záznamů $rxpower= -99.9$,
 které charakterizují výpadek spoje.
 
 \end{comment}
-
+%%% MK: end-zakomentovano na prani martina.
 
 
 Při každém uživatelském spuštění modulu \textit{r.mwprecip } proběhne
-kontrola stavu databáze. Při prvním spuštění je databáze uvedena do
-potřebného stavu  Filosofie modulu je
+kontrola stavu databáze. Při zjištění prvního spuštění je databáze nakonfigurována.  Filosofie modulu je
 založena na předpokladu, že bude sloužit k experimentálním pokusům
 v~rozhraní GRASS GIS. Jednotlivé kroky výpočtů jsou od sebe odděleny
 tak, aby se při změně parametrů části programu znovu nemusely provádět
-veškeré výpočty. Tyto kroky se dělí do výše zmíněných tří kategorií.
+veškeré výpočty. 
 
+\paragraph*{Správa dat}
+Modul pracuje v oddělených databázových schematech. Volbou pracovního
+ schéma se vytvoří pracovní složka ve spouštěcím adresáři a databázové schéma v připojené databázi.
+Vlastnosti správy dat se dají shrnout v následujících bodech:
+\begin{description}
+\item Z databázového schématu \texttt{public} načítá veškerá data z databáze a až na prvotní
+jednorázovou přípravu databáze do něj nezapisuje. Výsledky modulu se zapisují odděleně do pracovního schématu, který si uživatel
+pojmenuje pomocí parametru \texttt{schema}.
 
-Modul pracuje v oddělených databázových schematech. Ze schématu
-\texttt{public} načítá veškerá data z databáze a až na prvotní
-jednorázovou úpravu databáze do něj nezapisuje. Výsledky dílčích tří
-kategorii jsou zapisovány do pracovního schématu, který si uživatel
-pojmenuje pomocí parametru \texttt{schema}.  Volbou různých názvů
-\texttt{schema} je možné vytvářet schémata pro dané konfigurace
-výpočtu a zpětně se k nim vracet.
+\item Volbou různých názvů
+schémat je možné vytvářet jednotlivé pracovní instance daných konfigurací
+výpočtů a zpětně se k nim vracet.
 
-Modul zapisuje konfiguraci nastavených výpočtů do textových souborů,
+\item Modul zapisuje konfiguraci nastavených výpočtů do textových souborů,
 které jsou uloženy ve složce s názvem zvoleným pro pracovní schéma
 (parametr \texttt{schema}). Složka je umístěna ve spouštěcím adresáři
 modulu. Při dalším spuštění modul porovnává nastavení s konfiguračními
 soubory a na základě toho provede jen část výpočtu se změněnými
 parametry.
 
-V sekci \textit{Optional} je přepínač \texttt{-r}, který odstraní
-uživatelské schéma a složku s konfiguračními soubory. Této funkce se
-může využít pro vrácení databáze do původního stavu, nebo například
-při nekorektním ukončení modulu či výpočtu.
+\item  Smazání pracovního schématu lze docílit  v sekci \textit{Optional}  přepínačem \texttt{-r}, 
+který smaže jak pracovní složku, tak schéma z databáze. Této funkce se může mimo jiné využít například
+při nekorektním ukončení modulu či výpočtu. 
+\end{description}
 \begin{table}[h]
 \centering
 {\small
@@ -1886,16 +1890,15 @@ Optional                   & {\tt -p -r schema}                                 
 \end{table}
 
 
-\subsubsection*{Výpočet srážek} a konfigurace jejich výpočtu se uživatelsky nastavuje 
-v GUI sekci \textit{Baseline}. Zde jsou parametry pro konfiguraci výpočtu intenzit sráže,
- které se skládají hlavně s nastavení metody určení baseline. Teoretickým východiskem pro
-  určení baseline je kapitola, \ref{subsec:chyby} Mikrovlnné spoje. 
-
-Zjednodušeně řečeno, jde o určení hodnot útlumu MV signálu během suchého období, 
-kterou je nutné znát pro výpočet intenzit srážek.
+\subsubsection*{Výpočet srážek} 
+Výpočet srážek a konfigurace se uživatelsky nastavuje 
+v GUI sekci \textit{Baseline}. Zde jsou parametry pro konfiguraci výpočtu intenzit srážek,
+kde se jedná především o parametry nastavující metody určení baseline \footnote{určení baseline: jde o určení hodnot útlumu MV signálu během suchého období, 
+které je nutné znát pro výpočet intenzit srážek.}. Teoretickým východiskem pro 
+určení baseline je kapitola, \ref{subsec:chyby} Mikrovlnné spoje. 
 
 Baseline jde primárně určit dvěma způsoby. První metodou je přímé zadání známých hodnot ve formátu CSV. 
-Druhý způsob pomocí je umožněn pomocí volby suchého období a z něj spočtení hodnoty baseliine na základe statistických funkcí. Schéma volby baseline je znázorněno na obrázku.  \ref{fig:schemabase}.
+Druhý způsob  je umožněn pomocí volby suchého období a z něj spočtení hodnoty baseliine na základe statistických funkcí. Schéma volby baseline je znázorněno na obrázku.  \ref{fig:schemabase}.
 
 \begin{figure}[h!]
     \centering
@@ -1909,7 +1912,7 @@ Druhý způsob pomocí je umožněn pomocí volby suchého období a z něj spo�
 \paragraph*{Zadání známých hodnot}
 umožňuje \texttt{baselfile}, do kterého vstupuje textový soubor
 s hodnotami identifikátorů spojů (\texttt{linkid}) a příslušnými
-hodnotami baseline ve formátu    \acs{CSV}.
+hodnotami baseline ve formátu \acs{CSV}.
 
 \begin{table}[h!]
 \centering
@@ -1927,14 +1930,11 @@ hodnotami baseline ve formátu    \acs{CSV}.
 \label{my-label}
 \end{table}
 
-\paragraph*{Volba suchých období}
-je  možností, kdy jsou vstupními
-údaji časové intervaly nebo okamžiky, které představují suché období.
+\paragraph*{Volbou suchých období}
+je  možné definovat  časové intervaly nebo okamžiky, které slouží jako referenční hodnoty pro určení baseline. Z těch se následně zvolenými statistickými funkcemi vypočtou výsledné hodnoty.
 
-Pro příklad: první řádek označuje časový okamžik suchého období, na
-dalším řádku je časový interval uvozený řetězcem \texttt{int} a za ním
-následují dva řádky definující interval. Další řádek reprezentuje
-jeden zvolený časový okamžik.
+Volba suchých období se definuje do textového souboru který je vstupní hodnotou do parametru \texttt{baseltime}.
+Pro příklad: 
 
 \begin{figure}[h!]
 \begin{footnotesize}
@@ -1950,35 +1950,41 @@ int                     -uvozen'í' intervalu
 \end{footnotesize}
 \end{figure}
 \vskip-2ex
+První řádek označuje časový okamžik suchého období, na
+dalším řádku je časový interval uvozený řetězcem \texttt{int} a za ním
+následují dva řádky definující interval. Další řádek reprezentuje
+další zvolený časový okamžik.
 
-Po výběru časových intervalů suchých období je možnost volby výpočtu výsledné baseline
-pro daný spoj pomocí základních statistických funkcí. K volbě slouží
-parametr \texttt{statfce}, který má explicitně nastavené možnosti
-\emph{avg} (průměr), \emph{mode} (modus), \emph{quantile}
-(kvantil). Výchozí hodnota je nastavena na mode. Při volbě funkce
-modus je možné nastavit počet desetinných míst při zaokrouhlení vzorku
-hodnot. Parametr \texttt{quantile} vyjadřuje horní kvantil souboru dat
-v procentech.
+
+Z vybraných suchých období se určují výsledné hodnoty \textit{baseline} pomocí základních statistických funkcí (parametr \texttt{statfce}):
+\begin{itemize}
+\item průměr (avg) - určení hodnot baseline prostým průměrováním hodnot pro jednotlivé spoje
+\item modus (mode) - určení pomocí funkce modus. Z podstaty této funkce je nutno nastavit zaokrouhlení (parametr \texttt{roundm}) dat, které je provedeno před samotným výpočtem funkce modus.
+\item quantile (kvanitl) - určení hodnot uživatelsky nastaveným kvantilem. Hodnota kvantilu se nastavuje parametrem \texttt{quantile}.  
+\end{itemize}
+
 
 Posledním parametrem v této sekci je \texttt{Aw} a vyplývá ze vztahu
 \ref{eq:Ar}.
 
 
-\subsubsection*{Časová okna} jsou druhou samostatnou GUI sekcí s názvem
+\subsubsection*{Časová okna} 
+Časová okna jsou druhou samostatnou GUI sekcí s názvem
 \textit{Time-windows}. Vytvo\-ření časových oken přímo navazuje na
-vypočtené hodnoty. Principiálně jde o vytvoření tabulek vždy pro jeden
-časový okamžik. K tomu je třeba převedení srážkových řad s nepravidelným
+vypočtené hodnoty z minulé sekce. Principiálně jde o vytvoření tabulek v databázi vždy pro jeden
+časový okamžik.  K tomu je třeba převedení srážkových řad s nepravidelným
 krokem na časové řady s krokem pravidelným. 
-Konfigurovatelné funkce této GUI sekce mají následující sled:
+Konfigurovatelné funkce této GUI sekce jsou následující:
 
 \begin{enumerate}
-\item vymezení generování časových oken intervalem,
+
 \item převedení srážkových řad na konstantní časový krok,
-\item vynechání časových úseků z jednotlivých zvolených spojů
+\item vynechání zvolených MV spojů z výpočtu,
+\item generování časových oken ze zvoleného  intervalu
 \item načtení časových řad z referenčních srážkoměrů
 \end{enumerate}
 
-
+Jednotlivé konfigurovatelné funkce jsou v tomto pořadí popsány v následujících  odstavcích:
 \paragraph*{Převod na konstantní krok} je nastavitelný  
 parametrem \texttt{interval}, který je explicitně nastaven na hodnoty
 \emph{minute} (minuta), \emph{hour} (hodina) a \emph{day}
@@ -2002,16 +2008,10 @@ intervalu.
 \label{my-label}
 \end{table}
 
-\paragraph*{Generování} časových oken z vymezujícího intervalu má 
-přímou návaznost na plošnou interpolaci srážek a další
-využití v GRASS. Vstupní hodnoty pro parametry \textit{fromtime}
-(začátek intervalu) a \textit{totime} (konec intervalu) jsou datového
-typu (timestamp) ve formátu \emph{"YYYY-MM-DD H:M:S"}. V~sekci
-\textit{Optional} je přepínač \texttt{-p}, který vypisuje na
-standardní výstup informaci o začátku a~konci časového rozsahu
-datasetu pro zjištění možného maximálního intervalu.
 
-\paragraph*{Vynechání spojů} je možné pomocí vstupního souboru do parametru \texttt{lignore}, který definuje jednotlivé spoje,
+
+\paragraph*{Vynechání spojů} je možné pomocí vstupního souboru do parametru \texttt{lignore},
+ který definuje jednotlivé spoje,
  které mají být z časových oken vynechány. Tato
 funkce je vytvořena k zamezení přidání chybných nebo cíleně
 vynechaných spojů do časových oken, která by tak ztrácela validitu pro
@@ -2019,9 +2019,24 @@ plošné interpolace. Hodnoty \texttt{linkid} se zadávají po řádku vždy
 ve formátu datového typu (integer) odvozeného z databázové tabulky
 \texttt{link}.
 
-\paragraph*{Načtení časových řad ze srážkoměrů} pomocí parametru
+\paragraph*{Generování časových oken}  ze zvoleného intervalu má 
+přímou návaznost na plošné interpolace srážek a další
+analýzy v GRASS. Jedná se o převedení tabulky s časovou řadou na tabulky, 
+které představují vždy pouze data pro jeden okamžik. 
+
+Časový úsek, ze kterého jsou časová okna vytvářena je vymezen krajními hodnotami: \textit{fromtime}
+(začátek intervalu) a \textit{totime} (konec intervalu)
+Vstupní hodnoty  jsou datového
+typu (timestamp) ve formátu \emph{"YYYY-MM-DD H:M:S"}. 
+
+V~sekci
+\textit{Optional} je přepínač \texttt{-p}, který vypisuje na
+standardní výstup informaci o začátku a~konci časového rozsahu
+datasetu pro zjištění možného maximálního intervalu.
+
+\paragraph*{Načtení časových řad ze srážkoměrů} je umožněno pomocí parametru
 \texttt{rgauges}. Srážkoměrná data jsou načítána v časových řadách jejichž rozměr je intenzita srážky v [$mm \cdot h^{-1}$]. Struktura vstupního
-souboru je následující.
+souboru je následující:
 
 
 \begin{figure}[h!]
@@ -2035,6 +2050,7 @@ escapeinside=''}
 2013-09-01 00:00:00,6.12      #hodnoty ve form'á'tu CSV 
 2013-09-01 00:01:00,12.18     #"YYYY-MM-DD H:M:S,hodnota"		
 2013-09-01 00:02:00,12.12
+...
 \end{lstlisting}
 \end{footnotesize}
 \end{figure}
@@ -2048,13 +2064,16 @@ v zásadě identické nastavení jako pro tvorbu časových oken
 intenzity srážek z MV spojů.
 
 
-\subsubsection*{Interpolace} je jedním z výstupů modulu
-\textit{r.mwprecip}. GUI sekce \textit{Interpolation} je specifická
-dvěma částmi. První zahrnuje interpolace bodů podél spojů a druhá
-plošné interpolace srážek.
+\subsubsection*{Interpolace} 
+Plošné interpolace srážek jsou  jedním z hlavních výstupů modulu
+\textit{r.mwprecip}. GUI sekce \textit{Interpolation} je charakteristická
+dvěma částmi: 
+\begin{itemize}
+\item interpolace bodů podél spojů
+\item plošné interpolace srážek
+\end{itemize}
 
-
-
+\paragraph*{Volba regionu}
 Modul \textit{r.mwprecip} má pro dávkové generovaní interpolací 
 nastaven výpočetní region na výchozí hodnoty, které definují oblast
 výpočetního regionu. Toto výchozí nastavení modulu lze ignorovat přepínačem \texttt{-q}
@@ -2078,6 +2097,7 @@ a využít tedy nastavení globální či nastavené modulem \textit{g.region}.
 \end{tabular}
 \caption{Parametry v GUI sekci Interpolation}
 \end{table}
+
 Současná verze GRASS GIS neumožňuje interpolace z liniové reprezentace
 dat, což není při porovnání s ostatními GIS nijak neobvyklé. Parametr
 \texttt{pmethod} definuje metodu interpolace bodů podél
