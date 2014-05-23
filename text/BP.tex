@@ -2385,8 +2385,8 @@ umožňuje volby bilineární a~bikubické interpolace.
   křivky pro jednotlivé kroky ve směrech východ-západ (sie) a
   sever-jih (sin). Maximální hodnota \texttt{sie} a \texttt{sin}, určuje vzdálenost spline
   křivky pro jednotlivé kroky ve výše uvedených směrech. Pro oba směry by neměla 
-  být menší než vzdálenost známých bodů \footnote{\url{\ref{subsec:temporalgrassframe}
-}}.
+  být menší než vzdálenost známých bodů \footnote{\ref{subsec:temporalgrassframe}
+}.
 
 \item Parametr \texttt{lambda\_i} (Thykonov regularization parameter)
   ovlivňuje vyhlazení interpolace. Při volbě malé \texttt{lambda\_i}
@@ -2741,7 +2741,7 @@ souřadnicích do jednoho rastru na základě zvolené matematické funkce
 časového kroku.
 
 Modul, který implementuje agregační funkci, se jmenuje
-{\it t.rast.aggregate} \footnote{\url{http://grass.osgeo.org/grass70/manuals/t.rast.aggregate.html}}.
+{\it t.rast.aggregate} 
 
 V příkladě uvedeném níže byly pomocí agregační funkce vytvořeny rastry
 reprezentující sumy srážkových intenzit po 15 minutách. Vytvořený
@@ -2766,7 +2766,7 @@ Další možností je modul \textit{r.rast.series}, který využívá k agregaci
 algoritmů a je určen pro analýzu celého datasetu bez zvolené
 granularity.  Příkladem je vytvoření rastru s maximálními intenzitami
 srážek v celém časovém intervalu datasetu. Byly vytvořeny maximální
-intenzity časového datasetu z plošných interpolací\ref{fig:maximasraz} metod RST a IDW.
+intenzity časového datasetu z plošných interpolací \ref{fig:maximasraz} RST a IDW.
 
 
 \begin{figure}[h!]
@@ -2796,8 +2796,8 @@ t.rast.series input=rstt method=maximum output=rstt_seriesmax
 
 \paragraph*{Mapová algebra} se v rámci TGRASS dělí na dva typy:
 \begin{description}
-\item [t.rast.mapcalc] plně podporuje funkcionalitu mapové algebry \textit{r.mapcalc}. Z časo\-prostorového modelu podporuje například start\_time, end\_time, které jsou nejčastěji využívané.
-\item [t.rast.mapcalc2] umožňuje využívat časoprostorové algebry, která je vůbec první svého druhu.
+\item [t.rast.mapcalc] plně podporuje funkčnost mapové algebry \textit{r.mapcalc}. Z časo\-prostorového modelu podporuje například start\_time, end\_time, které jsou nejčastěji využívané.
+\item [t.rast.mapcalc2] umožňuje využívat časoprostorové algebry, která je v současně dostupných GIS nástrojích první svého druhu.\footnote{Modul nebyl oficiálně představen. Zdroj informace pochází z nepublikovaných materiálů autora (Soren Gebbert)} 
 \end{description}
 
 Použití \textit{t.rast.mapcalc} je analogické pro klasickou mapovou
@@ -2864,8 +2864,7 @@ t.vect.observe.strds input=srazkomery strds=idw_gama \
 
 
 Ve zvolené výchozí databázi se vytvoří \uv{časová okna} v časovém kroku
- granularity datasetu.  Po observaci bude nejspíše následovat analýza
- výsledků. Je možné výsledky prohlížet v databázi nebo využít modul
+ granularity datasetu.  Z dané observace je možné výsledky prohlížet v databázi nebo využít modul
  \textit{t.vect.select}, který vypíše tabulku do řádku s hlavičkami a
  oddělovačem podle nastavení parametru \texttt{separator}. Je tedy
  možné například vytvořit standardizovaný výstup formátu CSV.
@@ -2884,7 +2883,7 @@ Ve zvolené výchozí databázi se vytvoří \uv{časová okna} v časovém krok
  ukládají do virtuální paměti a rychlost procesu se
  zpomalí \footnote{Při observaci rastru rozsahu jednoho týdne o časovém
    kroku 1 minuta (cca 10000 rastrů) trval výpočet 17 hodin a zabral
-   10 GB virtuální paměti (Ubuntu 13, AMD X3).}. Řešením je rozdělit
+   10 GB virtuální paměti (Ubuntu 13, AMD X3).}. Řešením je rozdělení
  dataset na menší části (\textit{t.rast.extract}).
 
 
@@ -2894,7 +2893,8 @@ Ve zvolené výchozí databázi se vytvoří \uv{časová okna} v časovém krok
 Modulem \emph{r.mwprecip} jsou vygenerována minutová \uv{časová okna} z
 jednoho dne. Z oken jsou dále interpolovány plošné srážkové intenzity
 metodou RST a IDW. Cílem analýzy je vytvořit rastr, který by
-charakterizoval srážkové úhrny z intervalu 3 hodin. Odečtením rastrů od sebe je získán objem vody, který představuje objemovou v daném časovém intervalu.
+charakterizoval srážkové úhrny z intervalu 3 hodin. 
+Odečtením rastrů od sebe je získán objem vody, který představuje objemovou odchylku pro dané dva rastry ve zvoleném časovém intervalu.
 
 
 
@@ -2938,8 +2938,7 @@ t.rast.mapcalc inputs=idw_gama_extract_agg@test,\
 \end{lstlisting}
 \end{footnotesize} 
 \end{figure}
-\vskip-2ex
-   
+
 
 %%% ML: opet nestastne umisteni legendy, mela byt mimo rastr
 
@@ -2975,7 +2974,7 @@ hodinách z intervalu několika dní, v poslednímu kroku bychom využili
 \paragraph*{Transformace srážek do povodí}
 Vytvoření nástroje pro přenesení hrubých dat do formy vypočtených
 srážek v GIS prostředí bylo prvním a potřebným krokem k~dalšímu
-možnému vývoji dalších GIS nástrojů. Jedním z možných směrů je
+možnému vývoji dalších GIS nástrojů. Jedním z možných postupů je
 automatická klasifikace a transformace srážek do definovaných
 subpovodí, která by byla vstupem pro srážko-odtokový hydrologický
 model.
@@ -3016,9 +3015,9 @@ Vstupem do parametru \texttt{baseltime} jsou dva časové intervaly
 období sucha vyplývající z měření srážkoměrů. Sumy srážek jsou
 vytvořeny po 1 minutě. Do parametru \texttt{lignore} vstupuje soubor s
 definovanými spoji (linkid), které vykazují vysokou chybovost. Linie
-spojů byly ve své polovině nahrazeny jedním bodem, ze kterých se
-interpoluje nastavenou interpolací RST (výchozí nastavení). Výpočetní
-region je nastaven automaticky.
+spojů byly nahrazeny vždy jedním bodem, ze kterých se
+interpolují hodnoty intenzit srážek pomocí  interpolace RST (výchozí nastavení). Výpočetní
+region je nastaven automaticky modulem \textit{r.mwprecip}.
 
 
 \item Následuje založení časoprostorového datasetu, registrace map a agregace po 15 minutách s funkcí sumace \ref{subsubsec:casoprostoranal}.
@@ -3095,27 +3094,18 @@ r.volume input=sum15minute_103 clump=basin \
 
 Výsledkem je vektorová bodová mapa\ref{fig:vysledekaggrrast}, kde ke každému bodu je připojena
 tabulka s hodnotami výsledků (sum, avg). Parametr \texttt{output}
-umožňuje uložení tabulky ve formě textového souboru se statistikami
+umožňuje uložení ta\-bulky ve formě textového souboru se statistikami
 celé plochy výpočetního regionu.  Aby výsledné hodnoty jednotlivých 
 povodí byly v jednotkách stejných jako vstupní rastry ($mm \cdot h^{-1}$), 
-je nutno výsledný objem vydělit počtem minut po kterých byla nastavena agregace.
+je nutno výsledný objem vydělit počtem minut, po kterých byla nastavena agregace.
 
+%%% MK: nevim jestli tento odstavec tu ma byt. klidne ho kdyztak smaz
 Ve výše zmíněných příkladech byly demonstrovány jednoduché analýzy, které
- především sloužily k otestování datových výstupů z vlastních modulů a 
+ sloužily především  k otestování datových výstupů z vlastních modulů a 
  zároveň demonstrovaly základní a pokročilejší funkce časoprostorového modelu TGRASS. 
 
-%%% ML: v jakych jednotkach tedy jsou
-%%% MK: predelano
-%%% ML: OK
 
-%%% ML: smysluplnost tohoto prikladu jsi predpokladam konzlultoval, to
-%%% nedokazu posoudit...
-%%% MK: ukazoval jsem mu to a nerikal nic spatnyho. 
-%%% ML: dobra zprava :-)
 \setcounter{footnote}{1}
-
-
-
 \newpage
 \necislovana{Závěr}
 
@@ -3124,6 +3114,7 @@ telekomunikačních spojů pomocí GIS" vycházelo z přímých požadavků
 %%% ML: co uvest zadavatele konkretneji (alespon v poznamce pod carou)???
 %%% MK:  Jasne
 %%% ML: co uvest jeste jeho skolitele???
+%%% MK:  jo
 zadavatele\footnote{Odpovědný řešitel: Ing. Vojtech Bareš Ph.D, řešitel: 
  Ing. Martin Fencl: GA ČR 14-22978S \uv{Predikce srážkového odtoku v
   urbanizovaných povodích na základě deštěm generovaného útlumu
