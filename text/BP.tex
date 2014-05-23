@@ -1521,24 +1521,22 @@ na základě datasetu B (např. průnik).
 \chapter*{Praktická část}\stepcounter{chapter}\addcontentsline{toc}{chapter}{Praktická část}
 \setcounter{section}{3}
 
-\noindent Praktická část práce se zabývá především vývojem vlastních GIS modulů. 
-Ostatní části praktické práce jsou přímo návazné na vytvořené moduly a poukazují na jejich aplikační hodnotu.
+\noindent Hlavní směr praktické části je věnován vývoji vlastních GIS modulů, na něž jsou navázány další kroky této práce, které se zaměřují na charakterizaci aplikačního potenciálu.
 Pro ucelený pohled na danou problematiku jsou v první kapitole \ref{sec:charakteristikadat} praktické části představeny charakteristiky vstupních dat.
 
 Jednotlivé kapitoly praktické části  jsou seřazeny na základě chronologického postupu vývoje aplikací:
 \begin{enumerate}
-\item analýza dostupných dat - Charakteristika dat \ref{sec:charakteristikadat} 
-\item návrh aplikace, implementace - Navržené nástroje do systému GRASS \ref{sec:grassgismodule}
-\item testování - Výstupy modulů a jejich využití \ref{vystupymoduluavyuziti} 
+\item Charakteristika dat \ref{sec:charakteristikadat}  - analýza dostupných dat
+\item Navržené nástroje do systému GRASS \ref{sec:grassgismodule} - návrh aplikace, implementace a ovládání
+\item Výstupy modulů a jejich využití \ref{sec:vystupymoduluavyuziti} - testování aplikace 
 \end{enumerate}
 
 
 
 \setcounter{footnote}{1}
 \section{Charakteristika dat}
-Následující text představuje obecné vlastnosti dat MV spojů a na to přímou
-návazností konkrétní analýza dostupného vzorku dat pro tuto práci. Znalost dat
- je důležitá pro jednodušší orientaci v části pojednávající o vlastnostech vyvinutých modulů.
+Následující text popisuje obecné vlastnosti dat MV spojů s přímou návazností konkrétní analýzy 
+dostupného vzorku dat pro tuto práci.
 
 \label{sec:charakteristikadat}
 V současné době je v rámci zadavatelského projektu  využíváno naměřených dat z
@@ -1548,7 +1546,7 @@ do databáze PostgreSQL.
 \subsection*{Data}  
  
 Od dubna 2013 jsou sbírána data z 14 MV spojů na pilotním povodí
-projektu v~Praze Letňanech a 7 spojů na území Praha Michle a
+projektu v~Praze Letňanech a 7 spojů na území Prahy Michle a
 okolí. Zároveň jsou k dispozici 3 referenční srážkoměry v okolí MV
 spojů v Letňanech.  V současné době se pracuje na dohodě o poskytování
 dat většího pokrytí území hl.m. Prahy.
@@ -1564,10 +1562,10 @@ Data jsou v současné době\footnote{situace v květnu 2014} sbírána ze sít�
 
 Časový krok je determinován odezvou jednotlivých 
 zařízení, která jsou dotazována sériově. Pro sbírané množství je tak 
-dosaženo časového kroku cca 12-15 s.
+dosaženo časového kroku cca~12-15~s.
 
 \subsection*{Databáze}  
-Pro záznam měřených hodnot je využíváno databáze
+Pro záznam měřených hodnot je využívána databáze
 PostgreSQL, která běží na PC na ústředí T-Mobile připojenému na 
 dohledovou síť operátora. 
  Záznam dat pro zmíněné lokality probíhá nepřetržitě od
@@ -1632,7 +1630,7 @@ v souřadnicovém systému WGS-84 (\texttt{lat, long}) -- EPSG 4326.
 \end{figure}
 
 \paragraph*{Tabulka record} má atributy \texttt{time} datového typu
-\texttt{timestamp}; \texttt{rxpower} a \texttt{txpower} jsou údaje o
+\texttt{timestamp}; \texttt{rxpower} a \texttt{txpower}  v nichž jsou údaje o
 odeslané a přijaté intenzitě signálu.
 
 \begin{figure}[h!]
@@ -1653,7 +1651,8 @@ odeslané a přijaté intenzitě signálu.
 
 
 V současné době není do databáze zahrnut atribut s hodnotami o vertikální či
-horizontální pola\-rizaci signálu (\texttt{polarization}). Tyto hodnoty byly přidány do databáze z externího zdroje informací. 
+horizontální pola\-rizaci signálu (\texttt{polarization}). 
+Tyto hodnoty byly přidány do databáze z externího zdroje informací. 
 %%% ML: tato cast vety mi nedava smysl, neco tam chybi...
 %%% MK: opraveno
 %%% ML: OK
@@ -1678,7 +1677,7 @@ dva moduly:
   
 
 \item {\it v.link.precip} je doplňkovým modulem k \textit{r.mwprecip},
-  jehož funkcionalita spočívá v nativním přístupu k výsledkům v GRASS
+  jehož funkčnost spočívá v nativním přístupu k výsledkům v GRASS
   GIS.
 \end{itemize}
 
@@ -1712,7 +1711,7 @@ modulů volaných z \textit{GRASS Python Scripting Library}.
 
 \paragraph*{Uživatelské rozhraní}
 Uživatelské rozhraní navržených modulů je definováno sadou přepínačů
-a~ para\-metrů viz kap. \ref{subsubsec:grassterminologie}. Program se
+a~ para\-metrů, viz kap. \ref{subsubsec:grassterminologie}. Program se
 ovládá (spouští) buď z příkazové řádky GRASS nebo ve wxGUI, kde se
 vygeneruje dialogové okno s jednotlivými předem nakonfigu\-rovanými
 sekcemi.
@@ -1745,7 +1744,7 @@ jeho  datových toků mezi databází, modulem a rozhraním systému GRASS.
 \item \textbf{data} - konfigurace a přístup
 \item \textbf{výpočet srážek}	 - intenzity srážek z MV spojů
 \item \textbf{generování časových oken}	 - vytvoření instancí MV spojů pro časové okamžiky
-\item \textbf{interpolace} - vytvoření plošných inter{subsec:postgresql}polací z \uv{časových oken}
+\item \textbf{interpolace} - vytvoření plošných interpolací z \uv{časových oken}
 \end{enumerate}
 
 
@@ -1757,13 +1756,13 @@ jeho  datových toků mezi databází, modulem a rozhraním systému GRASS.
 V následujícím textu jsou obecně představeny  jednotlivé funkce modulu
 \textit{r.mwprecip} a s tím spojená jejich možná konfigurace. Konkrétní ukázka nastavení modulu
  je v příloze \ref{appendix:ukazkakonf}.
-Uživatelské rozhraní se primárně dělí na již zmíněné čtyři části a následující text se je podlé tohoto dělení strukturován.
+Uživatelské rozhraní se primárně dělí na již zmíněné čtyři části a následující text  je podle tohoto dělení strukturován.
 
 \subsubsection*{Data}
 V následujícím textu je popsána příprava databáze a filozofie správy dat. 
 
 \paragraph*{Příprava databáze}
- se provádí automaticky v prostředí navrženého GRASS modulu a 
+ se provádí automaticky v prostředí navrženého GRASS mo\-dulu a 
  skládá se z jednotlivých dílčích úkonů, které jsou na obecné úrovni popsány v praktické části \ref{subsec:postgis} a \ref{subsec:postgresql}. Úpravy databáze jsou: 
 \begin{itemize}
 %%% ML: odkaz na kapitolu o PostGISu
@@ -1898,8 +1897,8 @@ kde se jedná především o parametry nastavující metody určení baseline \f
 které je nutné znát pro výpočet intenzit srážek.}. Teoretickým východiskem pro 
 určení baseline je kapitola, \ref{subsec:chyby} Mikrovlnné spoje. 
 
-Baseline jde primárně určit dvěma způsoby. První metodou je přímé zadání známých hodnot ve formátu CSV. 
-Druhý způsob  je umožněn pomocí volby suchého období a z něj spočtení hodnoty baseliine na základe statistických funkcí. Schéma volby baseline je znázorněno na obrázku.  \ref{fig:schemabase}.
+Baseline lze primárně určit dvěma způsoby. První metodou je přímé zadání známých hodnot ve formátu CSV. 
+Druhý způsob  je umožněn pomocí volby suchého období a z něj spočtení hodnoty baseline na základě statistických funkcí. Schéma volby baseline je znázorněno na obrázku.  \ref{fig:schemabase}.
 
 \begin{figure}[h!]
     \centering
@@ -1910,8 +1909,7 @@ Druhý způsob  je umožněn pomocí volby suchého období a z něj spočtení 
 
 
 
-\paragraph*{Zadání známých hodnot}
-umožňuje \texttt{baselfile}, do kterého vstupuje textový soubor
+\paragraph*{Zadání známých hodnot} umožňuje \texttt{baselfile}, do kterého vstupuje textový soubor
 s hodnotami identifikátorů spojů (\texttt{linkid}) a příslušnými
 hodnotami baseline ve formátu \acs{CSV}.
 
@@ -1934,8 +1932,7 @@ hodnotami baseline ve formátu \acs{CSV}.
 \paragraph*{Volbou suchých období}
 je  možné definovat  časové intervaly nebo okamžiky, které slouží jako referenční hodnoty pro určení baseline. Z těch se následně zvolenými statistickými funkcemi vypočtou výsledné hodnoty.
 
-Volba suchých období se definuje do textového souboru který je vstupní hodnotou do parametru \texttt{baseltime}.
-Pro příklad: 
+Volba suchých období se definuje do textového souboru, který je vstupní hodnotou do parametru \texttt{baseltime}, např.: 
 
 \begin{figure}[h!]
 \begin{footnotesize}
@@ -1959,9 +1956,9 @@ další zvolený časový okamžik.
 
 Z vybraných suchých období se určují výsledné hodnoty \textit{baseline} pomocí základních statistických funkcí (parametr \texttt{statfce}):
 \begin{itemize}
-\item průměr - určení hodnot baseline prostým průměrováním hodnot pro jednotlivé spoje
-\item modus - určení pomocí funkce modus. Z podstaty této funkce je nutno nastavit zaokrouhlení (parametr \texttt{roundm}) dat, které je provedeno před samotným výpočtem funkce modus.
-\item  kvantil - určení hodnot uživatelsky nastaveným kvantilem. Hodnota kvantilu se nastavuje parametrem \texttt{quantile}.  
+\item průměr - určení hodnot baseline prostým průměrováním hodnot pro jednotlivé spoje,
+\item modus - určení pomocí funkce modus. Z podstaty této funkce je nutno nastavit zaokrouhlení (parametr \texttt{roundm}) dat, které je provedeno před samotným výpočtem funkce modus,
+\item  kvantil - určení hodnot uživatelsky nastaveným kvantilem. Hodnota kvantilu se nastavuje parametrem \texttt{quantile}. 
 \end{itemize}
 
 
@@ -1981,8 +1978,8 @@ Konfigurovatelné funkce této GUI sekce jsou následující:
 
 \item převedení srážkových řad na konstantní časový krok,
 \item vynechání zvolených MV spojů z výpočtu,
-\item generování \uv{časových oken} ze zvoleného  intervalu
-\item načtení časových řad z referenčních srážkoměrů
+\item generování \uv{časových oken} ze zvoleného  intervalu,
+\item načtení časových řad z referenčních srážkoměrů.
 \end{enumerate}
 
 Jednotlivé konfigurovatelné funkce jsou v tomto pořadí popsány v následujících  odstavcích:
@@ -2025,8 +2022,8 @@ přímou návaznost na plošné interpolace srážek a další
 analýzy v GRASS. Jedná se o převedení tabulky s časovou řadou na tabulky, 
 které představují vždy pouze data pro jeden okamžik. 
 
-Časový úsek, ze kterého jsou \uv{časová okna} vytvářena je vymezen krajními hodnotami: \textit{fromtime}
-(začátek intervalu) a \textit{totime} (konec intervalu)
+Časový úsek, ze kterého jsou \uv{časová okna} vytvářena, je vymezen krajními hodnotami: \textit{fromtime}
+(začátek intervalu) a \textit{totime} (konec intervalu).
 Vstupní hodnoty  jsou datového
 typu (timestamp) ve formátu \emph{"YYYY-MM-DD H:M:S"}. 
 
@@ -2036,7 +2033,8 @@ standardní výstup informaci o začátku a~konci časového rozsahu
 datasetu pro zjištění možného maximálního intervalu.
 
 \paragraph*{Načtení časových řad ze srážkoměrů} je umožněno pomocí parametru
-\texttt{rgauges}. Srážkoměrná data jsou načítána v časových řadách jejichž rozměr je intenzita srážky v [$mm \cdot h^{-1}$]. Struktura vstupního
+\texttt{rgauges}. Srážkoměrná data jsou načítána v časových řadách, jejichž rozměr
+ je intenzita srážky v [$mm \cdot h^{-1}$]. Struktura vstupního
 souboru je následující:
 
 
@@ -2066,7 +2064,7 @@ intenzity srážek z MV spojů.
 
 
 \subsubsection*{Interpolace} 
-Plošné interpolace srážek jsou  jedním z hlavních výstupů modulu
+Plošné interpolace srážek reprezentují jeden z hlavních výstupů modulu
 \textit{r.mwprecip}. GUI sekce \textit{Interpolation} je charakteristická
 třemi částmi: 
 \begin{itemize}
@@ -2079,8 +2077,8 @@ Následující odstavce popisují výše zmíněné tři hlavní oblasti nastave
 
 \paragraph*{Volba výpočetního regionu}
 Modul \textit{r.mwprecip} má pro dávkové generovaní interpolací 
-nastaven výpočetní region na výchozí hodnoty, které definují oblast
-výpočetního regionu. Toto výchozí nastavení modulu lze ignorovat přepínačem \texttt{-q}
+nastaven výpočetní region na výchozí hodnoty, které definují jeho oblast.
+  Výchozí nastavení modulu lze ignorovat přepínačem \texttt{-q}
 a využít tedy nastavení globální či nastavené modulem \textit{g.region}.
 %%% ML: tomu nerozumim, co se dat vypnout pomoci prepinase `-q`???
 %%% MK: ta funkce nedava smysl. Smazu ji z modulu ok?
@@ -2118,12 +2116,12 @@ body podél MV spojů ve jejich zvoleném počtu dle nastavení parametru
 
 \paragraph*{Plošné interpolace srážek} K určení interpolovaných hodnot je možno využít
  tří modulů ze stabilní verze GRASS.  Jedná se o metody \emph{rst}(regular spline with tension), \emph{idw} (invese
-distace weighting) a \emph{bspline} (bicubic spline tension).
+distance weighting) a \emph{bspline} (bicubic spline tension).
 
 Interpolace lze definovat jak uživatelsky, tak i automatizovaně
 (výchozími hodnotami jednotlivých modulů). 
 
-Uživatelské nastavení jednotlivých interpolací lze pomocí parametru \texttt{isettings}, do kterého je
+Uživatelské nastavení jednotlivých interpolací lze provést pomocí parametru \texttt{isettings}, do kterého je
 vstupem textový řetězec ve formátu \textit{GRASS Python Scripting
   Library}.  Řetězce je možné konfigurovat ve wxGUI daných modulů a z
 výstupního terminálu jej lze kopírovat.
@@ -2188,9 +2186,9 @@ výsled\-kům z primárního modulu. Modul \textit{r.mwprecip} při vytváření
 \uv{časových oken} zapisuje tabulky (\uv{časová okna}) do databáze. Vektorová geometrie
 reprezentovaná liniemi (MV spoje) a body (pro interpolace) je v databázi
 pro zamezení redundance dat v samostatné tabulce, nikoliv pro každé
-\uv{časové okno}. Pro analýzy a další využití výsledků v GRASS GIS, je
+\uv{časové okno}. Pro analýzy a další využití výsledků v GRASS GIS je
 podstatné, aby bylo možné jednotlivá \uv{časová okna} připojovat k
-vektorovému podkladu a s vhodnou tabulkou barev je zobrazovat.  Toho
+vektorovému podkladu a s vhodně nastavenou škálou barev je zobrazovat.  Toho
 lze docílit sledem po sobě jdoucích volání jednotlivých modulů ze systému
 GRASS. Pro jednoduchost byl vytvořen modul \textit{v.link.precip},
 který to umožňuje v uživatelsky přístupné formě.
@@ -2206,7 +2204,7 @@ který to umožňuje v uživatelsky přístupné formě.
 zmíněným principem připojit příslušná \uv{časová okna} ze zvoleného okamžiku.
 \end{itemize} 
  
-Mimo to je možné pro zvolený  okamžik data ne pouze připojovat, ale i \textbf{vytvářet} vektorové mapy
+Mimo to je lze pro zvolený  okamžik data nejen připojovat, ale i vytvářet vektorové mapy
  s připojenými příslušnými daty. V tomto případě dochází k redundanci dat. 
  
  
@@ -2220,7 +2218,7 @@ Mimo to je možné pro zvolený  okamžik data ne pouze připojovat, ale i \text
 \subsubsection{Použití modulu}
 Modul při prvním spuštění vytvoří vektorovou vrstvu v nativním
 formátu GRASS na základě vytvořené geometrie v databázi
-PostgreSQL. K ní připojí zvolenou tabulku reprezentující \uv{časové
+PostgreSQL. K ní připojí zvolenou ta\-bulku reprezentující \uv{časové
 okno}. Při dalším připojení jiného \uv{časového okna} je původně připojená
 tabulka odpojena a k té samé vektorové vrstvě se připojí tabulka nová. Modul
 je tvořen dvěma GUI záložkami \textit{Required} a \textit{Optional}.
@@ -2257,8 +2255,8 @@ které chceme při\-pojit výsledky v podobě \uv{časových oken}. Podmínkou j
 praxi zde budou nejčastěji připojovány vrstvy vytvořené v rámci
 výpočtu primárního modulu \textit{r.mwprecip}. Ty jsou pojmenovány
 \textit{linkpoints} s postfixem hodnoty parametru \texttt{step} (počet
-bodů či krok). Pro připojení liniových vrstev MV spojů je výchozí
-název \textit{link}.  Škála barev pro vektorovou vrstvu je možná
+bodů či zvolený rozestup mezi body). Pro připojení liniových vrstev MV spojů je výchozí
+název \textit{link}.  Škála barev pro vektorovou vrstvu se nastaví
 nastavit parametrem \texttt{color}, kde vstupní hodnota je textový
 soubor analogický k formátu škály barev pro plošné interpolace.
 
@@ -2268,15 +2266,16 @@ soubor analogický k formátu škály barev pro plošné interpolace.
 \newpage
 \setcounter{footnote}{1}
 \section{Výstupy modulů a jejich využití}
-Následující kapitola částečně vyplynula z testování vytvořených modulů. Je rozdělena do na dvě části:
+\ref{sec:vystupymoduluavyuziti} 
+Následující kapitola částečně vyplynula z testování vytvořených modulů a je rozdělena na dvě podkapitoly:
 \begin{itemize}
-\item Vizualizace,
-\item Temporal GRASS framework
+\item Vizualizace \ref{subsec:vizualuzace} a
+\item Temporal GRASS framework \ref{subsec:temporalgrassframe}.
 \end{itemize}
 
 V první části je kladen důraz na prostorovou interpolaci srážek, kde jsou demonstrovány interpolační metody.
- V rozsahu této není analýza výsledků jednotlivých interpolačních metod a jejich výsledků.
- Jedná se o ukázku možných vizualizací výsledků s nastíněním možných problematik plošných interpolací z MV spojů.
+ Zde není zahrnuta analýza výsledků jednotlivých interpolačních metod.
+ Jedná se o ukázku možných vizualizací výsledků s nastíněním problematik plošných interpolací z MV spojů.
  
 V druhé části je otestován nově navržený časoprostorový model V GRASS GIS s využitím výsledků z vlastních modulů. 
 Jelikož se jedná o poměrně novou část GRASS GIS, která byla doposavad ve fázi vývoje, 
@@ -2286,11 +2285,12 @@ kapitola může posloužit jako forma návodu pro uživatele GRASS.
 
 
 \subsection{Vizualizace}
+\label{subsec:vizualuzace}
 V následujících ukázkách jsou demonstrovány vizualizace datových výstupů z modulu r.mwprecip.
 Vizualizace je možné kategorizovat na základě datových charakteristik:
 
 \begin{itemize}
-\item vektorové mapy jsou vizualizované pomocí linií a bodů, které vycházejí z vytvořené geometrie v databázi.
+\item vektorové mapy jsou vizualizované pomocí linií a bodů, které vycházejí z vytvořené geometrie v databázi,
 \item rastrové mapy zobrazují plošné srážky vycházející z plošných interpolací.
 \end{itemize}
 
@@ -2298,7 +2298,7 @@ Vizualizace je možné kategorizovat na základě datových charakteristik:
 \paragraph*{Vektorové mapy} lze vizualizovat na základě široké škály volby parametrů. 
 V níže uvedených příkladech bylo využito znázornění bodu pomocí čtverce, který na základě 
 zvolené škály barev charakterizuje hodnotu intenzit srážek, ze kterých se provedla interpolace.
- Uživatelskou konfiguraci znázornění vektorových vrstev je možno pomocí modulu \textit{d.vect} či \textit{v.color}.
+Konfigurovat  vizualizaci vektorových vrstev je možno provést s využitím modulu \textit{d.vect} a \textit{v.color}.
  
 Ukázky grafických výstupů vektorových map jsou sjednoceny s výstupy plošných interpolací,
  které jsou znázorněny v podkapitole (Plošná interpretace srážek).
@@ -2307,10 +2307,10 @@ Ukázky grafických výstupů vektorových map jsou sjednoceny s výstupy plošn
  plošná srážková data, která jsou odhadem
 interpolačních metod. K vizualizaci je vytvořena škála barev
 odvozená od stupnice používané k radarové odrazivosti srážkových
-intenzit.  Škálu barev je možno zvolit jak z předefinovaných možností, tak z vlastní konfigurace. 
+intenzit.  Škálu barev je možno zvolit jak z předdefinovaných možností, tak z vlastní konfigurace. 
 K nastavení škály barev rastrů slouží modul \textit{r.color} .
 
-K vhodné vizualizaci rastrových map může posloužit modul \textit{g.gui.animation},
+K vhodné vizualizaci rastrových map lze využít modul \textit{g.gui.animation},
 který umožňuje vytvářet animace z po sobě jdoucích rastrů. 
 
 Součástí další kapitoly jsou obrázky reprezentující ukázky vizualizovaných rastrových map.
@@ -2336,7 +2336,7 @@ interpolací je patrné, že počet bodů vstupujících do interpolací má
 velký vliv na jejich výsledky. Zcela jistě má vliv na výsledek i
 dostupný vzorek dat. Ten se skládá ze dvou  uzlů,
 které jsou od sebe, při porovnáním s reálnou hustotou rozložení
-uzlů velmi vzdálené. Při využití disponibilních vysílačů, např.
+uzlů, velmi vzdálené. Při využití disponibilních vysílačů, např.
 sítí T-mobile, by prostorovou mezeru doplnilo několik desítek dalších. 
 Tím jsou výstupy následujících interpolací oproti
 možným výsledkům značně ovlivněny. 
@@ -2370,13 +2370,13 @@ escapeinside=''}
 %%% MK: vysvetleno
 %%% ML: OK
 Parametr \texttt{vect} umožňuje nastavení velikosti výpočetního regionu 
-na základě území vektorové mapy ohraničené minimálním obdélníkem.  
+na základě území vektorové mapy (MV spojů) ohraničené minimálním obdélníkem.  
 Parametr \texttt{res} nastavuje velikost rozlišení výpočetního regionu,
 který je možno definovat v délkové nebo stupňové míře a to podle výchozího 
 referenčního systému dané lokace. Parametry \texttt{n, s, e, w} určují rozšíření čí zmenšení daného výpočetního regionu ve směrech jednotlivých světových stran.
 
 \subsubsection*{v.surf.bspline}
-Modulu \textit{v.surf.bspline} má parametr \texttt{method}, který
+Modul \textit{v.surf.bspline} má parametr \texttt{method}, který
 umožňuje volby bilineární a~bikubické interpolace.
 
 \begin{description}
@@ -2384,8 +2384,9 @@ umožňuje volby bilineární a~bikubické interpolace.
 \item Parametry \texttt{sie} a \texttt{sin}, určují vzdálenost spline
   křivky pro jednotlivé kroky ve směrech východ-západ (sie) a
   sever-jih (sin). Maximální hodnota \texttt{sie} a \texttt{sin}, určuje vzdálenost spline
-  křivky pro jednotlivé kroky ve výše uvedených směrech. Pro oba směry by měla neměla 
-  být menší než vzdálenost známých bodů \footnote{\url{http://grass.osgeo.org/grass70/manuals/v.surf.bspline.html}}.
+  křivky pro jednotlivé kroky ve výše uvedených směrech. Pro oba směry by neměla 
+  být menší než vzdálenost známých bodů \footnote{\url{\ref{subsec:temporalgrassframe}
+}}.
 
 \item Parametr \texttt{lambda\_i} (Thykonov regularization parameter)
   ovlivňuje vyhlazení interpolace. Při volbě malé \texttt{lambda\_i}
@@ -2436,17 +2437,17 @@ v.surf.bspline complete. Cross validation finished \
 
 \subsubsection*{v.surf.idw}
 Modul \texttt{v.surf.idw} umožňuje nastavení exponentu \texttt{power}
-a počet známých bodů \texttt{npoints}, ze kterého se odhadovaný bod
+a počet známých bodů \texttt{npoints}, ze kterých se odhadovaný bod
 určuje \ref{sec:plostneinterpolace}.
 
 
 Metoda \ac{IDW} v GRASS nedisponuje některými nastaveními, které by byla vhodná
 pro odhad plošných srážek pomocí MV. Jedním z nastavení je
 podpora rozdělení na sektory, která by byla v tomto případě výhodná
-pro rozdělení interpolované mapy na segmenty, ze kterých by se do
+pro rozdělení interpolované mapy na segmenty. Z nich by se do
 výpočtu neznámé buňky zahrnoval zvolený počet bodů. Dalším důležitým
-omezením u IDW je určení vzdálenostní bariéry, která ignoruje vzdálené
-body do výpočtu. Z volby možných dvou parametrů vyplynulo několik
+omezením u metody IDW je určení vzdálenostní bariéry, která ignoruje vzdálené
+body při výpočtu. Z volby možných dvou parametrů vyplynulo několik
 poznatků:
 \begin{figure}[h!]%
     \centering
@@ -2454,19 +2455,17 @@ poznatků:
     \qquad
     \subfloat[IDW interpolace -- body po 500~m, npoints=150, power=1.5]{ \includegraphics[width=0.33\textwidth]{./img/intanalys/idw500.png} }%
        \caption[Interpolace IDW]{Názorné porovnání výsledků interpolace IDW s různou volbou rozložení bodů \centering}%
-
-    \label{fig:example}%
+	
+    \label{fig:idwpic}%
 \end{figure}
 \begin{description}
-\item \textbf{Volba počtu bodů}, ze kterých se provádí interpolace, má
-  velký vliv na možné výsledky. IDW je vhodná interpolační metoda pro
+\item \textbf{Volba počtu bodů} z nichž se provádí interpolace, má
+  velký vliv výsledky. IDW je vhodná interpolační metoda pro
   rovnoměrně rozmístěné známé body. V tomto případě je vhodné
   výpočetní region rozdělit do dvou částí, čímž se do jisté míry
-  nahradí chybějící parametr pro maximální vzdálenost. Rozdělení
-  regionu lze částečně suplovat parametrem \texttt{npoints}, ale v
-  případě dvou ohnisek bodů s rozdílnou hustotou, což koresponduje s
-  topologií dostupného vzorku dat, tento úsudek neplatí. Výsledná mapa
-  obsahuje na pomy\-slné hranici mezi danými lokalitami nespojitý povrch.
+  nahradí chybějící parametr pro maximální vzdálenost. Při takovémto postupu však není 
+   simulována reálná situace možných výsledků s využitím plnohodnotného vzorku dat (hustota MV spojů).
+  Při plošné interpolaci z dostupného vzorku dat a konfiguraci interpolace viz. obr. \ref{fig:idwpic} a),  je způsobován na pomy\-slné hranici mezi danými lokalitami nespojitý povrch.
 
 \item \textbf{Volba exponentu} ovlivňuje váhu (vzdálenost)
   jednotlivých bodů. Při volbě vysokého exponentu je odhadovaná buňka
@@ -2481,7 +2480,9 @@ poznatků:
 Jednou z možných chyb interpolace IDW je přenesení hodnoty (srážek)
 přes mezilehlý známý bod. V praxi pak dochází k tomu, že vysoké
 srážkové intenzity ze známého bodu mohou přeskočit oblast se známou
-nulovou srážkou a použít ji zcela chybně pro výpočet.
+nulovou srážkou a použít ji zcela chybně pro výpočet dané buňky.
+Zamezením tohoto jevu se zamezuje pomocí specifické úpravy metody IDW, 
+která spočívá v rozdělení oblasti na kvadranty, ze kterých zasahuje do výpočtu  pouze nejbližší bod \cite{krejci}.
 
 
 %%% ML: rozepsat RST a podobne i IDW, nebo alespon odkaz na seznam
@@ -2501,9 +2502,9 @@ nulovou srážkou a použít ji zcela chybně pro výpočet.
 \end{figure}
 \subsubsection*{v.surf.rst}
 Metoda \ac{RST} odhaduje neznámé hodnoty pomocí spline křivky, která 
-je definována jako funkce, která prochází měřenými body a má minimální
+je definována jako funkce procházející měřenými body a má minimální
  křivost. Z toho mimo jiné plyne, že interpolované hodnoty mohou nabývat 
- hodnot mimo interval hodnot známých.  Důsledkem toho je, že při interpolaci
+ hodnot mimo interval hodnot známých, což má za důsledek, že při interpolaci
   srážek mohou vznikat srážky záporné.
 
 
@@ -2531,7 +2532,9 @@ rozdílnou konfigurací bodů a nastavením tenze.
 %%% tak nech (je to detail)
 
 \subsection{Temporal GRASS framework}
-Kapitola \textit{Temporal GRASS framework} (TGRASS) demonstruje jeho možné využití
+\label{subsec:temporalgrassframe}
+
+Kapitola je zaměřena na možné využití \textit{Temporal GRASS framework} (TGRASS)
 %%% ML: prilis dlouhe souveti...
 %%% MK: Rozdeleno
 %%% ML: mirne preformulovano...
@@ -2539,7 +2542,7 @@ pro analýzu výsledků z modulu \textit{r.mwprecip}.  Protože je
 TGRASS poměrně nový a~v~současné době existuje jen několik málo nastínění jeho
 možné aplikace, bude následující text částečně psán stylem podobným
 formě návodu. Tato forma je zvolena z důvodu, aby mohl text
- sloužit jako úvod pro experimentálního využití
+ sloužit jako úvod pro experimentální využití
 modulu v GRASS GIS v rámci problematiky MV spojů. Tento směr má
 logickou návaznost na zadání projektu.
 
@@ -2553,14 +2556,14 @@ interpolovány metodou RST a IDW pomocí jednoho bodu uprostřed linie
 
 \subsubsection{Základní operace}
 
-\paragraph*{Databáze} je možné využít pro GRASS nativní SQLite, která je
+\paragraph*{Volba databáze} pro správu časoprostorových má dvě možnosti: databáze  SQLite (nativní v GRASS), která je
 nastavena jako výchozí nebo modulem \textit{t.connect} definovat
 připojení k externí databázi PostgreSQL.
 
 %%% ML: misto casoveho bych spise psal casoprostroveho datasetu...
 %%% MK: ok
 \paragraph*{Vytvoření } časoprostorového datasetu je prvním nezbytným
-krokem. K jeho vytvo\-ření slouží modul \textit{t.create}
+krokem a slouží k němu modul \textit{t.create}, např:
 \footnote{\url{http://grass.osgeo.org/grass70/manuals/t.create.html}}.
 \begin{figure}[h!]
 \begin{footnotesize}
@@ -2629,7 +2632,7 @@ operace při práci s časo\-prostorovým datasetem.
 \end{description}
 
 
-\paragraph*{Vytvoření sub datasetu} je možné využít v případě, že již
+\paragraph*{Vytvoření sub datasetu} zle v případě, že již jeden
 časový dataset existuje. Mohou nastat dva případy, kdy je vhodné
 využít modul \textit{t.rast.extract}.
 
@@ -2637,9 +2640,9 @@ První je situace, kdy jsou z modulu \textit{r.mwprecip} vygenerována
 \uv{časová okna} z~většího časového intervalu, než chceme využít k analýzám
 TGRASS. V takovém případě je možné při registraci interaktivně
 editovat registrační soubor, nebo využít \textit{t.rast.extract} a
-definovat v parametru \texttt{where} podmínku.
+definovat v parametru \texttt{where} podmínku, která vymezí časová rozsah nového datasetu.
 
-Modul také podporuje mapový kalkulátor, kde parametr
+Modul mimo jiné podporuje mapový kalkulátor, kde parametr
 \texttt{expression} umožňuje pomocí mapové algebry definovat nahrazení
 jednotlivých buněk jinými.
 \begin{figure}[h!]
@@ -2658,8 +2661,8 @@ Ve tomto případě jsou nahrazeny hodnoty menší než 0 (MV šum - chyby)
 hodnotou NULL. To je výhodné například pro vizualizaci srážek nad
 podkladovou mapou, kde je vodné, aby nulové hodnoty byly průhledné.
 
-\paragraph*{ Export} časoprostorových datasetů například pro zálohování či
-přenesení na jiné úložné médium je možné pomocí modulu
+\paragraph*{Export} časoprostorových datasetů např. pro zálohování či
+přenesení na jiné úložné médium se provede pomocí modulu
 \textit{t.rast.export} pro rastrové datasety \newline a \textit{t.vect.export}
 pro vektorové datasety.
 
@@ -2667,10 +2670,9 @@ Modul \textit{t.rast.out.vtk} umí exportovat rastry do textové formy
 \textit{VTK DataFile Version 3.0}. Export tímto modulem je možnost,
 jak dávkově exportovat data z modulu \textit{r.mwprecip}.
 
-Atributovou tabulku časoprostorového datasetu vypisuje
-\textit{t.vect.db.select}. Možností je volba oddělovače jednotlivých
-sloupců (\texttt{separator}). Lze tedy formát výstupu uzpůsobit
-například často používanému formátu CSV.
+Atributovou tabulku časoprostorového datasetu lze vypsat modulem
+\textit{t.vect.db.select}. Volbou oddělovače jednotlivých
+sloupců (\texttt{separator}), lze např. uzpůsobit výstup do formátu \ac{CSV}.
 
 
 %%% ML: v odstavci chybi odkaz na obrazek (viz obr.~\ref{x}), tak jako
@@ -2694,7 +2696,7 @@ například často používanému formátu CSV.
 
  \paragraph*{Vytvoření intervalů} Při registraci map jsou časové
  známky registrovány jako absolutní bod v čase. Pro některé analýzy
- bude zapotřebí pracovat s intervaly. Modul \textit{t.snap} vytvoří
+ je třeba pracovat s časovými intervaly. Modul \textit{t.snap} vytvoří
  automaticky intervaly podle granularity datasetu.
 %%% ML: tohle bych vynechal
 % Modul nemá kromě
@@ -2722,7 +2724,7 @@ t.shift input=rastr@tletnany granularity=1 hours
 
 %%% ML: nepsal bych jake ma modul parametry, ale co dela...
 %%% MK: ok
-\paragraph*{t.merge} je modul který umožňuje spojení dvou časových datasetů. 
+\paragraph*{t.merge} je modul, který umožňuje spojení dvou časových datasetů. 
 K nastavení slouží  dva parametry -
 \texttt{inputs}, do něhož vstupuje libovolné množství datasetů, které
 mají být spojeny v jeden \texttt{output}. Podmínkou je, že spojované
@@ -2741,7 +2743,7 @@ souřadnicích do jednoho rastru na základě zvolené matematické funkce
 Modul, který implementuje agregační funkci, se jmenuje
 {\it t.rast.aggregate} \footnote{\url{http://grass.osgeo.org/grass70/manuals/t.rast.aggregate.html}}.
 
-V příkladě uvedeném níže byly pomocí agregační funkcí vytvořeny rastry
+V příkladě uvedeném níže byly pomocí agregační funkce vytvořeny rastry
 reprezentující sumy srážkových intenzit po 15 minutách. Vytvořený
 dataset je nazván \emph{temporalLetnany}.
 \begin{figure}[h!]
@@ -2756,8 +2758,8 @@ t.rast.aggregate input=temporalLetnany output=temporal_aggreg \
 \end{figure}
 \vskip-2ex
 Jinou agregační funkcí je \textit{t.rast.aggregate.ds}, která má na
-vstupu dva datasety \emph{a} a \emph{b}. Funkci této agregační funkce
-je agregace datasetu \emph{a} podle datasetu \emph{b}, tedy vytvoření
+vstupu dva datasety \emph{a} a \emph{b}. Agregací
+ datasetu \emph{a} podle datasetu \emph{b}, tedy vytvoření
 časové topologie \emph{a} podle předlohy \emph{b}.
 
 Další možností je modul \textit{r.rast.series}, který využívá k agregaci jiných
@@ -3237,7 +3239,7 @@ předpoklad vytvoření datového rozhraní pro standardní a časoprostorové a
 	\acro{GUI}{Graphical User Interface (Grafické uživatelské rozhraní)}
 		
 	\acro{HMM}{Hidden Markov Model} 
-	\acro{IDW}{Inverse Distace Weighting} 
+	\acro{IDW}{Inverse Distance Weighting} 
 	
 	\acro{ITU}{International Telecommunication Union}
 	
@@ -3423,6 +3425,9 @@ HOFIERKA, Jaroslav, Helena  MITASOVA, Lubos MITAS a Juraj PARAJKA.\textit{Multiv
 KEYS, R. \textit{ IEEE Transactions on Acoustics, Speech, and Signal Processing}
 Cubic convolution interpolation for digital image processing. [online]. 1981, vol. 29, issue 6, s. 1153-1160 [cit. 2014-04-29]. DOI: 10.1109/TASSP.1981.1163711.URL:\textless\url {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=1163711"}
 
+\bibitem{krejci}
+KREJČÍ, Jakub. \textit{Možnosti sumulace dopadů vývoje klimatu koncepčním hydrologickým modelem}
+ Praha, 2011. Disertační. ČZU v Praze. Vedoucí práce Jiří Zezulák.
 
 
 \end{thebibliography}
