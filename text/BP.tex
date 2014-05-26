@@ -16,7 +16,7 @@
 %\setlength{\belowcaptionskip}{-10pt}
 \newcommand{\squeezeup}{\vspace{-2.5mm}}
 
-
+\usepackage{url}
 
 
 \usepackage{verbatim}
@@ -446,8 +446,8 @@ srážek do vzdálenosti přibližně 150 km od radaru \cite{kohout}.
 
 \subsubsection{Dálkový průzkum Země}
 Je důležité zmínit možnost získávání informací o srážkách pomocí
-  \acs{DPZ}. Tento obor z hlediska meteorologie zaujímá zcela jiný
-náhled na měření srážek oproti předchozím metodám. \acs{DPZ} v
+   \acs{DPZ}. Tento obor z hlediska meteorologie zaujímá zcela jiný
+náhled na měření srážek oproti předchozím metodám.  \acs{DPZ} v
 meteorologii umožňuje globální pohled na meteorologické jevy. Makro
 náhled na enviromentální jevy, např. cyklóny, tropické bouře, tornáda
 či pohyb mraků, je podstatný pro sledování a pochopení globálního
@@ -601,7 +601,7 @@ velikosti a tvarů. Signál může být tlumen různými objekty počínaje vodn
 párou, přes mrholení až po velké dešťové
 kapky či srážky pevného skupenství. Vztah mezi intenzitou srážek \emph{R} a~útlumem
 \emph{$\gamma_{R} $} je funkcí frekvence, polarizace a rozložení
-dešťových kapek   \acs{DSD}.
+dešťových kapek    \acs{DSD}.
 
 Na frekvencích mezi 25 a 40 GHz platí takřka lineární závislost a
 model je téměř nezávislý na teplotě, rozložení dešťových kapek a
@@ -609,7 +609,7 @@ empiricky vykazuje chyby méně než 10\emph{\%}. Na nízkých
 frekvencích okolo 10 GHz přesahuje chyby 20\emph{\%}. Přesnost
 určování srážek výše zmíněným modelem dle ITU P.838 je při těchto
 nízkých frekvencích mnohem více náchylná na rozložení
-kapek   \acs{DSD} \cite{dsd}.
+kapek    \acs{DSD} \cite{dsd}.
 
 \paragraph*{Určení baseline} \emph{$A_{0}$} je jedním z důležitých
 a nejvíce ovlivňujících činitelů při výpočtu výsledné srážky
@@ -626,7 +626,7 @@ látkách při dopadu ionizujícího záření.}. Útlum vysílaných a
 přijímaných vln ovlivňuje také teplota prostředí, jímž vlna
 prochází. Dalším činitelem, který může způsobovat kolísání signálu, je
 vítr.  Pro určování baseline se využívá různých metod, například
-   \acs{HMM} \cite{comparsinmv}, Retrieval Algorithms
+    \acs{HMM} \cite{comparsinmv}, Retrieval Algorithms
 \cite{countryw} atd. Metody určení baseline se dají klasifikovat na
 automatizované a uživatelské. Automatizovaným určováním baseline se
 myslí především algoritmy, které jsou schopny rozlišovat dešťové a suché
@@ -637,7 +637,7 @@ jiné např. určují období srážek pomocí dat ze srážkoměrů
 
 \paragraph*{Nejistoty modelu} založeného na vztahu \eqref{eq:Ar} jsou
 především v závislosti \emph{$\gamma_{A_{m}} $}, \emph{$A_{w} $} na
-rozložení kapek   \acs{DSD} podél MV spoje.
+rozložení kapek    \acs{DSD} podél MV spoje.
 
 \paragraph*{DSD} způsobují nejistoty při určení výsledného útlumu
 signálu \emph{$\gamma_{A_{m}} $}. Tyto chyby jsou zapříčiněny
@@ -686,7 +686,7 @@ výsledné plošné rekonstrukci zdrojem nezanedbatelných chyb. Měření
 moderními srážkoměry může být při správné volbě umístění velmi
 přesné. Toho se v současnosti využívá jako referenčního indikátoru
 srážek pro kalibraci radarů nebo k určování baseline při odhadu
-srážek MV spoji, viz kap. \ref{subsec:chyby}.
+srážek MV spoji, viz kap.  \ref{subsec:chyby}.
 
 \paragraph*{Radary}
 jsou současnou nejvíce využívanou metodou, jejímž produktem je plošné vyjádření srážek.
@@ -739,6 +739,7 @@ oblasti.
     \caption[Porytí tel. sítí]{\centering Mapa celosvětového pokrytí signálu telekomunikačních mobilních operátorů. Pokrytí je vyjádřeno oranžovou a žlutou barvou. \footnotemark }
     \label{fig:pokryti}
  \end{figure}   
+\footnotetext{Obrázek byl sejmut z webové aplikace OpenSignal. \url{http://opensignal.com/}}
 
 Jedním z velkých potenciálů této metody je zlepšení přesnosti
 prostorové informace o srážkách ve vysokém rozlišení. To žádné jiné
@@ -748,7 +749,7 @@ vzájemného se doplňování jednotlivých metod, což by patrně vedlo k
 zlepšení přesnosti měření srážek.
 
 Jelikož tyto MV spoje operují těsně nad zemským povrchem, vypočtené
-intenzity by mohly být pomocí nástrojů \acs{GIS} velkou přesností
+intenzity by mohly být pomocí nástrojů  \acs{GIS} velkou přesností
 přiřazovány do jednotlivých dílčích povodí. To by zpřesnilo vstupy do
 srážko-odtokového modelu a umožnilo lépe modelovat členitá povodí ve velkých městských aglomerací.
 
@@ -760,12 +761,11 @@ spojených s přívalovými srážkami \cite{mv2}.
 
 Velkým potenciálem je takřka nulová finanční náročnost pro sběr
 dat. Telekomunikační sítě mobilních operátorů jsou v hustěji
-osídlených částech světa běžné.\ref{fig:pokryti} V~rychle se rozvíjejících zemích
+osídlených částech světa běžné. \ref{fig:pokryti} V~rychle se rozvíjejících zemích
 třetího světa se v průběhu času stanou telekomunikační sítě
 samozřejmostí a využití metody odhadu srážek pomocí MV spojů by se mohlo stát více
 dostupnou oproti budování radarů, pozemních stanic či sítě
 srážkoměrů.
-\footnotetext{Obrázek byl sejmut z webové aplikace OpenSignal. \url{http://opensignal.com/}}
 
 \setcounter{footnote}{1}
 
@@ -778,7 +778,7 @@ srážkoměrů.
 \subsection{Systém GRASS GIS}
 \textbf{GRASS} (Geographic Resources Analysis Support System) GIS
 \footnote{\url{http://grass.osgeo.org/}} je multiplatformní
-geografický systém, šiřitelný pod všeobecně veřejnou licencí \acs{GNU
+geografický systém, šiřitelný pod všeobecně veřejnou licencí  \acs{GNU
   GPL}. Systém je primárně určený pro správu 2D/3D rastrových a
 vektorových geodat, jejich zpracování, analýzu a vizualizaci. K těmto
 účelům systém GRASS GIS disponuje několika stovkami nástrojů,
@@ -823,7 +823,7 @@ rok 1995, ve kterém se laboratoře CERL zřekli tohoto projektu, čehož
 následkem bylo přesun vývoje na akademickou půdu. Rok před začátkem
 nového tisíciletí byla vydána první verze pod licencí GNU GPL, pod
 kterou je vyvíjen dodnes. V letech 2008 se GRASS GIS zařadil pod hlavičku nadace
-   \acs{OSGeo}, pod kterou spadá mnoho významných volně šiřitelných
+    \acs{OSGeo}, pod kterou spadá mnoho významných volně šiřitelných
 GIS
 projektů \footnote{\url{http://www.osgeo.org/}}. Letošním rokem
 oslavil GRASS dlouhých 30 let vývoje.
@@ -837,7 +837,7 @@ uživatelského rozhraní systému GRASS GIS.
 \paragraph*{Data} ke kterým GRASS přistupuje, jsou definována pevně
 stanovenou adresářovou strukturou. Pro práci v tomto systému, je prvně
 zapotřebí definovat trojici nastavení. V grafickém rozhraní GRASS
-   \acs{wxGUI} je implementován průvodce nastavením jednotlivých kroků:
+    \acs{wxGUI} je implementován průvodce nastavením jednotlivých kroků:
 
 \begin{enumerate}
 \item \textbf{Databanka} v prostředí GRASS je stanovena proměnou
@@ -857,7 +857,7 @@ zapotřebí definovat trojici nastavení. V grafickém rozhraní GRASS
 %%% ML: pozor na termin "projekce" v cestine neznamena to co v anglictine
 \begin{itemize}
 \item seznam jednotlivých obecně známých kartografických zobrazení, 
-\item zadáním unikátního kódu z databáze    \acs{EPSG}. \footnote{\url{http://www.epsg-registry.org/}},
+\item zadáním unikátního kódu z databáze     \acs{EPSG}. \footnote{\url{http://www.epsg-registry.org/}},
 \item načtením externích georeferencovaných dat,
 \item definováním parametrů souřadnicového systému s využitím pravidel\newline PROJ.4\footnote{\url{http://trac.osgeo.org/proj/}},
 \item pomocí \ac{WKT}\footnote{WKT je značkovací jazyk pro reprezentaci vektorových objektů na digitálních mapách.} souboru \emph{.prj}, který je součástí formátu Esri Shapefile.
@@ -878,7 +878,7 @@ geoinformačního systému. Volba implementace pomocí jednotlivých modulů
 pochází z doby, kdy výpočetní technika byla v počátcích a šetrné
 využití operační paměti a procesorového výkonu bylo nezbytností. Jádro
 systému je napsáno procedurálně v jazyce C a k němu jsou integrovány
-jednotlivé funkcionality pomocí \acs{API}, které je v jazyce C a
+jednotlivé funkcionality pomocí  \acs{API}, které je v jazyce C a
 Python. Funkcionality - moduly jsou logicky rozděleny do kategorií
 podle účelu jejich využití:
 \begin{table}[h]
@@ -922,7 +922,7 @@ funkcionalit v podobě objektů. Tento přístup více odpovídá současným tr
 Plošné interpolace slouží k odhadu hodnot v prostoru, který je vymezen 
 body se známými hodnotami. Nutnost odhadovat hodnoty má logickou návaznost na
 problematiku sběru dat.  Podobně tomu je i v oblasti
-hydrometeorologie viz kap.~\ref{subsec:11}.
+hydrometeorologie viz kap.~ \ref{subsec:11}.
  Možnou variantou interpolací v GIS
 systémech je datový vstup reprezentovaný bodovým polem (vektor) a
 výstup v podobě rastru (grid). Interpolace se také využívají k
@@ -957,7 +957,7 @@ Regularized spline tension & {\tt v.surf.rst} \\
 Inverse distance weighting & {\tt v.surf.idw} \\ \hline
 \end{tabular}
 \caption{Přehled modulů pro interpolaci v GRASS GIS}
-\label{my-label}
+
 \end{table}
 
 
@@ -1009,7 +1009,7 @@ Dotazy se dělí podle jejich typu na optimalizované a
 neoptimalizované. Do skupiny optimalizovaných spadají příkazy z
 \ac{DML}. Ty jsou charakteristické právě pohybem/manipulací s
 daty. Patří mezi ně \texttt{SELECT}, \texttt{INSERT}, \texttt{UPDATE},
-\texttt{DELETE} a další méně využívané.    \acs{DDL} představuje skupinu
+\texttt{DELETE} a další méně využívané.     \acs{DDL} představuje skupinu
 neoptimalizovaných dotazů, což plyne z jejich funkčnosti. Patří mezi
 ně především \texttt{CREATE}, \texttt{ALTER}, \texttt{DROP} a
 další. \cite{bares}
@@ -1033,7 +1033,7 @@ definice & optim* & příkaz & popis \\ \hline \hline
 %%% ML: je nekde vysvetlena zkratka SQL?
 %%% MK: doplneno
 %%% ML: OK
-\caption{Zařazení a popis \acs{SQL} příkazu do kategorií.
+\caption{Zařazení a popis  \acs{SQL} příkazu do kategorií.
 *( ne/optimalizovaných )}
 \label{tab:prikazy}
 \end{table}
@@ -1058,7 +1058,7 @@ definice & optim* & příkaz & popis \\ \hline \hline
   síťových analýz, kde jednotlivé cesty jsou ohodnoceny a algoritmus
   vybere obecně tu nevýhodnější.
 
-\item[Exekutor] pracuje pouze s  \acs{DML}.  Od výše zmíněného
+\item[Exekutor] pracuje pouze s   \acs{DML}.  Od výše zmíněného
   \textit{planneru} obdrží plán nejvýhodnější cesty a zahájí zpracování daného stromu procesu od horního uzlu.
 \end{description}
 
@@ -1128,7 +1128,7 @@ PostGIS\footnote{\url{http://postgis.net/}} je open-source rozšířením
 objektů. Jde tedy o velice vhodný nástroj pro využití v GIS. PostGIS
 implementuje specifikaci \textit{Simple Features for
   SQL}\footnote{\url{http://www.opengeospatial.org/standards/sfs} }
-konsorcia \acs{OGC}, která v současné době plní funkci standardizační
+konsorcia  \acs{OGC}, která v současné době plní funkci standardizační
 organizace pro geoprostorová data. PostGIS je 2D/3D vektorovou
 databázovou nadstavbou, vedle které existuje i extenze PostGIS Raster pro data rastrová.
 
@@ -1141,14 +1141,14 @@ databázovou nadstavbou, vedle které existuje i extenze PostGIS Raster pro data
 \footnotetext{\url{http://postgis.net/docs/manual-2.1/}}
 
 \paragraph*{Prostorový model} 
-je založen na specifikaci    \acs{OGC} \textit{Simple Feature}, z toho
+je založen na specifikaci     \acs{OGC} \textit{Simple Feature}, z toho
 plyne že model nepodporuje geometrickou topologii. OGC definuje
 jednotlivé operace mezi standardem SQL a prostorovými daty. Souřadnice
 jednotlivých objektů jsou ukládány v tabulkách, kde každá tabulka je
 specifická jedním typem geometrie (bod, linie, polygon atd.) a
 referenčním prostorovým systémem \cite{postgis}. 
 %%% ML: WKT rozhodne, tu vetu bych klidne vynechal
-%Souřadnice jsou ukládány ve standardu    \acs{WKT}.
+%Souřadnice jsou ukládány ve standardu     \acs{WKT}.
 %%% ML: tahle veta je zmatecna, prozatim zakomentovano
 % Společně s metadaty  geometrického prvku jsou
 % ukládány ve sloupci \texttt{geometry}, který má informaci o
@@ -1186,7 +1186,7 @@ předdefinované, ostatní se dají dodatečně definovat a upravovat.
 % \end{verbatim}
 
 Souřadnicové systémy jsou charakterizovány unikátním kódem
-\texttt{\acs{SRID}}, který je všeobecně zažitým formátem v aplikacích GIS.
+\texttt{ \acs{SRID}}, který je všeobecně zažitým formátem v aplikacích GIS.
 %%% ML: standardem?
 %%% MK: muze to byt takhle?... který je všeobecně zažitým formátem v aplikacích GIS.
 %%% ML: zacitym je spis EPSG (kteremu SRID v PostGISu i vetsinou odpovida...)
@@ -1200,7 +1200,7 @@ Pro konverze mezi jednotlivými systémy slouží funkce
 představuje geometrickou složku popisu geoprvků.  Charakteristika tohoto
 datového typu je dána standardem OGC \textit{Simple Features}.
 %%% ML: data jsou ukladana v binarni forme (WKB ci odvozene) nikoliv ve WKT
-%%% rovněž ve formátu \acs{WKT}.
+%%% rovněž ve formátu  \acs{WKT}.
 %%% MK: no jasne. Chyba
 Sloupec s geometrií je definován pomocí parametrů, které
 nastavují obecná a geometrická specifika: název, typ, souřadnicový
@@ -1211,7 +1211,7 @@ Pro definování typu geoprvku jsou k vytvořeny funkce
 %%% ML: todo - vysvetlit zkratku WKT
 %%% MK: radek 841 je wkt poprve, dal jsem poznamku pod caru. Muze to tak byt? Nebo spis do textu?: "WKT je značkovací jazyk pro reprezentaci vektorových objektů na digitálních mapách."
 %%% ML: OK
-OGC \textit{Simple Features} (příklad v textové reprezentaci~\acs{WKT}):
+OGC \textit{Simple Features} (příklad v textové reprezentaci~ \acs{WKT}):
 
 
 \begin{verbatim}
@@ -1250,11 +1250,11 @@ demonstrovány jejich kategorie a nejzákladnější funkce.
 
 %%% ML: nejde o referencni (souradnicove) systemy ale formu zapisu geometrie
 \item[Konverze] umožňují převod mezi různými formami zápisu geometrie (binárními a~textovými
-  formáty). Například do rozšířeného formátu \acs{WKT}:
+  formáty). Například do rozšířeného formátu  \acs{WKT}:
 
   %%% ML: tohle neni ciste WKT (tak jak se o nem mluvi ve OGC SF), ale
   %%% o rozsirenou formu PostGISu
-  %%% MK: v PostGis manualu je psano WKT. Nevim jak to uchopit. Muze byt?: Například do rozšířeného formátu \acs{WKT}:
+  %%% MK: v PostGis manualu je psano WKT. Nevim jak to uchopit. Muze byt?: Například do rozšířeného formátu  \acs{WKT}:
   %%% ML: OK
 \begin{verbatim}
 SELECT  ST_AsEWKT (geom) FROM link
@@ -1291,7 +1291,7 @@ technologií i~matematických formulací řešena
 %%% ML: tady bych vysvetlil zkratku TGRASS
 %%% MK: muze byt formou zkratky?
 %%% ML: OK
-\acs{TGRASS} \footnote{\url{http://grass.osgeo.org/grass70/manuals/temporalintro.html}},
+ \acs{TGRASS} \footnote{\url{http://grass.osgeo.org/grass70/manuals/temporalintro.html}},
 který integruje do původního GRASS systému časový rozměr.
 
 Hlavním obsahem této kapitoly je představení časoprostorových
@@ -1363,7 +1363,7 @@ Výhodou \textit{snapshot} modelu je jeho jednoduchost a především
 vhodná struktura pro implementaci do GIS. Jak již bylo zmíněno, model
 uchovává jednotlivé vrstvy pro dané časové okamžiky odděleně.
 Jednotlivé tématické informace o zájmových oblastech jsou ukládány do
-separovaných datových vrstev \ref{fig:snapshot}.  Model
+separovaných datových vrstev  \ref{fig:snapshot}.  Model
 charakte\-ristikou svého návrhu odpovídá diskrétním
 systémům. Jednotlivé proměnné - geodata se skokově mění v průběhu
 času. Z toho mimo jiné pro uplatnění v GIS plyne, že jednotlivé snímky
@@ -1395,7 +1395,7 @@ vysoké výpočetní náročnosti.
 
 \paragraph*{Time Composit}
 \textit{\ac{STC}} byl vyvinut v~roce
-1988, Lagran \cite{lagran}. Model \acs{STC} pracuje s vektorovou interpretací
+1988, Lagran \cite{lagran}. Model  \acs{STC} pracuje s vektorovou interpretací
  prostorových dat. Jeho princip  spočívá v zobrazení linií do roviny, čímž se v~průběhu času jednotlivé prostory v projekční rovině sjednotí a tím z
 nich vznikají polygony -- síť. V databázi jsou pak pro jednotlivé
 polygony uchovávány atributy, které odpovídají jejich historii. Tento model
@@ -1461,7 +1461,7 @@ tomu interval je definován počátečním  a koncovým okamžikem nebo pouze
 počátečním časovým bodem a délkou intervalu.
 
 \paragraph*{Absolutní a relativní} jsou definovány v TGRASS obdobně
-jako kap. \ref{subsec:terminologie}.
+jako kap.  \ref{subsec:terminologie}.
 
 \paragraph*{Granularita} tj. podrobnost časového rozlišení je v TGRASS
 přepočítána po každém zásahu do datasetu. Mezi vlastnosti granularity
@@ -1472,7 +1472,7 @@ patří i vlastnost, kdy jednotlivé datasety obsahují mezery v čase
 \paragraph*{Časová topologie} v problematice časové proměnné
 závislosti vychází obecně z~principu obecné topologie. Časová
 topologie popisuje vztahy mezi jednotlivými časovými známkami jak pro
-časový interval\ref{fig:topology} tak pro časový okamžik. Jednotlivé charakteristiky
+časový interval \ref{fig:topology} tak pro časový okamžik. Jednotlivé charakteristiky
 byly odvozeny z booleovské algebry a aplikovány na časové známky.
 \begin{figure}[h!]
     \centering
@@ -1482,7 +1482,7 @@ byly odvozeny z booleovské algebry a aplikovány na časové známky.
  \end{figure}   
 
 \paragraph*{Temporal sampling} vychází z časové topologie a určuje
-jednotlivé vztahy mezi časovými datasety\ref{fig:sampling}. Pro představu jsou uvedeny
+jednotlivé vztahy mezi časovými datasety \ref{fig:sampling}. Pro představu jsou uvedeny
 některé vztahy pro časové datasety např. h a B následující: start
 (A, B mají stejný začátek), during (A během B), overlap (A, B se v
 čase překrývají ), contain (A obsahuje B), equal (A a B jsou stejné),
@@ -1522,13 +1522,13 @@ na základě datasetu B (např. průnik).
 \setcounter{section}{3}
 
 \noindent Hlavní směr praktické části je věnován vývoji vlastních GIS modulů, na něž jsou navázány další kroky této práce, které se zaměřují na charakterizaci aplikačního potenciálu.
-Pro ucelený pohled na danou problematiku jsou v první kapitole \ref{sec:charakteristikadat} praktické části představeny charakteristiky vstupních dat.
+Pro ucelený pohled na danou problematiku jsou v první kapitole  \ref{sec:charakteristikadat} praktické části představeny charakteristiky vstupních dat.
 
 Jednotlivé kapitoly praktické části  jsou seřazeny na základě chronologického postupu vývoje aplikací:
 \begin{enumerate}
-\item Charakteristika dat \ref{sec:charakteristikadat}  - analýza dostupných dat
-\item Navržené nástroje do systému GRASS \ref{sec:grassgismodule} - návrh aplikace, implementace a ovládání
-\item Výstupy modulů a jejich využití \ref{sec:vystupymoduluavyuziti} - testování aplikace 
+\item Charakteristika dat  \ref{sec:charakteristikadat}  - analýza dostupných dat
+\item Navržené nástroje do systému GRASS  \ref{sec:grassgismodule} - návrh aplikace, implementace a ovládání
+\item Výstupy modulů a jejich využití  \ref{sec:vystupymoduluavyuziti} - testování aplikace 
 \end{enumerate}
 
 
@@ -1557,7 +1557,6 @@ Data jsou v současné době\footnote{situace v květnu 2014} sbírána ze sít�
     \centering
     \includegraphics[width=0.5\textwidth]{./img/letnany.png}
     \caption[Snapshot model]{Současný stav MV spojů dostupných v rámci projektu v lokalitě Praha  \centering  }
-        \label{fig:snapshot}
  \end{figure} 
 
 Časový krok je determinován odezvou jednotlivých 
@@ -1711,7 +1710,7 @@ modulů volaných z \textit{GRASS Python Scripting Library}.
 
 \paragraph*{Uživatelské rozhraní}
 Uživatelské rozhraní navržených modulů je definováno sadou přepínačů
-a~ para\-metrů, viz kap. \ref{subsubsec:grassterminologie}. Program se
+a~ para\-metrů, viz kap.  \ref{subsubsec:grassterminologie}. Program se
 ovládá (spouští) buď z příkazové řádky GRASS nebo ve wxGUI, kde se
 vygeneruje dialogové okno s jednotlivými předem nakonfigu\-rovanými
 sekcemi.
@@ -1737,7 +1736,7 @@ registrační soubory do uživatelské pracovní složky.
 
 Funkčnost modulu je možné rozdělit do hlavních čtyř skupin, 
 které charakterizují vlastnosti modulu. 
-Na obrázku \ref{fig:schema1} je znázorněn základní princip fungování modulu a 
+Na obrázku  \ref{fig:schema1} je znázorněn základní princip fungování modulu a 
 jeho  datových toků mezi databází, modulem a rozhraním systému GRASS. 
  Zmíněné skupiny funkcí mají následující chronologický postup:
 \begin{enumerate}
@@ -1755,7 +1754,7 @@ jeho  datových toků mezi databází, modulem a rozhraním systému GRASS.
 
 V následujícím textu jsou obecně představeny  jednotlivé funkce modulu
 \textit{r.mwprecip} a s tím spojená jejich možná konfigurace. Konkrétní ukázka nastavení modulu
- je v příloze \ref{appendix:ukazkakonf}.
+ je v příloze  \ref{appendix:ukazkakonf}.
 Uživatelské rozhraní se primárně dělí na již zmíněné čtyři části a následující text  je podle tohoto dělení strukturován.
 
 \subsubsection*{Data}
@@ -1763,12 +1762,12 @@ V následujícím textu je popsána příprava databáze a filozofie správy dat
 
 \paragraph*{Příprava databáze}
  se provádí automaticky v prostředí navrženého GRASS mo\-dulu a 
- skládá se z jednotlivých dílčích úkonů, které jsou na obecné úrovni popsány v praktické části \ref{subsec:postgis} a \ref{subsec:postgresql}. Úpravy databáze jsou: 
+ skládá se z jednotlivých dílčích úkonů, které jsou na obecné úrovni popsány v praktické části  \ref{subsec:postgis} a  \ref{subsec:postgresql}. Úpravy databáze jsou: 
 \begin{itemize}
 %%% ML: odkaz na kapitolu o PostGISu
 %%% MK: opraveno
 %%% MK: OK, jemne upraveno
-\item \textbf{Geometrie} - využití extenze PostGIS (viz kap. \ref{subsec:postgis}) k vytvoření geometrických prvků pro MV spoje v databázi.
+\item \textbf{Geometrie} - využití extenze PostGIS (viz kap.  \ref{subsec:postgis}) k vytvoření geometrických prvků pro MV spoje v databázi.
 
 \item \textbf{Indexy} - vytvoření indexů pro optimalizaci vyhledávání dotazů v databázi. K vytvoření indexů bylo využito algoritmu.
 \textit{B-tree}. \footnote{\url{http://www.postgresql.org/docs/9.2/static/indexes-types.html}}.
@@ -1895,10 +1894,10 @@ Výpočet srážek a konfigurace se uživatelsky nastavuje
 v GUI sekci \textit{Baseline}. Zde jsou parametry pro konfiguraci výpočtu intenzit srážek,
 kde se jedná především o parametry nastavující metody určení baseline \footnote{určení baseline: jde o určení hodnot útlumu MV signálu během suchého období, 
 které je nutné znát pro výpočet intenzit srážek.}. Teoretickým východiskem pro 
-určení baseline je kapitola, \ref{subsec:chyby} Mikrovlnné spoje. 
+určení baseline je kapitola,  \ref{subsec:chyby} Mikrovlnné spoje. 
 
 Baseline lze primárně určit dvěma způsoby. První metodou je přímé zadání známých hodnot ve formátu CSV. 
-Druhý způsob  je umožněn pomocí volby suchého období a z něj spočtení hodnoty baseline na základě statistických funkcí. Schéma volby baseline je znázorněno na obrázku.  \ref{fig:schemabase}.
+Druhý způsob  je umožněn pomocí volby suchého období a z něj spočtení hodnoty baseline na základě statistických funkcí. Schéma volby baseline je znázorněno na obrázku.   \ref{fig:schemabase}.
 
 \begin{figure}[h!]
     \centering
@@ -1909,9 +1908,9 @@ Druhý způsob  je umožněn pomocí volby suchého období a z něj spočtení 
 
 
 
-\paragraph*{Zadání známých hodnot} umožňuje \texttt{baselfile}, do kterého vstupuje textový soubor
+\paragraph*{Zadání známých hodnot} umožňuje parametr \texttt{baselfile}, do kterého vstupuje textový soubor
 s hodnotami identifikátorů spojů (\texttt{linkid}) a příslušnými
-hodnotami baseline ve formátu \acs{CSV}.
+hodnotami baseline ve formátu  \acs{CSV}.
 
 \begin{table}[h!]
 \centering
@@ -1926,7 +1925,7 @@ hodnotami baseline ve formátu \acs{CSV}.
 {\tt baselfile}                              & soubor         		 & interaktivní zadání                                           \\ \hline
 \end{tabular}
 \caption{Parametry v GUI sekci Baseline}
-\label{my-label}
+
 \end{table}
 
 \paragraph*{Volbou suchých období}
@@ -1963,7 +1962,7 @@ Z vybraných suchých období se určují výsledné hodnoty \textit{baseline} p
 
 
 Posledním parametrem v této sekci je \texttt{Aw} a vyplývá ze vztahu
-\ref{eq:Ar}.
+ \ref{eq:Ar}.
 
 
 \subsubsection*{Časová okna} 
@@ -2003,7 +2002,7 @@ intervalu.
 {\tt lignore}                                & soubor                  & linkid                        \\ \hline
 \end{tabular}
 \caption{Parametry v GUI sekci Time-window}
-\label{my-label}
+
 \end{table}
 
 
@@ -2127,7 +2126,7 @@ vstupem textový řetězec ve formátu \textit{GRASS Python Scripting
 výstupního terminálu jej lze kopírovat.
 
 Některé parametry (vstup/výstup map) pro dané interpolační metody musí
-být nastaveny ve formátu podle tabulky \ref{tab:interpol}.
+být nastaveny ve formátu podle tabulky  \ref{tab:interpol}.
 
 \begin{table}[h]
 \centering
@@ -2229,7 +2228,7 @@ uloženy výsledky pro zobrazení. Parametr \texttt{type} nastavuje, zda chceme
 připojovat  hodnoty ke srážkoměrům nebo k MV spojům.
 Při volbě MV spojů je možné určit, zda chceme připojit hodnoty k 
 vektorové mapě v podobě spojů či bodů (body z interpolace). 
-Možnosti konfigurace jsou znázorněny ve schématu \ref{fig:baseline1}
+Možnosti konfigurace jsou znázorněny ve schématu  \ref{fig:baseline1}
 
 
 
@@ -2269,8 +2268,8 @@ soubor analogický k formátu škály barev pro plošné interpolace.
 \label{sec:vystupymoduluavyuziti} 
 Následující kapitola částečně vyplynula z testování vytvořených modulů a je rozdělena na dvě podkapitoly:
 \begin{itemize}
-\item Vizualizace \ref{subsec:vizualuzace} a
-\item Temporal GRASS framework \ref{subsec:temporalgrassframe}.
+\item Vizualizace  \ref{subsec:vizualuzace} a
+\item Temporal GRASS framework  \ref{subsec:temporalgrassframe}.
 \end{itemize}
 
 V první části je kladen důraz na prostorovou interpolaci srážek, kde jsou demonstrovány interpolační metody.
@@ -2385,7 +2384,7 @@ umožňuje volby bilineární a~bikubické interpolace.
   křivky pro jednotlivé kroky ve směrech východ-západ (sie) a
   sever-jih (sin). Maximální hodnota \texttt{sie} a \texttt{sin}, určuje vzdálenost spline
   křivky pro jednotlivé kroky ve výše uvedených směrech. Pro oba směry by neměla 
-  být menší než vzdálenost známých bodů \footnote{\ref{subsec:temporalgrassframe}
+  být menší než vzdálenost známých bodů \footnote{ \ref{subsec:temporalgrassframe}
 }.
 
 \item Parametr \texttt{lambda\_i} (Thykonov regularization parameter)
@@ -2393,7 +2392,7 @@ umožňuje volby bilineární a~bikubické interpolace.
   jsou interpolované hodnoty více závislé na vstupních hodnotách;
   vysoké \texttt{lambda\_i} vytvoří výsledný rastr \uv{jemnější}. Pro
   optimální zjištění parametru slouží přepínač \texttt{-c}, který pro
-  nastavenou délku křivky spline vypočte \acs{RMS} charakteristiky.
+  nastavenou délku křivky spline vypočte  \acs{RMS} charakteristiky.
 \end{description}
 %%% MK: zakomentovano na prani martina
 \begin{comment}
@@ -2438,7 +2437,7 @@ v.surf.bspline complete. Cross validation finished \
 \subsubsection*{v.surf.idw}
 Modul \texttt{v.surf.idw} umožňuje nastavení exponentu \texttt{power}
 a počet známých bodů \texttt{npoints}, ze kterých se odhadovaný bod
-určuje \ref{sec:plostneinterpolace}.
+určuje  \ref{sec:plostneinterpolace}.
 
 
 Metoda \ac{IDW} v GRASS nedisponuje některými nastaveními, které by byla vhodná
@@ -2465,7 +2464,7 @@ poznatků:
   výpočetní region rozdělit do dvou částí, čímž se do jisté míry
   nahradí chybějící parametr pro maximální vzdálenost. Při takovémto postupu však není 
    simulována reálná situace možných výsledků s využitím plnohodnotného vzorku dat (hustota MV spojů).
-  Při plošné interpolaci z dostupného vzorku dat a konfiguraci interpolace viz. obr. \ref{fig:idwpic} a),  je způsobován na pomy\-slné hranici mezi danými lokalitami nespojitý povrch.
+  Při plošné interpolaci z dostupného vzorku dat a konfiguraci interpolace viz. obr.  \ref{fig:idwpic} a),  je způsobován na pomy\-slné hranici mezi danými lokalitami nespojitý povrch.
 
 \item \textbf{Volba exponentu} ovlivňuje váhu (vzdálenost)
   jednotlivých bodů. Při volbě vysokého exponentu je odhadovaná buňka
@@ -2515,7 +2514,7 @@ dalších. Dále umožňuje volbu maximální a minimální vzdálenosti bodů
 při segmentaci. Mezi charakteristické parametry této metody patří:
 \texttt{dmin} a \texttt{dmax} umožňující nastavení minimální a
 maximální vzdálenosti mezi body; parametr \texttt{tension} určující
-napětí povrchu. Obrázek \ref{fig:rst} znázorňuje dva výsledné rastry s 
+napětí povrchu. Obrázek  \ref{fig:rst} znázorňuje dva výsledné rastry s 
 rozdílnou konfigurací bodů a nastavením tenze.
 
 
@@ -2525,7 +2524,7 @@ rozdílnou konfigurací bodů a nastavením tenze.
 
 \vskip 3\baselineskip
 
-%%% ML: melo by zde vic odkazu na teoretickou cast (viz kap. \ref{xx})
+%%% ML: melo by zde vic odkazu na teoretickou cast (viz kap.  \ref{xx})
 %%% a pod.
 
 %%% ML: dataset by sel spravne psat jako datova sada, ale klidno to
@@ -2643,7 +2642,7 @@ editovat registrační soubor, nebo využít \textit{t.rast.extract} a
 definovat v parametru \texttt{where} podmínku, která vymezí časová rozsah nového datasetu.
 
 Modul mimo jiné podporuje mapový kalkulátor, kde parametr
-\texttt{expression} umožňuje pomocí mapové algebry definovat nahrazení
+\texttt{expression} umo\-žňuje pomocí mapové algebry definovat nahrazení
 jednotlivých buněk jinými.
 \begin{figure}[h!]
 \begin{footnotesize}
@@ -2675,12 +2674,12 @@ Atributovou tabulku časoprostorového datasetu lze vypsat modulem
 sloupců (\texttt{separator}), lze např. uzpůsobit výstup do formátu \ac{CSV}.
 
 
-%%% ML: v odstavci chybi odkaz na obrazek (viz obr.~\ref{x}), tak jako
+%%% ML: v odstavci chybi odkaz na obrazek (viz obr.~ \ref{x}), tak jako
 %%% vsude v textu...
 %%% MK: doplneno
 %%% ML: doplnena mezera, jinak OK
 \paragraph*{Zobrazení časoprostorových datasetů } umožňuje modul
-\emph{g.gui.timeline} \ref{fig:timeline}, který na časové ose zobrazuje zvolené
+\emph{g.gui.timeline}  \ref{fig:timeline}, který na časové ose zobrazuje zvolené
 časoprostorové datasety a jejich granularitu. Modul dokáže zobrazit jak
 časovou osu ve 2D, tak časovou krychli ve 3D.
 
@@ -2766,7 +2765,7 @@ Další možností je modul \textit{r.rast.series}, který využívá k agregaci
 algoritmů a je určen pro analýzu celého datasetu bez zvolené
 granularity.  Příkladem je vytvoření rastru s maximálními intenzitami
 srážek v celém časovém intervalu datasetu. Byly vytvořeny maximální
-intenzity časového datasetu z plošných interpolací \ref{fig:maximasraz} RST a IDW.
+intenzity časového datasetu z plošných interpolací  \ref{fig:maximasraz} RST a IDW.
 
 
 \begin{figure}[h!]
@@ -2796,7 +2795,7 @@ t.rast.series input=rstt method=maximum output=rstt_seriesmax
 
 \paragraph*{Mapová algebra} se v rámci TGRASS dělí na dva typy:
 \begin{description}
-\item [t.rast.mapcalc] plně podporuje funkčnost mapové algebry \textit{r.mapcalc}. Z časo\-prostorového modelu podporuje například start\_time, end\_time, které jsou nejčastěji využívané.
+\item [t.rast.mapcalc] plně podporuje funkčnost mapové algebry \textit{r.mapcalc}. Z časoprosto\-rového modelu podporuje například start\_time, end\_time, které jsou nejčastěji využívané.
 \item [t.rast.mapcalc2] umožňuje využívat časoprostorové algebry, která je v současně dostupných GIS nástrojích první svého druhu.\footnote{Modul nebyl oficiálně představen. Zdroj informace pochází z nepublikovaných materiálů autora (Soren Gebbert)} 
 \end{description}
 
@@ -2879,7 +2878,7 @@ Ve zvolené výchozí databázi se vytvoří \uv{časová okna} v časovém krok
 
 
  Modul \textit{t.vect.observe} v současné době nemá zcela vyladěnou
- správu    \acs{RAM}. Při větších počtech vstupních rastrů se data
+ správu     \acs{RAM}. Při větších počtech vstupních rastrů se data
  ukládají do virtuální paměti a rychlost procesu se
  zpomalí \footnote{Při observaci rastru rozsahu jednoho týdne o časovém
    kroku 1 minuta (cca 10000 rastrů) trval výpočet 17 hodin a zabral
@@ -2989,7 +2988,7 @@ pro transformaci srážek do subpovodí. Postup je následující:
 \begin{enumerate}
 \item {\it r.mwprecip} - vytvoření plošných interpolací
 \item TGRASS - {\it t.create}, {\it t.register} a {\it t.rast.aggregate}
-\item {\it r.in.gdal} - import   \acs{DMT}
+\item {\it r.in.gdal} - import    \acs{DMT}
 \item {\it r.watershed} -  vytvoření subpovodí z DMT
 \item {\it r.volume} - určení objemu vody v subpovodích 
 \end{enumerate}
@@ -3020,7 +3019,7 @@ interpolují hodnoty intenzit srážek pomocí  interpolace RST (výchozí nasta
 region je nastaven automaticky modulem \textit{r.mwprecip}.
 
 
-\item Následuje založení časoprostorového datasetu, registrace map a agregace po 15 minutách s funkcí sumace \ref{subsubsec:casoprostoranal}.
+\item Následuje založení časoprostorového datasetu, registrace map a agregace po 15 minutách s funkcí sumace  \ref{subsubsec:casoprostoranal}.
 
 \item Modul \textit{r.in.gdal} umožňuje importovat rastrová data většiny obecně známých formátů.  Model terénu ze \ac{SRTM}\footnote{\url{http://edcftp.cr.usgs.gov/pub/data/}} je využit k vytvoření akumulace vody a z té vyplývající jednotlivá povodí v~násle\-dujícím kroku.
 
@@ -3092,7 +3091,7 @@ r.volume input=sum15minute_103 clump=basin \
 
 
 
-Výsledkem je vektorová bodová mapa\ref{fig:vysledekaggrrast}, kde ke každému bodu je připojena
+Výsledkem je vektorová bodová mapa  \ref{fig:vysledekaggrrast}, kde ke každému bodu je připojena
 tabulka s hodnotami výsledků (sum, avg). Parametr \texttt{output}
 umožňuje uložení ta\-bulky ve formě textového souboru se statistikami
 celé plochy výpočetního regionu.  Aby výsledné hodnoty jednotlivých 
@@ -3115,7 +3114,7 @@ telekomunikačních spojů pomocí GIS" vycházelo z přímých požadavků
 %%% MK:  Jasne
 %%% ML: co uvest jeste jeho skolitele???
 %%% MK:  jo
-zadavatele\footnote{Odpovědný řešitel: Ing. Vojtech Bareš, Ph.D, řešitel: 
+zadavatele\footnote{Odpovědný řešitel: Ing. Vojtech Bareš Ph.D, řešitel: 
  Ing. Martin Fencl: GA ČR 14-22978S \uv{Predikce srážkového odtoku v
   urbanizovaných povodích na základě deštěm generovaného útlumu
   signálu mikrovlnných spojů telekomunikační sítě}} této práce, který spolupracuje na projektu mezinárodního
@@ -3130,8 +3129,8 @@ Modul \textit{r.mwprecip} umožňuje výpočet srážek metodou MV spojů z
 externí data\-báze, ve které jsou uložena hrubá data z mikrovlnných
 vysílačů. Výstupem modulu jsou srážková data ve vhodném formátu  jak pro standardní
 funkce GRASS tak pro časoprostorové analýzy. Vypočtená data jsou
-dostupná jak ve formě časových oken, tak ve formě vhodné pro export
-pro jiná využití. Výstupní formát modu\-lu podporující \textit{Temporal GRASS
+dostupná jak ve formě časových oken, tak ve f vhodné pro export
+pro jiná využití. Výstupní formát modulu podporující \textit{Temporal GRASS
   framework} umožňuje větší možnosti při analýze časových řad srážek
 včetně dávkového exportu ve vhodném formátu pro vstup do
 srážko-odtokových modelů.
@@ -3174,12 +3173,11 @@ byly vedoucím práce v GRASS GIS upraveny.
 
 
 Práce ukazuje na možné nové směry výzkumu v oblasti
-interpolací srážek z~linio\-vých reprezentací, které jsou zcela novým a
-málo zažitým jevem jak na úrovni GIS, tak i  součástí problematiky
-rekonstrukce dešťových srážek obecně. S velkou pravděpodobností bude v
+interpolací srážek z linio\-vých reprezentací, které jsou zcela novým 
+jevem na úrovni GIS. S velkou pravděpo\-dobností bude v
 nejbližší době ze strany T-Mobile zpřístupněn pro projekt kvalitnější
 vzorek dat z pohledu hustoty MV spojů, který by umožňoval výzkum
-založený na významnějším datovém podkladu.
+založený na významněj\-ším datovém podkladu.
 
 %%% ML: teto vete (a celemu odstavci) prilis nerozumim...
 %%% MK: jo, nedavalo to smysl. 
@@ -3217,17 +3215,19 @@ předpoklad vytvoření datového rozhraní pro standardní a časoprostorové a
   	\acro{API}{Application Programming Interface}
   	\acro{CSV}{Comma Separated Values}
   	
+  	\acro{DDL}{Data Definition Language}
   	\acro{DML}{Data Manipulate on Language}
+  	\acro{DMT}{Digitalní Model Terénu}
   	\acro{DSD}{Drop Size Distribution}
   	\acro{DPZ}{Dálkový Průzkum Země}
-  	\acro{DDL}{Data Definition Language}
-  	\acro{DMT}{Digitalní Model Terénu}
+  	
+  	
   	\acro{EPSG}{Geodetic Parameter Set}	
   	
-  	\acro{GIS}{Geographic Information System (Geografický informační systém)}
-  	\acro{GNU GPL}{GNU General Public License (Všeobecná veřejná licence GNU)} 
+  	\acro{GIS}{Geographic Information System}
+  	\acro{GNU GPL}{GNU General Public License } 
 	\acro{GRASS}{Geographical Resources Analysis Support System}
-	\acro{GUI}{Graphical User Interface (Grafické uživatelské rozhraní)}
+	\acro{GUI}{Graphical User Interface}
 		
 	\acro{HMM}{Hidden Markov Model} 
 	\acro{IDW}{Inverse Distance Weighting} 
@@ -3249,9 +3249,10 @@ předpoklad vytvoření datového rozhraní pro standardní a časoprostorové a
     \acro{SRID}{Spatial Reference System Identifier}
     \acro{SQL}{Structured Query Language}
     \acro{TGRASS}{Temporal GRASS Framework}
-	\acro{wxGUI}{WxPython-based GUI for GRASS}	
+	
 	
 	\acro{WKT}{Well-known text}
+	\acro{wxGUI}{WxPython - based GUI for GRASS}	
 \end{acronym}
 
 
@@ -3263,7 +3264,7 @@ předpoklad vytvoření datového rozhraní pro standardní a časoprostorové a
 \selectfont
 \renewcommand{\refname}{Použité zdroje}
 \phantomsection
-\addcontentsline{toc}{section}{\refname}
+\addcontentsline{toc}{section}{ \refname}
 
 \begin{thebibliography}{99}
 \label{literatura}
@@ -3291,7 +3292,7 @@ SLAVÍČEK, Marek. \textit{Zkoumání srážkoodtokových vztahů v urbanizovan�
 
 \bibitem{wpc}
 Hydrometeorological Prediction Center \textit{ A Brief History of the Hydrometeorological Prediction Center}
-[cit. 2014-04-14] URL: \textless\url{ http://www.hpc.ncep.noaa.gov/html/WPC_history.pdf}
+[cit. 2014-04-14] URL: \textless\url{ http://www.hpc.ncep.noaa.gov/html/WPC_history.pdf}$>$
 
 
 \bibitem{flash_floods}
@@ -3314,7 +3315,7 @@ World Meteorological Organization. \textit{Guide to meteorological instruments a
 
 \bibitem{chmu_navod}
 Česká republika, \textit{Návod pro pozorovatele meteorologických stanic.}
-In: Metodický předpis č. 13. Ostrava, 2013. URL:\textless {\url{http://old.chmi.cz/OS/pdf/metodicky_navod/MP.pdf}}
+In: Metodický předpis č. 13. Ostrava, 2013. URL: \textless{\url{http://old.chmi.cz/OS/pdf/metodicky_navod/MP.pdf}$>$}
 
 %\bibitem{doppler}
 %DOVIAK, R. J.; D. S. Zrnic. \textit{Doppler Radar and Weather Observations (2nd ed.)}
@@ -3326,42 +3327,42 @@ Ostrava: TANGER, 2003. s. 101-103. ISBN 80-85988-90-9.
 
 \bibitem{radar_chmu}
 KRÁČMAR, Jan. Český hydrometeorologický ústav. \textit{Meteorologické radiolokátory.} 
-ČHMÚ. [online]. 1997-2011 [cit. 2014-04-06]. URL:\textless \url{http://portal.chmi.cz/files/portal/docs/meteo/rad/info_radar/index.html}
+ČHMÚ. [online]. 1997-2011 [cit. 2014-04-06]. URL: \textless \url{http://portal.chmi.cz/files/portal/docs/meteo/rad/info_radar/index.html}$>$
 
 \bibitem{itu}
 RECOMMENDATION ITU-R P.838-3. \textit{Specific attenuation model for rain for use in prediction methods}. 
-ITU-R, (1992-1999-2003-2005). URL:\textless\url {https://www.itu.int/dms_pubrec/itu-r/rec/p/R-REC-P.838-3-200503-I!!PDF-E.pdf}
+ITU-R, (1992-1999-2003-2005). URL: \textless\url {https://www.itu.int/dms_pubrec/itu-r/rec/p/R-REC-P.838-3-200503-I!!PDF-E.pdf}$>$
 
 \bibitem{dsd}
 CARLTON,W. Ulrich.\textit {Natural Variations in the Analytical Form of the Raindrop Size Distribution}. 
-Department of Physics and Astronomy, Clemson University: Journal of Climate and Applied Meteorology, 1983, roč. 1983, č. 22. URL:\textless\url {http://radarmet.atmos.colostate.edu/AT741/papers/Ulbrich_DSD.pdf}
+Department of Physics and Astronomy, Clemson University: Journal of Climate and Applied Meteorology, 1983, roč. 1983, č. 22. URL: \textless\url{http://radarmet.atmos.colostate.edu/AT741/papers/Ulbrich_DSD.pdf}$>$
 
 \bibitem{mv1}
-ZINEVICH, A., H. MESSER a P. ALPERT. \textit {Prediction of rainfall intensity measurement errors using commercial microwave communication links}. Atmospheric Measurement Techniques [online]. 2010, vol. 3, issue 5, s. 1385-1402 [cit. 2014-04-13]. DOI: 10.5194/amt-3-1385-2010. URL:\textless\url { http://www.atmos-meas-tech.net/3/1385/2010/}
+ZINEVICH, A., H. MESSER a P. ALPERT. \textit {Prediction of rainfall intensity measurement errors using commercial microwave communication links}. Atmospheric Measurement Techniques [online]. 2010, vol. 3, issue 5, s. 1385-1402 [cit. 2014-04-13]. DOI: 10.5194/amt-3-1385-2010. URL: \textless\url{ http://www.atmos-meas-tech.net/3/1385/2010/}$>$
 
 \bibitem{mv2}
-MESSER, H. \textit {Environmental Monitoring by Wireless Communication Networks.}, Science [online]. 2006-05-05, vol. 312, issue 5774, s. 713-713 [cit. 2014-04-14]. DOI: 10.1126/science.1120034. URL:\textless\url {http://www.sciencemag.org/cgi/doi/10.1126/science.1120034}
+MESSER, H. \textit {Environmental Monitoring by Wireless Communication Networks.}, Science [online]. 2006-05-05, vol. 312, issue 5774, s. 713-713 [cit. 2014-04-14]. DOI: 10.1126/science.1120034. URL:\textless\url {http://www.sciencemag.org/cgi/doi/10.1126/science.1120034}$>$
 
 \bibitem{wetat}
 M, Schleiss, Rieckermann J. a Berne A.  \textit{Quantification and Modeling of Wet-Antenna Attenuation for Commercial Microwave Links}[online]. 06 únor 2013. Geoscience and Remote Sensing Letters, IEEE, 2013[cit. 2014-04-13]. Volume:10. 
 
 \bibitem{countryw}
-OVEREEM, Aart, Hidde LEIJNSE a Remko UIJLENHOET.  \textit{Country-wide rainfall maps from cellular communication networks} [online]. 2012 [cit. 2014-04-13]. 110: 8. DOI: 10.1073/pnas.121796111. URL:\textless\url {http://www.pnas.org/content/110/8/2741.full}
+OVEREEM, Aart, Hidde LEIJNSE a Remko UIJLENHOET.  \textit{Country-wide rainfall maps from cellular communication networks} [online]. 2012 [cit. 2014-04-13]. 110: 8. DOI: 10.1073/pnas.121796111. URL: \textless\url{http://www.pnas.org/content/110/8/2741.full}$>$
 
 \bibitem{radiolinks}
-LEIJNSE, H., R. UIJLENHOET a J. N. M. STRICKER. \textit{Rainfall measurement using radio links from cellular communication networks.} Water Resources Research [online]. 2007, vol. 43, issue 3, n/a-n/a [cit. 2014-04-13]. DOI: 10.1029/2006WR005631. URL:\textless\url {http://doi.wiley.com/10.1029/2006WR005631}
+LEIJNSE, H., R. UIJLENHOET a J. N. M. STRICKER. \textit{Rainfall measurement using radio links from cellular communication networks.} Water Resources Research [online]. 2007, vol. 43, issue 3, n/a-n/a [cit. 2014-04-13]. DOI: 10.1029/2006WR005631. URL:\textless\url {http://doi.wiley.com/10.1029/2006WR005631}$>$
 
 \bibitem{comparsinmv}
 Asaf Rayitsfeld, Rana Samuels, Artem Zinevich, Uri Hadar, Pinhas Alpert, \textit{Comparison of two methodologies for long term rainfall monitoring using a commercial microwave communication system}. Atmospheric Research, Volumes 104–105, February 2012, Pages 119-127, ISSN 0169-8095, http://dx.doi.org/10.1016/j.atmosres.2011.08.011.
-URL:\textless\url {http://www.sciencedirect.com/science/article/pii/S0169809511002626}
+URL: \textless\url{http://www.sciencedirect.com/science/article/pii/S0169809511002626}$>$
 
 \bibitem{grasshist}
-Historical Notes. \textit{GRASS GIS} [online]. 1998-2014 [cit. 2014-04-17]. URL:\textless\url {http://grass.osgeo.org/home/history/}
+Historical Notes. \textit{GRASS GIS} [online]. 1998-2014 [cit. 2014-04-17]. URL: \textless\url{http://grass.osgeo.org/home/history/}$>$
 
 
 
 \bibitem{soren}
-Sören GEBBERT a Edzer PEBESMA. \textit{A temporal GIS for field based environmental modeling.} [online]. 2014, vol. 53, s. 1-12. DOI: 10.1016/j.envsoft.2013.11.001. URL:\textless\url {http://linkinghub.elsevier.com/retrieve/pii/S136481521300282X}
+Sören GEBBERT a Edzer PEBESMA. \textit{A temporal GIS for field based environmental modeling.} [online]. 2014, vol. 53, s. 1-12. DOI: 10.1016/j.envsoft.2013.11.001. URL: \textless\url{http://linkinghub.elsevier.com/retrieve/pii/S136481521300282X}$>$
 
 
 
@@ -3370,7 +3371,7 @@ Sören GEBBERT a Edzer PEBESMA. \textit{A temporal GIS for field based environme
 SMITH, Michael J, Michael F GOODCHILD a Paul LONGLEY. \textit{Geospatial analysis: a comprehensive guide to principles, techniques and software tools} [online]. 4th ed. Winchelsea, UK: The Winchelsea Press, c2013, s. 130-135 [cit. 2014-04-18]. ISBN 9781906221980.
 
 \bibitem{gistemporal}
-LONGLEY, Paul.\textit{Geographical information systems: principles, techniques, management, and applications}[online]. 2nd ed., abridged. Hoboken, N.J.: John Wiley, c2005., ch 8, [cit. 2014-04-18]. ISBN 0471735450.
+LONGLEY, Paul\textit{Geographical information systems: principles, techniques, management, and applications}[online]. 2nd ed., abridged. Hoboken, N.J.: John Wiley, c2005., ch 8, [cit. 2014-04-18]. ISBN 0471735450.]
 
 \bibitem{lagran}
 G. Langran and N.R. Chrisman. \textit{A framework for temporal geographic infor-
@@ -3378,7 +3379,7 @@ mation}. In: Cartographica: The International Journal for Geographic Infor-
 mation and Geovisualization 25.3 (1988), pp. 1–14.
 
 \bibitem{hunter}
-J. HUNTER, Gary a Ian P. WILLIAMSON. \textit{Journal of Geographic Information System} The Development of a Historical Digital Cadastral Database. 1990, no.2, s. 167-179. URL:\textless\url {http://csdila.unimelb.edu.au/publication/journals/ipw_90_historicalDCDB.pdf}
+J. HUNTER, Gary a Ian P. WILLIAMSON. \textit{Journal of Geographic Information System} The Development of a Historical Digital Cadastral Database. 1990, no.2, s. 167-179. URL: \textless\url{http://csdila.unimelb.edu.au/publication/journals/ipw_90_historicalDCDB.pdf}$>$
 
 
 \bibitem{pelekis}
@@ -3388,33 +3389,33 @@ PELEKIS, Nikos, Babis THEODOULIDIS, Ioannis KOPANAKIS a Yannis THEODORIDIS. Lite
 ISO/IEC 9075-2:1999. \textit{Information technology: Database languages SQL}. Part 2: Foundation. SQL/Foundation, 2011. 
 
 \bibitem{postgre}
-CHEN, Hao, Heechul HEECHUL a Jin XIAO. \textit{Concept Architecture of PostgreSQL}. 2009. URL:\textit{\url{http://www.inf.fu-berlin.de/lehre/WS09/DBS-Tech/Material/ConceptArchPostres.pdf}}
+CHEN, Hao, Heechul HEECHUL a Jin XIAO. \textit{Concept Architecture of PostgreSQL}. 2009. URL: \textless\url{http://www.inf.fu-berlin.de/lehre/WS09/DBS-Tech/Material/ConceptArchPostres.pdf}$>$
 
 \bibitem{bares}
-BARĚŠ, Pavel. \textit{Implementace materializovaných pohled; v PostgreSQL}. Praha, 2010. Bakalářská práce. ČVUT FIT. Vedoucí práce Ing. Zdeněk Kotala.
+BARĚŠ, Pavel. \textit{Implementace materializovaných pohledů v PostgreSQL}. Praha, 2010. Bakalářská práce. ČVUT FIT. Vedoucí práce Ing. Zdeněk Kotala.
 
 \bibitem{sqlmm}
-STOLZE, Knut. \textit{SQL/MM Spatial: The Standard to Manage Spatial Data in Relational Database Systems. 2003.}\textless\url {http://doesen0.informatik.uni-leipzig.de/proceedings/paper/68.pdf}
+STOLZE, Knut. \textit{SQL/MM Spatial: The Standard to Manage Spatial Data in Relational Database Systems. 2003.}\textless\url {http://doesen0.informatik.uni-leipzig.de/proceedings/paper/68.pdf}$>$
 
 \bibitem{postgis}
 CHRISTL, Arnulf.\textit{Introduction to Spatial Data Management with Postgis }
-[online]. [cit. 2014-04-20]. URL:\textless\url { http://www.mapbender.org/presentations/Spatial_Data_Management_Arnulf_Christl/Spatial_Data_Management_Arnulf_Christl.pdf}
+[online]. [cit. 2014-04-20]. URL: \textless\url{ http://www.mapbender.org/presentations/Spatial_Data_Management_Arnulf_Christl/Spatial_Data_Management_Arnulf_Christl.pdf}$>$
 
 \bibitem{spatialinter}
 Mitas, L., Mitasova, H.,\textit{Geographical Information Systems}
-2002; Burrough and McDonnell; Bonham-Carter, 1996, URL: \textless\url {http://csiss.org/learning_resources/content/good_sa/#Interpolation}
+2002; Burrough and McDonnell; Bonham-Carter, 1996, URL: \textless\url{http://csiss.org/learning_resources/content/good_sa/#Interpolation}$>$
 
 
 \bibitem{spygrass}
 GRASS Development Team.\textit{ GRASS 7 Programmer’s Manual}
-[online]. c2000-2011, generated on Sat Apr 16 2011 [cit. 2011-03-19]. URL:\textless\url {http://grass.osgeo.org/programming7  }
+[online]. c2000-2011, generated on Sat Apr 16 2011 [cit. 2011-03-19]. URL: \textless\url{http://grass.osgeo.org/programming7 }$>$
 
 \bibitem{RST}
 HOFIERKA, Jaroslav, Helena  MITASOVA, Lubos MITAS a Juraj PARAJKA.\textit{Multivariate Interpolation of Precipitation Using Regularized Spline with Tension}. Blackwell Publishers Ltd, 108 Cowley Road, Oxford 2002. 
 
 \bibitem{bicubic}
 KEYS, R. \textit{ IEEE Transactions on Acoustics, Speech, and Signal Processing}
-Cubic convolution interpolation for digital image processing. [online]. 1981, vol. 29, issue 6, s. 1153-1160 [cit. 2014-04-29]. DOI: 10.1109/TASSP.1981.1163711.URL:\textless\url {http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=1163711"}
+Cubic convolution interpolation for digital image processing. [online]. 1981, vol. 29, issue 6, s. 1153-1160 [cit. 2014-04-29]. DOI: 10.1109/TASSP.1981.1163711.URL: \textless\url{http://ieeexplore.ieee.org/lpdocs/epic03/wrapper.htm?arnumber=1163711}$>$
 
 \bibitem{krejci}
 KREJČÍ, Jakub. \textit{Možnosti sumulace dopadů vývoje klimatu koncepčním hydrologickým modelem}
@@ -3577,11 +3578,11 @@ Stažení  modulu \textit{r.mwprecip} a \textit{v.link.precip} je možno pomocí
 escapeinside=''}
 \begin{lstlisting}[style=mybash]
 # Instalace modul'ů'
-g.extension extension=r.mwprecip 
-g.extension extension=v.link.precip     
+$ g.extension extension=r.mwprecip 
+$ g.extension extension=v.link.precip     
 # Spu'š'ten'í' modul'ů'
-r.mwprecip
-v.link.precip                                 
+$ r.mwprecip
+$ v.link.precip                                 
 \end{lstlisting}
 \end{scriptsize} 
 \end{figure} 
@@ -3689,8 +3690,6 @@ schema=ukazka
     \includegraphics[width=0.5\textwidth]{./img/priloha/opt.png}
     \caption[Optional]{Okno pro nastavení pracovního schéma a doplňkových parametrů \centering  }
  \end{figure}
-
-
 
 
 
