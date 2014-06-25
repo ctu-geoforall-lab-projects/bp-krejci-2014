@@ -1,0 +1,84 @@
+\documentclass[czech,11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{a4wide}
+\usepackage[pdftex,breaklinks=true,colorlinks=true,urlcolor=blue,
+  pagecolor=black,linkcolor=black]{hyperref}
+\usepackage[czech]{babel}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{center}
+  {\Large --- Posudek vedoucího bakalářské práce ---}
+\end{center}
+
+\vspace{.2cm}
+
+\noindent \begin{tabular}{rp{.75\textwidth}}
+  {\bf Bakalářská práce:} & Analýza a vizualizace srážkových dat z mikrovlnných telekomunikačních spojů pomocí GIS \\
+  {\bf Student:} & Matěj Krejčí \\
+  {\bf Vedoucí:} & Ing. Martin Landa, Ph.D. \\
+  {\bf Oponent:} & Ing. Vojtěch Bareš, Ph.D. \\
+\end{tabular}
+
+\vspace{1cm}
+
+Zadání bakalářské práce Matěje Krejčího vychází z grantu GAČR
+(14-22978S) řešeného na katedře hydrauliky a hydrologie. Grant je
+zaměřen na metody převodu útlumu mikrovlnných telekomunikačních spojů
+(dále MV spojů) na srážkové intenzity a jejich následné využití
+v~meteorologii a hydrologii.  \\
+
+Hlavním úkolem studenta bylo v rámci své bakalářské práce přistoupit k
+analýze a vizualizaci srážkových dat získaných z MV spojů v prostředí
+geografických informačních systémů (GIS). Po domluvě s kolegy z
+katedry hydrauliky a hydrologie byl zvolen jako implementační
+framework prostředí open source GIS nástroje GRASS GIS.  \\
+
+Student musel v poměrně krátkém časovém úseku načerpat základní
+teoretické znalosti dané problematiky, seznámit se s prostředím
+nástroje GRASS GIS především z pohledu programátora a vývojáře. Pro
+vlastní implementaci nástrojů, které vznikly jako výstupy této práce,
+byl použit programovací jazyk Python a příslušné knihovny systému
+GRASS. Tyto nástroje byly publikovány jako doplňková součást systému
+GRASS (tzv. Addons).  \\
+
+Z pohledu vedoucího práce mohu konstatovat, že student plnil zadané
+dílčí úkoly svědomitě. Mezivýsledky konzultoval nejen s vedoucím
+práce, ale i se zadavateli z katedry hydrauliky a~hydrologie. Přesto
+má výsledek jisté limity, na kterých by měl student do budoucna
+zapracovat. Po formální stránce je text práce nepříliš šťastně
+strukturován, vzhledem k tomu utrpěla čitelnost textu a nebyl dodržen
+základní princip oddělení teoretické části, popisu metodických postupů
+a výsledků práce. Z pohledu výstupu práce -- navržených nástrojů -- je
+zde prostor na další vývoj či případné revize kódu (odstranění
+závislosti na geodatabázi PostGIS, objektový návrh namísto
+procedurálního a pod.).  \\
+
+Za vedlejší přínos práce považuji posílení motivace studenta se dále
+soustředit na vývoj GIS nástrojů. Výsledkem je jeho účast na
+prestižním mezinárodním programu Google Summmer of Code, což je
+program společnosti Google na podporu studentů informatických oborů a
+jejich zapojení do vývoje open source nástrojů.  \\
+
+\newpage
+Závěrem mohu konstatovat, že předložená bakalářská práce splňuje
+všechny formální náležitosti a doporučuji ji k obhajobě. Bakalářskou
+práci hodnotím stupněm
+
+\vskip 2cm
+
+\begin{center}
+{\bf -- B (velmi dobře)  --}
+\end{center}
+
+\vskip 2cm
+
+\begin{tabular}{lp{.25\textwidth}r}
+& & \ldots\ldots\ldots\ldots\ldots\ldots\ldots \\
+V~Solanech dne 20.6.2014 & & Ing. Martin Landa, Ph.D. \\
+& & Fakulta stavební, ČVUT v Praze \\
+\end{tabular}
+
+\end{document}
