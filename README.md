@@ -10,7 +10,7 @@ Matěj Krejčí
 
 ## Vedoucí
 
-Ing. Martin Landa
+Ing. Martin Landa, Ph.D.
 
 ## Obhajoba
 
